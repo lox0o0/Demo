@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Team } from "@/lib/mockData";
+import Image from "next/image";
+import { Team } from "@/lib/data/teams";
 import { EntryPoint } from "@/lib/onboardingTypes";
 
 interface ProgressiveProfileProps {
@@ -84,11 +85,15 @@ export default function ProgressiveProfile({
           {step === 1 && (
             <div className="space-y-6">
               <div className="text-center mb-6">
-                <div
-                  className="text-6xl mb-4"
-                  style={{ color: team.primaryColor }}
-                >
-                  {team.emoji}
+                <div className="relative w-24 h-24 mx-auto mb-4">
+                  <Image
+                    src={team.logoUrl}
+                    alt={team.name}
+                    fill
+                    className="object-contain"
+                    style={{ filter: `drop-shadow(0 0 20px ${team.primaryColor}40)` }}
+                    unoptimized
+                  />
                 </div>
                 <h2 className="text-2xl font-bold mb-2">Almost there!</h2>
                 <p className="text-gray-400">

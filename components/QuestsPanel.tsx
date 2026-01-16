@@ -24,26 +24,26 @@ export default function QuestsPanel({ user, expanded = false }: QuestsPanelProps
   };
 
   return (
-    <div className="glass-strong rounded-3xl p-8">
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">Quests & Missions</h2>
-        <div className="text-sm text-gray-400">
+        <h2 className="text-xl font-bold text-nrl-text-primary">Quests & Missions</h2>
+        <div className="text-sm text-nrl-text-secondary">
           {dailyQuests.filter(q => q.completed).length + weeklyQuests.filter(q => q.completed).length} / {dailyQuests.length + weeklyQuests.length} completed
         </div>
       </div>
 
       <div className="mb-8">
-        <h3 className="text-xs font-bold text-gray-400 mb-4 uppercase tracking-wider">
+        <h3 className="text-xs font-bold text-nrl-text-secondary mb-4 uppercase tracking-wider">
           Daily Quests
         </h3>
         <div className="space-y-3">
           {dailyQuests.map((quest) => (
             <div
               key={quest.id}
-              className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${
+              className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
                 quest.completed
                   ? "bg-nrl-green/10 border-nrl-green/30"
-                  : "bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10"
+                  : "bg-nrl-dark-hover border-nrl-border-light hover:border-nrl-border-medium"
               }`}
             >
               <div className="flex items-center gap-4 flex-1">
@@ -52,10 +52,10 @@ export default function QuestsPanel({ user, expanded = false }: QuestsPanelProps
                     type="checkbox"
                     checked={quest.completed}
                     onChange={() => handleQuestComplete(quest.id, quest.points)}
-                    className="w-6 h-6 rounded-lg border-2 border-white/30 bg-white/5 checked:bg-nrl-green checked:border-nrl-green cursor-pointer"
+                    className="w-6 h-6 rounded-lg border-2 border-nrl-border-medium bg-nrl-dark-hover checked:bg-nrl-green checked:border-nrl-green cursor-pointer"
                   />
                 </div>
-                <span className={`font-medium ${quest.completed ? "line-through text-gray-500" : "text-white"}`}>
+                <span className={`font-medium ${quest.completed ? "line-through text-nrl-text-muted" : "text-nrl-text-primary"}`}>
                   {quest.title}
                 </span>
               </div>
@@ -72,17 +72,17 @@ export default function QuestsPanel({ user, expanded = false }: QuestsPanelProps
       </div>
 
       <div>
-        <h3 className="text-xs font-bold text-gray-400 mb-4 uppercase tracking-wider">
+        <h3 className="text-xs font-bold text-nrl-text-secondary mb-4 uppercase tracking-wider">
           Weekly Quests
         </h3>
         <div className="space-y-3">
           {weeklyQuests.map((quest) => (
             <div
               key={quest.id}
-              className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${
+              className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
                 quest.completed
                   ? "bg-nrl-green/10 border-nrl-green/30"
-                  : "bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10"
+                  : "bg-nrl-dark-hover border-nrl-border-light hover:border-nrl-border-medium"
               }`}
             >
               <div className="flex items-center gap-4 flex-1">
@@ -91,10 +91,10 @@ export default function QuestsPanel({ user, expanded = false }: QuestsPanelProps
                     type="checkbox"
                     checked={quest.completed}
                     onChange={() => handleQuestComplete(quest.id, quest.points)}
-                    className="w-6 h-6 rounded-lg border-2 border-white/30 bg-white/5 checked:bg-nrl-green checked:border-nrl-green cursor-pointer"
+                    className="w-6 h-6 rounded-lg border-2 border-nrl-border-medium bg-nrl-dark-hover checked:bg-nrl-green checked:border-nrl-green cursor-pointer"
                   />
                 </div>
-                <span className={`font-medium ${quest.completed ? "line-through text-gray-500" : "text-white"}`}>
+                <span className={`font-medium ${quest.completed ? "line-through text-nrl-text-muted" : "text-nrl-text-primary"}`}>
                   {quest.title}
                 </span>
               </div>
@@ -111,23 +111,23 @@ export default function QuestsPanel({ user, expanded = false }: QuestsPanelProps
       </div>
 
       {expanded && (
-        <div className="mt-6 pt-6 border-t border-white/10">
-          <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wide">
+        <div className="mt-6 pt-6 border-t border-nrl-border-light">
+          <h3 className="text-xs font-bold text-nrl-text-secondary mb-4 uppercase tracking-wider">
             Seasonal Quests
           </h3>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-              <span>Attend a game</span>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between p-4 bg-nrl-dark-hover rounded-xl border border-nrl-border-light">
+              <span className="text-nrl-text-primary font-medium">Attend a game</span>
               <span className="text-nrl-green font-semibold">+200 pts</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-              <span>Refer a mate</span>
+            <div className="flex items-center justify-between p-4 bg-nrl-dark-hover rounded-xl border border-nrl-border-light">
+              <span className="text-nrl-text-primary font-medium">Refer a mate</span>
               <span className="text-nrl-green font-semibold">+100 pts</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-nrl-green/30">
+            <div className="flex items-center justify-between p-4 bg-nrl-green/10 rounded-xl border border-nrl-green/30">
               <div>
-                <span className="font-semibold">Complete the Telstra Challenge</span>
-                <p className="text-xs text-gray-400">Watch 5 highlights this week</p>
+                <span className="font-semibold text-nrl-text-primary">Complete the Telstra Challenge</span>
+                <p className="text-xs text-nrl-text-secondary mt-1">Watch 5 highlights this week</p>
               </div>
               <span className="text-nrl-green font-semibold">+50 pts + Credits</span>
             </div>

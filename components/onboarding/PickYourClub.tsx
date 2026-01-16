@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { NRL_TEAMS, Team } from "@/lib/mockData";
+import Image from "next/image";
+import { NRL_TEAMS, Team } from "@/lib/data/teams";
 import { EntryPoint } from "@/lib/onboardingTypes";
 import ProgressiveProfile from "./ProgressiveProfile";
 
@@ -57,17 +58,23 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
             <button
               key={team.id}
               onClick={() => handleTeamSelect(team)}
-              className="group relative overflow-hidden glass rounded-2xl p-6 hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-white/20"
+              className="group relative overflow-hidden bg-nrl-dark-card rounded-2xl p-6 hover:scale-105 transition-all duration-300 border border-nrl-border-light hover:border-nrl-border-medium"
               style={{
-                background: `linear-gradient(135deg, ${team.primaryColor}15 0%, ${team.secondaryColor}15 100%)`,
+                background: `linear-gradient(135deg, ${team.primaryColor}10 0%, ${team.secondaryColor}10 100%)`,
               }}
             >
-              <div className="relative z-10">
-                <div className="text-6xl mb-3 transform group-hover:scale-110 transition-transform duration-300">
-                  {team.emoji}
+              <div className="relative z-10 flex flex-col items-center">
+                <div className="relative w-20 h-20 mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                  <Image
+                    src={team.logoUrl}
+                    alt={team.name}
+                    fill
+                    className="object-contain"
+                    unoptimized
+                  />
                 </div>
-                <div className="font-bold text-lg">{team.name}</div>
-                <div className="text-xs text-gray-400 mt-1">
+                <div className="font-bold text-lg text-nrl-text-primary">{team.name}</div>
+                <div className="text-xs text-nrl-text-secondary mt-1">
                   {team.fanCount.toLocaleString()} fans
                 </div>
               </div>
@@ -119,12 +126,18 @@ function TeamCelebration({ team }: { team: Team }) {
       </div>
 
       <div className="relative z-10 text-center space-y-8 max-w-2xl mx-auto">
-        {/* Explosive team emoji */}
+        {/* Explosive team logo */}
         <div
-          className="text-9xl md:text-[12rem] transform animate-bounce-in"
+          className="relative w-48 h-48 md:w-64 md:h-64 mx-auto transform animate-bounce-in"
           style={{ animation: "bounceIn 0.8s ease-out" }}
         >
-          {team.emoji}
+          <Image
+            src={team.logoUrl}
+            alt={team.name}
+            fill
+            className="object-contain drop-shadow-2xl"
+            unoptimized
+          />
         </div>
 
         {/* Welcome message */}

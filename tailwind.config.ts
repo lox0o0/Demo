@@ -10,10 +10,22 @@ const config: Config = {
     extend: {
       colors: {
         nrl: {
+          // Official NRL Green (primary brand color)
           green: "#00A651",
-          dark: "#0d0d0d",
+          // Dark backgrounds (matching NRL official site)
+          dark: "#0A0A0A",
+          "dark-card": "#141414",
+          "dark-hover": "#1A1A1A",
+          // Text colors
+          "text-primary": "#FFFFFF",
+          "text-secondary": "#B3B3B3",
+          "text-muted": "#808080",
+          // Accent colors
           amber: "#FFB800",
           gold: "#FFD700",
+          // Border colors
+          "border-light": "rgba(255, 255, 255, 0.1)",
+          "border-medium": "rgba(255, 255, 255, 0.15)",
         },
       },
       backgroundImage: {

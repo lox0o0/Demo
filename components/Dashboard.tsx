@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
+import { NRL_TEAMS } from "@/lib/data/teams";
 import FanScore from "./FanScore";
 import QuestsPanel from "./QuestsPanel";
 import StatusCards from "./StatusCards";
@@ -15,48 +17,65 @@ interface DashboardProps {
 export default function Dashboard({ user }: DashboardProps) {
   const [activeTab, setActiveTab] = useState<"home" | "quests" | "social" | "profile">("home");
 
-  const teamData = user?.teamData;
+  const teamData = user?.teamData || NRL_TEAMS.find(t => t.name === user?.team) || NRL_TEAMS[0];
   const teamColors = teamData 
     ? { primary: teamData.primaryColor, secondary: teamData.secondaryColor }
     : { primary: "#00A651", secondary: "#FFB800" };
+
+  // Mock featured content for hero section
+  const featuredContent = {
+    title: "Las Vegas: NRL's American Dream",
+    subtitle: "The historic double-header that changed everything",
+    image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&h=600&fit=crop",
+    category: "Feature",
+  };
+
+  // Mock matches/videos for grid
+  const mustWatchContent = [
+    { id: 1, title: "Round 1 Highlights", thumbnail: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&h=225&fit=crop", duration: "5:23" },
+    { id: 2, title: "Origin Preview", thumbnail: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&h=225&fit=crop", duration: "3:45" },
+    { id: 3, title: "Top 10 Tries", thumbnail: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&h=225&fit=crop", duration: "8:12" },
+    { id: 4, title: "Coach's Corner", thumbnail: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&h=225&fit=crop", duration: "12:30" },
+  ];
 
   return (
     <div className="min-h-screen bg-nrl-dark">
       {/* Premium background with team colors */}
       <div 
-        className="fixed inset-0 z-0 opacity-10"
+        className="fixed inset-0 z-0 opacity-5"
         style={{
           background: `radial-gradient(circle at 20% 50%, ${teamColors.primary} 0%, transparent 50%),
                        radial-gradient(circle at 80% 50%, ${teamColors.secondary} 0%, transparent 50%),
-                       linear-gradient(to bottom, #0d0d0d 0%, #000000 100%)`,
+                       linear-gradient(to bottom, #0A0A0A 0%, #000000 100%)`,
         }}
       />
       <div className="relative z-10">
         {/* Premium Header */}
-        <header className="glass-strong border-b border-white/10 sticky top-0 z-20">
-          <div className="max-w-6xl mx-auto px-4 py-5">
+        <header className="bg-nrl-dark-card border-b border-nrl-border-light sticky top-0 z-20 backdrop-blur-sm bg-opacity-95">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 {teamData && (
-                  <div 
-                    className="w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold shadow-lg"
-                    style={{
-                      background: `linear-gradient(135deg, ${teamColors.primary} 0%, ${teamColors.secondary} 100%)`,
-                    }}
-                  >
-                    {teamData.emoji}
+                  <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-white/5 border border-nrl-border-light">
+                    <Image
+                      src={teamData.logoUrl}
+                      alt={teamData.name}
+                      fill
+                      className="object-contain p-1"
+                      unoptimized
+                    />
                   </div>
                 )}
                 <div>
-                  <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                  <h1 className="text-xl font-bold text-nrl-text-primary">
                     Welcome back, {user?.name || "Fan"}! 👋
                   </h1>
-                  <p className="text-sm text-gray-400 font-medium">{user?.team}</p>
+                  <p className="text-sm text-nrl-text-secondary font-medium">{user?.team}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                 {user?.streak > 0 && (
-                  <div className="flex items-center gap-2 px-4 py-2 glass rounded-full border border-nrl-amber/30">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-nrl-dark-card rounded-full border border-nrl-amber/30">
                     <span className="text-xl fire-animation">🔥</span>
                     <span className="font-bold text-nrl-amber">{user.streak} day streak</span>
                   </div>
@@ -67,12 +86,87 @@ export default function Dashboard({ user }: DashboardProps) {
         </header>
 
         {/* Main Content */}
-        <main className="max-w-6xl mx-auto px-4 py-6 pb-24">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24">
           {activeTab === "home" && (
-            <div className="space-y-6">
-              <FanScore user={user} />
-              <StatusCards user={user} />
-              <QuestsPanel user={user} />
+            <div className="space-y-8">
+              {/* Hero Section - Featured Content */}
+              <div className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
+                <Image
+                  src={featuredContent.image}
+                  alt={featuredContent.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  unoptimized
+                />
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
+                
+                {/* Content */}
+                <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+                  <div className="max-w-3xl">
+                    <span className="inline-block px-3 py-1 bg-nrl-green text-white text-xs font-bold rounded-full mb-4 uppercase tracking-wider">
+                      {featuredContent.category}
+                    </span>
+                    <h2 className="text-3xl md:text-5xl font-black text-white mb-3 leading-tight">
+                      {featuredContent.title}
+                    </h2>
+                    <p className="text-lg md:text-xl text-gray-300 font-medium">
+                      {featuredContent.subtitle}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Must Watch Videos Grid */}
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-nrl-text-primary">Must-Watch Videos</h2>
+                  <button className="text-nrl-green hover:text-nrl-green/80 font-semibold text-sm">
+                    View All →
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {mustWatchContent.map((item) => (
+                    <div
+                      key={item.id}
+                      className="group relative bg-nrl-dark-card rounded-xl overflow-hidden border border-nrl-border-light hover:border-nrl-border-medium transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+                    >
+                      <div className="relative aspect-video bg-nrl-dark-hover">
+                        <Image
+                          src={item.thumbnail}
+                          alt={item.title}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-110"
+                          unoptimized
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/80 rounded text-xs font-semibold text-white">
+                          {item.duration}
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-semibold text-nrl-text-primary group-hover:text-nrl-green transition-colors line-clamp-2">
+                          {item.title}
+                        </h3>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Fan Score & Status Cards */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 space-y-6">
+                  <FanScore user={user} />
+                  <StatusCards user={user} />
+                </div>
+                <div>
+                  <QuestsPanel user={user} />
+                </div>
+              </div>
+
+              {/* Activity Feed */}
               <ActivityFeed />
             </div>
           )}
@@ -91,7 +185,7 @@ export default function Dashboard({ user }: DashboardProps) {
 
           {activeTab === "profile" && (
             <div className="space-y-6">
-              <ProfileView user={user} />
+              <ProfileView user={user} teamData={teamData} />
             </div>
           )}
         </main>
@@ -103,7 +197,7 @@ export default function Dashboard({ user }: DashboardProps) {
   );
 }
 
-function ProfileView({ user }: { user: any }) {
+function ProfileView({ user, teamData }: { user: any; teamData: any }) {
   const currentTier = TIERS.find((t, i) => {
     const nextTier = TIERS[i + 1];
     return user.points >= t.minPoints && (!nextTier || user.points < nextTier.minPoints);
@@ -114,47 +208,57 @@ function ProfileView({ user }: { user: any }) {
 
   return (
     <div className="space-y-6">
-      <div className="glass rounded-2xl p-6 text-center">
-        <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-nrl-green to-nrl-amber flex items-center justify-center text-4xl border-4 border-nrl-amber">
-          {user?.name?.charAt(0) || "F"}
+      <div className="bg-nrl-dark-card rounded-2xl p-8 text-center border border-nrl-border-light">
+        <div className="relative w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-nrl-green to-nrl-amber flex items-center justify-center border-4 border-nrl-amber overflow-hidden">
+          {teamData ? (
+            <Image
+              src={teamData.logoUrl}
+              alt={teamData.name}
+              fill
+              className="object-contain p-3"
+              unoptimized
+            />
+          ) : (
+            <span className="text-4xl">{user?.name?.charAt(0) || "F"}</span>
+          )}
         </div>
-        <h2 className="text-2xl font-bold mb-1">{user?.name}</h2>
-        <p className="text-gray-400 mb-4">{user?.team} • Member since {user?.memberSince}</p>
-        <div className="inline-block px-4 py-2 bg-nrl-amber/20 text-nrl-amber rounded-full font-semibold">
+        <h2 className="text-2xl font-bold mb-1 text-nrl-text-primary">{user?.name}</h2>
+        <p className="text-nrl-text-secondary mb-4">{user?.team} • Member since {user?.memberSince}</p>
+        <div className="inline-block px-4 py-2 bg-nrl-amber/20 text-nrl-amber rounded-full font-semibold border border-nrl-amber/30">
           {currentTier.name} Tier
         </div>
       </div>
 
-      <div className="glass rounded-2xl p-6">
-        <h3 className="text-lg font-semibold mb-4">Your Stats</h3>
+      <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+        <h3 className="text-lg font-semibold mb-4 text-nrl-text-primary">Your Stats</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <div className="text-2xl font-bold text-nrl-green">{user?.lifetimePoints || 0}</div>
-            <div className="text-sm text-gray-400">Lifetime Points</div>
+            <div className="text-sm text-nrl-text-secondary">Lifetime Points</div>
           </div>
           <div>
-            <div className="text-2xl font-bold">{user?.streak || 0}</div>
-            <div className="text-sm text-gray-400">Day Streak</div>
+            <div className="text-2xl font-bold text-nrl-text-primary">{user?.streak || 0}</div>
+            <div className="text-sm text-nrl-text-secondary">Day Streak</div>
           </div>
           <div>
-            <div className="text-2xl font-bold">12</div>
-            <div className="text-sm text-gray-400">Games Attended</div>
+            <div className="text-2xl font-bold text-nrl-text-primary">12</div>
+            <div className="text-sm text-nrl-text-secondary">Games Attended</div>
           </div>
           <div>
-            <div className="text-2xl font-bold">#847</div>
-            <div className="text-sm text-gray-400">Tipping Rank</div>
+            <div className="text-2xl font-bold text-nrl-text-primary">#847</div>
+            <div className="text-sm text-nrl-text-secondary">Tipping Rank</div>
           </div>
         </div>
       </div>
 
-      <div className="glass rounded-2xl p-6">
-        <h3 className="text-lg font-semibold mb-4">Progress to {nextTier.name}</h3>
+      <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+        <h3 className="text-lg font-semibold mb-4 text-nrl-text-primary">Progress to {nextTier.name}</h3>
         <div className="mb-2">
           <div className="flex justify-between text-sm mb-2">
-            <span>{user?.points || 0} points</span>
-            <span>{nextTier.minPoints} points</span>
+            <span className="text-nrl-text-secondary">{user?.points || 0} points</span>
+            <span className="text-nrl-text-secondary">{nextTier.minPoints} points</span>
           </div>
-          <div className="w-full bg-white/10 rounded-full h-3">
+          <div className="w-full bg-nrl-dark-hover rounded-full h-3">
             <div
               className="bg-gradient-to-r from-nrl-green to-nrl-amber h-3 rounded-full transition-all"
               style={{
@@ -163,7 +267,7 @@ function ProfileView({ user }: { user: any }) {
             />
           </div>
         </div>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-nrl-text-secondary">
           {pointsToNext} points to unlock: {nextTier.reward}
         </p>
       </div>

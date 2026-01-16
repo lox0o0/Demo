@@ -14,16 +14,16 @@ export default function Navigation({ activeTab, setActiveTab }: NavigationProps)
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 glass border-t border-white/10">
-      <div className="max-w-4xl mx-auto flex items-center justify-around p-2">
+    <nav className="fixed bottom-0 left-0 right-0 bg-nrl-dark-card border-t border-nrl-border-light backdrop-blur-sm bg-opacity-95 z-20">
+      <div className="max-w-7xl mx-auto flex items-center justify-around p-2">
         {navItems.map((item) => (
           <button
             key={item.id}
             onClick={() => setActiveTab(item.id)}
-            className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-colors ${
+            className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all ${
               activeTab === item.id
                 ? "text-nrl-green bg-nrl-green/10"
-                : "text-gray-400 hover:text-white"
+                : "text-nrl-text-secondary hover:text-nrl-text-primary"
             }`}
           >
             <span className="text-xl">{item.icon}</span>

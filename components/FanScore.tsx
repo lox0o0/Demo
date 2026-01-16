@@ -23,7 +23,7 @@ export default function FanScore({ user }: FanScoreProps) {
 
   return (
     <div 
-      className="glass-strong rounded-3xl p-8 relative overflow-hidden"
+      className="bg-nrl-dark-card rounded-2xl p-8 relative overflow-hidden border border-nrl-border-light"
       style={{
         background: `linear-gradient(135deg, ${teamColors.primary}08 0%, ${teamColors.secondary}08 100%)`,
       }}
@@ -37,14 +37,14 @@ export default function FanScore({ user }: FanScoreProps) {
       <div className="relative z-10">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Fan Score</h2>
+            <h2 className="text-sm font-semibold text-nrl-text-secondary uppercase tracking-wider mb-2">Fan Score</h2>
             <div className="text-6xl font-black bg-gradient-to-r from-nrl-green to-nrl-amber bg-clip-text text-transparent">
               {user?.points || 0}
             </div>
           </div>
           <div className="text-right">
             <div 
-              className="inline-block px-5 py-3 rounded-2xl font-bold text-sm shadow-lg border-2"
+              className="inline-block px-5 py-3 rounded-xl font-bold text-sm shadow-lg border-2"
               style={{
                 background: `linear-gradient(135deg, ${teamColors.primary} 0%, ${teamColors.secondary} 100%)`,
                 borderColor: teamColors.secondary,
@@ -57,10 +57,10 @@ export default function FanScore({ user }: FanScoreProps) {
 
         <div className="mb-6">
           <div className="flex justify-between text-sm mb-3">
-            <span className="text-gray-300 font-medium">{pointsToNext} pts to {nextTier.name}</span>
+            <span className="text-nrl-text-secondary font-medium">{pointsToNext} pts to {nextTier.name}</span>
             <span className="text-nrl-amber font-semibold">{nextTier.reward}</span>
           </div>
-          <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden shadow-inner">
+          <div className="w-full bg-nrl-dark-hover rounded-full h-3 overflow-hidden shadow-inner">
             <div
               className="h-3 rounded-full transition-all duration-500 relative overflow-hidden"
               style={{ 
@@ -73,14 +73,14 @@ export default function FanScore({ user }: FanScoreProps) {
           </div>
         </div>
 
-        <div className="flex items-center justify-between pt-4 border-t border-white/10">
+        <div className="flex items-center justify-between pt-4 border-t border-nrl-border-light">
           <div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Lifetime Points</div>
-            <div className="text-2xl font-bold text-white">{user?.lifetimePoints || 0}</div>
+            <div className="text-xs text-nrl-text-secondary uppercase tracking-wider mb-1">Lifetime Points</div>
+            <div className="text-2xl font-bold text-nrl-text-primary">{user?.lifetimePoints || 0}</div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Member Since</div>
-            <div className="text-2xl font-bold text-white">{user?.memberSince || new Date().getFullYear()}</div>
+            <div className="text-xs text-nrl-text-secondary uppercase tracking-wider mb-1">Member Since</div>
+            <div className="text-2xl font-bold text-nrl-text-primary">{user?.memberSince || new Date().getFullYear()}</div>
           </div>
         </div>
       </div>

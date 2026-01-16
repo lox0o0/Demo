@@ -4,8 +4,11 @@
 
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 13, 13, 13;
-  --background-end-rgb: 13, 13, 13;
+  --background-start-rgb: 10, 10, 10;
+  --background-end-rgb: 10, 10, 10;
+  --nrl-green: #00A651;
+  --nrl-dark: #0A0A0A;
+  --nrl-card-bg: #141414;
 }
 
 body {
