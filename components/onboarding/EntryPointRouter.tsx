@@ -5,7 +5,7 @@ import StadiumQR from "./entry-points/StadiumQR";
 import BroadcastQR from "./entry-points/BroadcastQR";
 import TippingInvite from "./entry-points/TippingInvite";
 import ContentEntry from "./entry-points/ContentEntry";
-import PickYourClub from "./PickYourClub";
+import SnappyOnboarding from "./SnappyOnboarding";
 import { EntryPoint } from "@/lib/onboardingTypes";
 
 interface EntryPointRouterProps {
@@ -37,7 +37,7 @@ export default function EntryPointRouter({ onComplete }: EntryPointRouterProps) 
 
   if (showClubPicker) {
     return (
-      <PickYourClub 
+      <SnappyOnboarding 
         entryPoint={entryPoint || "direct"}
         entryData={entryData}
         onComplete={onComplete}
@@ -55,6 +55,6 @@ export default function EntryPointRouter({ onComplete }: EntryPointRouterProps) 
     case "content":
       return <ContentEntry onComplete={handleEntryComplete} />;
     default:
-      return <PickYourClub entryPoint="direct" onComplete={onComplete} />;
+      return <SnappyOnboarding entryPoint="direct" onComplete={onComplete} />;
   }
 }

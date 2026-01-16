@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { NRL_TEAMS, Team } from "@/lib/data/teams";
 import { EntryPoint } from "@/lib/onboardingTypes";
-import ProgressiveProfile from "./ProgressiveProfile";
+import SnappyOnboarding from "./SnappyOnboarding";
 
 interface PickYourClubProps {
   entryPoint: EntryPoint;
@@ -17,21 +17,32 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   const [showCelebration, setShowCelebration] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
+  // For direct entry, use SnappyOnboarding which handles the full flow
+  // For other entry points that already collected data, we could show celebration first
+  if (entryPoint === "direct" || !entryData) {
+    return (
+      <SnappyOnboarding
+        entryPoint={entryPoint}
+        entryData={entryData}
+        onComplete={onComplete}
+      />
+    );
+  }
+
   const handleTeamSelect = (team: Team) => {
     setSelectedTeam(team);
+    // Quick celebration, then move to social step
     setShowCelebration(true);
-    
-    // Play celebration animation
     setTimeout(() => {
       setShowCelebration(false);
       setShowProfile(true);
-    }, 4000);
+    }, 2000); // Reduced from 4000ms for snappier flow
   };
 
   if (showProfile && selectedTeam) {
+    // Use the new snappy onboarding for social connection
     return (
-      <ProgressiveProfile
-        team={selectedTeam}
+      <SnappyOnboarding
         entryPoint={entryPoint}
         entryData={entryData}
         onComplete={onComplete}
