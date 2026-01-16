@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import Dashboard from "@/components/Dashboard";
-import Onboarding from "@/components/Onboarding";
+import EntryPointRouter from "@/components/onboarding/EntryPointRouter";
 
 export default function Home() {
   const [isOnboarded, setIsOnboarded] = useState(false);
@@ -28,7 +27,7 @@ export default function Home() {
   };
 
   if (!isOnboarded) {
-    return <Onboarding onComplete={handleOnboardingComplete} />;
+    return <EntryPointRouter onComplete={handleOnboardingComplete} />;
   }
 
   return <Dashboard user={user} />;

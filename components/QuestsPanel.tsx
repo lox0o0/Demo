@@ -24,58 +24,87 @@ export default function QuestsPanel({ user, expanded = false }: QuestsPanelProps
   };
 
   return (
-    <div className="glass rounded-2xl p-6">
-      <h2 className="text-xl font-bold mb-4">Quests & Missions</h2>
+    <div className="glass-strong rounded-3xl p-8">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold">Quests & Missions</h2>
+        <div className="text-sm text-gray-400">
+          {dailyQuests.filter(q => q.completed).length + weeklyQuests.filter(q => q.completed).length} / {dailyQuests.length + weeklyQuests.length} completed
+        </div>
+      </div>
 
-      <div className="mb-6">
-        <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wide">
+      <div className="mb-8">
+        <h3 className="text-xs font-bold text-gray-400 mb-4 uppercase tracking-wider">
           Daily Quests
         </h3>
-        <div className="space-y-2">
+        <div className="space-y-3">
           {dailyQuests.map((quest) => (
             <div
               key={quest.id}
-              className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
+              className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${
+                quest.completed
+                  ? "bg-nrl-green/10 border-nrl-green/30"
+                  : "bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10"
+              }`}
             >
-              <div className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  checked={quest.completed}
-                  onChange={() => handleQuestComplete(quest.id, quest.points)}
-                  className="w-5 h-5 rounded border-white/20 bg-white/5"
-                />
-                <span className={quest.completed ? "line-through text-gray-500" : ""}>
+              <div className="flex items-center gap-4 flex-1">
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    checked={quest.completed}
+                    onChange={() => handleQuestComplete(quest.id, quest.points)}
+                    className="w-6 h-6 rounded-lg border-2 border-white/30 bg-white/5 checked:bg-nrl-green checked:border-nrl-green cursor-pointer"
+                  />
+                </div>
+                <span className={`font-medium ${quest.completed ? "line-through text-gray-500" : "text-white"}`}>
                   {quest.title}
                 </span>
               </div>
-              <span className="text-nrl-green font-semibold">+{quest.points} pts</span>
+              <span className={`font-bold px-3 py-1 rounded-lg ${
+                quest.completed 
+                  ? "bg-nrl-green/20 text-nrl-green" 
+                  : "bg-nrl-green/10 text-nrl-green"
+              }`}>
+                +{quest.points} pts
+              </span>
             </div>
           ))}
         </div>
       </div>
 
       <div>
-        <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wide">
+        <h3 className="text-xs font-bold text-gray-400 mb-4 uppercase tracking-wider">
           Weekly Quests
         </h3>
-        <div className="space-y-2">
+        <div className="space-y-3">
           {weeklyQuests.map((quest) => (
             <div
               key={quest.id}
-              className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
+              className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${
+                quest.completed
+                  ? "bg-nrl-green/10 border-nrl-green/30"
+                  : "bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10"
+              }`}
             >
-              <div className="flex items-center gap-3 flex-1">
-                <input
-                  type="checkbox"
-                  checked={quest.completed}
-                  onChange={() => handleQuestComplete(quest.id, quest.points)}
-                  className="w-5 h-5 rounded border-white/20 bg-white/5"
-                />
-                <span className={quest.completed ? "line-through text-gray-500" : ""}>
+              <div className="flex items-center gap-4 flex-1">
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    checked={quest.completed}
+                    onChange={() => handleQuestComplete(quest.id, quest.points)}
+                    className="w-6 h-6 rounded-lg border-2 border-white/30 bg-white/5 checked:bg-nrl-green checked:border-nrl-green cursor-pointer"
+                  />
+                </div>
+                <span className={`font-medium ${quest.completed ? "line-through text-gray-500" : "text-white"}`}>
                   {quest.title}
                 </span>
               </div>
-              <span className="text-nrl-green font-semibold">+{quest.points} pts</span>
+              <span className={`font-bold px-3 py-1 rounded-lg ${
+                quest.completed 
+                  ? "bg-nrl-green/20 text-nrl-green" 
+                  : "bg-nrl-green/10 text-nrl-green"
+              }`}>
+                +{quest.points} pts
+              </span>
             </div>
           ))}
         </div>

@@ -4,11 +4,28 @@ A modern Next.js 14 demo application showcasing an NRL Fan Engagement Platform c
 
 ## Features
 
-- **Onboarding Flow**: Frictionless sign-up with team selection and instant personalization
-- **Fan Dashboard**: Real-time fan score, tier progression, and quick-access cards
-- **Quests & Missions**: Daily, weekly, and seasonal quests with point rewards
-- **Status & Progression**: Tier system (Rookie → Bronze → Silver → Gold → Legend)
-- **Fantasy & Tipping Integration**: Status cards showing current performance
+### Premium Onboarding System
+- **Multiple Entry Points**: 
+  - Stadium QR: "I Was There" badge claim
+  - Broadcast QR: Live game predictions
+  - Tipping Invite: Social competition entry
+  - Content: Article-based sign-up
+- **Emotional "Pick Your Club" Moment**: 
+  - Explosive team selection with animations
+  - Team colors and fan count celebration
+  - Crowd roar effect and welcome messages
+- **Progressive Profiling**: 
+  - Emotional first, admin later
+  - Step-by-step data capture
+  - SMS verification with rewards
+  - Progressive disclosure of fields
+
+### Fan Dashboard
+- **Premium UI**: NBA.com-level design quality
+- **Team-Personalized**: Dynamic colors based on selected team
+- **Fan Score**: Real-time points with tier progression
+- **Status Cards**: Fantasy & Tipping integration
+- **Quests & Missions**: Daily, weekly, and seasonal quests
 - **Social Features**: Activity feed, leagues, and leaderboards
 - **Profile Page**: Badge collection, stats, and progress tracking
 
@@ -32,6 +49,19 @@ npm run dev
 ```
 
 3. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Testing Entry Points
+
+To test different onboarding entry points, add `?entry=` to the URL:
+
+- **Stadium QR**: `http://localhost:3000?entry=stadium-qr`
+- **Broadcast QR**: `http://localhost:3000?entry=broadcast-qr`
+- **Tipping Invite**: `http://localhost:3000?entry=tipping-invite`
+- **Content**: `http://localhost:3000?entry=content`
+- **Direct**: `http://localhost:3000` (default)
+
+For tipping invite with custom data:
+`http://localhost:3000?entry=tipping-invite&inviter=Dave&comp=The%20Office%20Comp`
 
 ## Project Structure
 

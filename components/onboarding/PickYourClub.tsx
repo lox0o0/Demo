@@ -1,0 +1,214 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { NRL_TEAMS, Team } from "@/lib/mockData";
+import { EntryPoint } from "@/lib/onboardingTypes";
+import ProgressiveProfile from "./ProgressiveProfile";
+
+interface PickYourClubProps {
+  entryPoint: EntryPoint;
+  entryData?: any;
+  onComplete: (userData: any) => void;
+}
+
+export default function PickYourClub({ entryPoint, entryData, onComplete }: PickYourClubProps) {
+  const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+
+  const handleTeamSelect = (team: Team) => {
+    setSelectedTeam(team);
+    setShowCelebration(true);
+    
+    // Play celebration animation
+    setTimeout(() => {
+      setShowCelebration(false);
+      setShowProfile(true);
+    }, 4000);
+  };
+
+  if (showProfile && selectedTeam) {
+    return (
+      <ProgressiveProfile
+        team={selectedTeam}
+        entryPoint={entryPoint}
+        entryData={entryData}
+        onComplete={onComplete}
+      />
+    );
+  }
+
+  if (showCelebration && selectedTeam) {
+    return <TeamCelebration team={selectedTeam} />;
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-nrl-dark via-nrl-dark to-black">
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-nrl-green to-white bg-clip-text text-transparent">
+            Pick Your Club
+          </h1>
+          <p className="text-xl text-gray-400">Choose your team to get started</p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
+          {NRL_TEAMS.map((team) => (
+            <button
+              key={team.id}
+              onClick={() => handleTeamSelect(team)}
+              className="group relative overflow-hidden glass rounded-2xl p-6 hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-white/20"
+              style={{
+                background: `linear-gradient(135deg, ${team.primaryColor}15 0%, ${team.secondaryColor}15 100%)`,
+              }}
+            >
+              <div className="relative z-10">
+                <div className="text-6xl mb-3 transform group-hover:scale-110 transition-transform duration-300">
+                  {team.emoji}
+                </div>
+                <div className="font-bold text-lg">{team.name}</div>
+                <div className="text-xs text-gray-400 mt-1">
+                  {team.fanCount.toLocaleString()} fans
+                </div>
+              </div>
+              
+              {/* Hover effect overlay */}
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  background: `linear-gradient(135deg, ${team.primaryColor}20 0%, ${team.secondaryColor}20 100%)`,
+                }}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TeamCelebration({ team }: { team: Team }) {
+  const [showStats, setShowStats] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowStats(true), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div
+      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
+      style={{
+        background: `linear-gradient(135deg, ${team.primaryColor} 0%, ${team.secondaryColor} 100%)`,
+      }}
+    >
+      {/* Confetti/particles effect */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(50)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-white rounded-full animate-float"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 2}s`,
+              animationDuration: `${2 + Math.random() * 2}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="relative z-10 text-center space-y-8 max-w-2xl mx-auto">
+        {/* Explosive team emoji */}
+        <div
+          className="text-9xl md:text-[12rem] transform animate-bounce-in"
+          style={{ animation: "bounceIn 0.8s ease-out" }}
+        >
+          {team.emoji}
+        </div>
+
+        {/* Welcome message */}
+        <div className="space-y-4">
+          <h1
+            className="text-5xl md:text-7xl font-black text-white drop-shadow-2xl"
+            style={{ animation: "fadeInUp 0.8s ease-out 0.3s both" }}
+          >
+            {team.welcomeMessage}
+          </h1>
+          
+          {showStats && (
+            <div
+              className="space-y-2 text-white/90"
+              style={{ animation: "fadeInUp 0.8s ease-out 0.6s both" }}
+            >
+              <p className="text-2xl md:text-3xl font-bold">
+                You're one of {team.fanCount.toLocaleString()} {team.name} fans
+              </p>
+              <p className="text-xl md:text-2xl font-semibold">
+                {team.chant}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Badge unlock animation */}
+        {showStats && (
+          <div
+            className="mt-8 glass rounded-2xl p-6 border-2 border-white/30"
+            style={{ animation: "fadeInUp 0.8s ease-out 0.9s both" }}
+          >
+            <div className="text-4xl mb-2">🎖️</div>
+            <div className="text-xl font-bold text-white">Welcome Badge Unlocked!</div>
+            <div className="text-sm text-white/80 mt-1">+50 points awarded</div>
+          </div>
+        )}
+      </div>
+
+      <style jsx>{`
+        @keyframes bounceIn {
+          0% {
+            transform: scale(0);
+            opacity: 0;
+          }
+          50% {
+            transform: scale(1.2);
+          }
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+          }
+          50% {
+            transform: translateY(-20px) rotate(180deg);
+            opacity: 0.7;
+          }
+        }
+
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-bounce-in {
+          animation: bounceIn 0.8s ease-out;
+        }
+      `}</style>
+    </div>
+  );
+}
