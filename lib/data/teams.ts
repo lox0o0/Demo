@@ -13,7 +13,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 1,
     name: "Broncos",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/4/44/Brisbane_Broncos_logo.svg/200px-Brisbane_Broncos_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/f/fb/Brisbane_Broncos_logo.svg",
     primaryColor: "#8B1538",
     secondaryColor: "#FFD700",
     fanCount: 847291,
@@ -23,7 +23,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 2,
     name: "Rabbitohs",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/South_Sydney_Rabbitohs_logo.svg/200px-South_Sydney_Rabbitohs_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/f/fb/South_Sydney_Rabbitohs_Logo.svg",
     primaryColor: "#006633",
     secondaryColor: "#FF0000",
     fanCount: 523847,
@@ -33,7 +33,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 3,
     name: "Roosters",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4a/Sydney_Roosters_logo.svg/200px-Sydney_Roosters_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/3/39/Sydney_Roosters_Logo.svg",
     primaryColor: "#000080",
     secondaryColor: "#FF0000",
     fanCount: 412583,
@@ -43,7 +43,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 4,
     name: "Storm",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8f/Melbourne_Storm_logo.svg/200px-Melbourne_Storm_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/4/42/Melbourne_Storm_Logo.svg",
     primaryColor: "#1E3A8A",
     secondaryColor: "#FFD700",
     fanCount: 389472,
@@ -53,7 +53,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 5,
     name: "Panthers",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5f/Penrith_Panthers_logo.svg/200px-Penrith_Panthers_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/c/c5/Penrith_Panthers_logo.svg",
     primaryColor: "#000000",
     secondaryColor: "#FF6B00",
     fanCount: 456291,
@@ -63,7 +63,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 6,
     name: "Eels",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Parramatta_Eels_logo.svg/200px-Parramatta_Eels_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/d/d7/Parramatta_Eels_logo.svg",
     primaryColor: "#0066CC",
     secondaryColor: "#FFD700",
     fanCount: 398472,
@@ -73,7 +73,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 7,
     name: "Sharks",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6a/Cronulla-Sutherland_Sharks_logo.svg/200px-Cronulla-Sutherland_Sharks_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/2/2e/Cronulla_Sutherland_Sharks_logo.svg",
     primaryColor: "#0066CC",
     secondaryColor: "#FFFFFF",
     fanCount: 312847,
@@ -83,7 +83,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 8,
     name: "Sea Eagles",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9f/Manly-Warringah_Sea_Eagles_logo.svg/200px-Manly-Warringah_Sea_Eagles_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/1/17/Manly_Warringah_Sea_Eagles_Logo.svg",
     primaryColor: "#800080",
     secondaryColor: "#FFD700",
     fanCount: 287391,
@@ -93,7 +93,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 9,
     name: "Warriors",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/New_Zealand_Warriors_logo.svg/200px-New_Zealand_Warriors_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/9/90/New_Zealand_Warriors_logo.svg",
     primaryColor: "#000000",
     secondaryColor: "#FFD700",
     fanCount: 523847,
@@ -103,7 +103,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 10,
     name: "Cowboys",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0b/North_Queensland_Cowboys_logo.svg/200px-North_Queensland_Cowboys_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/6/64/North_Queensland_Cowboys_logo.svg",
     primaryColor: "#0066CC",
     secondaryColor: "#FFD700",
     fanCount: 298472,
@@ -113,7 +113,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 11,
     name: "Titans",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Gold_Coast_Titans_logo.svg/200px-Gold_Coast_Titans_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/6/66/Gold_Coast_Titans_logo.svg",
     primaryColor: "#0066CC",
     secondaryColor: "#FFD700",
     fanCount: 234791,
@@ -123,7 +123,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 12,
     name: "Dragons",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/1/1c/St_George_Illawarra_Dragons_logo.svg/200px-St_George_Illawarra_Dragons_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/3/34/St._George_Illawarra_Dragons_Logo.svg",
     primaryColor: "#FF0000",
     secondaryColor: "#FFFFFF",
     fanCount: 412583,
@@ -133,7 +133,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 13,
     name: "Knights",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8a/Newcastle_Knights_logo.svg/200px-Newcastle_Knights_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/0/0e/Newcastle_Knights_logo.svg",
     primaryColor: "#000080",
     secondaryColor: "#FFD700",
     fanCount: 287391,
@@ -143,7 +143,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 14,
     name: "Raiders",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Canberra_Raiders_logo.svg/200px-Canberra_Raiders_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/e/e5/Canberra_Raiders_logo.svg",
     primaryColor: "#006633",
     secondaryColor: "#FFD700",
     fanCount: 198472,
@@ -153,7 +153,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 15,
     name: "Tigers",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Wests_Tigers_logo.svg/200px-Wests_Tigers_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/b/b1/Wests_Tigers_Logo.svg",
     primaryColor: "#FF6B00",
     secondaryColor: "#000000",
     fanCount: 412583,
@@ -163,7 +163,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 16,
     name: "Bulldogs",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8a/Canterbury-Bankstown_Bulldogs_logo.svg/200px-Canterbury-Bankstown_Bulldogs_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/a/a2/Canterbury-Bankstown_Bulldogs_logo.svg",
     primaryColor: "#0066CC",
     secondaryColor: "#FFFFFF",
     fanCount: 398472,
@@ -173,7 +173,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 17,
     name: "Dolphins",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8c/The_Dolphins_logo.svg/200px-The_Dolphins_logo.svg.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/8/8c/The_Dolphins_logo.svg",
     primaryColor: "#FF6B00",
     secondaryColor: "#0066CC",
     fanCount: 234791,
