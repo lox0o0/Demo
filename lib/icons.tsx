@@ -11,10 +11,10 @@ export const SOCIAL_LOGOS = {
   x: "/social-logos/x.png",
 };
 
-// Auth Provider Logos
+// Auth Provider Logos - using files from social-logos folder
 export const AUTH_LOGOS = {
-  google: "/auth-logos/google.svg", // Will use SVG for Google
-  apple: "/auth-logos/apple.svg", // Will use SVG for Apple
+  google: "/social-logos/Google__G__logo.svg",
+  apple: "/social-logos/apple.jpg",
 };
 
 // Auth Icon Component for Google and Apple
