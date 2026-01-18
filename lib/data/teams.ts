@@ -23,7 +23,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 2,
     name: "Rabbitohs",
-    logoUrl: "/team-logos/rabbitohs.png",
+    logoUrl: "/team-logos/rabbitohs.svg",
     primaryColor: "#0C4629",
     secondaryColor: "#FF0000",
     fanCount: 523847,
@@ -63,7 +63,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 6,
     name: "Eels",
-    logoUrl: "/team-logos/eels.png",
+    logoUrl: "/team-logos/eels.svg",
     primaryColor: "#006BA6",
     secondaryColor: "#FFD700",
     fanCount: 398472,
@@ -73,7 +73,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 7,
     name: "Sharks",
-    logoUrl: "/team-logos/sharks.png",
+    logoUrl: "/team-logos/sharks.svg",
     primaryColor: "#0097C7",
     secondaryColor: "#FFFFFF",
     fanCount: 312847,
@@ -153,7 +153,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 15,
     name: "Tigers",
-    logoUrl: "/team-logos/tigers.png",
+    logoUrl: "/team-logos/tigers.svg",
     primaryColor: "#F5821F",
     secondaryColor: "#000000",
     fanCount: 412583,
