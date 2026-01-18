@@ -81,6 +81,18 @@ export default function Dashboard({ user }: DashboardProps) {
                     <span className="font-bold text-nrl-amber">{user.streak} day streak</span>
                   </div>
                 )}
+                {/* Reset button for testing */}
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("nrl_onboarded");
+                    localStorage.removeItem("nrl_user");
+                    window.location.reload();
+                  }}
+                  className="text-xs text-nrl-text-muted hover:text-nrl-text-primary px-2 py-1 rounded"
+                  title="Reset onboarding (for testing)"
+                >
+                  Reset
+                </button>
               </div>
             </div>
           </div>

@@ -122,7 +122,7 @@ export default function Navigation({
       )}
 
       {/* Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-nrl-dark-card border-t border-nrl-border-light backdrop-blur-sm bg-opacity-95 z-40">
+      <nav className="fixed bottom-0 left-0 right-0 bg-nrl-dark-card border-t border-nrl-border-light backdrop-blur-sm bg-opacity-95 z-50 shadow-lg">
         {/* Dropdown Menu */}
         {openDropdown && (
           <div className="absolute bottom-full left-0 right-0 bg-nrl-dark-card border-t border-nrl-border-light max-h-64 overflow-y-auto">
