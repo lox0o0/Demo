@@ -160,17 +160,17 @@ export default function Navigation({
                 <div key={item.id} className="relative flex-shrink-0">
                   <button
                     onClick={() => handleNavClick(item.id)}
-                    className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all min-w-[60px] ${
+                    className={`flex flex-col items-center justify-center gap-0.5 px-3 py-2.5 rounded-xl transition-all min-w-[60px] ${
                       isActive
                         ? "text-nrl-green bg-nrl-green/10"
                         : "text-nrl-text-secondary hover:text-nrl-text-primary"
                     }`}
                   >
-                    <div className="relative flex items-center justify-center">
+                    <div className="relative flex items-center justify-center w-full">
                       <NavIcon type={item.id} />
                       {hasDropdown && (
                         <span
-                          className={`absolute -top-1 -right-1 text-[8px] transition-transform ${
+                          className={`absolute -top-0.5 -right-0.5 text-[6px] text-nrl-text-muted transition-transform ${
                             isDropdownOpen ? "rotate-180" : ""
                           }`}
                         >
@@ -178,9 +178,6 @@ export default function Navigation({
                         </span>
                       )}
                     </div>
-                    <span className="text-[10px] font-medium text-center leading-tight mt-1">
-                      {item.label}
-                    </span>
                   </button>
                 </div>
               );
