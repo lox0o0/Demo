@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { NRL_TEAMS, Team } from "@/lib/data/teams";
 import { EntryPoint } from "@/lib/onboardingTypes";
@@ -73,10 +73,10 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
     }
   };
 
-  const handleCelebrationComplete = () => {
+  const handleCelebrationComplete = useCallback(() => {
     // Move to social step after celebration
     setStep("social");
-  };
+  }, []);
 
   const handleSocialToggle = (platformId: string) => {
     setConnectedSocials((prev) =>
@@ -128,11 +128,15 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
     }
   };
 
-  const handleComplete = () => {
+  const handleComplete = (overrideName?: string, overrideEmail?: string) => {
     if (selectedTeam) {
+      // Use override values if provided (for immediate auth callbacks), otherwise use state
+      const finalName = overrideName !== undefined ? overrideName : (name || "Fan");
+      const finalEmail = overrideEmail !== undefined ? overrideEmail : (email || "");
+      
       const userData = {
-        name: name || "Fan",
-        email: email || "",
+        name: finalName,
+        email: finalEmail,
         team: selectedTeam.name,
         teamData: selectedTeam,
         fanScore: calculatePoints(),
@@ -200,17 +204,23 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
     const handleGoogleSignIn = () => {
       // In a real app, this would trigger Google OAuth
       // For now, simulate getting user data
-      setName("User"); // Would come from Google
-      setEmail("user@gmail.com"); // Would come from Google
-      handleComplete();
+      const googleName = "User"; // Would come from Google
+      const googleEmail = "user@gmail.com"; // Would come from Google
+      // Update state for UI consistency, but pass values directly to handleComplete
+      setName(googleName);
+      setEmail(googleEmail);
+      handleComplete(googleName, googleEmail);
     };
 
     const handleAppleSignIn = () => {
       // In a real app, this would trigger Apple Sign In
       // For now, simulate getting user data
-      setName("User"); // Would come from Apple
-      setEmail("user@icloud.com"); // Would come from Apple
-      handleComplete();
+      const appleName = "User"; // Would come from Apple
+      const appleEmail = "user@icloud.com"; // Would come from Apple
+      // Update state for UI consistency, but pass values directly to handleComplete
+      setName(appleName);
+      setEmail(appleEmail);
+      handleComplete(appleName, appleEmail);
     };
 
     return (
