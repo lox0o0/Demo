@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
-// Social Media Logo URLs (official brand assets - verified working URLs)
+// Social Media Logo URLs - using local files from public/social-logos/
 export const SOCIAL_LOGOS = {
-  facebook: "https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png",
-  tiktok: "https://upload.wikimedia.org/wikipedia/commons/a/a7/TikTok_logo.svg",
-  instagram: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png",
-  x: "https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_original.svg",
+  facebook: "/social-logos/facebook.png",
+  tiktok: "/social-logos/tiktok.svg", // or .png
+  instagram: "/social-logos/instagram.png",
+  x: "/social-logos/x.svg", // or .png
 };
 
 // Navigation Icons - text-only labels (like official NRL site)
