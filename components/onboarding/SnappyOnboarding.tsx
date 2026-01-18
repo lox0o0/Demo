@@ -57,18 +57,20 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete }: 
 
   const handleSkip = () => {
     if (selectedTeam) {
+      // When skipping, don't include social connection points - only base welcome bonus
+      const basePoints = 50; // Base welcome bonus only
       const userData = {
         name: name || "Fan",
         email: email || "",
         team: selectedTeam.name,
         teamData: selectedTeam,
-        fanScore: calculatePoints(),
+        fanScore: basePoints,
         tier: "Rookie",
-        points: calculatePoints(),
-        lifetimePoints: calculatePoints(),
+        points: basePoints,
+        lifetimePoints: basePoints,
         memberSince: new Date().getFullYear(),
         streak: 0,
-        connectedSocials: [],
+        connectedSocials: [], // Empty array matches the base points calculation
         profileCompletion: calculateProfileCompletion(),
         entryPoint,
         entryData,

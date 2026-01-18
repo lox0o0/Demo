@@ -31,18 +31,6 @@ export default function Navigation({
 }: NavigationProps) {
   const [openDropdown, setOpenDropdown] = useState<NavSection | null>(null);
 
-  const handleNavClick = (section: NavSection, subSection?: any) => {
-    if (openDropdown === section) {
-      setOpenDropdown(null);
-    } else {
-      setOpenDropdown(section);
-      if (subSection) {
-        setActiveSection(section, subSection);
-        setOpenDropdown(null);
-      }
-    }
-  };
-
   const navItems = [
     {
       id: "latest" as NavSection,
@@ -110,6 +98,29 @@ export default function Navigation({
       ],
     },
   ];
+
+  const handleNavClick = (section: NavSection, subSection?: any) => {
+    const clickedItem = navItems.find((item) => item.id === section);
+    const hasDropdown = !!clickedItem?.dropdown;
+
+    if (hasDropdown) {
+      // For items with dropdowns, toggle the dropdown
+      if (openDropdown === section) {
+        setOpenDropdown(null);
+      } else {
+        setOpenDropdown(section);
+        // If a subSection is provided, navigate to it and close dropdown
+        if (subSection) {
+          setActiveSection(section, subSection);
+          setOpenDropdown(null);
+        }
+      }
+    } else {
+      // For items without dropdowns, navigate directly and close any open dropdown
+      setOpenDropdown(null);
+      setActiveSection(section);
+    }
+  };
 
   return (
     <>
