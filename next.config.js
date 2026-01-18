@@ -16,7 +16,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**.wikimedia.org',
+        hostname: '*.wikimedia.org',
       },
     ],
   },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { NRL_TEAMS, Team } from "@/lib/data/teams";
 import { EntryPoint } from "@/lib/onboardingTypes";
@@ -140,27 +140,75 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
 
 function TeamCelebration({ team }: { team: Team }) {
   const [showStats, setShowStats] = useState(false);
+  const [videoEnded, setVideoEnded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const isBroncos = team.name === "Broncos";
+  
+  // Broncos-specific assets
+  const broncosVideoPath = "/broncos/splash-video.mp4";
+  const broncosBackgroundPath = "/broncos/background.jpg";
+  
+  // Check if video exists (we'll handle this gracefully)
+  const hasVideo = isBroncos;
+  const hasBackground = isBroncos;
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowStats(true), 1500);
-    return () => clearTimeout(timer);
-  }, []);
+    // If no video or video ended/errored, show stats after delay
+    if (!hasVideo || videoEnded || videoError) {
+      const timer = setTimeout(() => setShowStats(true), hasVideo ? 500 : 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [hasVideo, videoEnded, videoError]);
 
-  // Trophy image for Broncos (or use team-specific images)
-  const trophyImageUrl = team.name === "Broncos" 
-    ? "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1920&q=80" // Placeholder - replace with actual trophy image URL
-    : null;
+  const handleVideoEnd = () => {
+    setVideoEnded(true);
+  };
 
+  const handleVideoError = () => {
+    setVideoError(true);
+  };
+
+  // Show video first for Broncos (if available)
+  if (isBroncos && hasVideo && !videoEnded && !videoError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          playsInline
+          onEnded={handleVideoEnd}
+          onError={handleVideoError}
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src={broncosVideoPath} type="video/mp4" />
+          {/* Fallback if video format not supported */}
+        </video>
+        {/* Overlay gradient for smooth transition */}
+        <div 
+          className="absolute inset-0 transition-opacity duration-1000"
+          style={{
+            opacity: videoEnded ? 1 : 0,
+            background: `linear-gradient(135deg, ${team.primaryColor}CC 0%, ${team.secondaryColor}CC 100%)`,
+          }}
+        />
+      </div>
+    );
+  }
+
+  // Main celebration screen with background image
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
+      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden transition-all duration-1000"
       style={{
-        background: trophyImageUrl 
-          ? `linear-gradient(135deg, ${team.primaryColor}CC 0%, ${team.secondaryColor}CC 100%), url(${trophyImageUrl})`
+        background: hasBackground && isBroncos
+          ? `linear-gradient(135deg, ${team.primaryColor}CC 0%, ${team.secondaryColor}CC 100%), url(${broncosBackgroundPath})`
           : `linear-gradient(135deg, ${team.primaryColor} 0%, ${team.secondaryColor} 100%)`,
-        backgroundSize: trophyImageUrl ? 'cover' : 'auto',
-        backgroundPosition: trophyImageUrl ? 'center' : 'auto',
-        backgroundBlendMode: trophyImageUrl ? 'overlay' : 'normal',
+        backgroundSize: hasBackground ? 'cover' : 'auto',
+        backgroundPosition: hasBackground ? 'center' : 'auto',
+        backgroundBlendMode: hasBackground ? 'overlay' : 'normal',
       }}
     >
       {/* Confetti/particles effect */}
