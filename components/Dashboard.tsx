@@ -306,13 +306,22 @@ export default function Dashboard({ user }: DashboardProps) {
 }
 
 function ProfileView({ user, teamData }: { user: any; teamData: any }) {
+  const userPoints = user?.points || 0;
+  const maxTier = TIERS[TIERS.length - 1];
+  
   const currentTier = TIERS.find((t, i) => {
     const nextTier = TIERS[i + 1];
-    return user.points >= t.minPoints && (!nextTier || user.points < nextTier.minPoints);
+    return userPoints >= t.minPoints && (!nextTier || userPoints < nextTier.minPoints);
   }) || TIERS[0];
 
-  const nextTier = TIERS.find((t) => t.minPoints > user.points) || TIERS[TIERS.length - 1];
-  const pointsToNext = nextTier.minPoints - user.points;
+  // Check if user is at max tier
+  const isMaxTier = currentTier.name === maxTier.name && userPoints >= maxTier.minPoints;
+  
+  const nextTier = isMaxTier 
+    ? null 
+    : TIERS.find((t) => t.minPoints > userPoints);
+  
+  const pointsToNext = isMaxTier ? 0 : (nextTier ? nextTier.minPoints - userPoints : 0);
 
   return (
     <div className="space-y-6">
@@ -360,23 +369,32 @@ function ProfileView({ user, teamData }: { user: any; teamData: any }) {
       </div>
 
       <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
-        <h3 className="text-lg font-semibold mb-4 text-nrl-text-primary">Progress to {nextTier.name}</h3>
+        <h3 className="text-lg font-semibold mb-4 text-nrl-text-primary">
+          {isMaxTier ? `🏆 ${currentTier.name} Tier - Maximum Achieved!` : `Progress to ${nextTier?.name || currentTier.name}`}
+        </h3>
         <div className="mb-2">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-nrl-text-secondary">{user?.points || 0} points</span>
-            <span className="text-nrl-text-secondary">{nextTier.minPoints} points</span>
+            <span className="text-nrl-text-secondary">{userPoints} points</span>
+            <span className="text-nrl-text-secondary">
+              {isMaxTier ? maxTier.minPoints : nextTier ? nextTier.minPoints : currentTier.minPoints} points
+            </span>
           </div>
           <div className="w-full bg-nrl-dark-hover rounded-full h-3">
             <div
               className="bg-gradient-to-r from-nrl-green to-nrl-amber h-3 rounded-full transition-all"
               style={{
-                width: `${Math.min((user?.points / nextTier.minPoints) * 100, 100)}%`,
+                width: `${isMaxTier ? 100 : nextTier ? Math.min((userPoints / nextTier.minPoints) * 100, 100) : 100}%`,
               }}
             />
           </div>
         </div>
         <p className="text-sm text-nrl-text-secondary">
-          {pointsToNext} points to unlock: {nextTier.reward}
+          {isMaxTier 
+            ? `You've reached the maximum tier! Enjoy ${currentTier.reward}`
+            : nextTier
+              ? `${pointsToNext} points to unlock: ${nextTier.reward}`
+              : `Current tier: ${currentTier.reward}`
+          }
         </p>
       </div>
     </div>

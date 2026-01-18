@@ -7,14 +7,28 @@ interface FanScoreProps {
 }
 
 export default function FanScore({ user }: FanScoreProps) {
+  const userPoints = user?.points || 0;
+  const maxTier = TIERS[TIERS.length - 1];
+  
   const currentTier = TIERS.find((t, i) => {
     const nextTier = TIERS[i + 1];
-    return user.points >= t.minPoints && (!nextTier || user.points < nextTier.minPoints);
+    return userPoints >= t.minPoints && (!nextTier || userPoints < nextTier.minPoints);
   }) || TIERS[0];
 
-  const nextTier = TIERS.find((t) => t.minPoints > user.points) || TIERS[TIERS.length - 1];
-  const pointsToNext = nextTier.minPoints - user.points;
-  const progressPercent = Math.min((user.points / nextTier.minPoints) * 100, 100);
+  // Check if user is at max tier
+  const isMaxTier = currentTier.name === maxTier.name && userPoints >= maxTier.minPoints;
+  
+  const nextTier = isMaxTier 
+    ? null 
+    : TIERS.find((t) => t.minPoints > userPoints);
+  
+  // Handle max tier case
+  const pointsToNext = isMaxTier ? 0 : (nextTier ? nextTier.minPoints - userPoints : 0);
+  const progressPercent = isMaxTier 
+    ? 100 
+    : nextTier 
+      ? Math.min((userPoints / nextTier.minPoints) * 100, 100)
+      : 100;
 
   const teamData = user?.teamData;
   const teamColors = teamData 
@@ -57,14 +71,28 @@ export default function FanScore({ user }: FanScoreProps) {
 
         <div className="mb-6">
           <div className="flex justify-between text-sm mb-3">
-            <span className="text-nrl-text-secondary font-medium">{pointsToNext} pts to {nextTier.name}</span>
-            <span className="text-nrl-amber font-semibold">{nextTier.reward}</span>
+            {isMaxTier ? (
+              <>
+                <span className="text-nrl-text-secondary font-medium">🏆 Maximum tier achieved!</span>
+                <span className="text-nrl-amber font-semibold">{currentTier.reward}</span>
+              </>
+            ) : nextTier ? (
+              <>
+                <span className="text-nrl-text-secondary font-medium">{pointsToNext} pts to {nextTier.name}</span>
+                <span className="text-nrl-amber font-semibold">{nextTier.reward}</span>
+              </>
+            ) : (
+              <>
+                <span className="text-nrl-text-secondary font-medium">Progress complete</span>
+                <span className="text-nrl-amber font-semibold">{currentTier.reward}</span>
+              </>
+            )}
           </div>
           <div className="w-full bg-nrl-dark-hover rounded-full h-3 overflow-hidden shadow-inner">
             <div
               className="h-3 rounded-full transition-all duration-500 relative overflow-hidden"
               style={{ 
-                width: `${progressPercent}%`,
+                width: `${Math.min(progressPercent, 100)}%`,
                 background: `linear-gradient(90deg, ${teamColors.primary} 0%, ${teamColors.secondary} 100%)`,
               }}
             >
