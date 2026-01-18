@@ -83,7 +83,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 8,
     name: "Sea Eagles",
-    logoUrl: "/team-logos/eagles.jpg",
+    logoUrl: "/team-logos/sea-eagles.jpg",
     primaryColor: "#6F163D",
     secondaryColor: "#FFD700",
     fanCount: 287391,
