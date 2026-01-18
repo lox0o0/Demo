@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 
-// Social Media Logo URLs (official brand assets - verified working URLs)
+// Social Media Logo URLs (official brand assets - high quality)
 export const SOCIAL_LOGOS = {
-  facebook: "https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.svg",
+  facebook: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Facebook_logo_%28square%29.png",
   tiktok: "https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg",
   instagram: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png",
   x: "https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_original.svg",

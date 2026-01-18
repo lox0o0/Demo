@@ -6,6 +6,40 @@ import { NRL_TEAMS, Team } from "@/lib/data/teams";
 import { EntryPoint } from "@/lib/onboardingTypes";
 import SnappyOnboarding from "./SnappyOnboarding";
 
+// Team logo component with error handling
+function TeamLogoWithFallback({ src, alt }: { src: string; alt: string }) {
+  const [imgSrc, setImgSrc] = useState(src);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setImgSrc(src);
+    setHasError(false);
+  }, [src]);
+
+  return (
+    <div className="relative w-full h-full">
+      {!hasError ? (
+        <Image
+          src={imgSrc}
+          alt={alt}
+          fill
+          className="object-contain"
+          unoptimized
+          onError={() => {
+            setHasError(true);
+            // Fallback to a placeholder or team initial
+            setImgSrc(`data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="80" height="80" fill="#1a1a1a"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#fff" font-size="24" font-weight="bold">${alt.charAt(0)}</text></svg>`)}`);
+          }}
+        />
+      ) : (
+        <div className="w-full h-full flex items-center justify-center bg-nrl-dark-card rounded-lg border border-nrl-border-light">
+          <span className="text-nrl-text-primary font-bold text-lg">{alt.charAt(0)}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface PickYourClubProps {
   entryPoint: EntryPoint;
   entryData?: any;
@@ -78,12 +112,9 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
             >
               <div className="relative z-10 flex flex-col items-center">
                 <div className="relative w-20 h-20 mb-4 transform group-hover:scale-110 transition-transform duration-300">
-                  <Image
+                  <TeamLogoWithFallback
                     src={team.logoUrl}
                     alt={team.name}
-                    fill
-                    className="object-contain"
-                    unoptimized
                   />
                 </div>
                 <div className="font-bold text-lg text-nrl-text-primary">{team.name}</div>
@@ -115,11 +146,21 @@ function TeamCelebration({ team }: { team: Team }) {
     return () => clearTimeout(timer);
   }, []);
 
+  // Trophy image for Broncos (or use team-specific images)
+  const trophyImageUrl = team.name === "Broncos" 
+    ? "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1920&q=80" // Placeholder - replace with actual trophy image URL
+    : null;
+
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
       style={{
-        background: `linear-gradient(135deg, ${team.primaryColor} 0%, ${team.secondaryColor} 100%)`,
+        background: trophyImageUrl 
+          ? `linear-gradient(135deg, ${team.primaryColor}CC 0%, ${team.secondaryColor}CC 100%), url(${trophyImageUrl})`
+          : `linear-gradient(135deg, ${team.primaryColor} 0%, ${team.secondaryColor} 100%)`,
+        backgroundSize: trophyImageUrl ? 'cover' : 'auto',
+        backgroundPosition: trophyImageUrl ? 'center' : 'auto',
+        backgroundBlendMode: trophyImageUrl ? 'overlay' : 'normal',
       }}
     >
       {/* Confetti/particles effect */}

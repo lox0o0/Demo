@@ -6,6 +6,40 @@ import { NRL_TEAMS, Team } from "@/lib/data/teams";
 import { EntryPoint } from "@/lib/onboardingTypes";
 import { SocialIcon, SOCIAL_LOGOS } from "@/lib/icons";
 
+// Team logo component with error handling
+function TeamLogoWithFallback({ src, alt }: { src: string; alt: string }) {
+  const [imgSrc, setImgSrc] = useState(src);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setImgSrc(src);
+    setHasError(false);
+  }, [src]);
+
+  return (
+    <div className="relative w-full h-full">
+      {!hasError ? (
+        <Image
+          src={imgSrc}
+          alt={alt}
+          fill
+          className="object-contain"
+          unoptimized
+          onError={() => {
+            setHasError(true);
+            // Fallback to a placeholder or team initial
+            setImgSrc(`data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" fill="#1a1a1a"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold">${alt.charAt(0)}</text></svg>`)}`);
+          }}
+        />
+      ) : (
+        <div className="w-full h-full flex items-center justify-center bg-nrl-dark-card rounded-lg border border-nrl-border-light">
+          <span className="text-nrl-text-primary font-bold text-sm">{alt.charAt(0)}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface SnappyOnboardingProps {
   entryPoint: EntryPoint;
   entryData?: any;
@@ -128,12 +162,9 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
               >
                 <div className="relative z-10 flex flex-col items-center">
                   <div className="relative w-16 h-16 mb-3 transform group-hover:scale-110 transition-transform duration-300">
-                    <Image
+                    <TeamLogoWithFallback
                       src={team.logoUrl}
                       alt={team.name}
-                      fill
-                      className="object-contain"
-                      unoptimized
                     />
                   </div>
                   <div className="font-bold text-sm text-nrl-text-primary">{team.name}</div>
