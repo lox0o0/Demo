@@ -48,11 +48,11 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete }: 
     return points;
   };
 
-  const calculateProfileCompletion = () => {
+  const calculateProfileCompletion = (socialsToCount: string[] = connectedSocials) => {
     let completion = 20; // Base (team selected)
     if (name) completion += 15;
     if (email) completion += 15;
-    completion += connectedSocials.length * 12.5; // Each social = 12.5%
+    completion += socialsToCount.length * 12.5; // Each social = 12.5%
     return Math.min(completion, 100);
   };
 
@@ -60,6 +60,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete }: 
     if (selectedTeam) {
       // When skipping, don't include social connection points - only base welcome bonus
       const basePoints = 50; // Base welcome bonus only
+      const emptySocials: string[] = []; // Explicitly empty for skip
       const userData = {
         name: name || "Fan",
         email: email || "",
@@ -71,8 +72,8 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete }: 
         lifetimePoints: basePoints,
         memberSince: new Date().getFullYear(),
         streak: 0,
-        connectedSocials: [], // Empty array matches the base points calculation
-        profileCompletion: calculateProfileCompletion(),
+        connectedSocials: emptySocials, // Empty array matches the base points calculation
+        profileCompletion: calculateProfileCompletion(emptySocials), // Calculate with empty socials
         entryPoint,
         entryData,
       };
