@@ -184,7 +184,19 @@ export function TeamCelebration({ team, onComplete }: { team: Team; onComplete?:
   // Show video first for Broncos (if available)
   if (isBroncos && hasVideo && !videoEnded && !videoError) {
     return (
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
+      <div 
+        className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black cursor-pointer"
+        onClick={handleVideoEnd}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleVideoEnd();
+          }
+        }}
+        tabIndex={0}
+        role="button"
+        aria-label="Click to skip video"
+      >
         <video
           ref={videoRef}
           autoPlay
@@ -205,6 +217,10 @@ export function TeamCelebration({ team, onComplete }: { team: Team; onComplete?:
             background: `linear-gradient(135deg, ${team.primaryColor}CC 0%, ${team.secondaryColor}CC 100%)`,
           }}
         />
+        {/* Skip hint */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/60 text-sm">
+          Click anywhere to skip
+        </div>
       </div>
     );
   }

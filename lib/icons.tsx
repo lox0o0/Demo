@@ -11,6 +11,51 @@ export const SOCIAL_LOGOS = {
   x: "/social-logos/x.png",
 };
 
+// Auth Provider Logos
+export const AUTH_LOGOS = {
+  google: "/auth-logos/google.svg", // Will use SVG for Google
+  apple: "/auth-logos/apple.svg", // Will use SVG for Apple
+};
+
+// Auth Icon Component for Google and Apple
+export const AuthIcon = ({ provider, size = 24 }: { provider: "google" | "apple"; size?: number }) => {
+  const logoUrl = AUTH_LOGOS[provider];
+  const [imgSrc, setImgSrc] = useState(logoUrl);
+  const [hasError, setHasError] = useState(false);
+  
+  useEffect(() => {
+    if (logoUrl) {
+      setImgSrc(logoUrl);
+      setHasError(false);
+    }
+  }, [logoUrl]);
+  
+  if (!logoUrl || hasError) {
+    // Fallback to text/emoji if logo not found
+    return (
+      <span className="text-lg font-semibold text-nrl-text-primary">
+        {provider === "google" ? "G" : "🍎"}
+      </span>
+    );
+  }
+  
+  return (
+    <div className="relative flex items-center justify-center" style={{ width: size, height: size, minWidth: size, minHeight: size }}>
+      <Image
+        src={imgSrc}
+        alt={`${provider} logo`}
+        width={size}
+        height={size}
+        className="object-contain w-full h-full"
+        unoptimized
+        onError={() => {
+          setHasError(true);
+        }}
+      />
+    </div>
+  );
+};
+
 // Navigation Icons - text-only labels (like official NRL site)
 export const NavIcon = ({ type }: { type: string }) => {
   const icons: Record<string, string> = {

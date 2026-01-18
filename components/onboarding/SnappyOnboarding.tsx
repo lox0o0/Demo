@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { NRL_TEAMS, Team } from "@/lib/data/teams";
 import { EntryPoint } from "@/lib/onboardingTypes";
-import { SocialIcon, SOCIAL_LOGOS } from "@/lib/icons";
+import { SocialIcon, SOCIAL_LOGOS, AuthIcon } from "@/lib/icons";
 import { TeamCelebration } from "./PickYourClub";
 
 // Team logo component with error handling
@@ -194,144 +194,88 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
   }
 
   if (step === "social" && selectedTeam) {
-    const totalPoints = calculatePoints();
-    const profileCompletion = calculateProfileCompletion();
-    const pointsFromSocials = connectedSocials.reduce((sum, id) => {
-      const platform = SOCIAL_PLATFORMS.find((p) => p.id === id);
-      return sum + (platform?.points || 0);
-    }, 0);
+    const isBroncos = selectedTeam.name === "Broncos";
+    const broncosBackgroundPath = "/broncos/premership.webp";
+
+    const handleGoogleSignIn = () => {
+      // In a real app, this would trigger Google OAuth
+      // For now, simulate getting user data
+      setName("User"); // Would come from Google
+      setEmail("user@gmail.com"); // Would come from Google
+      handleComplete();
+    };
+
+    const handleAppleSignIn = () => {
+      // In a real app, this would trigger Apple Sign In
+      // For now, simulate getting user data
+      setName("User"); // Would come from Apple
+      setEmail("user@icloud.com"); // Would come from Apple
+      handleComplete();
+    };
 
     return (
-      <div className="min-h-screen bg-nrl-dark flex items-center justify-center p-4">
-        <div className="w-full max-w-2xl">
-          <div className="bg-nrl-dark-card rounded-2xl p-8 border border-nrl-border-light">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <div className="relative w-20 h-20 mx-auto mb-4">
-                <Image
-                  src={selectedTeam.logoUrl}
-                  alt={selectedTeam.name}
-                  fill
-                  className="object-contain"
-                  unoptimized
-                />
-              </div>
-              <h2 className="text-2xl font-bold text-nrl-text-primary mb-2">
-                Welcome to {selectedTeam.name}!
-              </h2>
-              <p className="text-nrl-text-secondary">
-                Connect your socials for bonus points
-              </p>
-            </div>
-
-            {/* Quick Name/Email (Optional) */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Name (optional)"
-                className="bg-nrl-dark-hover border border-nrl-border-light rounded-xl px-4 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted focus:outline-none focus:border-nrl-green"
-              />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email (optional)"
-                className="bg-nrl-dark-hover border border-nrl-border-light rounded-xl px-4 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted focus:outline-none focus:border-nrl-green"
-              />
-            </div>
-
-            {/* Social Connection */}
-            <div className="mb-6">
-              <h3 className="text-sm font-semibold text-nrl-text-secondary uppercase tracking-wider mb-4">
-                Connect Social Accounts
+      <div 
+        className="min-h-screen flex items-center justify-center p-4 relative"
+        style={{
+          background: isBroncos
+            ? `linear-gradient(135deg, ${selectedTeam.primaryColor}CC 0%, ${selectedTeam.secondaryColor}CC 100%), url(${broncosBackgroundPath})`
+            : `linear-gradient(135deg, ${selectedTeam.primaryColor} 0%, ${selectedTeam.secondaryColor} 100%)`,
+          backgroundSize: isBroncos ? 'cover' : 'auto',
+          backgroundPosition: isBroncos ? 'center' : 'auto',
+          backgroundBlendMode: isBroncos ? 'overlay' : 'normal',
+        }}
+      >
+        <div className="w-full max-w-md relative z-10">
+          <div className="bg-nrl-dark-card/95 backdrop-blur-sm rounded-2xl p-8 border border-nrl-border-light">
+            {/* Connect with Gmail or Apple */}
+            <div className="text-center mb-6">
+              <h3 className="text-lg font-semibold text-nrl-text-primary mb-4">
+                Connect with Gmail or Apple
               </h3>
-              <div className="grid grid-cols-2 gap-3">
-                {SOCIAL_PLATFORMS.map((platform) => {
-                  const isConnected = connectedSocials.includes(platform.id);
-                  return (
-                    <button
-                      key={platform.id}
-                      onClick={() => handleSocialToggle(platform.id)}
-                      className={`relative p-4 rounded-xl border-2 transition-all ${
-                        isConnected
-                          ? "bg-nrl-green/10 border-nrl-green"
-                          : "bg-nrl-dark-hover border-nrl-border-light hover:border-nrl-border-medium"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 flex items-center justify-center">
-                            <SocialIcon platform={platform.id} size={32} />
-                          </div>
-                          <div className="text-left">
-                            <div className="font-semibold text-nrl-text-primary text-sm">
-                              {platform.name}
-                            </div>
-                            <div className="text-xs text-nrl-green font-bold">
-                              +{platform.points} pts
-                            </div>
-                          </div>
-                        </div>
-                        {isConnected && (
-                          <div className="w-5 h-5 rounded-full bg-nrl-green flex items-center justify-center">
-                            <span className="text-white text-xs">✓</span>
-                          </div>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
+              <div className="flex justify-center gap-4 mb-4">
+                {/* Google Button */}
+                <button
+                  onClick={handleGoogleSignIn}
+                  className="w-14 h-14 rounded-full bg-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+                  aria-label="Sign in with Google"
+                >
+                  <AuthIcon provider="google" size={32} />
+                </button>
+                {/* Apple Button */}
+                <button
+                  onClick={handleAppleSignIn}
+                  className="w-14 h-14 rounded-full bg-black flex items-center justify-center hover:scale-110 transition-transform shadow-lg border border-white/20"
+                  aria-label="Sign in with Apple"
+                >
+                  <AuthIcon provider="apple" size={32} />
+                </button>
               </div>
             </div>
 
-            {/* Points Summary */}
-            <div className="bg-nrl-dark-hover rounded-xl p-4 mb-6 border border-nrl-border-light">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-sm text-nrl-text-secondary">Total Points</span>
-                <span className="text-2xl font-black text-nrl-green">{totalPoints}</span>
+            {/* Or: enter email */}
+            <div className="mb-6">
+              <div className="text-center mb-4">
+                <span className="text-nrl-text-secondary text-sm">or: enter email</span>
               </div>
-              <div className="space-y-1 text-xs text-nrl-text-muted">
-                <div className="flex justify-between">
-                  <span>Welcome bonus</span>
-                  <span className="text-nrl-green">+50 pts</span>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                  <svg className="w-5 h-5 text-nrl-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
                 </div>
-                {pointsFromSocials > 0 && (
-                  <div className="flex justify-between">
-                    <span>Social connections</span>
-                    <span className="text-nrl-green">+{pointsFromSocials} pts</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Profile Completion & Vegas Draw */}
-            <div className="bg-gradient-to-r from-nrl-green/20 to-nrl-amber/20 rounded-xl p-4 mb-6 border border-nrl-green/30">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-semibold text-nrl-text-primary">
-                  Profile Completion
-                </span>
-                <span className="text-lg font-bold text-nrl-green">{profileCompletion}%</span>
-              </div>
-              <div className="w-full bg-nrl-dark-hover rounded-full h-2 mb-3">
-                <div
-                  className="bg-gradient-to-r from-nrl-green to-nrl-amber h-2 rounded-full transition-all duration-500"
-                  style={{ width: `${profileCompletion}%` }}
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Loxley.davies@gmail.com"
+                  className="w-full bg-white/10 border border-nrl-border-light rounded-xl pl-12 pr-12 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted focus:outline-none focus:border-nrl-green focus:bg-white/15 transition-all"
                 />
+                <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                  <svg className="w-5 h-5 text-nrl-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
               </div>
-              <p className="text-xs text-nrl-text-secondary">
-                {profileCompletion >= 80 ? (
-                  <span className="text-nrl-green font-semibold">
-                    ✓ You're eligible for the Vegas 2027 tickets draw!
-                  </span>
-                ) : (
-                  <span>
-                    Reach <span className="font-semibold text-nrl-green">80%</span> to enter the
-                    <span className="font-bold text-nrl-amber"> Vegas 2027 tickets draw</span>
-                  </span>
-                )}
-              </p>
             </div>
 
             {/* Action Buttons */}
