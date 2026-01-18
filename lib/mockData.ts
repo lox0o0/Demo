@@ -50,6 +50,6 @@ export const WEEKLY_QUESTS = [
 
 export const MOCK_MATES = [
   { name: "Dave", activity: "just completed tipping (7/8)", time: "2h ago" },
-  { name: "Sarah", activity: "hit a 15-week streak 🔥", time: "5h ago" },
+  { name: "Sarah", activity: "hit a 15-week streak", time: "5h ago" },
   { name: "Mike", activity: "reached Gold tier!", time: "1d ago" },
 ];
