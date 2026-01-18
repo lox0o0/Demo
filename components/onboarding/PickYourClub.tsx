@@ -41,11 +41,13 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
 
   if (showProfile && selectedTeam) {
     // Use the new snappy onboarding for social connection
+    // Pass the selected team so user doesn't have to select again
     return (
       <SnappyOnboarding
         entryPoint={entryPoint}
         entryData={entryData}
         onComplete={onComplete}
+        initialTeam={selectedTeam}
       />
     );
   }

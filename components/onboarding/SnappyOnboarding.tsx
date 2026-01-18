@@ -10,6 +10,7 @@ interface SnappyOnboardingProps {
   entryPoint: EntryPoint;
   entryData?: any;
   onComplete: (userData: any) => void;
+  initialTeam?: Team | null; // Allow passing pre-selected team
 }
 
 const SOCIAL_PLATFORMS = [
@@ -19,9 +20,10 @@ const SOCIAL_PLATFORMS = [
   { id: "x", name: "X (Twitter)", points: 20, color: "#000000" },
 ];
 
-export default function SnappyOnboarding({ entryPoint, entryData, onComplete }: SnappyOnboardingProps) {
-  const [step, setStep] = useState<"club" | "social" | "complete">("club");
-  const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
+export default function SnappyOnboarding({ entryPoint, entryData, onComplete, initialTeam = null }: SnappyOnboardingProps) {
+  // If initialTeam is provided, skip club selection and go straight to social step
+  const [step, setStep] = useState<"club" | "social" | "complete">(initialTeam ? "social" : "club");
+  const [selectedTeam, setSelectedTeam] = useState<Team | null>(initialTeam);
   const [connectedSocials, setConnectedSocials] = useState<string[]>([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
