@@ -24,10 +24,12 @@ export default function FanScore({ user }: FanScoreProps) {
   
   // Handle max tier case
   const pointsToNext = isMaxTier ? 0 : (nextTier ? nextTier.minPoints - userPoints : 0);
+  
+  // Calculate progress relative to current tier and next tier
   const progressPercent = isMaxTier 
     ? 100 
     : nextTier 
-      ? Math.min((userPoints / nextTier.minPoints) * 100, 100)
+      ? Math.min(((userPoints - currentTier.minPoints) / (nextTier.minPoints - currentTier.minPoints)) * 100, 100)
       : 100;
 
   const teamData = user?.teamData;

@@ -395,7 +395,7 @@ function ProfileView({ user, teamData }: { user: any; teamData: any }) {
             <div
               className="bg-gradient-to-r from-nrl-green to-nrl-amber h-3 rounded-full transition-all"
               style={{
-                width: `${isMaxTier ? 100 : nextTier ? Math.min((userPoints / nextTier.minPoints) * 100, 100) : 100}%`,
+                width: `${isMaxTier ? 100 : nextTier ? Math.min(((userPoints - currentTier.minPoints) / (nextTier.minPoints - currentTier.minPoints)) * 100, 100) : 100}%`,
               }}
             />
           </div>

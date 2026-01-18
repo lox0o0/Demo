@@ -13,7 +13,8 @@ interface EntryPointRouterProps {
 }
 
 export default function EntryPointRouter({ onComplete }: EntryPointRouterProps) {
-  const [entryPoint, setEntryPoint] = useState<EntryPoint | null>(null);
+  // Initialize with "direct" to avoid hydration mismatch - will be updated by useEffect if URL params exist
+  const [entryPoint, setEntryPoint] = useState<EntryPoint>("direct");
   const [showClubPicker, setShowClubPicker] = useState(false);
   const [entryData, setEntryData] = useState<any>(null);
 
