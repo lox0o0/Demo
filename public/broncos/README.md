@@ -10,8 +10,9 @@ Save your Broncos splash video here:
 
 ## Background Image
 Save your Broncos background image here:
-- **File path:** `public/broncos/background.jpg` (or `.png`, `.webp`)
-- **Recommended format:** JPG for photos, PNG for graphics with transparency
+- **File path:** `public/broncos/premership.webp` (or `.jpg`, `.png`)
+- **Note:** The code expects the filename `premership.webp` - if you use a different name, update the code in `components/onboarding/PickYourClub.tsx` line 151
+- **Recommended format:** WebP for best compression, or JPG for photos, PNG for graphics with transparency
 - **Recommended resolution:** 1920x1080 or higher
 - **File size:** Optimize to under 500KB for fast loading
 
