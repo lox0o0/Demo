@@ -11,8 +11,8 @@ export default function StatusCards({ user }: StatusCardsProps) {
       <div className="bg-nrl-dark-card rounded-2xl p-6 hover:scale-[1.02] transition-transform duration-300 group border border-nrl-border-light hover:border-nrl-border-medium">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold">Tipping</h3>
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-nrl-green/20 to-nrl-green/10 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-            🎯
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-nrl-green/20 to-nrl-green/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <span className="text-xs font-bold text-nrl-green">TIP</span>
           </div>
         </div>
         <div className="space-y-3 mb-4">
@@ -24,7 +24,7 @@ export default function StatusCards({ user }: StatusCardsProps) {
             <span className="text-xs text-nrl-text-secondary font-medium">overall</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2 bg-nrl-amber/10 rounded-lg border border-nrl-amber/20 w-fit">
-            <span className="text-lg fire-animation">🔥</span>
+            <span className="text-xs font-bold text-nrl-amber fire-animation">STREAK</span>
             <span className="text-sm font-bold text-nrl-amber">12-week streak</span>
           </div>
         </div>
@@ -37,8 +37,8 @@ export default function StatusCards({ user }: StatusCardsProps) {
       <div className="bg-nrl-dark-card rounded-2xl p-6 hover:scale-[1.02] transition-transform duration-300 group border border-nrl-border-light hover:border-nrl-border-medium">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold">Fantasy</h3>
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-nrl-amber/20 to-nrl-amber/10 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-            ⚽
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-nrl-amber/20 to-nrl-amber/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <span className="text-xs font-bold text-nrl-amber">FAN</span>
           </div>
         </div>
         <div className="space-y-3 mb-4">

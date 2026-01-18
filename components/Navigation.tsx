@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { NavIcon } from "@/lib/icons";
 
 export type NavSection = 
   | "home"
@@ -35,7 +36,6 @@ export default function Navigation({
     {
       id: "latest" as NavSection,
       label: "Latest",
-      icon: "📰",
       dropdown: [
         { id: "news" as LatestSubSection, label: "News" },
         { id: "watch" as LatestSubSection, label: "Watch" },
@@ -45,12 +45,10 @@ export default function Navigation({
     {
       id: "home" as NavSection,
       label: "Home",
-      icon: "🏠",
     },
     {
       id: "stats" as NavSection,
       label: "Stats",
-      icon: "📊",
       dropdown: [
         { id: "ladder" as StatsSubSection, label: "Ladder" },
         { id: "draw" as StatsSubSection, label: "Draw" },
@@ -61,37 +59,30 @@ export default function Navigation({
     {
       id: "fantasy" as NavSection,
       label: "Fantasy",
-      icon: "⚽",
     },
     {
       id: "tipping" as NavSection,
       label: "Tipping",
-      icon: "🎯",
     },
     {
       id: "lockerroom" as NavSection,
       label: "Lockerroom",
-      icon: "👤",
     },
     {
       id: "shop" as NavSection,
       label: "Shop",
-      icon: "🛒",
     },
     {
       id: "tickets" as NavSection,
       label: "Tickets",
-      icon: "🎫",
     },
     {
       id: "memberships" as NavSection,
       label: "Memberships",
-      icon: "⭐",
     },
     {
       id: "social" as NavSection,
       label: "Social",
-      icon: "👥",
       dropdown: [
         { id: "leaderboards" as SocialSubSection, label: "Leaderboards" },
         { id: "friends" as SocialSubSection, label: "Friends" },
@@ -175,11 +166,11 @@ export default function Navigation({
                         : "text-nrl-text-secondary hover:text-nrl-text-primary"
                     }`}
                   >
-                    <div className="relative">
-                      <span className="text-xl">{item.icon}</span>
+                    <div className="relative flex items-center justify-center">
+                      <NavIcon type={item.id} />
                       {hasDropdown && (
                         <span
-                          className={`absolute -top-1 -right-1 text-[10px] transition-transform ${
+                          className={`absolute -top-1 -right-1 text-[8px] transition-transform ${
                             isDropdownOpen ? "rotate-180" : ""
                           }`}
                         >
@@ -187,7 +178,7 @@ export default function Navigation({
                         </span>
                       )}
                     </div>
-                    <span className="text-[10px] font-medium text-center leading-tight">
+                    <span className="text-[10px] font-medium text-center leading-tight mt-1">
                       {item.label}
                     </span>
                   </button>

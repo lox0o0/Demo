@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { NRL_TEAMS, Team } from "@/lib/data/teams";
 import { EntryPoint } from "@/lib/onboardingTypes";
+import { SocialIcon, SOCIAL_LOGOS } from "@/lib/icons";
 
 interface SnappyOnboardingProps {
   entryPoint: EntryPoint;
@@ -12,10 +13,10 @@ interface SnappyOnboardingProps {
 }
 
 const SOCIAL_PLATFORMS = [
-  { id: "facebook", name: "Facebook", icon: "📘", points: 25, color: "#1877F2" },
-  { id: "tiktok", name: "TikTok", icon: "🎵", points: 30, color: "#000000" },
-  { id: "instagram", name: "Instagram", icon: "📷", points: 25, color: "#E4405F" },
-  { id: "x", name: "X (Twitter)", icon: "🐦", points: 20, color: "#000000" },
+  { id: "facebook", name: "Facebook", points: 25, color: "#1877F2" },
+  { id: "tiktok", name: "TikTok", points: 30, color: "#000000" },
+  { id: "instagram", name: "Instagram", points: 25, color: "#E4405F" },
+  { id: "x", name: "X (Twitter)", points: 20, color: "#000000" },
 ];
 
 export default function SnappyOnboarding({ entryPoint, entryData, onComplete }: SnappyOnboardingProps) {
@@ -211,7 +212,9 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete }: 
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <span className="text-2xl">{platform.icon}</span>
+                          <div className="w-8 h-8 flex items-center justify-center">
+                            <SocialIcon platform={platform.id} size={32} />
+                          </div>
                           <div className="text-left">
                             <div className="font-semibold text-nrl-text-primary text-sm">
                               {platform.name}
@@ -270,7 +273,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete }: 
               <p className="text-xs text-nrl-text-secondary">
                 {profileCompletion >= 80 ? (
                   <span className="text-nrl-green font-semibold">
-                    🎉 You're eligible for the Vegas 2027 tickets draw!
+                    ✓ You're eligible for the Vegas 2027 tickets draw!
                   </span>
                 ) : (
                   <span>

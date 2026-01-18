@@ -69,7 +69,7 @@ export default function Dashboard({ user }: DashboardProps) {
                 )}
                 <div>
                   <h1 className="text-xl font-bold text-nrl-text-primary">
-                    Welcome back, {user?.name || "Fan"}! 👋
+                    Welcome back, {user?.name || "Fan"}!
                   </h1>
                   <p className="text-sm text-nrl-text-secondary font-medium">{user?.team}</p>
                 </div>
@@ -77,7 +77,7 @@ export default function Dashboard({ user }: DashboardProps) {
               <div className="flex items-center gap-4">
                 {user?.streak > 0 && (
                   <div className="flex items-center gap-2 px-4 py-2 bg-nrl-dark-card rounded-full border border-nrl-amber/30">
-                    <span className="text-xl fire-animation">🔥</span>
+                    <span className="text-xs font-bold text-nrl-amber fire-animation uppercase tracking-tight">STREAK</span>
                     <span className="font-bold text-nrl-amber">{user.streak} day streak</span>
                   </div>
                 )}

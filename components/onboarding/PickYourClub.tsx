@@ -181,7 +181,7 @@ function TeamCelebration({ team }: { team: Team }) {
             className="mt-8 glass rounded-2xl p-6 border-2 border-white/30"
             style={{ animation: "fadeInUp 0.8s ease-out 0.9s both" }}
           >
-            <div className="text-4xl mb-2">🎖️</div>
+            <div className="text-xs font-bold text-white uppercase tracking-wider mb-2">BADGE</div>
             <div className="text-xl font-bold text-white">Welcome Badge Unlocked!</div>
             <div className="text-sm text-white/80 mt-1">+50 points awarded</div>
           </div>

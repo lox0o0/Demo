@@ -24,8 +24,8 @@ export default function BroadcastQR({ onComplete }: BroadcastQRProps) {
       <div className="w-full max-w-md">
         <div className="glass rounded-3xl p-8 text-center space-y-6">
           <div className="mb-8">
-            <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-nrl-green to-nrl-amber flex items-center justify-center text-5xl">
-              📺
+            <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-nrl-green to-nrl-amber flex items-center justify-center">
+              <span className="text-xs font-bold text-white uppercase tracking-tight">LIVE</span>
             </div>
             <h1 className="text-3xl font-bold mb-2">Predict the margin</h1>
             <p className="text-gray-400 text-lg">

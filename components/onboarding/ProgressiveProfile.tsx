@@ -194,7 +194,9 @@ export default function ProgressiveProfile({
           {step === 3 && (
             <div className="space-y-6 text-center">
               <div className="mb-6">
-                <div className="text-6xl mb-4 animate-bounce">🎉</div>
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-nrl-green/20 flex items-center justify-center animate-bounce">
+                  <span className="text-2xl font-bold text-nrl-green">✓</span>
+                </div>
                 <h2 className="text-2xl font-bold mb-2">You're all set!</h2>
                 <p className="text-gray-400">
                   Welcome to the {team.name} community
@@ -209,7 +211,7 @@ export default function ProgressiveProfile({
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">Badge unlocked:</span>
-                    <span className="font-bold">🎖️ Rookie</span>
+                    <span className="font-bold">Rookie</span>
                   </div>
                   {formData.phoneVerified && (
                     <div className="flex justify-between">
