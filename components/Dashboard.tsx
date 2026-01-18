@@ -207,10 +207,10 @@ export default function Dashboard({ user }: DashboardProps) {
           )}
 
           {/* Stats Section */}
-          {(activeSection === "stats" || activeSubSection === "ladder" || activeSubSection === "draw" || activeSubSection === "players") && (
+          {(activeSection === "stats" || activeSubSection === "ladder" || activeSubSection === "draw" || activeSubSection === "players" || activeSubSection === "stats") && (
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-nrl-text-primary">
-                {activeSubSection === "ladder" ? "Ladder" : activeSubSection === "draw" ? "Draw" : activeSubSection === "players" ? "Players" : "Stats"}
+                {activeSubSection === "ladder" ? "Ladder" : activeSubSection === "draw" ? "Draw" : activeSubSection === "players" ? "Players" : activeSubSection === "stats" ? "Stats" : "Stats"}
               </h2>
               <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
                 <p className="text-nrl-text-secondary">Stats content coming soon...</p>
