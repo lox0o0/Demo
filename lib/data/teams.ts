@@ -13,7 +13,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 1,
     name: "Broncos",
-    logoUrl: "/team-logos/broncos.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/broncos.png",
     primaryColor: "#69002C",
     secondaryColor: "#FFD700",
     fanCount: 847291,
@@ -23,7 +23,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 2,
     name: "Rabbitohs",
-    logoUrl: "/team-logos/rabbitohs.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/rabbitohs.png",
     primaryColor: "#0C4629",
     secondaryColor: "#FF0000",
     fanCount: 523847,
@@ -33,7 +33,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 3,
     name: "Roosters",
-    logoUrl: "/team-logos/roosters.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/roosters.png",
     primaryColor: "#001E3E",
     secondaryColor: "#FF0000",
     fanCount: 412583,
@@ -43,7 +43,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 4,
     name: "Storm",
-    logoUrl: "/team-logos/storm.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/storm.svg",
     primaryColor: "#562381",
     secondaryColor: "#FFD700",
     fanCount: 389472,
@@ -53,7 +53,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 5,
     name: "Panthers",
-    logoUrl: "/team-logos/panthers.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/panthers.png",
     primaryColor: "#000000",
     secondaryColor: "#FF6B00",
     fanCount: 456291,
@@ -63,7 +63,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 6,
     name: "Eels",
-    logoUrl: "/team-logos/eels.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/eels.png",
     primaryColor: "#006BA6",
     secondaryColor: "#FFD700",
     fanCount: 398472,
@@ -73,7 +73,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 7,
     name: "Sharks",
-    logoUrl: "/team-logos/sharks.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/sharks.png",
     primaryColor: "#0097C7",
     secondaryColor: "#FFFFFF",
     fanCount: 312847,
@@ -83,7 +83,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 8,
     name: "Sea Eagles",
-    logoUrl: "/team-logos/sea-eagles.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/eagles.jpg",
     primaryColor: "#6F163D",
     secondaryColor: "#FFD700",
     fanCount: 287391,
@@ -93,7 +93,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 9,
     name: "Warriors",
-    logoUrl: "/team-logos/warriors.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/warriors.png",
     primaryColor: "#000000",
     secondaryColor: "#FFD700",
     fanCount: 523847,
@@ -103,7 +103,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 10,
     name: "Cowboys",
-    logoUrl: "/team-logos/cowboys.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/cowboys.png",
     primaryColor: "#002B5C",
     secondaryColor: "#FFD700",
     fanCount: 298472,
@@ -113,7 +113,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 11,
     name: "Titans",
-    logoUrl: "/team-logos/titans.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/titans.png",
     primaryColor: "#005596",
     secondaryColor: "#FFD700",
     fanCount: 234791,
@@ -123,7 +123,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 12,
     name: "Dragons",
-    logoUrl: "/team-logos/dragons.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/dragons.png",
     primaryColor: "#E01F26",
     secondaryColor: "#FFFFFF",
     fanCount: 412583,
@@ -133,7 +133,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 13,
     name: "Knights",
-    logoUrl: "/team-logos/knights.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/knights.png",
     primaryColor: "#EE3039",
     secondaryColor: "#FFD700",
     fanCount: 287391,
@@ -143,7 +143,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 14,
     name: "Raiders",
-    logoUrl: "/team-logos/raiders.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/raiders.png",
     primaryColor: "#9DC217",
     secondaryColor: "#FFD700",
     fanCount: 198472,
@@ -153,7 +153,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 15,
     name: "Tigers",
-    logoUrl: "/team-logos/tigers.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/tigers.png",
     primaryColor: "#F5821F",
     secondaryColor: "#000000",
     fanCount: 412583,
@@ -163,7 +163,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 16,
     name: "Bulldogs",
-    logoUrl: "/team-logos/bulldogs.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/bulldogs.png",
     primaryColor: "#0047BA",
     secondaryColor: "#FFFFFF",
     fanCount: 398472,
@@ -173,7 +173,7 @@ export const NRL_TEAMS: Team[] = [
   {
     id: 17,
     name: "Dolphins",
-    logoUrl: "/team-logos/dolphins.svg", // Local file - place in public/team-logos/
+    logoUrl: "/team-logos/dolphins.png",
     primaryColor: "#C60C30",
     secondaryColor: "#0066CC",
     fanCount: 234791,
