@@ -297,7 +297,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                 Skip for Now
               </button>
               <button
-                onClick={handleComplete}
+                onClick={() => handleComplete()}
                 className="flex-1 bg-nrl-green text-white font-bold py-3 rounded-xl hover:bg-nrl-green/90 transition-all transform hover:scale-[1.02]"
               >
                 Continue
