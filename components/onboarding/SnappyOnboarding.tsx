@@ -5,6 +5,7 @@ import Image from "next/image";
 import { NRL_TEAMS, Team } from "@/lib/data/teams";
 import { EntryPoint } from "@/lib/onboardingTypes";
 import { SocialIcon, SOCIAL_LOGOS } from "@/lib/icons";
+import { TeamCelebration } from "./PickYourClub";
 
 // Team logo component with error handling
 function TeamLogoWithFallback({ src, alt }: { src: string; alt: string }) {
@@ -56,7 +57,7 @@ const SOCIAL_PLATFORMS = [
 
 export default function SnappyOnboarding({ entryPoint, entryData, onComplete, initialTeam = null }: SnappyOnboardingProps) {
   // If initialTeam is provided, skip club selection and go straight to social step
-  const [step, setStep] = useState<"club" | "social" | "complete">(initialTeam ? "social" : "club");
+  const [step, setStep] = useState<"club" | "celebration" | "social" | "complete">(initialTeam ? "social" : "club");
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(initialTeam);
   const [connectedSocials, setConnectedSocials] = useState<string[]>([]);
   const [name, setName] = useState("");
@@ -64,6 +65,16 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
 
   const handleTeamSelect = (team: Team) => {
     setSelectedTeam(team);
+    // Show celebration for Broncos, otherwise go straight to social
+    if (team.name === "Broncos") {
+      setStep("celebration");
+    } else {
+      setStep("social");
+    }
+  };
+
+  const handleCelebrationComplete = () => {
+    // Move to social step after celebration
     setStep("social");
   };
 
@@ -138,6 +149,11 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       onComplete(userData);
     }
   };
+
+  // Show celebration screen for Broncos
+  if (step === "celebration" && selectedTeam) {
+    return <TeamCelebration team={selectedTeam} onComplete={handleCelebrationComplete} />;
+  }
 
   if (step === "club") {
     return (

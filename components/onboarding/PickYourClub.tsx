@@ -138,7 +138,7 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   );
 }
 
-function TeamCelebration({ team }: { team: Team }) {
+export function TeamCelebration({ team, onComplete }: { team: Team; onComplete?: () => void }) {
   const [showStats, setShowStats] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
   const [videoError, setVideoError] = useState(false);
@@ -148,7 +148,7 @@ function TeamCelebration({ team }: { team: Team }) {
   
   // Broncos-specific assets
   const broncosVideoPath = "/broncos/splash-video.mp4";
-  const broncosBackgroundPath = "/broncos/background.jpg";
+  const broncosBackgroundPath = "/broncos/premership.webp";
   
   // Check if video exists (we'll handle this gracefully)
   const hasVideo = isBroncos;
@@ -169,6 +169,17 @@ function TeamCelebration({ team }: { team: Team }) {
   const handleVideoError = () => {
     setVideoError(true);
   };
+
+  // Auto-advance to next step after celebration (for SnappyOnboarding integration)
+  useEffect(() => {
+    if (onComplete && showStats) {
+      // Wait a bit after stats show, then call onComplete to advance
+      const timer = setTimeout(() => {
+        onComplete();
+      }, 3000); // Show celebration for 3 seconds after stats appear
+      return () => clearTimeout(timer);
+    }
+  }, [showStats, onComplete]);
 
   // Show video first for Broncos (if available)
   if (isBroncos && hasVideo && !videoEnded && !videoError) {
