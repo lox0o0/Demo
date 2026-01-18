@@ -8,14 +8,15 @@ import FanScore from "./FanScore";
 import QuestsPanel from "./QuestsPanel";
 import StatusCards from "./StatusCards";
 import ActivityFeed from "./ActivityFeed";
-import Navigation from "./Navigation";
+import Navigation, { NavSection, LatestSubSection, StatsSubSection, SocialSubSection } from "./Navigation";
 
 interface DashboardProps {
   user: any;
 }
 
 export default function Dashboard({ user }: DashboardProps) {
-  const [activeTab, setActiveTab] = useState<"home" | "quests" | "social" | "profile">("home");
+  const [activeSection, setActiveSection] = useState<NavSection>("home");
+  const [activeSubSection, setActiveSubSection] = useState<LatestSubSection | StatsSubSection | SocialSubSection | undefined>(undefined);
 
   const teamData = user?.teamData || NRL_TEAMS.find(t => t.name === user?.team) || NRL_TEAMS[0];
   const teamColors = teamData 
@@ -86,8 +87,8 @@ export default function Dashboard({ user }: DashboardProps) {
         </header>
 
         {/* Main Content */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24">
-          {activeTab === "home" && (
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32">
+          {activeSection === "home" && (
             <div className="space-y-8">
               {/* Hero Section - Featured Content */}
               <div className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
@@ -171,27 +172,134 @@ export default function Dashboard({ user }: DashboardProps) {
             </div>
           )}
 
-          {activeTab === "quests" && (
+          {/* Latest Section */}
+          {(activeSection === "latest" || activeSubSection === "news" || activeSubSection === "watch" || activeSubSection === "highlights") && (
             <div className="space-y-6">
-              <QuestsPanel user={user} expanded />
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-nrl-text-primary">
+                  {activeSubSection === "news" ? "News" : activeSubSection === "watch" ? "Watch" : activeSubSection === "highlights" ? "Highlights" : "Latest"}
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div key={i} className="bg-nrl-dark-card rounded-xl overflow-hidden border border-nrl-border-light hover:border-nrl-border-medium transition-all cursor-pointer">
+                    <div className="aspect-video bg-nrl-dark-hover" />
+                    <div className="p-4">
+                      <h3 className="font-semibold text-nrl-text-primary mb-2">Sample {activeSubSection || "Latest"} Content {i}</h3>
+                      <p className="text-sm text-nrl-text-secondary">Lorem ipsum dolor sit amet consectetur adipiscing elit.</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
-          {activeTab === "social" && (
+          {/* Stats Section */}
+          {(activeSection === "stats" || activeSubSection === "ladder" || activeSubSection === "draw" || activeSubSection === "players") && (
             <div className="space-y-6">
-              <ActivityFeed expanded />
+              <h2 className="text-2xl font-bold text-nrl-text-primary">
+                {activeSubSection === "ladder" ? "Ladder" : activeSubSection === "draw" ? "Draw" : activeSubSection === "players" ? "Players" : "Stats"}
+              </h2>
+              <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+                <p className="text-nrl-text-secondary">Stats content coming soon...</p>
+              </div>
             </div>
           )}
 
-          {activeTab === "profile" && (
+          {/* Fantasy Section */}
+          {activeSection === "fantasy" && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-nrl-text-primary">Fantasy</h2>
+              <StatusCards user={user} />
+            </div>
+          )}
+
+          {/* Tipping Section */}
+          {activeSection === "tipping" && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-nrl-text-primary">Tipping</h2>
+              <StatusCards user={user} />
+            </div>
+          )}
+
+          {/* Lockerroom (Profile) Section */}
+          {activeSection === "lockerroom" && (
             <div className="space-y-6">
               <ProfileView user={user} teamData={teamData} />
+            </div>
+          )}
+
+          {/* Shop Section */}
+          {activeSection === "shop" && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-nrl-text-primary">Shop</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="bg-nrl-dark-card rounded-xl overflow-hidden border border-nrl-border-light">
+                    <div className="aspect-square bg-nrl-dark-hover" />
+                    <div className="p-4">
+                      <p className="text-sm font-semibold text-nrl-text-primary">Product {i}</p>
+                      <p className="text-xs text-nrl-text-secondary mt-1">$99.99</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Tickets Section */}
+          {activeSection === "tickets" && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-nrl-text-primary">Tickets</h2>
+              <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+                <p className="text-nrl-text-secondary">Ticket purchasing coming soon...</p>
+              </div>
+            </div>
+          )}
+
+          {/* Memberships Section */}
+          {activeSection === "memberships" && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-nrl-text-primary">Memberships</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {["Bronze", "Silver", "Gold"].map((tier) => (
+                  <div key={tier} className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light hover:border-nrl-green transition-all cursor-pointer">
+                    <h3 className="text-xl font-bold text-nrl-text-primary mb-2">{tier} Membership</h3>
+                    <p className="text-2xl font-black text-nrl-green mb-4">$199</p>
+                    <ul className="space-y-2 text-sm text-nrl-text-secondary mb-6">
+                      <li>✓ Exclusive content</li>
+                      <li>✓ Early ticket access</li>
+                      <li>✓ Member-only events</li>
+                    </ul>
+                    <button className="w-full bg-nrl-green text-white font-bold py-3 rounded-xl hover:bg-nrl-green/90 transition-colors">
+                      Join Now
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Social Section */}
+          {(activeSection === "social" || activeSubSection === "leaderboards" || activeSubSection === "friends") && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-nrl-text-primary">
+                {activeSubSection === "leaderboards" ? "Leaderboards" : activeSubSection === "friends" ? "Friends" : "Social"}
+              </h2>
+              <ActivityFeed expanded />
             </div>
           )}
         </main>
 
         {/* Bottom Navigation */}
-        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Navigation 
+          activeSection={activeSection} 
+          activeSubSection={activeSubSection}
+          setActiveSection={(section, subSection) => {
+            setActiveSection(section);
+            setActiveSubSection(subSection);
+          }} 
+        />
       </div>
     </div>
   );
