@@ -95,16 +95,17 @@ export default function Navigation({
     const hasDropdown = !!clickedItem?.dropdown;
 
     if (hasDropdown) {
-      // For items with dropdowns, toggle the dropdown
+      // If a subSection is provided, navigate to it and close dropdown
+      if (subSection) {
+        setActiveSection(section, subSection);
+        setOpenDropdown(null);
+        return;
+      }
+      // Otherwise, toggle the dropdown
       if (openDropdown === section) {
         setOpenDropdown(null);
       } else {
         setOpenDropdown(section);
-        // If a subSection is provided, navigate to it and close dropdown
-        if (subSection) {
-          setActiveSection(section, subSection);
-          setOpenDropdown(null);
-        }
       }
     } else {
       // For items without dropdowns, navigate directly and close any open dropdown

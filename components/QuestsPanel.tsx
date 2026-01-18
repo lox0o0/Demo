@@ -13,13 +13,19 @@ export default function QuestsPanel({ user, expanded = false }: QuestsPanelProps
   const [weeklyQuests, setWeeklyQuests] = useState(WEEKLY_QUESTS);
 
   const handleQuestComplete = (questId: number, points: number) => {
-    // Update quest as completed
-    setDailyQuests((prev) =>
-      prev.map((q) => (q.id === questId ? { ...q, completed: true } : q))
-    );
-    setWeeklyQuests((prev) =>
-      prev.map((q) => (q.id === questId ? { ...q, completed: true } : q))
-    );
+    // Check which array the quest belongs to and only update that one
+    const isDailyQuest = dailyQuests.some((q) => q.id === questId);
+    const isWeeklyQuest = weeklyQuests.some((q) => q.id === questId);
+
+    if (isDailyQuest) {
+      setDailyQuests((prev) =>
+        prev.map((q) => (q.id === questId ? { ...q, completed: true } : q))
+      );
+    } else if (isWeeklyQuest) {
+      setWeeklyQuests((prev) =>
+        prev.map((q) => (q.id === questId ? { ...q, completed: true } : q))
+      );
+    }
     // In real app, this would update user points
   };
 
