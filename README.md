@@ -72,7 +72,11 @@ For tipping invite with custom data:
 │   └── globals.css     # Global styles
 ├── components/
 │   ├── Dashboard.tsx   # Main dashboard
-│   ├── Onboarding.tsx  # Sign-up flow
+│   ├── onboarding/     # Onboarding flow components
+│   │   ├── SnappyOnboarding.tsx  # Main onboarding flow
+│   │   ├── PickYourClub.tsx      # Team selection
+│   │   ├── EntryPointRouter.tsx  # Entry point routing
+│   │   └── ProgressiveProfile.tsx # Progressive profiling
 │   ├── FanScore.tsx    # Fan score display
 │   ├── QuestsPanel.tsx # Quests & missions
 │   ├── StatusCards.tsx # Fantasy & Tipping cards
