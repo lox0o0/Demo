@@ -355,31 +355,32 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
     setIsSpinning(true);
     setPrizeWon(null);
     
-    // Random prize selection
-    const randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
-    const prizeIndex = prizes.findIndex(p => p.id === randomPrize.id);
-    
-    // Simulate spin duration based on tier
-    const spinDuration = randomPrize.tier === 'legendary' ? 7000 :
-                        randomPrize.tier === 'epic' ? 6000 :
-                        randomPrize.tier === 'rare' ? 5000 :
-                        4000;
-    
-    // Calculate rotation: full spins (3-5) + position of prize
-    // Pointer is at 3 o'clock (0 degrees), so we need to rotate to center the prize
+    // Calculate random final rotation (3-5 full spins + random angle)
     const fullSpins = 3 + Math.random() * 2; // 3-5 full rotations
-    const segmentAngle = 360 / 20; // 18 degrees per segment
-    // Prize should be centered at the pointer (3 o'clock = 0 degrees)
-    // So we rotate the wheel so the prize segment centers at 0 degrees
-    const targetAngle = prizeIndex * segmentAngle;
-    const finalRotation = fullSpins * 360 + (360 - targetAngle) + segmentAngle / 2;
+    const randomAngle = Math.random() * 360; // Random final angle
+    const finalRotation = fullSpins * 360 + randomAngle;
+    
+    // Simulate spin duration (4-7 seconds)
+    const spinDuration = 4000 + Math.random() * 3000;
     
     // Animate rotation
     setRotation(finalRotation);
     
     setTimeout(() => {
+      // Calculate which prize the pointer lands on based on final rotation
+      // Pointer is at 3 o'clock (0 degrees in standard math, but we need to account for wheel rotation)
+      // The wheel rotates clockwise, so we need to reverse the calculation
+      const normalizedAngle = (360 - (finalRotation % 360)) % 360;
+      const segmentAngle = 360 / 20; // 18 degrees per segment
+      // Find which segment index the pointer is pointing at
+      let prizeIndex = Math.floor(normalizedAngle / segmentAngle);
+      // Ensure index is within bounds
+      prizeIndex = prizeIndex % 20;
+      
+      const actualPrize = prizes[prizeIndex];
+      
       setIsSpinning(false);
-      setPrizeWon(randomPrize);
+      setPrizeWon(actualPrize);
       setSpinsRemaining(spinsRemaining - 1);
     }, spinDuration);
   };
@@ -507,19 +508,35 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
 
         {/* Prize Won Display */}
         {prizeWon && !isSpinning && (
-          <div className="bg-nrl-green/20 border-2 border-nrl-green rounded-xl p-6 mb-4 text-center">
-            <div className="text-4xl mb-2">🎉</div>
-            <div className="text-xl font-bold text-white mb-1">YOU WON!</div>
-            <div className="text-2xl mb-2">{prizeWon.icon}</div>
-            <div className="text-lg font-semibold text-nrl-green mb-2">{prizeWon.name}</div>
+          <div className="bg-gradient-to-br from-nrl-green/30 to-nrl-amber/30 border-2 border-nrl-green rounded-xl p-6 mb-4 text-center animate-pulse">
+            <div className="text-5xl mb-3">🎉</div>
+            <div className="text-2xl font-bold text-white mb-2">YOU WON!</div>
+            <div className="text-4xl mb-3">{prizeWon.icon}</div>
+            <div className="text-xl font-semibold text-nrl-green mb-2">{prizeWon.name}</div>
             {prizeWon.sponsor && (
-              <div className="text-xs text-nrl-text-muted">Sponsored by {prizeWon.sponsor}</div>
+              <div className="text-sm text-nrl-text-muted mb-4">Sponsored by {prizeWon.sponsor}</div>
             )}
+            <div className="flex gap-3 justify-center">
+              {spinsRemaining > 0 && (
+                <button
+                  onClick={handleSpin}
+                  className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-lg hover:from-orange-600 hover:to-red-600 transition-all"
+                >
+                  Spin Again ({spinsRemaining} left)
+                </button>
+              )}
+              <button
+                onClick={onClose}
+                className="px-6 py-2 bg-nrl-dark-hover border border-nrl-border-light text-white font-bold rounded-lg hover:border-nrl-green transition-all"
+              >
+                Close
+              </button>
+            </div>
           </div>
         )}
 
-        {/* Spin Button */}
-        {spinsRemaining > 0 && (
+        {/* Spin Button - Only show if no prize won */}
+        {!prizeWon && spinsRemaining > 0 && (
           <button
             onClick={handleSpin}
             disabled={isSpinning}
@@ -529,9 +546,15 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
           </button>
         )}
 
-        {spinsRemaining === 0 && (
-          <div className="text-center text-nrl-text-secondary text-sm">
-            ✓ All spins used this week
+        {!prizeWon && spinsRemaining === 0 && (
+          <div className="text-center text-nrl-text-secondary">
+            <div className="text-sm font-semibold mb-2">✓ All spins used this week</div>
+            <button
+              onClick={onClose}
+              className="px-6 py-2 bg-nrl-dark-hover border border-nrl-border-light text-white font-bold rounded-lg hover:border-nrl-green transition-all"
+            >
+              Close
+            </button>
           </div>
         )}
       </div>

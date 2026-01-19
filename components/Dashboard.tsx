@@ -10,6 +10,8 @@ import StatusCards from "./StatusCards";
 import ActivityFeed from "./ActivityFeed";
 import Navigation, { NavSection, LatestSubSection, StatsSubSection, SocialSubSection } from "./Navigation";
 import DashboardNew from "./DashboardNew";
+import ProfilePage from "./ProfilePage";
+import PointsShopPage from "./PointsShopPage";
 
 interface DashboardProps {
   user: any;
@@ -115,6 +117,14 @@ export default function Dashboard({ user }: DashboardProps) {
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-8">
           {activeSection === "dashboard" && (
             <DashboardNew user={user} hideNavigation={true} />
+          )}
+          
+          {activeSection === "profile" && (
+            <ProfilePage user={user} />
+          )}
+          
+          {activeSection === "points-shop" && (
+            <PointsShopPage user={user} />
           )}
 
           {activeSection === "home" && (
