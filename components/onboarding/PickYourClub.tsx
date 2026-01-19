@@ -217,15 +217,7 @@ export function TeamCelebration({ team, onComplete }: { team: Team; onComplete?:
         role="button"
         aria-label="Click to skip video"
       >
-        {/* Loading state - show background image while video loads */}
-        {videoLoading && (
-          <div 
-            className="absolute inset-0 w-full h-full bg-cover bg-center"
-            style={{
-              backgroundImage: `url(${broncosBackgroundPath})`,
-            }}
-          />
-        )}
+        {/* Keep background black during loading - no flash of background image */}
         <video
           ref={videoRef}
           autoPlay
