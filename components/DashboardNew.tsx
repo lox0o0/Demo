@@ -64,16 +64,20 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
         <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
       )}
 
-      {/* Main Content - 2 Column Layout */}
+      {/* Main Content - 3 Column Layout */}
       <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 ${hideNavigation ? 'pt-6' : 'pt-24'}`}>
         {activeSection === "dashboard" && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Left Column - Weekly Activities */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left Column - Activities, Profile Completion, Connect Socials */}
             <div className="space-y-6">
               <WeeklyActivitiesSimplified user={user} teamData={teamData} />
+              
+              <ProfileCompletionSimplified user={user} profileCompletion={profileCompletion} />
+              
+              <ConnectSocialsCard user={user} />
             </div>
 
-            {/* Right Column - Profile, Leaderboards, Stats, Tiers, Wheel */}
+            {/* Middle Column - Profile, Leaderboards, Stats */}
             <div className="space-y-6">
               <ProfileCardFull 
                 tier={currentTier}
@@ -89,9 +93,10 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
               <LeaderboardsCard user={user} teamData={teamData} />
               
               <SeasonStatsCard user={user} />
-              
-              <ProfileCompletionSimplified user={user} profileCompletion={profileCompletion} />
-              
+            </div>
+
+            {/* Right Column - Tier Rewards, Prize Wheel */}
+            <div className="space-y-6">
               <TiersRewardsCard currentTier={currentTier} userPoints={userPoints} />
               
               <PrizeWheelCard streakData={streakData} teamData={teamData} />
@@ -826,7 +831,6 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
                       </div>
                       <div className="flex-1">
                         <div className="text-sm font-semibold text-white">{player.name}</div>
-                        <div className="text-xs text-nrl-text-secondary">{player.stats}</div>
                       </div>
                       {selectedNextWeekPlayer === player.name && (
                         <span className="text-nrl-green">✓</span>
@@ -1165,6 +1169,51 @@ function TiersRewardsCard({ currentTier, userPoints }: any) {
   );
 }
 
+// Connect Socials Card (Left Column)
+function ConnectSocialsCard({ user }: any) {
+  const allSocials = [
+    { id: "facebook", name: "Facebook", logo: "/social-logos/facebook.png" },
+    { id: "tiktok", name: "TikTok", logo: "/social-logos/tiktok.png" },
+    { id: "instagram", name: "Instagram", logo: "/social-logos/instagram.png" },
+    { id: "x", name: "X", logo: "/social-logos/x.png" },
+  ];
+
+  const connectedSocials = user?.connectedSocials || [];
+  const missingSocials = allSocials.filter(social => !connectedSocials.includes(social.id));
+
+  if (missingSocials.length === 0) {
+    return null; // Don't show if all socials are connected
+  }
+
+  return (
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+      <h3 className="text-lg font-bold text-white mb-4">Connect Socials</h3>
+      <div className="text-xs text-nrl-text-secondary mb-4">
+        Connect additional social accounts to earn more points
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        {missingSocials.map((social) => (
+          <button
+            key={social.id}
+            className="bg-nrl-dark-hover border border-nrl-border-light rounded-xl p-4 flex flex-col items-center gap-2 hover:border-nrl-green transition-colors"
+          >
+            <div className="relative w-12 h-12">
+              <Image
+                src={social.logo}
+                alt={social.name}
+                fill
+                className="object-contain"
+                unoptimized
+              />
+            </div>
+            <span className="text-xs font-semibold text-white">{social.name}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // Prize Wheel Card (Right Column)
 function PrizeWheelCard({ streakData, teamData }: any) {
   const [showWheel, setShowWheel] = useState(false);
@@ -1172,7 +1221,8 @@ function PrizeWheelCard({ streakData, teamData }: any) {
   return (
     <>
       <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
-        <h3 className="text-lg font-bold text-white mb-4">Prize Wheel</h3>
+        <h3 className="text-lg font-bold text-white mb-1">Prize Wheel</h3>
+        <div className="text-xs text-nrl-text-secondary mb-4">(win tickets, vouchers and points!)</div>
         {streakData.spins.available > 0 ? (
           <div className="text-center">
             <div className="text-4xl mb-4">🎰</div>
