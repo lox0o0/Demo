@@ -554,8 +554,16 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
     const isBroncos = selectedTeam.name === "Broncos";
     const broncosBackgroundPath = "/broncos/premership.webp";
     
-    // Calculate profile completion: 10% base (team selected), 20% if authenticated
-    const profileCompletion = (hasAuth || email.trim() !== "") ? 20 : 10;
+    // Calculate profile completion using the proper function
+    // Team selection = 20% base, authentication = +30%
+    // So: 20% (team only) or 50% (team + auth)
+    const profileCompletion = calculateProfileCompletion(
+      [], // No socials connected yet at this step
+      undefined, // No name override
+      email.trim() !== "" ? email : undefined, // Use email if provided
+      false, // Don't include auth selection flag
+      true // Team is selected
+    );
     const teamPrimaryColor = selectedTeam.primaryColor;
 
     const handleGoogleSignIn = () => {
