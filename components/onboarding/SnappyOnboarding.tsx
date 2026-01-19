@@ -96,10 +96,17 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
     return points;
   };
 
-  const calculateProfileCompletion = (socialsToCount: string[] = connectedSocials) => {
+  const calculateProfileCompletion = (
+    socialsToCount: string[] = connectedSocials,
+    overrideName?: string,
+    overrideEmail?: string
+  ) => {
     let completion = 20; // Base (team selected)
-    if (name) completion += 15;
-    if (email) completion += 15;
+    // Use override values if provided, otherwise use state
+    const finalName = overrideName !== undefined ? overrideName : name;
+    const finalEmail = overrideEmail !== undefined ? overrideEmail : email;
+    if (finalName) completion += 15;
+    if (finalEmail) completion += 15;
     completion += socialsToCount.length * 12.5; // Each social = 12.5%
     return Math.min(completion, 100);
   };
@@ -147,7 +154,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         memberSince: new Date().getFullYear(),
         streak: 0,
         connectedSocials,
-        profileCompletion: calculateProfileCompletion(),
+        profileCompletion: calculateProfileCompletion(connectedSocials, overrideName, overrideEmail),
         entryPoint,
         entryData,
       };
@@ -292,7 +299,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
-                    setHasAuth(false); // Reset auth flag when typing
+                    // hasAuth will be false by default, email.trim() check handles the 20% completion
                   }}
                   placeholder="Loxley.davies@gmail.com"
                   className="w-full bg-white/10 border border-nrl-border-light rounded-xl pl-12 pr-12 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted focus:outline-none focus:border-nrl-green focus:bg-white/15 transition-all"
