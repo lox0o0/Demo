@@ -63,14 +63,14 @@ export default function Dashboard({ user }: DashboardProps) {
                     badgeColor="green"
                   />
                   <ContentCard
-                    image="/images/cards/profile-upgrade.jpg"
+                    image="/images/cards/predictions.jpg"
                     title="Upgrade your profile"
                     subtitle="Complete profile data to earn points!"
                     progressPercent={30}
                     badge="+200 pts available"
                   />
                   <ContentCard
-                    image="/images/cards/prize-wheel.jpg"
+                    image="/images/cards/predictions.jpg"
                     title="Prize Wheel"
                     subtitle="Spin to win exclusive rewards"
                     badge="🎰 5 spins available"
@@ -97,7 +97,7 @@ export default function Dashboard({ user }: DashboardProps) {
                 />
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <ContentCard
-                    image="/images/cards/fantasy-get-started.jpg"
+                    image="/images/cards/fantasy-get-started.jpeg"
                     title="Test your knowledge and earn points"
                     subtitle="Get into Tipping & Fantasy"
                     badge="+50 pts"
@@ -105,7 +105,7 @@ export default function Dashboard({ user }: DashboardProps) {
                     ctaButton="Get Started →"
                   />
                   <ContentCard
-                    image="/images/cards/tipping.jpg"
+                    image="/images/cards/fantasy-team.jpg"
                     title="Tipping"
                     subtitle="Tips made for upcoming weekend fixtures"
                     progressRing={{ current: 6, total: 8 }}
@@ -134,7 +134,7 @@ export default function Dashboard({ user }: DashboardProps) {
                 />
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <ContentCard
-                    image="/images/cards/ben-hunt-highlights.jpg"
+                    image="/images/cards/ben-hunt-highlights.jpeg"
                     title="Ben Hunt stuns in Premiership performance"
                     subtitle="Grand Final Highlights"
                     badge="▶ 12 min"
@@ -146,7 +146,7 @@ export default function Dashboard({ user }: DashboardProps) {
                     badge="▶ 45 min"
                   />
                   <ContentCard
-                    image="/images/cards/top-performers.jpg"
+                    image="/images/cards/top-performers.avif"
                     title="Top Performers from Premiership"
                     subtitle="Stats Overview"
                     badge="📊 Stats"
