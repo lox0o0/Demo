@@ -10,6 +10,9 @@ import StatusCards from "./StatusCards";
 import ActivityFeed from "./ActivityFeed";
 import Navigation, { NavSection, LatestSubSection, StatsSubSection, SocialSubSection } from "./Navigation";
 import DashboardNew from "./DashboardNew";
+import LeftSidebar from "./layout/LeftSidebar";
+import RightSidebar from "./layout/RightSidebar";
+import StatusBar from "./layout/StatusBar";
 
 interface DashboardProps {
   user: any;
@@ -41,78 +44,20 @@ export default function Dashboard({ user }: DashboardProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-nrl-dark">
-      {/* Premium background with team colors */}
-      <div 
-        className="fixed inset-0 z-0 opacity-5"
-        style={{
-          background: `radial-gradient(circle at 20% 50%, ${teamColors.primary} 0%, transparent 50%),
-                       radial-gradient(circle at 80% 50%, ${teamColors.secondary} 0%, transparent 50%),
-                       linear-gradient(to bottom, #0A0A0A 0%, #000000 100%)`,
-        }}
+    <div className="h-screen overflow-hidden bg-[#0a0a0b] flex">
+      {/* Left Sidebar */}
+      <LeftSidebar 
+        activeSection={activeSection} 
+        onNavigate={(section) => setActiveSection(section as NavSection)}
       />
-      <div className="relative z-10">
-        {/* Top Navigation */}
-        <Navigation 
-          activeSection={activeSection} 
-          activeSubSection={activeSubSection}
-          setActiveSection={(section, subSection) => {
-            setActiveSection(section);
-            if (subSection) setActiveSubSection(subSection);
-          }}
-        />
 
-        {/* Premium Header - Only show when not on home */}
-        {activeSection !== "home" && (
-          <header className="bg-nrl-dark-card border-b border-nrl-border-light sticky top-16 z-20 backdrop-blur-sm bg-opacity-95">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                {teamData && (
-                  <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-white/10 border border-nrl-border-light p-1.5">
-                    <Image
-                      src={teamData.logoUrl}
-                      alt={teamData.name}
-                      fill
-                      className="object-contain"
-                      unoptimized
-                    />
-                  </div>
-                )}
-                <div>
-                  <h1 className="text-xl font-bold text-nrl-text-primary">
-                    Welcome back, {user?.name || "Fan"}!
-                  </h1>
-                  <p className="text-sm text-nrl-text-secondary font-medium">{user?.team}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                {user?.streak > 0 && (
-                  <div className="flex items-center gap-2 px-4 py-2 bg-nrl-dark-card rounded-full border border-nrl-amber/30">
-                    <span className="text-xs font-bold text-nrl-amber fire-animation uppercase tracking-tight">STREAK</span>
-                    <span className="font-bold text-nrl-amber">{user.streak} day streak</span>
-                  </div>
-                )}
-                {/* Reset button for testing */}
-                <button
-                  onClick={() => {
-                    localStorage.removeItem("nrl_onboarded");
-                    localStorage.removeItem("nrl_user");
-                    window.location.reload();
-                  }}
-                  className="text-xs text-nrl-text-muted hover:text-nrl-text-primary px-2 py-1 rounded"
-                  title="Reset onboarding (for testing)"
-                >
-                  Reset
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
-        )}
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col ml-[70px] mr-[280px] overflow-hidden">
+        {/* Status Bar */}
+        <StatusBar user={user} />
 
-        {/* Main Content */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-8">
+        {/* Scrollable Content */}
+        <main className="flex-1 overflow-y-auto px-6 py-6">
           {activeSection === "home" && (
             <div className="space-y-8">
               {/* Hero Section - Featured Content */}
@@ -188,6 +133,9 @@ export default function Dashboard({ user }: DashboardProps) {
           )}
         </main>
       </div>
+
+      {/* Right Sidebar */}
+      <RightSidebar user={user} />
     </div>
   );
 }
