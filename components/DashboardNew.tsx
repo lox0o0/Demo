@@ -14,8 +14,10 @@ interface DashboardProps {
 
 // Calculate tier based on points and profile completion
 const calculateTier = (points: number, profileCompletion: number) => {
-  // If profile completion is 100%, give Bronze tier (250 points)
-  if (profileCompletion >= 100) {
+  // If profile completion is 90% or higher (team + auth + all 4 socials), give Bronze tier (250 points)
+  // Note: Maximum completion from onboarding is 90% (20% team + 30% auth + 40% from 4 socials)
+  // Additional profile fields (DOB, gender, home ground) can add up to 10% more to reach 100%
+  if (profileCompletion >= 90) {
     return TIERS.find(t => t.name === "Bronze") || TIERS[1];
   }
   
@@ -33,8 +35,9 @@ export default function DashboardNew({ user, hideNavigation = false }: Dashboard
   
   // Get user data
   const profileCompletion = user?.profileCompletion || 0;
-  // If profile completion is 100%, give Bronze tier (250 points minimum)
-  const userPoints = profileCompletion >= 100 
+  // If profile completion is 90% or higher (team + auth + all 4 socials), give Bronze tier (250 points minimum)
+  // Note: Maximum completion from onboarding is 90% (20% team + 30% auth + 40% from 4 socials)
+  const userPoints = profileCompletion >= 90 
     ? Math.max(user?.points || 0, 250) 
     : (user?.points || 0);
   const currentTier = calculateTier(userPoints, profileCompletion);

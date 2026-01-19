@@ -145,8 +145,12 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       completion += 30;
     }
     
-    // Each social connection = 10% (4 socials = 40%, so team + auth + all socials = 90%)
+    // Each social connection = 10% (4 socials = 40%)
     completion += socialsToCount.length * 10;
+    
+    // Additional profile fields can add up to 10% more (DOB, gender, home ground, etc.)
+    // This allows reaching 100% completion (20% team + 30% auth + 40% socials + 10% additional = 100%)
+    // For now, we'll cap at 100% to allow for future additional fields
     return Math.min(completion, 100);
   };
 
@@ -164,10 +168,11 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       let finalEmail = email || "";
       if (selectedAuthMethod === "email" && buildProfileEmail.trim() !== "") {
         finalEmail = buildProfileEmail.trim();
-        // Extract name from email if no name provided
-        if (!nameForCompletion || finalName === "Fan") {
+        // Extract name from email if no real name provided (check for placeholder names)
+        if (!nameForCompletion || isPlaceholderName(finalName)) {
           const emailName = buildProfileEmail.split("@")[0];
           finalName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
+          // Set nameForCompletion to the extracted name so it counts toward profile completion
           nameForCompletion = finalName;
         }
       }
