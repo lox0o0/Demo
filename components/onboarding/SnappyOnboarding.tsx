@@ -302,8 +302,24 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                   }}
                   placeholder="Enter your email"
                   className="w-full bg-nrl-dark-card border border-nrl-border-light rounded-xl pl-11 pr-4 py-2.5 text-sm text-nrl-text-primary placeholder:text-nrl-text-muted/60 focus:outline-none focus:border-nrl-amber focus:ring-2 focus:ring-nrl-amber/20 transition-all"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && preClubEmail.trim() !== "") {
+                      handlePreClubEmailContinue();
+                    }
+                  }}
                 />
               </div>
+              {/* Continue button under email */}
+              {preClubEmail.trim() !== "" && (
+                <div className="mt-3 max-w-md mx-auto">
+                  <button
+                    onClick={handlePreClubEmailContinue}
+                    className="w-full bg-nrl-amber text-nrl-dark font-bold py-2.5 rounded-xl hover:bg-nrl-amber/90 transition-all transform hover:scale-[1.02] text-sm"
+                  >
+                    Continue
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
