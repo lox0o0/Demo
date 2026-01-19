@@ -40,7 +40,7 @@ export default function Dashboard({ user }: DashboardProps) {
         <StatusBar user={user} />
 
         {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto px-6 py-6">
+        <main className="flex-1 overflow-y-auto pl-8 pr-6 py-6">
           {activeSection === "home" && (
             <div className="space-y-12">
               {/* SECTION 1: ACTIVITIES */}
@@ -54,7 +54,7 @@ export default function Dashboard({ user }: DashboardProps) {
                   title="ACTIVITIES"
                   seeAllLink="#"
                 />
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <ContentCard
                     image="/images/cards/predictions.jpg"
                     title="Predictions"
@@ -98,7 +98,7 @@ export default function Dashboard({ user }: DashboardProps) {
                   title="FANTASY & TIPPING"
                   seeAllLink="#"
                 />
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <ContentCard
                     image="/images/cards/fantasy-get-started.jpeg"
                     title="Test your knowledge and earn points"
@@ -138,7 +138,7 @@ export default function Dashboard({ user }: DashboardProps) {
                   title="WATCH"
                   seeAllLink="#"
                 />
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <ContentCard
                     image="/images/cards/ben-hunt-highlights.jpeg"
                     title="Ben Hunt stuns in Premiership performance"

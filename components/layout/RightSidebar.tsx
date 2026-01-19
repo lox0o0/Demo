@@ -114,7 +114,7 @@ export default function RightSidebar({ user }: RightSidebarProps) {
                     
                     {/* Current position indicator */}
                     {isCurrentTier && (
-                      <div className="mt-2 p-2 bg-[#1a1a1d] border border-[#22c55e] rounded text-xs">
+                      <div className="mt-2 p-2 bg-[#1a1a1d] border-2 border-[#22c55e] rounded text-xs animate-pulse-glow">
                         <div className="text-[#22c55e] font-semibold mb-1">▲ YOU ARE HERE</div>
                         <div className="text-white font-bold">{userPoints.toLocaleString()} pts</div>
                       </div>

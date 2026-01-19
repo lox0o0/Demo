@@ -38,6 +38,7 @@ const config: Config = {
         "fade-in-up": "fadeInUp 0.8s ease-out",
         "float": "float 3s ease-in-out infinite",
         "shimmer": "shimmer 2s infinite",
+        "pulse-glow": "pulseGlow 2s ease-in-out infinite",
       },
       keyframes: {
         bounceIn: {
@@ -56,6 +57,16 @@ const config: Config = {
         shimmer: {
           "0%": { backgroundPosition: "-1000px 0" },
           "100%": { backgroundPosition: "1000px 0" },
+        },
+        pulseGlow: {
+          "0%, 100%": { 
+            boxShadow: "0 0 8px rgba(34, 197, 94, 0.5), 0 0 16px rgba(34, 197, 94, 0.3)",
+            borderColor: "#22c55e"
+          },
+          "50%": { 
+            boxShadow: "0 0 16px rgba(34, 197, 94, 0.8), 0 0 32px rgba(34, 197, 94, 0.5)",
+            borderColor: "#22c55e"
+          },
         },
       },
       backdropBlur: {
