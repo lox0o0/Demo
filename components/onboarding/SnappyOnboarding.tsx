@@ -201,37 +201,74 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
   }
 
   if (step === "club") {
+    // Filter teams based on search query
+    const filteredTeams = NRL_TEAMS.filter((team) =>
+      team.name.toLowerCase().includes(teamSearchQuery.toLowerCase())
+    );
+
     return (
       <div className="min-h-screen bg-nrl-dark flex items-center justify-center p-4">
         <div className="w-full max-w-4xl">
+          <ProgressStepper currentStep={1} />
           <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-white via-nrl-green to-white bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-nrl-amber via-white to-nrl-amber bg-clip-text text-transparent">
               Pick Your Club
             </h1>
             <p className="text-nrl-text-secondary text-lg">Choose your team to get started</p>
           </div>
 
+          {/* Search Bar */}
+          <div className="mb-6 max-w-md mx-auto">
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                <svg className="w-5 h-5 text-nrl-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <input
+                type="text"
+                value={teamSearchQuery}
+                onChange={(e) => setTeamSearchQuery(e.target.value)}
+                placeholder="Search for your team..."
+                className="w-full bg-nrl-dark-card border border-nrl-border-light rounded-xl pl-12 pr-4 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted focus:outline-none focus:border-nrl-amber focus:ring-2 focus:ring-nrl-amber/20 transition-all"
+              />
+            </div>
+          </div>
+
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {NRL_TEAMS.map((team) => (
-              <button
-                key={team.id}
-                onClick={() => handleTeamSelect(team)}
-                className="group relative overflow-hidden bg-nrl-dark-card rounded-xl p-4 hover:scale-105 transition-all duration-300 border border-nrl-border-light hover:border-nrl-border-medium"
-                style={{
-                  background: `linear-gradient(135deg, ${team.primaryColor}10 0%, ${team.secondaryColor}10 100%)`,
-                }}
-              >
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className="relative w-20 h-20 mb-3 transform group-hover:scale-110 transition-transform duration-300 bg-white/5 rounded-xl p-2 border border-nrl-border-light">
-                    <TeamLogoWithFallback
-                      src={team.logoUrl}
-                      alt={team.name}
-                    />
+            {filteredTeams.length > 0 ? (
+              filteredTeams.map((team) => (
+                <button
+                  key={team.id}
+                  onClick={() => handleTeamSelect(team)}
+                  className="group relative overflow-hidden bg-nrl-dark-card rounded-xl p-4 hover:scale-105 transition-all duration-300 border border-nrl-border-light hover:border-opacity-0"
+                  style={{
+                    background: `linear-gradient(135deg, ${team.primaryColor}10 0%, ${team.secondaryColor}10 100%)`,
+                  }}
+                >
+                  {/* Hover glow effect in team colors */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"
+                    style={{
+                      background: `radial-gradient(circle, ${team.primaryColor}40 0%, transparent 70%)`,
+                    }}
+                  />
+                  <div className="relative z-10 flex flex-col items-center">
+                    <div className="relative w-20 h-20 mb-3 transform group-hover:scale-110 transition-transform duration-300 bg-white/5 rounded-xl p-2 border border-nrl-border-light">
+                      <TeamLogoWithFallback
+                        src={team.logoUrl}
+                        alt={team.name}
+                      />
+                    </div>
+                    <div className="font-bold text-sm text-nrl-text-primary">{team.name}</div>
                   </div>
-                  <div className="font-bold text-sm text-nrl-text-primary">{team.name}</div>
-                </div>
-              </button>
-            ))}
+                </button>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-8 text-nrl-text-muted">
+                No teams found matching "{teamSearchQuery}"
+              </div>
+            )}
           </div>
         </div>
       </div>
