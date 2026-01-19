@@ -5,6 +5,7 @@ import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
 import { NRL_TEAMS } from "@/lib/data/teams";
 import Navigation, { NavSection } from "./Navigation";
+import { generateMockStreakData, getFlameEmoji, getFlameLevelName, type StreakData } from "@/lib/streakData";
 
 interface DashboardProps {
   user: any;
@@ -45,6 +46,9 @@ export default function DashboardNew({ user, hideNavigation = false }: Dashboard
 
   const teamData = user?.teamData || NRL_TEAMS.find(t => t.name === user?.team) || NRL_TEAMS[0];
   const firstName = user?.name?.split(' ')[0] || "Fan";
+  
+  // Generate streak data
+  const streakData = generateMockStreakData(user);
 
   return (
     <div className="min-h-screen bg-nrl-dark">
@@ -75,6 +79,9 @@ export default function DashboardNew({ user, hideNavigation = false }: Dashboard
                 profileCompletion={profileCompletion}
                 teamData={teamData}
               />
+              
+              {/* Streak Card */}
+              <StreakCard streakData={streakData} teamData={teamData} />
               
               {/* Today's Quest */}
               <TodaysQuestCard teamData={teamData} />
@@ -186,6 +193,247 @@ function StatusCard({ tier, points, progressPercent, pointsToNext, nextTier, str
       <div className="flex items-center gap-2 text-xs text-nrl-text-muted">
         <span>🔒</span>
         <span>{nextTier.name} unlocks: {nextTier.access || nextTier.reward}</span>
+      </div>
+    </div>
+  );
+}
+
+// Streak Card Component
+function StreakCard({ streakData, teamData }: { streakData: StreakData; teamData: any }) {
+  const [showWheel, setShowWheel] = useState(false);
+  const flameEmoji = getFlameEmoji(streakData.currentWeek.flameLevel);
+  const flameName = getFlameLevelName(streakData.currentWeek.flameLevel);
+  const fuelPercent = Math.min((streakData.currentWeek.fuel / 300) * 100, 100); // Cap at 300 for Inferno
+  const fuelToNext = streakData.currentWeek.flameLevel === 'inferno' 
+    ? 0 
+    : streakData.currentWeek.flameLevel === 'blazing'
+    ? 300 - streakData.currentWeek.fuel
+    : streakData.currentWeek.flameLevel === 'burning'
+    ? 200 - streakData.currentWeek.fuel
+    : streakData.currentWeek.flameLevel === 'lit'
+    ? 150 - streakData.currentWeek.fuel
+    : 100 - streakData.currentWeek.fuel;
+
+  return (
+    <>
+      <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+        {/* Flame and Streak Count */}
+        <div className="text-center mb-4">
+          <div className="text-4xl mb-2">{flameEmoji}</div>
+          <div className="text-3xl font-bold text-white mb-1">
+            {streakData.fanStreak.currentWeeks}
+          </div>
+          <div className="text-sm text-nrl-text-secondary mb-2">week streak</div>
+          <div className="text-xs text-nrl-amber font-semibold">
+            {flameName} ({streakData.currentWeek.fuel} Fuel this week)
+          </div>
+        </div>
+
+        {/* Fuel Progress Bar */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs text-nrl-text-secondary">Weekly Fuel</span>
+            <span className="text-xs font-bold text-nrl-green">
+              {streakData.currentWeek.fuel} / {streakData.currentWeek.target}
+            </span>
+          </div>
+          <div className="w-full bg-nrl-dark-hover rounded-full h-2 mb-1">
+            <div
+              className="h-2 rounded-full transition-all duration-500 bg-gradient-to-r from-orange-500 to-red-500"
+              style={{ width: `${fuelPercent}%` }}
+            />
+          </div>
+          {fuelToNext > 0 && streakData.currentWeek.flameLevel !== 'inferno' && (
+            <div className="text-xs text-nrl-text-muted">
+              {fuelToNext} to {streakData.currentWeek.flameLevel === 'lit' ? 'Burning' : streakData.currentWeek.flameLevel === 'burning' ? 'Blazing' : 'Inferno'}
+            </div>
+          )}
+        </div>
+
+        {/* Streak Benefits */}
+        <div className="bg-nrl-dark-hover rounded-xl p-4 mb-4 border border-nrl-border-light">
+          <div className="text-xs font-bold uppercase text-nrl-text-secondary mb-3 tracking-wider">
+            Streak Benefits
+          </div>
+          <div className="grid grid-cols-2 gap-3 text-xs">
+            <div>
+              <div className="text-nrl-text-muted mb-1">💰 Points Multiplier</div>
+              <div className="font-bold text-white">{streakData.benefits.pointsMultiplier}x</div>
+            </div>
+            <div>
+              <div className="text-nrl-text-muted mb-1">🎁 Weekly Bonus</div>
+              <div className="font-bold text-white">+{streakData.benefits.weeklyBonus} pts</div>
+            </div>
+            <div>
+              <div className="text-nrl-text-muted mb-1">🎰 Spins Available</div>
+              <div className="font-bold text-white">{streakData.spins.available}</div>
+            </div>
+            <div>
+              <div className="text-nrl-text-muted mb-1">🛡️ Shields</div>
+              <div className="font-bold text-white">{streakData.shields.available}/{streakData.shields.maxCapacity}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Spin Wheel Button */}
+        {streakData.spins.available > 0 && (
+          <button
+            onClick={() => setShowWheel(true)}
+            className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 rounded-xl hover:from-orange-600 hover:to-red-600 transition-all transform hover:scale-[1.02] mb-3"
+          >
+            🎰 SPIN THE WHEEL ({streakData.spins.available} left)
+          </button>
+        )}
+
+        {/* Next Milestone */}
+        {streakData.nextMilestone && (
+          <div className="text-center">
+            <div className="text-xs text-nrl-text-muted mb-1">
+              Next milestone: {streakData.nextMilestone.weeks} weeks ({streakData.nextMilestone.weeksRemaining} to go)
+            </div>
+            <div className="text-xs text-nrl-text-secondary">
+              {streakData.nextMilestone.name} — {streakData.nextMilestone.reward}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Prize Wheel Modal */}
+      {showWheel && (
+        <PrizeWheel 
+          streakData={streakData}
+          teamData={teamData}
+          onClose={() => setShowWheel(false)}
+        />
+      )}
+    </>
+  );
+}
+
+// Prize Wheel Component
+function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData; teamData: any; onClose: () => void }) {
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [prizeWon, setPrizeWon] = useState<any>(null);
+  const [spinsRemaining, setSpinsRemaining] = useState(streakData.spins.available);
+
+  const prizes = [
+    { id: 1, name: '25 Points', tier: 'common', icon: '🪙', color: teamData?.primaryColor || '#73003c' },
+    { id: 2, name: '$10 Telstra Credit', tier: 'uncommon', icon: '📱', color: '#00A8E8', sponsor: 'Telstra' },
+    { id: 3, name: '50 Points', tier: 'common', icon: '🪙', color: teamData?.secondaryColor || '#FFB81C' },
+    { id: 4, name: '100 Points', tier: 'uncommon', icon: '🪙', color: '#1E1E1E' },
+    { id: 5, name: '10 Points', tier: 'common', icon: '🪙', color: '#FFFFFF' },
+    { id: 6, name: '$10 KFC Voucher', tier: 'rare', icon: '🍗', color: '#E4002B', sponsor: 'KFC' },
+    { id: 7, name: '25 Points', tier: 'common', icon: '🪙', color: teamData?.primaryColor || '#73003c' },
+    { id: 8, name: 'Free Shield 🛡️', tier: 'uncommon', icon: '🛡️', color: teamData?.secondaryColor || '#FFB81C' },
+    { id: 9, name: '50 Points', tier: 'common', icon: '🪙', color: '#1E1E1E' },
+    { id: 10, name: '$25 NRL Shop Voucher', tier: 'epic', icon: '🛍️', color: '#00A651', sponsor: 'NRL' },
+    { id: 11, name: '250 Points', tier: 'rare', icon: '🪙', color: '#FFFFFF' },
+    { id: 12, name: 'Signed Mini Ball', tier: 'epic', icon: '🏉', color: teamData?.primaryColor || '#73003c' },
+    { id: 13, name: '25 Points', tier: 'common', icon: '🪙', color: teamData?.secondaryColor || '#FFB81C' },
+    { id: 14, name: '500 Points', tier: 'rare', icon: '🪙', color: '#1E1E1E' },
+    { id: 15, name: '$20 Uber Eats', tier: 'uncommon', icon: '🍔', color: '#000000', sponsor: 'Uber Eats' },
+    { id: 16, name: 'Match Tickets', tier: 'legendary', icon: '🎟️', color: '#FFD700' },
+  ];
+
+  const handleSpin = () => {
+    if (spinsRemaining === 0 || isSpinning) return;
+    
+    setIsSpinning(true);
+    setPrizeWon(null);
+    
+    // Simulate spin (3-5 seconds)
+    const spinDuration = 3000 + Math.random() * 2000;
+    const randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
+    
+    setTimeout(() => {
+      setIsSpinning(false);
+      setPrizeWon(randomPrize);
+      setSpinsRemaining(spinsRemaining - 1);
+    }, spinDuration);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div 
+        className="bg-nrl-dark-card rounded-2xl p-8 max-w-md w-full border border-nrl-border-light"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-white">🎁 Weekly Prize Wheel</h2>
+          <button
+            onClick={onClose}
+            className="text-nrl-text-muted hover:text-white transition-colors"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Wheel Visual */}
+        <div className="relative w-full aspect-square mb-6 flex items-center justify-center">
+          <div className="relative w-64 h-64 rounded-full border-4 border-nrl-border-light overflow-hidden">
+            {isSpinning ? (
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-500/20 to-red-500/20">
+                <div className="text-white font-bold animate-spin">SPINNING...</div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-4 w-full h-full">
+                {prizes.slice(0, 16).map((prize, idx) => (
+                  <div
+                    key={prize.id}
+                    className="flex items-center justify-center text-xs font-bold text-white border border-nrl-border-light"
+                    style={{ backgroundColor: prize.color }}
+                  >
+                    {prize.icon}
+                  </div>
+                ))}
+              </div>
+            )}
+            {/* Pointer */}
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2">
+              <div className="w-0 h-0 border-l-8 border-r-8 border-t-12 border-transparent border-t-white"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Spins Remaining */}
+        <div className="text-center mb-4">
+          <div className="text-sm text-nrl-text-secondary mb-1">
+            Spins Remaining: <span className="font-bold text-white">{spinsRemaining}</span>
+          </div>
+          <div className="text-xs text-nrl-text-muted">
+            Your streak: {streakData.fanStreak.currentWeeks} weeks ({streakData.spins.baseSpins} base + {streakData.spins.bonusSpins} {getFlameLevelName(streakData.currentWeek.flameLevel)} bonus)
+          </div>
+        </div>
+
+        {/* Prize Won Display */}
+        {prizeWon && !isSpinning && (
+          <div className="bg-nrl-green/20 border-2 border-nrl-green rounded-xl p-6 mb-4 text-center">
+            <div className="text-4xl mb-2">🎉</div>
+            <div className="text-xl font-bold text-white mb-1">YOU WON!</div>
+            <div className="text-2xl mb-2">{prizeWon.icon}</div>
+            <div className="text-lg font-semibold text-nrl-green mb-2">{prizeWon.name}</div>
+            {prizeWon.sponsor && (
+              <div className="text-xs text-nrl-text-muted">Sponsored by {prizeWon.sponsor}</div>
+            )}
+          </div>
+        )}
+
+        {/* Spin Button */}
+        {spinsRemaining > 0 && (
+          <button
+            onClick={handleSpin}
+            disabled={isSpinning}
+            className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-4 rounded-xl hover:from-orange-600 hover:to-red-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-3"
+          >
+            {isSpinning ? 'SPINNING...' : 'SPIN NOW'}
+          </button>
+        )}
+
+        {spinsRemaining === 0 && (
+          <div className="text-center text-nrl-text-secondary text-sm">
+            ✓ All spins used this week
+          </div>
+        )}
       </div>
     </div>
   );
