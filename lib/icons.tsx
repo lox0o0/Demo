@@ -78,8 +78,8 @@ export const NavIcon = ({ type }: { type: string }) => {
   );
 };
 
-// Social Media Icon Component - using official brand logos with error handling
-export const SocialIcon = ({ platform, size = 24 }: { platform: string; size?: number }) => {
+// Social Media Icon Component - optimized for professional display like Strava/NBA/NFL
+export const SocialIcon = ({ platform, size = 32 }: { platform: string; size?: number }) => {
   const logoUrl = SOCIAL_LOGOS[platform as keyof typeof SOCIAL_LOGOS];
   const [imgSrc, setImgSrc] = useState(logoUrl);
   const [hasError, setHasError] = useState(false);
@@ -100,8 +100,21 @@ export const SocialIcon = ({ platform, size = 24 }: { platform: string; size?: n
     );
   }
   
+  // Platform-specific styling for better visibility
+  const platformStyles: Record<string, { bg?: string; padding?: string }> = {
+    instagram: { bg: "bg-white/10", padding: "p-1" }, // Instagram needs background for visibility
+    facebook: { bg: "bg-white/5", padding: "p-0.5" },
+    tiktok: { bg: "bg-white/5", padding: "p-0.5" },
+    x: { bg: "bg-white/5", padding: "p-0.5" },
+  };
+  
+  const styles = platformStyles[platform] || {};
+  
   return (
-    <div className="relative flex items-center justify-center" style={{ width: size, height: size, minWidth: size, minHeight: size }}>
+    <div 
+      className={`relative flex items-center justify-center ${styles.bg || ""} rounded ${styles.padding || ""}`}
+      style={{ width: size, height: size, minWidth: size, minHeight: size }}
+    >
       {!hasError ? (
         <Image
           src={imgSrc}
@@ -112,7 +125,6 @@ export const SocialIcon = ({ platform, size = 24 }: { platform: string; size?: n
           unoptimized
           onError={() => {
             setHasError(true);
-            // Fallback to text if image fails
           }}
         />
       ) : (

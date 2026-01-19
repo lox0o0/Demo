@@ -57,12 +57,12 @@ export default function Dashboard({ user }: DashboardProps) {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 {teamData && (
-                  <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-white/5 border border-nrl-border-light">
+                  <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-white/10 border border-nrl-border-light p-1.5">
                     <Image
                       src={teamData.logoUrl}
                       alt={teamData.name}
                       fill
-                      className="object-contain p-1"
+                      className="object-contain"
                       unoptimized
                     />
                   </div>

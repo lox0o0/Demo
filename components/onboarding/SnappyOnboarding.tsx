@@ -62,6 +62,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
   const [connectedSocials, setConnectedSocials] = useState<string[]>([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [hasAuth, setHasAuth] = useState(false);
 
   const handleTeamSelect = (team: Team) => {
@@ -189,7 +190,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                 }}
               >
                 <div className="relative z-10 flex flex-col items-center">
-                  <div className="relative w-16 h-16 mb-3 transform group-hover:scale-110 transition-transform duration-300">
+                  <div className="relative w-20 h-20 mb-3 transform group-hover:scale-110 transition-transform duration-300 bg-white/5 rounded-xl p-2 border border-nrl-border-light">
                     <TeamLogoWithFallback
                       src={team.logoUrl}
                       alt={team.name}
@@ -376,7 +377,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
           <div className="bg-nrl-dark-card/95 backdrop-blur-sm rounded-2xl p-8 border border-nrl-border-light">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="relative w-20 h-20 mx-auto mb-4">
+              <div className="relative w-24 h-24 mx-auto mb-4">
                 <Image
                   src={selectedTeam.logoUrl}
                   alt={selectedTeam.name}
@@ -391,6 +392,25 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
               <p className="text-nrl-text-secondary">
                 Connect your socials for bonus points
               </p>
+            </div>
+
+            {/* Profile Name */}
+            <div className="mb-6">
+              <label className="block text-sm font-semibold text-nrl-text-secondary uppercase tracking-wider mb-2">
+                Profile Name
+              </label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Choose a username"
+                className="w-full bg-white/10 border border-nrl-border-light rounded-xl px-4 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted focus:outline-none focus:border-nrl-green focus:bg-white/15 transition-all"
+              />
+              {username.trim() !== "" && (
+                <p className="mt-2 text-sm text-nrl-green font-medium">
+                  Username available
+                </p>
+              )}
             </div>
 
             {/* Social Connection */}
@@ -413,8 +433,8 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 flex items-center justify-center">
-                            <SocialIcon platform={platform.id} size={32} />
+                          <div className="w-10 h-10 flex items-center justify-center">
+                            <SocialIcon platform={platform.id} size={40} />
                           </div>
                           <div className="text-left">
                             <div className="font-semibold text-nrl-text-primary text-sm">

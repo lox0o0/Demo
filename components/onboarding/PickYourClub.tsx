@@ -111,7 +111,7 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
               }}
             >
               <div className="relative z-10 flex flex-col items-center">
-                <div className="relative w-20 h-20 mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                <div className="relative w-24 h-24 mb-4 transform group-hover:scale-110 transition-transform duration-300 bg-white/5 rounded-xl p-2 border border-nrl-border-light">
                   <TeamLogoWithFallback
                     src={team.logoUrl}
                     alt={team.name}
