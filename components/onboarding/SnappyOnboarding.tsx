@@ -66,6 +66,8 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
   const [hasAuth, setHasAuth] = useState(false);
   const [teamSearchQuery, setTeamSearchQuery] = useState("");
   const [preClubEmail, setPreClubEmail] = useState("");
+  const [selectedAuthMethod, setSelectedAuthMethod] = useState<"google" | "apple" | "email" | null>(null);
+  const [buildProfileEmail, setBuildProfileEmail] = useState("");
 
   const handleTeamSelect = (team: Team) => {
     setSelectedTeam(team);
@@ -143,11 +145,27 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
 
   const handleComplete = (overrideName?: string, overrideEmail?: string) => {
     if (selectedTeam) {
-      // Priority: overrideName > username (from profile name input) > name (from auth) > "Fan"
-      const finalName = overrideName !== undefined 
+      // Handle authentication if selected in build profile step
+      let finalName = overrideName !== undefined 
         ? overrideName 
         : (username.trim() || name || "Fan");
-      const finalEmail = overrideEmail !== undefined ? overrideEmail : (email || "");
+      let finalEmail = overrideEmail !== undefined ? overrideEmail : (email || "");
+
+      // If auth method was selected in build profile, authenticate now
+      if (selectedAuthMethod === "google") {
+        finalName = finalName || "User";
+        finalEmail = finalEmail || "user@gmail.com";
+      } else if (selectedAuthMethod === "apple") {
+        finalName = finalName || "User";
+        finalEmail = finalEmail || "user@icloud.com";
+      } else if (selectedAuthMethod === "email" && buildProfileEmail.trim() !== "") {
+        finalEmail = buildProfileEmail.trim();
+        if (!finalName || finalName === "Fan") {
+          // Extract name from email if no name provided
+          const emailName = buildProfileEmail.split("@")[0];
+          finalName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
+        }
+      }
       
       const userData = {
         name: finalName,
@@ -161,7 +179,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         memberSince: new Date().getFullYear(),
         streak: 0,
         connectedSocials,
-        profileCompletion: calculateProfileCompletion(connectedSocials, overrideName || username.trim() || undefined, overrideEmail || undefined),
+        profileCompletion: calculateProfileCompletion(connectedSocials, finalName !== "Fan" ? finalName : undefined, finalEmail || undefined),
         entryPoint,
         entryData,
       };
