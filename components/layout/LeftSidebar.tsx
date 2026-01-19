@@ -67,12 +67,12 @@ export default function LeftSidebar({ activeSection, onNavigate }: LeftSidebarPr
           const isHovered = hoveredItem === item.id;
 
           return (
-            <div key={item.id} className="relative">
+            <div key={item.id} className="relative group">
               <button
                 onClick={() => onNavigate(item.id)}
                 onMouseEnter={() => setHoveredItem(item.id)}
                 onMouseLeave={() => setHoveredItem(null)}
-                className={`w-full flex flex-col items-center justify-center py-4 transition-all duration-200 ${
+                className={`w-full flex items-center justify-center py-4 transition-all duration-200 relative ${
                   isActive ? "text-[#22c55e]" : "text-white/60 hover:text-white"
                 }`}
               >
@@ -81,13 +81,20 @@ export default function LeftSidebar({ activeSection, onNavigate }: LeftSidebarPr
                   <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#22c55e]" />
                 )}
                 
-                <div className="mb-1">{item.icon}</div>
-                {(isHovered || isActive) && (
-                  <span className="text-[10px] font-semibold uppercase tracking-wider mt-1">
-                    {item.label}
-                  </span>
-                )}
+                {/* Icon */}
+                <div className="flex items-center justify-center">
+                  {item.icon}
+                </div>
               </button>
+              
+              {/* Tooltip on hover */}
+              {isHovered && !isActive && (
+                <div className="absolute left-full ml-3 px-3 py-2 bg-[#1a1a1d] border border-[#2a2a2d] rounded-lg text-xs font-semibold text-white whitespace-nowrap z-50 shadow-lg">
+                  {item.label}
+                  {/* Tooltip arrow */}
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-[#2a2a2d]" />
+                </div>
+              )}
             </div>
           );
         })}
