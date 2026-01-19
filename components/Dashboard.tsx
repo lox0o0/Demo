@@ -61,6 +61,7 @@ export default function Dashboard({ user }: DashboardProps) {
                     subtitle="Round 6 Telstra MVP prediction made"
                     badge="✓ Complete"
                     badgeColor="green"
+                    ctaButton="Check predictions"
                   />
                   <ContentCard
                     image="/images/cards/profile-upgrade.jpg"
@@ -68,6 +69,7 @@ export default function Dashboard({ user }: DashboardProps) {
                     subtitle="Complete profile data to earn points!"
                     progressPercent={30}
                     badge="+200 pts available"
+                    ctaButton="Complete profile data"
                   />
                   <ContentCard
                     image="/images/cards/prize-wheel.png"
@@ -75,6 +77,7 @@ export default function Dashboard({ user }: DashboardProps) {
                     subtitle="Spin to win exclusive rewards"
                     badge="🎰 5 spins available"
                     ctaButton="Spin Now →"
+                    ctaStyle="centered"
                   />
                 </div>
               </section>
@@ -103,6 +106,7 @@ export default function Dashboard({ user }: DashboardProps) {
                     badge="+50 pts"
                     badgeColor="gold"
                     ctaButton="Get Started →"
+                    ctaStyle="wide"
                   />
                   <ContentCard
                     image="/images/cards/tipping.jpeg"
@@ -110,6 +114,7 @@ export default function Dashboard({ user }: DashboardProps) {
                     subtitle="Tips made for upcoming weekend fixtures"
                     progressRing={{ current: 6, total: 8 }}
                     badge="Round 6"
+                    ctaButton="Finish tips"
                   />
                   <ContentCard
                     image="/images/cards/fantasy-team.jpg"
@@ -117,6 +122,7 @@ export default function Dashboard({ user }: DashboardProps) {
                     subtitle="Trades made and team set"
                     statusIndicator="✓ Team Ready"
                     badge="12,847 pts"
+                    ctaButton="Check team"
                   />
                 </div>
               </section>
@@ -138,18 +144,21 @@ export default function Dashboard({ user }: DashboardProps) {
                     title="Ben Hunt stuns in Premiership performance"
                     subtitle="Grand Final Highlights"
                     badge="▶ 12 min"
+                    ctaStyle="subtitle"
                   />
                   <ContentCard
                     image="/images/cards/broncos-storm-replay.jpg"
                     title="Extended Highlights: Broncos vs Storm"
                     subtitle="Grand Final Full Replay"
                     badge="▶ 45 min"
+                    ctaStyle="subtitle"
                   />
                   <ContentCard
                     image="/images/cards/top-performers.avif"
                     title="Top Performers from Premiership"
                     subtitle="Stats Overview"
                     badge="📊 Stats"
+                    ctaStyle="subtitle"
                   />
                 </div>
               </section>

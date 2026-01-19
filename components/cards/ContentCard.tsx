@@ -13,6 +13,7 @@ interface ContentCardProps {
   progressRing?: { current: number; total: number };
   progressPercent?: number;
   ctaButton?: string;
+  ctaStyle?: "default" | "wide" | "centered" | "subtitle";
   onCardClick?: () => void;
   onCtaClick?: () => void;
 }
@@ -27,6 +28,7 @@ export default function ContentCard({
   progressRing,
   progressPercent,
   ctaButton,
+  ctaStyle = "default",
   onCardClick,
   onCtaClick,
 }: ContentCardProps) {
@@ -69,7 +71,21 @@ export default function ContentCard({
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1">
             <h3 className="text-base font-bold text-white mb-1">{title}</h3>
-            <p className="text-sm text-[#a1a1aa] mb-2">{subtitle}</p>
+            
+            {/* Subtitle - either as text or CTA box */}
+            {ctaStyle === "subtitle" ? (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onCtaClick?.();
+                }}
+                className="mt-1 mb-2 px-4 py-2 bg-[#1a1a1d] border border-[#2a2a2d] hover:border-[#22c55e] text-white text-sm font-semibold rounded-lg transition-colors"
+              >
+                {subtitle}
+              </button>
+            ) : (
+              <p className="text-sm text-[#a1a1aa] mb-2">{subtitle}</p>
+            )}
             
             {/* Status Indicator */}
             {statusIndicator && (
@@ -125,13 +141,15 @@ export default function ContentCard({
             )}
             
             {/* CTA Button */}
-            {ctaButton && (
+            {ctaButton && ctaStyle !== "subtitle" && (
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onCtaClick?.();
                 }}
-                className="mt-2 px-4 py-2 bg-[#22c55e] hover:bg-[#22c55e]/90 text-white text-xs font-semibold rounded-lg transition-colors"
+                className={`mt-2 px-4 py-2 bg-[#22c55e] hover:bg-[#22c55e]/90 text-white text-xs font-semibold rounded-lg transition-colors ${
+                  ctaStyle === "wide" ? "w-full" : ""
+                } ${ctaStyle === "centered" ? "w-full" : ""}`}
               >
                 {ctaButton}
               </button>
