@@ -135,10 +135,10 @@ export default function Dashboard({ user }: DashboardProps) {
               {/* Fan Score and Status Cards */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2">
-                  <FanScore user={user} teamData={teamData} />
+                  <FanScore user={user} />
                 </div>
                 <div className="lg:col-span-1">
-                  <StatusCards user={user} teamData={teamData} />
+                  <StatusCards user={user} />
                 </div>
               </div>
 
