@@ -103,8 +103,13 @@ export default function LeftSidebar({ activeSection, onNavigate }: LeftSidebarPr
       {/* Bottom Actions */}
       <div className="pb-4 border-t border-[#2a2a2d] pt-4">
         <button
+          onClick={() => {
+            localStorage.removeItem("nrl_onboarded");
+            localStorage.removeItem("nrl_user");
+            window.location.reload();
+          }}
           className="w-full flex flex-col items-center justify-center py-3 text-white/60 hover:text-white transition-colors"
-          title="Settings"
+          title="Reset Demo"
         >
           <svg
             width="24"
