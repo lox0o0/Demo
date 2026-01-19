@@ -133,7 +133,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         memberSince: new Date().getFullYear(),
         streak: 0,
         connectedSocials: emptySocials, // Empty array matches the base points calculation
-        profileCompletion: calculateProfileCompletion(emptySocials, username.trim() || undefined, undefined), // Calculate with empty socials
+        profileCompletion: calculateProfileCompletion(emptySocials, username.trim() || undefined, email || undefined), // Calculate with empty socials, include email if present
         entryPoint,
         entryData,
       };
