@@ -329,69 +329,6 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       <div className="min-h-screen bg-nrl-dark flex items-center justify-center p-4">
         <div className="w-full max-w-4xl">
           <ProgressStepper currentStep={1} />
-          
-          {/* Pre-club Sign-in Options */}
-          <div className="mb-8">
-            <div className="text-center mb-4">
-              <p className="text-sm text-nrl-text-secondary/70 mb-4">Sign in to get started</p>
-              <div className="flex justify-center gap-3 mb-4">
-                <button
-                  onClick={handlePreClubGoogleSignIn}
-                  className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg hover:shadow-xl"
-                  aria-label="Sign in with Google"
-                >
-                  <AuthIcon provider="google" size={28} />
-                </button>
-                <button
-                  onClick={handlePreClubAppleSignIn}
-                  className="w-12 h-12 rounded-full bg-black flex items-center justify-center hover:scale-110 transition-transform shadow-lg hover:shadow-xl border border-white/20"
-                  aria-label="Sign in with Apple"
-                >
-                  <AuthIcon provider="apple" size={28} />
-                </button>
-              </div>
-              <div className="relative max-w-md mx-auto">
-                <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                  <svg className="w-4 h-4 text-nrl-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <input
-                  type="email"
-                  value={preClubEmail}
-                  onChange={(e) => {
-                    setPreClubEmail(e.target.value);
-                    setEmail(e.target.value);
-                  }}
-                  placeholder="Enter your email"
-                  className="w-full bg-nrl-dark-card border border-nrl-border-light rounded-xl pl-11 pr-4 py-2.5 text-sm text-nrl-text-primary placeholder:text-nrl-text-muted/60 focus:outline-none focus:border-nrl-amber focus:ring-2 focus:ring-nrl-amber/20 transition-all"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && preClubEmail.trim() !== "") {
-                      handlePreClubEmailContinue();
-                    }
-                  }}
-                />
-              </div>
-              {/* Continue button under email */}
-              {preClubEmail.trim() !== "" && (
-                <div className="mt-3 max-w-md mx-auto">
-                  <button
-                    onClick={handlePreClubEmailContinue}
-                    className="w-full bg-nrl-amber text-nrl-dark font-bold py-2.5 rounded-xl hover:bg-nrl-amber/90 transition-all transform hover:scale-[1.02] text-sm"
-                  >
-                    Continue
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Value Proposition */}
-          <div className="text-center mb-6">
-            <p className="text-base text-nrl-text-primary/90 font-medium">
-              Earn rewards, unlock experiences, get closer to your team.
-            </p>
-          </div>
 
           <div className="text-center mb-6">
             <h1 className="text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-nrl-amber via-white to-nrl-amber bg-clip-text text-transparent">
