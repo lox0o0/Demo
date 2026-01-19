@@ -168,6 +168,33 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
     }
   };
 
+  // Progress stepper component - defined at component level for use across all steps
+  const ProgressStepper = ({ currentStep }: { currentStep: 1 | 2 | 3 }) => (
+    <div className="flex items-center justify-center gap-2 mb-6">
+      <div className="flex items-center gap-2">
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+          currentStep >= 1 ? 'bg-nrl-amber text-nrl-dark' : 'bg-nrl-border-light text-nrl-text-muted'
+        }`}>
+          1
+        </div>
+        <div className={`h-1 w-12 ${currentStep >= 2 ? 'bg-nrl-amber' : 'bg-nrl-border-light'}`}></div>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+          currentStep >= 2 ? 'bg-nrl-amber text-nrl-dark' : 'bg-nrl-border-light text-nrl-text-muted'
+        }`}>
+          2
+        </div>
+        <div className={`h-1 w-12 ${currentStep >= 3 ? 'bg-nrl-amber' : 'bg-nrl-border-light'}`}></div>
+      </div>
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+        currentStep >= 3 ? 'bg-nrl-amber text-nrl-dark' : 'bg-nrl-border-light text-nrl-text-muted'
+      }`}>
+        3
+      </div>
+    </div>
+  );
+
   // Show celebration screen for Broncos
   if (step === "celebration" && selectedTeam) {
     return <TeamCelebration team={selectedTeam} onComplete={handleCelebrationComplete} />;
