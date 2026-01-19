@@ -65,6 +65,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
   const [username, setUsername] = useState("");
   const [hasAuth, setHasAuth] = useState(false);
   const [teamSearchQuery, setTeamSearchQuery] = useState("");
+  const [preClubEmail, setPreClubEmail] = useState("");
 
   const handleTeamSelect = (team: Team) => {
     setSelectedTeam(team);
@@ -200,6 +201,25 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
     return <TeamCelebration team={selectedTeam} onComplete={handleCelebrationComplete} />;
   }
 
+  // Pre-club sign-in handlers
+  const handlePreClubGoogleSignIn = () => {
+    const googleName = "User";
+    const googleEmail = "user@gmail.com";
+    setName(googleName);
+    setEmail(googleEmail);
+    setPreClubEmail(googleEmail);
+    setHasAuth(true);
+  };
+
+  const handlePreClubAppleSignIn = () => {
+    const appleName = "User";
+    const appleEmail = "user@icloud.com";
+    setName(appleName);
+    setEmail(appleEmail);
+    setPreClubEmail(appleEmail);
+    setHasAuth(true);
+  };
+
   if (step === "club") {
     // Filter teams based on search query
     const filteredTeams = NRL_TEAMS.filter((team) =>
@@ -210,11 +230,59 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       <div className="min-h-screen bg-nrl-dark flex items-center justify-center p-4">
         <div className="w-full max-w-4xl">
           <ProgressStepper currentStep={1} />
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-nrl-amber via-white to-nrl-amber bg-clip-text text-transparent">
+          
+          {/* Pre-club Sign-in Options */}
+          <div className="mb-8">
+            <div className="text-center mb-4">
+              <p className="text-sm text-nrl-text-secondary/70 mb-4">Sign in to get started</p>
+              <div className="flex justify-center gap-3 mb-4">
+                <button
+                  onClick={handlePreClubGoogleSignIn}
+                  className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg hover:shadow-xl"
+                  aria-label="Sign in with Google"
+                >
+                  <AuthIcon provider="google" size={28} />
+                </button>
+                <button
+                  onClick={handlePreClubAppleSignIn}
+                  className="w-12 h-12 rounded-full bg-black flex items-center justify-center hover:scale-110 transition-transform shadow-lg hover:shadow-xl border border-white/20"
+                  aria-label="Sign in with Apple"
+                >
+                  <AuthIcon provider="apple" size={28} />
+                </button>
+              </div>
+              <div className="relative max-w-md mx-auto">
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                  <svg className="w-4 h-4 text-nrl-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <input
+                  type="email"
+                  value={preClubEmail}
+                  onChange={(e) => {
+                    setPreClubEmail(e.target.value);
+                    setEmail(e.target.value);
+                  }}
+                  placeholder="Enter your email"
+                  className="w-full bg-nrl-dark-card border border-nrl-border-light rounded-xl pl-11 pr-4 py-2.5 text-sm text-nrl-text-primary placeholder:text-nrl-text-muted/60 focus:outline-none focus:border-nrl-amber focus:ring-2 focus:ring-nrl-amber/20 transition-all"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Value Proposition */}
+          <div className="text-center mb-6">
+            <p className="text-base text-nrl-text-primary/90 font-medium">
+              Earn rewards, unlock experiences, get closer to your team.
+            </p>
+          </div>
+
+          <div className="text-center mb-6">
+            <h1 className="text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-nrl-amber via-white to-nrl-amber bg-clip-text text-transparent">
               Pick Your Club
             </h1>
-            <p className="text-nrl-text-secondary text-lg">Choose your team to get started</p>
+            <p className="text-nrl-text-secondary/70 text-lg">Choose your team to get started</p>
           </div>
 
           {/* Search Bar */}
@@ -230,7 +298,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                 value={teamSearchQuery}
                 onChange={(e) => setTeamSearchQuery(e.target.value)}
                 placeholder="Search for your team..."
-                className="w-full bg-nrl-dark-card border border-nrl-border-light rounded-xl pl-12 pr-4 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted focus:outline-none focus:border-nrl-amber focus:ring-2 focus:ring-nrl-amber/20 transition-all"
+                className="w-full bg-nrl-dark-card border border-nrl-border-light rounded-xl pl-12 pr-4 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted/60 focus:outline-none focus:border-nrl-amber focus:ring-2 focus:ring-nrl-amber/20 transition-all"
               />
             </div>
           </div>
@@ -270,6 +338,11 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
               </div>
             )}
           </div>
+          
+          {/* Change later message */}
+          <div className="text-center mt-6">
+            <p className="text-sm text-nrl-text-secondary/60">You can change this later.</p>
+          </div>
         </div>
       </div>
     );
@@ -280,8 +353,9 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
     const isBroncos = selectedTeam.name === "Broncos";
     const broncosBackgroundPath = "/broncos/premership.webp";
     
-    // Calculate profile completion: 0% if nothing, 20% if Google/Apple selected or email typed
-    const profileCompletion = (hasAuth || email.trim() !== "") ? 20 : 0;
+    // Calculate profile completion: 10% base (team selected), 20% if authenticated
+    const profileCompletion = (hasAuth || email.trim() !== "") ? 20 : 10;
+    const teamPrimaryColor = selectedTeam.primaryColor;
 
     const handleGoogleSignIn = () => {
       // In a real app, this would trigger Google OAuth
@@ -324,11 +398,32 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
           backgroundSize: isBroncos ? 'cover' : 'auto',
           backgroundPosition: isBroncos ? 'center' : 'auto',
           backgroundBlendMode: isBroncos ? 'overlay' : 'normal',
+          filter: 'brightness(0.92)', // Darken background images 8% for modal clarity
         }}
       >
         <div className="w-full max-w-md relative z-10">
           <div className="bg-nrl-dark-card/95 backdrop-blur-sm rounded-2xl p-8 border border-nrl-border-light">
             <ProgressStepper currentStep={2} />
+            
+            {/* Profile Completion Bar - Show after team selection */}
+            <div className="bg-nrl-dark-hover rounded-xl p-4 border border-nrl-border-light mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-semibold text-nrl-text-primary">
+                  Profile Completion
+                </span>
+                <span className="text-lg font-bold" style={{ color: teamPrimaryColor }}>{profileCompletion}%</span>
+              </div>
+              <div className="w-full bg-nrl-dark rounded-full h-2 mb-3">
+                <div
+                  className="h-2 rounded-full transition-all duration-500"
+                  style={{ 
+                    width: `${profileCompletion}%`,
+                    background: `linear-gradient(to right, ${teamPrimaryColor}, ${selectedTeam.secondaryColor})`
+                  }}
+                />
+              </div>
+            </div>
+
             {/* Connect with Gmail or Apple */}
             <div className="text-center mb-6">
               <h3 className="text-lg font-semibold text-nrl-text-primary mb-4">
@@ -357,7 +452,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
             {/* Or: enter email */}
             <div className="mb-6">
               <div className="text-center mb-4">
-                <span className="text-nrl-text-secondary text-sm">or: enter email</span>
+                <span className="text-nrl-text-secondary/70 text-sm">or: enter email</span>
               </div>
               <div className="relative">
                 <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
@@ -373,7 +468,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                     // hasAuth will be false by default, email.trim() check handles the 20% completion
                   }}
                   placeholder="Loxley.davies@gmail.com"
-                  className="w-full bg-white/10 border border-nrl-border-light rounded-xl pl-12 pr-12 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted focus:outline-none focus:border-nrl-green focus:bg-white/15 transition-all"
+                  className="w-full bg-white/10 border border-nrl-border-light rounded-xl pl-12 pr-12 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted/60 focus:outline-none focus:border-nrl-green focus:bg-white/15 transition-all"
                 />
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
                   <svg className="w-5 h-5 text-nrl-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -387,38 +482,31 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
             <div className="flex gap-3 mb-4">
               <button
                 onClick={handleSkip}
-                className="flex-1 bg-nrl-dark-hover border border-nrl-border-light text-nrl-text-secondary font-semibold py-3 rounded-xl hover:bg-nrl-dark-hover/80 transition-colors"
+                className="flex-1 bg-nrl-dark-hover border border-nrl-border-light text-nrl-text-secondary/80 font-semibold py-3 rounded-xl hover:bg-nrl-dark-hover/80 transition-colors"
               >
                 Skip for Now
               </button>
               <button
                 onClick={handleBuildFanProfile}
-                className="flex-1 bg-nrl-green text-white font-bold py-3 rounded-xl hover:bg-nrl-green/90 transition-all transform hover:scale-[1.02]"
+                className="flex-1 text-white font-bold py-3 rounded-xl transition-all transform hover:scale-[1.02]"
+                style={{
+                  backgroundColor: teamPrimaryColor,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '0.9';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '1';
+                }}
               >
                 Build fan profile
               </button>
             </div>
             {/* Value prop under Build fan profile */}
-            <div className="text-center mb-4">
+            <div className="text-center">
               <p className="text-sm text-nrl-amber font-medium">
                 Start earning points
               </p>
-            </div>
-
-            {/* Profile Completion Bar */}
-            <div className="bg-nrl-dark-hover rounded-xl p-4 border border-nrl-border-light">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-semibold text-nrl-text-primary">
-                  Profile Completion
-                </span>
-                <span className="text-lg font-bold text-nrl-green">{profileCompletion}%</span>
-              </div>
-              <div className="w-full bg-nrl-dark rounded-full h-2 mb-3">
-                <div
-                  className="bg-gradient-to-r from-nrl-green to-nrl-amber h-2 rounded-full transition-all duration-500"
-                  style={{ width: `${profileCompletion}%` }}
-                />
-              </div>
             </div>
           </div>
         </div>
@@ -596,7 +684,16 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
               </button>
               <button
                 onClick={() => handleComplete()}
-                className="flex-1 bg-nrl-green text-white font-bold py-3 rounded-xl hover:bg-nrl-green/90 transition-all transform hover:scale-[1.02]"
+                className="flex-1 text-white font-bold py-3 rounded-xl transition-all transform hover:scale-[1.02]"
+                style={{
+                  backgroundColor: selectedTeam.primaryColor,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '0.9';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '1';
+                }}
               >
                 Continue
               </button>
