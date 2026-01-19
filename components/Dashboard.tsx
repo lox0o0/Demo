@@ -116,7 +116,11 @@ export default function Dashboard({ user }: DashboardProps) {
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-8">
           {activeSection === "dashboard" && (
-            <DashboardNew user={user} hideNavigation={true} />
+            <DashboardNew 
+              user={user} 
+              hideNavigation={true}
+              onNavigate={(section) => setActiveSection(section)}
+            />
           )}
           
           {activeSection === "profile" && (
