@@ -59,7 +59,7 @@ export default function DashboardNew({ user, hideNavigation = false }: Dashboard
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column - Today's Activity */}
             <div className="lg:col-span-1 space-y-6">
-              <TodaysActivity user={user} profileCompletion={profileCompletion} teamData={teamData} />
+              <TodaysActivity user={user} teamData={teamData} />
             </div>
 
             {/* Middle Column - Main Dashboard Content */}
@@ -85,6 +85,9 @@ export default function DashboardNew({ user, hideNavigation = false }: Dashboard
 
             {/* Right Column - Mates, Points Shop, etc */}
             <div className="lg:col-span-1 space-y-6">
+              {/* Profile Completion */}
+              <ProfileCompletion user={user} profileCompletion={profileCompletion} />
+              
               {/* Mates Activity */}
               <MatesActivity />
               
@@ -189,40 +192,12 @@ function StatusCard({ tier, points, progressPercent, pointsToNext, nextTier, str
 }
 
 // Today's Activity Component
-function TodaysActivity({ user, profileCompletion, teamData }: any) {
+function TodaysActivity({ user, teamData }: any) {
   return (
     <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
       <h3 className="text-lg font-bold text-white mb-4">Today's Activity</h3>
       
       <div className="space-y-4">
-        {/* Complete Profile */}
-        <div className="border border-nrl-border-light rounded-xl p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h4 className="text-sm font-semibold text-white">Complete Profile</h4>
-            <span className="text-xs font-bold text-nrl-green">{profileCompletion}%</span>
-          </div>
-          <div className="w-full bg-nrl-dark-hover rounded-full h-1.5 mb-3">
-            <div
-              className="h-1.5 rounded-full bg-nrl-green transition-all"
-              style={{ width: `${profileCompletion}%` }}
-            />
-          </div>
-          <div className="space-y-2 text-xs text-nrl-text-secondary">
-            <div className="flex items-center gap-2">
-              <span>{user?.dob ? '✓' : '○'}</span>
-              <span>DOB, gender, postcode</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span>{user?.homeGround ? '✓' : '○'}</span>
-              <span>Set your home ground stadium</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span>{user?.connectedSocials?.length > 0 ? '✓' : '○'}</span>
-              <span>Connect socials</span>
-            </div>
-          </div>
-        </div>
-
         {/* Refer a friend */}
         <button className="w-full bg-nrl-dark-hover border border-nrl-border-light rounded-xl p-4 text-left hover:border-nrl-green transition-colors">
           <div className="flex items-center justify-between">
@@ -313,6 +288,118 @@ function SeasonFavouritePicks({ user }: any) {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+// Profile Completion Component with Dropdown
+function ProfileCompletion({ user, profileCompletion }: any) {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  // Check which socials are missing (assuming 4 total: facebook, tiktok, instagram, x)
+  const allSocials = ["facebook", "tiktok", "instagram", "x"];
+  const connectedSocials = user?.connectedSocials || [];
+  const missingSocials = allSocials.filter(social => !connectedSocials.includes(social));
+
+  return (
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-bold text-white">Profile Completion</h3>
+        <span className="text-sm font-bold text-nrl-green">{profileCompletion}%</span>
+      </div>
+      
+      {/* Progress Bar */}
+      <div className="w-full bg-nrl-dark-hover rounded-full h-2 mb-4">
+        <div
+          className="h-2 rounded-full transition-all duration-500 bg-gradient-to-r from-nrl-green to-nrl-amber"
+          style={{ width: `${profileCompletion}%` }}
+        />
+      </div>
+
+      {/* Dropdown */}
+      <div>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-full flex items-center justify-between bg-nrl-dark-hover border border-nrl-border-light rounded-xl p-4 hover:border-nrl-green transition-colors"
+        >
+          <span className="text-sm font-semibold text-white">Complete Profile for Points</span>
+          <span className={`text-nrl-green transition-transform ${isOpen ? 'rotate-180' : ''}`}>
+            ▼
+          </span>
+        </button>
+
+        {isOpen && (
+          <div className="mt-2 bg-nrl-dark-hover border border-nrl-border-light rounded-xl p-4 space-y-3">
+            {/* DOB */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className={user?.dob ? 'text-nrl-green' : 'text-nrl-text-muted'}>
+                  {user?.dob ? '✓' : '○'}
+                </span>
+                <span className="text-sm text-nrl-text-secondary">DOB</span>
+              </div>
+              {!user?.dob && (
+                <button className="text-xs text-nrl-green font-semibold hover:underline">
+                  Add →
+                </button>
+              )}
+            </div>
+
+            {/* Gender */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className={user?.gender ? 'text-nrl-green' : 'text-nrl-text-muted'}>
+                  {user?.gender ? '✓' : '○'}
+                </span>
+                <span className="text-sm text-nrl-text-secondary">Gender</span>
+              </div>
+              {!user?.gender ? (
+                <div className="flex gap-2">
+                  <button className="text-xs px-2 py-1 bg-nrl-dark-card border border-nrl-border-light rounded hover:border-nrl-green transition-colors">
+                    M
+                  </button>
+                  <button className="text-xs px-2 py-1 bg-nrl-dark-card border border-nrl-border-light rounded hover:border-nrl-green transition-colors">
+                    F
+                  </button>
+                  <button className="text-xs px-2 py-1 bg-nrl-dark-card border border-nrl-border-light rounded hover:border-nrl-green transition-colors">
+                    Rather not say
+                  </button>
+                </div>
+              ) : (
+                <span className="text-xs text-nrl-text-secondary">{user.gender}</span>
+              )}
+            </div>
+
+            {/* Home Ground Stadium */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className={user?.homeGround ? 'text-nrl-green' : 'text-nrl-text-muted'}>
+                  {user?.homeGround ? '✓' : '○'}
+                </span>
+                <span className="text-sm text-nrl-text-secondary">Home Ground Stadium</span>
+              </div>
+              {!user?.homeGround && (
+                <button className="text-xs text-nrl-green font-semibold hover:underline">
+                  Set →
+                </button>
+              )}
+            </div>
+
+            {/* Connect Socials */}
+            {missingSocials.length > 0 && (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-nrl-text-muted">○</span>
+                  <span className="text-sm text-nrl-text-secondary">Connect socials</span>
+                </div>
+                <button className="text-xs text-nrl-green font-semibold hover:underline">
+                  Connect →
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
