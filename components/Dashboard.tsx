@@ -43,35 +43,38 @@ export default function Dashboard({ user }: DashboardProps) {
         <main className="flex-1 overflow-y-auto px-6 py-6">
           {activeSection === "home" && (
             <div className="space-y-12">
-              {/* SECTION 1: WATCH */}
+              {/* SECTION 1: ACTIVITIES */}
               <section>
                 <SectionHeader
                   icon={
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polygon points="5 3 19 12 5 21 5 3" />
+                      <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                     </svg>
                   }
-                  title="WATCH"
+                  title="ACTIVITIES"
                   seeAllLink="#"
                 />
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <ContentCard
-                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
-                    title="Ben Hunt stuns in Premiership performance"
-                    subtitle="Grand Final Highlights"
-                    badge="▶ 12 min"
+                    image="/images/cards/predictions.jpg"
+                    title="Predictions"
+                    subtitle="Round 6 Telstra MVP prediction made"
+                    badge="✓ Complete"
+                    badgeColor="green"
                   />
                   <ContentCard
-                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
-                    title="Extended Highlights: Broncos vs Storm"
-                    subtitle="Grand Final Full Replay"
-                    badge="▶ 45 min"
+                    image="/images/cards/profile-upgrade.jpg"
+                    title="Upgrade your profile"
+                    subtitle="Complete profile data to earn points!"
+                    progressPercent={30}
+                    badge="+200 pts available"
                   />
                   <ContentCard
-                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
-                    title="Top Performers from Premiership"
-                    subtitle="Stats Overview"
-                    badge="📊 Stats"
+                    image="/images/cards/prize-wheel.jpg"
+                    title="Prize Wheel"
+                    subtitle="Spin to win exclusive rewards"
+                    badge="🎰 5 spins available"
+                    ctaButton="Spin Now →"
                   />
                 </div>
               </section>
@@ -94,7 +97,7 @@ export default function Dashboard({ user }: DashboardProps) {
                 />
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <ContentCard
-                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
+                    image="/images/cards/fantasy-get-started.jpg"
                     title="Test your knowledge and earn points"
                     subtitle="Get into Tipping & Fantasy"
                     badge="+50 pts"
@@ -102,14 +105,14 @@ export default function Dashboard({ user }: DashboardProps) {
                     ctaButton="Get Started →"
                   />
                   <ContentCard
-                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
+                    image="/images/cards/tipping.jpg"
                     title="Tipping"
                     subtitle="Tips made for upcoming weekend fixtures"
                     progressRing={{ current: 6, total: 8 }}
                     badge="Round 6"
                   />
                   <ContentCard
-                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
+                    image="/images/cards/fantasy-team.jpg"
                     title="Fantasy"
                     subtitle="Trades made and team set"
                     statusIndicator="✓ Team Ready"
@@ -118,38 +121,35 @@ export default function Dashboard({ user }: DashboardProps) {
                 </div>
               </section>
 
-              {/* SECTION 3: ACTIVITIES */}
+              {/* SECTION 3: WATCH */}
               <section>
                 <SectionHeader
                   icon={
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                      <polygon points="5 3 19 12 5 21 5 3" />
                     </svg>
                   }
-                  title="ACTIVITIES"
+                  title="WATCH"
                   seeAllLink="#"
                 />
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <ContentCard
-                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
-                    title="Predictions"
-                    subtitle="Round 6 Telstra MVP prediction made"
-                    badge="✓ Complete"
-                    badgeColor="green"
+                    image="/images/cards/ben-hunt-highlights.jpg"
+                    title="Ben Hunt stuns in Premiership performance"
+                    subtitle="Grand Final Highlights"
+                    badge="▶ 12 min"
                   />
                   <ContentCard
-                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
-                    title="Upgrade your profile"
-                    subtitle="Complete profile data to earn points!"
-                    progressPercent={30}
-                    badge="+200 pts available"
+                    image="/images/cards/broncos-storm-replay.jpg"
+                    title="Extended Highlights: Broncos vs Storm"
+                    subtitle="Grand Final Full Replay"
+                    badge="▶ 45 min"
                   />
                   <ContentCard
-                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
-                    title="Prize Wheel"
-                    subtitle="Spin to win exclusive rewards"
-                    badge="🎰 5 spins available"
-                    ctaButton="Spin Now →"
+                    image="/images/cards/top-performers.jpg"
+                    title="Top Performers from Premiership"
+                    subtitle="Stats Overview"
+                    badge="📊 Stats"
                   />
                 </div>
               </section>
