@@ -117,8 +117,10 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       // When skipping, don't include social connection points - only base welcome bonus
       const basePoints = 50; // Base welcome bonus only
       const emptySocials: string[] = []; // Explicitly empty for skip
+      // Use username if provided, otherwise fall back to name or "Fan"
+      const finalName = username.trim() || name || "Fan";
       const userData = {
-        name: name || "Fan",
+        name: finalName,
         email: email || "",
         team: selectedTeam.name,
         teamData: selectedTeam,
@@ -129,7 +131,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         memberSince: new Date().getFullYear(),
         streak: 0,
         connectedSocials: emptySocials, // Empty array matches the base points calculation
-        profileCompletion: calculateProfileCompletion(emptySocials), // Calculate with empty socials
+        profileCompletion: calculateProfileCompletion(emptySocials, username.trim() || undefined, undefined), // Calculate with empty socials
         entryPoint,
         entryData,
       };
@@ -139,8 +141,10 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
 
   const handleComplete = (overrideName?: string, overrideEmail?: string) => {
     if (selectedTeam) {
-      // Use override values if provided (for immediate auth callbacks), otherwise use state
-      const finalName = overrideName !== undefined ? overrideName : (name || "Fan");
+      // Priority: overrideName > username (from profile name input) > name (from auth) > "Fan"
+      const finalName = overrideName !== undefined 
+        ? overrideName 
+        : (username.trim() || name || "Fan");
       const finalEmail = overrideEmail !== undefined ? overrideEmail : (email || "");
       
       const userData = {
@@ -155,7 +159,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         memberSince: new Date().getFullYear(),
         streak: 0,
         connectedSocials,
-        profileCompletion: calculateProfileCompletion(connectedSocials, overrideName, overrideEmail),
+        profileCompletion: calculateProfileCompletion(connectedSocials, overrideName || username.trim() || undefined, overrideEmail || undefined),
         entryPoint,
         entryData,
       };
