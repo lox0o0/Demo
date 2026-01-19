@@ -187,6 +187,66 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
     }
   };
 
+  // Welcome page handlers
+  const handleWelcomeGoogleSignIn = () => {
+    // Fast sign-in: go straight to dashboard with 15% completion, no team selected
+    const googleName = "User"; // Would come from Google OAuth
+    const googleEmail = "user@gmail.com"; // Would come from Google OAuth
+    const userData = {
+      name: googleName,
+      email: googleEmail,
+      team: "", // No team selected in fast sign-in
+      teamData: null,
+      fanScore: 50, // Base welcome bonus
+      tier: "Rookie",
+      points: 50,
+      lifetimePoints: 50,
+      memberSince: new Date().getFullYear(),
+      streak: 0,
+      connectedSocials: [],
+      profileCompletion: 15, // 15% for fast sign-in (name + email)
+      entryPoint,
+      entryData,
+    };
+    onComplete(userData);
+  };
+
+  const handleWelcomeAppleSignIn = () => {
+    // Fast sign-in: go straight to dashboard with 15% completion, no team selected
+    const appleName = "User"; // Would come from Apple Sign In
+    const appleEmail = "user@icloud.com"; // Would come from Apple Sign In
+    const userData = {
+      name: appleName,
+      email: appleEmail,
+      team: "", // No team selected in fast sign-in
+      teamData: null,
+      fanScore: 50, // Base welcome bonus
+      tier: "Rookie",
+      points: 50,
+      lifetimePoints: 50,
+      memberSince: new Date().getFullYear(),
+      streak: 0,
+      connectedSocials: [],
+      profileCompletion: 15, // 15% for fast sign-in (name + email)
+      entryPoint,
+      entryData,
+    };
+    onComplete(userData);
+  };
+
+  const handleWelcomeEmailContinue = () => {
+    // Set email and move to club selection
+    if (preClubEmail.trim() !== "") {
+      setEmail(preClubEmail.trim());
+      setStep("club");
+    }
+  };
+
+  const handleBuildProfile = () => {
+    // Move to club selection step to build full profile
+    setStep("club");
+  };
+
   // Progress stepper component - defined at component level for use across all steps
   const ProgressStepper = ({ currentStep }: { currentStep: 1 | 2 | 3 }) => (
     <div className="flex items-center justify-center gap-2 mb-6">
