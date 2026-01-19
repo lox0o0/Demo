@@ -64,6 +64,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [hasAuth, setHasAuth] = useState(false);
+  const [teamSearchQuery, setTeamSearchQuery] = useState("");
 
   const handleTeamSelect = (team: Team) => {
     setSelectedTeam(team);
@@ -263,6 +264,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       >
         <div className="w-full max-w-md relative z-10">
           <div className="bg-nrl-dark-card/95 backdrop-blur-sm rounded-2xl p-8 border border-nrl-border-light">
+            <ProgressStepper currentStep={2} />
             {/* Connect with Gmail or Apple */}
             <div className="text-center mb-6">
               <h3 className="text-lg font-semibold text-nrl-text-primary mb-4">
@@ -332,6 +334,12 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                 Build fan profile
               </button>
             </div>
+            {/* Value prop under Build fan profile */}
+            <div className="text-center mb-4">
+              <p className="text-sm text-nrl-amber font-medium">
+                Start earning points
+              </p>
+            </div>
 
             {/* Profile Completion Bar */}
             <div className="bg-nrl-dark-hover rounded-xl p-4 border border-nrl-border-light">
@@ -379,6 +387,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       >
         <div className="w-full max-w-2xl relative z-10">
           <div className="bg-nrl-dark-card/95 backdrop-blur-sm rounded-2xl p-8 border border-nrl-border-light">
+            <ProgressStepper currentStep={3} />
             {/* Header */}
             <div className="text-center mb-8">
               <div className="relative w-24 h-24 mx-auto mb-4">
@@ -429,28 +438,32 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                     <button
                       key={platform.id}
                       onClick={() => handleSocialToggle(platform.id)}
-                      className={`relative p-4 rounded-xl border-2 transition-all ${
+                      className={`relative p-5 rounded-xl border-2 transition-all ${
                         isConnected
                           ? "bg-nrl-green/10 border-nrl-green"
-                          : "bg-nrl-dark-hover border-nrl-border-light hover:border-nrl-border-medium"
+                          : "bg-nrl-dark-hover hover:border-opacity-50"
                       }`}
+                      style={{
+                        borderColor: isConnected ? undefined : platform.color,
+                        borderWidth: isConnected ? '2px' : '1px',
+                      }}
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 flex items-center justify-center">
-                            <SocialIcon platform={platform.id} size={40} />
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="w-16 h-16 flex items-center justify-center rounded-full" style={{
+                          backgroundColor: isConnected ? `${platform.color}20` : `${platform.color}10`,
+                        }}>
+                          <SocialIcon platform={platform.id} size={48} />
+                        </div>
+                        <div className="text-center">
+                          <div className="font-semibold text-nrl-text-primary text-sm mb-1">
+                            {platform.name}
                           </div>
-                          <div className="text-left">
-                            <div className="font-semibold text-nrl-text-primary text-sm">
-                              {platform.name}
-                            </div>
-                            <div className="text-xs text-nrl-green font-bold">
-                              +{platform.points} pts
-                            </div>
+                          <div className="text-xs text-nrl-green font-bold">
+                            +{platform.points} pts
                           </div>
                         </div>
                         {isConnected && (
-                          <div className="w-5 h-5 rounded-full bg-nrl-green flex items-center justify-center">
+                          <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-nrl-green flex items-center justify-center">
                             <span className="text-white text-xs">✓</span>
                           </div>
                         )}
