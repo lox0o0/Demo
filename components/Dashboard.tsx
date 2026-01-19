@@ -166,7 +166,7 @@ export default function Dashboard({ user }: DashboardProps) {
                   <QuestsPanel user={user} />
                 </div>
                 <div className="lg:col-span-1">
-                  <ActivityFeed user={user} />
+                  <ActivityFeed />
                 </div>
               </div>
             </div>
