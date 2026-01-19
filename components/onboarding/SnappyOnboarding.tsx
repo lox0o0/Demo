@@ -104,15 +104,24 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
   const calculateProfileCompletion = (
     socialsToCount: string[] = connectedSocials,
     overrideName?: string,
-    overrideEmail?: string
+    overrideEmail?: string,
+    includeAuthSelection?: boolean
   ) => {
     let completion = 20; // Base (team selected)
     // Use override values if provided, otherwise use state
     const finalName = overrideName !== undefined ? overrideName : name;
     const finalEmail = overrideEmail !== undefined ? overrideEmail : email;
-    if (finalName) completion += 15;
-    if (finalEmail) completion += 15;
-    completion += socialsToCount.length * 12.5; // Each social = 12.5%
+    
+    // Count authentication: name and/or email, or auth method selected
+    if (finalName || finalEmail) {
+      completion += 30; // Combined auth bonus (name + email together = 30%)
+    } else if (includeAuthSelection && selectedAuthMethod) {
+      // If auth method is selected but not yet completed, still count it
+      completion += 30;
+    }
+    
+    // Each social connection = 10% (4 socials = 40%, so team + auth + all socials = 90%)
+    completion += socialsToCount.length * 10;
     return Math.min(completion, 100);
   };
 
@@ -122,12 +131,25 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       const basePoints = 50; // Base welcome bonus only
       const emptySocials: string[] = []; // Explicitly empty for skip
       // Use username if provided, otherwise fall back to name or "Fan"
-      const finalName = username.trim() || name || "Fan";
+      let finalName = username.trim() || name || "Fan";
       // For profile completion calculation, use username or name (but not "Fan" fallback)
-      const nameForCompletion = username.trim() || name || undefined;
+      let nameForCompletion = username.trim() || name || undefined;
+      
+      // Determine final email: use buildProfileEmail if email auth was selected, otherwise use email state
+      let finalEmail = email || "";
+      if (selectedAuthMethod === "email" && buildProfileEmail.trim() !== "") {
+        finalEmail = buildProfileEmail.trim();
+        // Extract name from email if no name provided
+        if (!nameForCompletion || finalName === "Fan") {
+          const emailName = buildProfileEmail.split("@")[0];
+          finalName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
+          nameForCompletion = finalName;
+        }
+      }
+      
       const userData = {
         name: finalName,
-        email: email || "",
+        email: finalEmail,
         team: selectedTeam.name,
         teamData: selectedTeam,
         fanScore: basePoints,
@@ -137,7 +159,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         memberSince: new Date().getFullYear(),
         streak: 0,
         connectedSocials: emptySocials, // Empty array matches the base points calculation
-        profileCompletion: calculateProfileCompletion(emptySocials, nameForCompletion, email || undefined), // Use same name logic as finalName (excluding "Fan" fallback)
+        profileCompletion: calculateProfileCompletion(emptySocials, nameForCompletion, finalEmail || undefined), // Use finalEmail which includes buildProfileEmail if applicable
         entryPoint,
         entryData,
       };
@@ -642,7 +664,8 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
     const isBroncos = selectedTeam.name === "Broncos";
     const broncosBackgroundPath = "/broncos/premership.webp";
     const totalPoints = calculatePoints();
-    const profileCompletion = calculateProfileCompletion();
+    // Include auth selection in completion calculation (even if not yet completed)
+    const profileCompletion = calculateProfileCompletion(connectedSocials, undefined, undefined, true);
     const pointsFromSocials = connectedSocials.reduce((sum, id) => {
       const platform = SOCIAL_PLATFORMS.find((p) => p.id === id);
       return sum + (platform?.points || 0);
@@ -904,7 +927,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
               <p className="text-xs text-nrl-text-secondary">
                 {profileCompletion >= 80 ? (
                   <span className="text-nrl-green font-semibold">
-                    ✓ You're eligible for the Vegas 2027 tickets draw!
+                    Congratulations! You are in the draw for Vegas 2027 tickets!
                   </span>
                 ) : (
                   <span>
