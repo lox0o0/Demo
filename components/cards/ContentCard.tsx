@@ -69,7 +69,7 @@ export default function ContentCard({
       {/* Content Overlay */}
       <div className="absolute bottom-0 left-0 right-0 p-4">
         <div className="flex items-start justify-between gap-3">
-          <div className="flex-1">
+          <div className="flex-1 flex flex-col">
             <h3 className="text-base font-bold text-white mb-1">{title}</h3>
             
             {/* Subtitle - either as text or CTA box */}
@@ -79,7 +79,7 @@ export default function ContentCard({
                   e.stopPropagation();
                   onCtaClick?.();
                 }}
-                className="mt-1 mb-2 px-4 py-2 bg-[#1a1a1d] border border-[#2a2a2d] hover:border-[#22c55e] text-white text-sm font-semibold rounded-lg transition-colors"
+                className="mt-1 mb-2 w-full px-4 py-2 bg-[#1a1a1d] border border-[#2a2a2d] hover:border-[#22c55e] text-white text-sm font-semibold rounded-lg transition-colors text-center"
               >
                 {subtitle}
               </button>
@@ -142,22 +142,24 @@ export default function ContentCard({
             
             {/* CTA Button */}
             {ctaButton && ctaStyle !== "subtitle" && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onCtaClick?.();
-                }}
-                className="mt-2 w-full px-4 py-2 bg-[#1a1a1d] border border-[#2a2a2d] hover:border-[#22c55e] text-white text-sm font-semibold rounded-lg transition-colors text-center"
-              >
-                {ctaButton}
-              </button>
+              <div className="w-full flex justify-center mt-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onCtaClick?.();
+                  }}
+                  className="w-full px-4 py-2 bg-[#1a1a1d] border border-[#2a2a2d] hover:border-[#22c55e] text-white text-sm font-semibold rounded-lg transition-colors text-center"
+                >
+                  {ctaButton}
+                </button>
+              </div>
             )}
           </div>
           
           {/* Badge */}
           {badge && (
             <div
-              className={`px-3 py-1 rounded-full border text-xs font-semibold whitespace-nowrap ${
+              className={`px-3 py-1 rounded-full border text-xs font-semibold whitespace-nowrap flex-shrink-0 ${
                 badgeColors[badgeColor]
               } ${badge.includes("🎰") ? "animate-pulse" : ""}`}
             >
