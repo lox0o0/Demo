@@ -123,6 +123,8 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       const emptySocials: string[] = []; // Explicitly empty for skip
       // Use username if provided, otherwise fall back to name or "Fan"
       const finalName = username.trim() || name || "Fan";
+      // For profile completion calculation, use username or name (but not "Fan" fallback)
+      const nameForCompletion = username.trim() || name || undefined;
       const userData = {
         name: finalName,
         email: email || "",
@@ -135,7 +137,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         memberSince: new Date().getFullYear(),
         streak: 0,
         connectedSocials: emptySocials, // Empty array matches the base points calculation
-        profileCompletion: calculateProfileCompletion(emptySocials, username.trim() || undefined, email || undefined), // Calculate with empty socials, include email if present
+        profileCompletion: calculateProfileCompletion(emptySocials, nameForCompletion, email || undefined), // Use same name logic as finalName (excluding "Fan" fallback)
         entryPoint,
         entryData,
       };
@@ -291,13 +293,15 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
           backgroundImage: `url(${backgroundImagePath})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          filter: 'brightness(0.4)', // Darken background for text readability
+          filter: 'brightness(0.65)', // Less darkening to show more background
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/40"></div>
         
         <div className="w-full max-w-md relative z-10">
-          <div className="bg-nrl-dark-card/95 backdrop-blur-sm rounded-2xl p-8 border border-nrl-border-light">
+          <div className="bg-nrl-dark-card backdrop-blur-md rounded-2xl p-8 border-2 border-nrl-amber/30 shadow-2xl" style={{
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(251, 191, 36, 0.1)',
+          }}>
             <div className="text-center mb-8">
               <h1 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-nrl-amber via-white to-nrl-amber bg-clip-text text-transparent">
                 Welcome
