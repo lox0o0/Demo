@@ -172,8 +172,11 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         if (!nameForCompletion || isPlaceholderName(finalName)) {
           const emailName = buildProfileEmail.split("@")[0];
           finalName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
-          // Set nameForCompletion to the extracted name so it counts toward profile completion
-          nameForCompletion = finalName;
+          // Only set nameForCompletion if the extracted name is not a placeholder
+          // This ensures consistency with handleComplete behavior
+          if (!isPlaceholderName(finalName)) {
+            nameForCompletion = finalName;
+          }
         }
       }
       
