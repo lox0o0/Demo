@@ -201,23 +201,59 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
     return <TeamCelebration team={selectedTeam} onComplete={handleCelebrationComplete} />;
   }
 
-  // Pre-club sign-in handlers
+  // Pre-club sign-in handlers - fast track to dashboard
   const handlePreClubGoogleSignIn = () => {
     const googleName = "User";
     const googleEmail = "user@gmail.com";
-    setName(googleName);
-    setEmail(googleEmail);
-    setPreClubEmail(googleEmail);
-    setHasAuth(true);
+    // Complete onboarding immediately with 15% completion (team not selected yet)
+    const userData = {
+      name: googleName,
+      email: googleEmail,
+      team: "", // No team selected yet
+      teamData: null,
+      fanScore: 0,
+      tier: "Rookie",
+      points: 0,
+      lifetimePoints: 0,
+      memberSince: new Date().getFullYear(),
+      streak: 0,
+      connectedSocials: [],
+      profileCompletion: 15, // 15% for email/name only
+      entryPoint,
+      entryData,
+    };
+    onComplete(userData);
   };
 
   const handlePreClubAppleSignIn = () => {
     const appleName = "User";
     const appleEmail = "user@icloud.com";
-    setName(appleName);
-    setEmail(appleEmail);
-    setPreClubEmail(appleEmail);
-    setHasAuth(true);
+    // Complete onboarding immediately with 15% completion (team not selected yet)
+    const userData = {
+      name: appleName,
+      email: appleEmail,
+      team: "", // No team selected yet
+      teamData: null,
+      fanScore: 0,
+      tier: "Rookie",
+      points: 0,
+      lifetimePoints: 0,
+      memberSince: new Date().getFullYear(),
+      streak: 0,
+      connectedSocials: [],
+      profileCompletion: 15, // 15% for email/name only
+      entryPoint,
+      entryData,
+    };
+    onComplete(userData);
+  };
+
+  const handlePreClubEmailContinue = () => {
+    if (preClubEmail.trim() !== "") {
+      setEmail(preClubEmail);
+      // Continue to team selection - they can build their profile
+      // Don't complete onboarding yet
+    }
   };
 
   if (step === "club") {
