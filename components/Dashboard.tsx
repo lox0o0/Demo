@@ -4,15 +4,13 @@ import { useState } from "react";
 import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
 import { NRL_TEAMS } from "@/lib/data/teams";
-import FanScore from "./FanScore";
-import QuestsPanel from "./QuestsPanel";
-import StatusCards from "./StatusCards";
-import ActivityFeed from "./ActivityFeed";
 import Navigation, { NavSection, LatestSubSection, StatsSubSection, SocialSubSection } from "./Navigation";
 import DashboardNew from "./DashboardNew";
 import LeftSidebar from "./layout/LeftSidebar";
 import RightSidebar from "./layout/RightSidebar";
 import StatusBar from "./layout/StatusBar";
+import SectionHeader from "./cards/SectionHeader";
+import ContentCard from "./cards/ContentCard";
 
 interface DashboardProps {
   user: any;
@@ -27,21 +25,6 @@ export default function Dashboard({ user }: DashboardProps) {
     ? { primary: teamData.primaryColor, secondary: teamData.secondaryColor }
     : { primary: "#00A651", secondary: "#FFB800" };
 
-  // Mock featured content for hero section
-  const featuredContent = {
-    title: "Las Vegas: NRL's American Dream",
-    subtitle: "The historic double-header that changed everything",
-    image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&h=600&fit=crop",
-    category: "Feature",
-  };
-
-  // Mock matches/videos for grid
-  const mustWatchContent = [
-    { id: 1, title: "Round 1 Highlights", thumbnail: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&h=225&fit=crop", duration: "5:23" },
-    { id: 2, title: "Origin Preview", thumbnail: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&h=225&fit=crop", duration: "3:45" },
-    { id: 3, title: "Top 10 Tries", thumbnail: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&h=225&fit=crop", duration: "8:12" },
-    { id: 4, title: "Coach's Corner", thumbnail: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&h=225&fit=crop", duration: "12:30" },
-  ];
 
   return (
     <div className="h-screen overflow-hidden bg-[#0a0a0b] flex">
@@ -59,61 +42,117 @@ export default function Dashboard({ user }: DashboardProps) {
         {/* Scrollable Content */}
         <main className="flex-1 overflow-y-auto px-6 py-6">
           {activeSection === "home" && (
-            <div className="space-y-8">
-              {/* Hero Section - Featured Content */}
-              <div className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10" />
-                <div className="absolute inset-0 z-20 flex flex-col justify-end p-8 md:p-12">
-                  <div className="text-xs font-bold uppercase tracking-wider text-nrl-amber mb-2">
-                    {featuredContent.category}
-                  </div>
-                  <h2 className="text-3xl md:text-4xl font-black text-white mb-3 group-hover:text-nrl-green transition-colors">
-                    {featuredContent.title}
-                  </h2>
-                  <p className="text-lg text-nrl-text-secondary font-medium max-w-2xl">
-                    {featuredContent.subtitle}
-                  </p>
+            <div className="space-y-12">
+              {/* SECTION 1: WATCH */}
+              <section>
+                <SectionHeader
+                  icon={
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polygon points="5 3 19 12 5 21 5 3" />
+                    </svg>
+                  }
+                  title="WATCH"
+                  seeAllLink="#"
+                />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <ContentCard
+                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
+                    title="Ben Hunt stuns in Premiership performance"
+                    subtitle="Grand Final Highlights"
+                    badge="▶ 12 min"
+                  />
+                  <ContentCard
+                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
+                    title="Extended Highlights: Broncos vs Storm"
+                    subtitle="Grand Final Full Replay"
+                    badge="▶ 45 min"
+                  />
+                  <ContentCard
+                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
+                    title="Top Performers from Premiership"
+                    subtitle="Stats Overview"
+                    badge="📊 Stats"
+                  />
                 </div>
-                <div className="absolute inset-0 bg-nrl-dark opacity-40" />
-              </div>
+              </section>
 
-              {/* Fan Score and Status Cards */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2">
-                  <FanScore user={user} />
+              {/* SECTION 2: FANTASY & TIPPING */}
+              <section>
+                <SectionHeader
+                  icon={
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                      <path d="M4 22h16" />
+                      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+                      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+                      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+                    </svg>
+                  }
+                  title="FANTASY & TIPPING"
+                  seeAllLink="#"
+                />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <ContentCard
+                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
+                    title="Test your knowledge and earn points"
+                    subtitle="Get into Tipping & Fantasy"
+                    badge="+50 pts"
+                    badgeColor="gold"
+                    ctaButton="Get Started →"
+                  />
+                  <ContentCard
+                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
+                    title="Tipping"
+                    subtitle="Tips made for upcoming weekend fixtures"
+                    progressRing={{ current: 6, total: 8 }}
+                    badge="Round 6"
+                  />
+                  <ContentCard
+                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
+                    title="Fantasy"
+                    subtitle="Trades made and team set"
+                    statusIndicator="✓ Team Ready"
+                    badge="12,847 pts"
+                  />
                 </div>
-                <div className="lg:col-span-1">
-                  <StatusCards user={user} />
-                </div>
-              </div>
+              </section>
 
-              {/* Must Watch Grid */}
-              <div>
-                <h3 className="text-xl font-bold text-white mb-4">Must Watch</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {mustWatchContent.map((item) => (
-                    <div key={item.id} className="relative group cursor-pointer">
-                      <div className="aspect-video bg-nrl-dark-card rounded-xl overflow-hidden border border-nrl-border-light group-hover:border-nrl-green transition-colors">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
-                        <div className="absolute bottom-2 left-2 right-2 z-20">
-                          <div className="text-xs font-semibold text-white mb-1">{item.title}</div>
-                          <div className="text-[10px] text-nrl-text-secondary">{item.duration}</div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+              {/* SECTION 3: ACTIVITIES */}
+              <section>
+                <SectionHeader
+                  icon={
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                    </svg>
+                  }
+                  title="ACTIVITIES"
+                  seeAllLink="#"
+                />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <ContentCard
+                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
+                    title="Predictions"
+                    subtitle="Round 6 Telstra MVP prediction made"
+                    badge="✓ Complete"
+                    badgeColor="green"
+                  />
+                  <ContentCard
+                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
+                    title="Upgrade your profile"
+                    subtitle="Complete profile data to earn points!"
+                    progressPercent={30}
+                    badge="+200 pts available"
+                  />
+                  <ContentCard
+                    image="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=450&fit=crop"
+                    title="Prize Wheel"
+                    subtitle="Spin to win exclusive rewards"
+                    badge="🎰 5 spins available"
+                    ctaButton="Spin Now →"
+                  />
                 </div>
-              </div>
-
-              {/* Quests and Activity Feed */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2">
-                  <QuestsPanel user={user} />
-                </div>
-                <div className="lg:col-span-1">
-                  <ActivityFeed />
-                </div>
-              </div>
+              </section>
             </div>
           )}
           
