@@ -147,9 +147,7 @@ export default function ContentCard({
                   e.stopPropagation();
                   onCtaClick?.();
                 }}
-                className={`mt-2 px-4 py-2 bg-[#22c55e] hover:bg-[#22c55e]/90 text-white text-xs font-semibold rounded-lg transition-colors ${
-                  ctaStyle === "wide" ? "w-full" : ""
-                } ${ctaStyle === "centered" ? "w-full" : ""}`}
+                className="mt-2 w-full px-4 py-2 bg-[#1a1a1d] border border-[#2a2a2d] hover:border-[#22c55e] text-white text-sm font-semibold rounded-lg transition-colors text-center"
               >
                 {ctaButton}
               </button>
