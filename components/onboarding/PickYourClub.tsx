@@ -142,6 +142,8 @@ export function TeamCelebration({ team, onComplete }: { team: Team; onComplete?:
   const [showStats, setShowStats] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [videoLoading, setVideoLoading] = useState(true);
+  const [videoCanPlay, setVideoCanPlay] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const isBroncos = team.name === "Broncos";
@@ -155,6 +157,13 @@ export function TeamCelebration({ team, onComplete }: { team: Team; onComplete?:
   const hasBackground = isBroncos;
 
   useEffect(() => {
+    // Preload video when component mounts
+    if (hasVideo && videoRef.current) {
+      videoRef.current.load();
+    }
+  }, [hasVideo]);
+
+  useEffect(() => {
     // If no video or video ended/errored, show stats after delay
     if (!hasVideo || videoEnded || videoError) {
       const timer = setTimeout(() => setShowStats(true), hasVideo ? 500 : 1500);
@@ -164,10 +173,21 @@ export function TeamCelebration({ team, onComplete }: { team: Team; onComplete?:
 
   const handleVideoEnd = () => {
     setVideoEnded(true);
+    setVideoLoading(false);
   };
 
   const handleVideoError = () => {
     setVideoError(true);
+    setVideoLoading(false);
+  };
+
+  const handleCanPlay = () => {
+    setVideoCanPlay(true);
+    setVideoLoading(false);
+  };
+
+  const handleLoadStart = () => {
+    setVideoLoading(true);
   };
 
   // Auto-advance to next step after celebration (for SnappyOnboarding integration)
@@ -197,14 +217,28 @@ export function TeamCelebration({ team, onComplete }: { team: Team; onComplete?:
         role="button"
         aria-label="Click to skip video"
       >
+        {/* Loading state - show background image while video loads */}
+        {videoLoading && (
+          <div 
+            className="absolute inset-0 w-full h-full bg-cover bg-center"
+            style={{
+              backgroundImage: `url(${broncosBackgroundPath})`,
+            }}
+          />
+        )}
         <video
           ref={videoRef}
           autoPlay
           muted
           playsInline
+          preload="auto"
           onEnded={handleVideoEnd}
           onError={handleVideoError}
-          className="absolute inset-0 w-full h-full object-cover"
+          onCanPlay={handleCanPlay}
+          onLoadStart={handleLoadStart}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+            videoCanPlay ? 'opacity-100' : 'opacity-0'
+          }`}
         >
           <source src={broncosVideoPath} type="video/mp4" />
           {/* Fallback if video format not supported */}
@@ -218,7 +252,9 @@ export function TeamCelebration({ team, onComplete }: { team: Team; onComplete?:
           }}
         />
         {/* Skip hint */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/60 text-sm">
+        <div className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/60 text-sm transition-opacity duration-300 ${
+          videoCanPlay ? 'opacity-100' : 'opacity-0'
+        }`}>
           Click anywhere to skip
         </div>
       </div>
