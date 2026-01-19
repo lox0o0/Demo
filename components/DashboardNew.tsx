@@ -64,48 +64,37 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
         <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
       )}
 
-      {/* Main Content - Horizontal layout */}
+      {/* Main Content - 2 Column Layout */}
       <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 ${hideNavigation ? 'pt-6' : 'pt-24'}`}>
         {activeSection === "dashboard" && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left Column - Profile Card + Total Points */}
-            <div className="lg:col-span-1 space-y-6">
-              <ProfileCard 
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left Column - Weekly Activities */}
+            <div className="space-y-6">
+              <WeeklyActivitiesSimplified user={user} teamData={teamData} />
+            </div>
+
+            {/* Right Column - Profile, Leaderboards, Stats, Tiers, Wheel */}
+            <div className="space-y-6">
+              <ProfileCardFull 
                 tier={currentTier}
                 points={userPoints}
                 progressPercent={progressPercent}
                 pointsToNext={pointsToNext}
                 nextTier={nextTier}
                 teamData={teamData}
+                profileCompletion={profileCompletion}
+                user={user}
               />
               
-              <TotalPointsCard 
-                points={userPoints}
-                onGoToShop={() => onNavigate ? onNavigate("points-shop") : window.location.hash = "#points-shop"}
-              />
-            </div>
-
-            {/* Middle Column - Activities */}
-            <div className="lg:col-span-1 space-y-6">
-              {/* Attend Broncos Game */}
-              <AttendGameCard teamData={teamData} />
+              <LeaderboardsCard user={user} teamData={teamData} />
               
-              {/* Today's Activities */}
-              <TodaysActivities />
+              <SeasonStatsCard user={user} />
               
-              {/* Weekly Activities */}
-              <WeeklyActivities user={user} teamData={teamData} />
+              <ProfileCompletionSimplified user={user} profileCompletion={profileCompletion} />
               
-              {/* One-time Activities */}
-              <OneTimeActivities />
+              <TiersRewardsCard currentTier={currentTier} userPoints={userPoints} />
               
-              {/* Optional Sponsor Quest */}
-              <SponsorQuestCard />
-            </div>
-
-            {/* Right Column - Streak Overview */}
-            <div className="lg:col-span-1 space-y-6">
-              <StreakOverviewCard streakData={streakData} />
+              <PrizeWheelCard streakData={streakData} teamData={teamData} />
             </div>
           </div>
         )}
@@ -659,11 +648,16 @@ function TodaysActivities() {
   );
 }
 
-// Weekly Activities (Middle Column)
-function WeeklyActivities({ user, teamData }: any) {
-  const [showMVP, setShowMVP] = useState(false);
-  const [selectedPlayer, setSelectedPlayer] = useState("");
-  const [playerSearch, setPlayerSearch] = useState("");
+// Weekly Activities Simplified (Left Column)
+function WeeklyActivitiesSimplified({ user, teamData }: any) {
+  const [showLastRoundMVP, setShowLastRoundMVP] = useState(false);
+  const [selectedLastRoundPlayer, setSelectedLastRoundPlayer] = useState("");
+  const [playerSearchLastRound, setPlayerSearchLastRound] = useState("");
+  
+  const [showNextWeekMVP, setShowNextWeekMVP] = useState(false);
+  const [selectedNextWeekPlayer, setSelectedNextWeekPlayer] = useState("");
+  const [playerSearchNextWeek, setPlayerSearchNextWeek] = useState("");
+  
   const [showDominantTeam, setShowDominantTeam] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState("");
 
@@ -676,11 +670,15 @@ function WeeklyActivities({ user, teamData }: any) {
     { id: 5, name: "Cameron Munster", stats: "2 tries, 1 assist", photo: "👤" },
   ];
 
-  const filteredPlayers = players.filter(p => 
-    p.name.toLowerCase().includes(playerSearch.toLowerCase())
+  const filteredPlayersLastRound = players.filter(p => 
+    p.name.toLowerCase().includes(playerSearchLastRound.toLowerCase())
+  );
+  
+  const filteredPlayersNextWeek = players.filter(p => 
+    p.name.toLowerCase().includes(playerSearchNextWeek.toLowerCase())
   );
 
-  // Mock team voting results - use actual team names from NRL_TEAMS
+  // Mock team voting results
   const teamVotes = [
     { name: "Broncos", percentage: 44 },
     { name: "Sharks", percentage: 20 },
@@ -698,7 +696,7 @@ function WeeklyActivities({ user, teamData }: any) {
       <div className="space-y-3">
         {/* Tips made for weekend fixture */}
         <ActivityButton 
-          title="Tips made for weekend fixture"
+          title="Tips made for weekend fixtures"
           points="+50"
           completed={false}
         />
@@ -710,22 +708,22 @@ function WeeklyActivities({ user, teamData }: any) {
           completed={false}
         />
 
-        {/* Telstra Tuesday MVP predictions */}
+        {/* Vote for MVP of last round fixtures */}
         <div className="bg-nrl-dark-hover border border-nrl-border-light rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <div className="text-sm font-semibold text-white">Telstra Tuesday MVP</div>
-              <div className="text-xs text-nrl-text-secondary">Select best player of the week</div>
+              <div className="text-sm font-semibold text-white">Vote for MVP of last round</div>
+              <div className="text-xs text-nrl-text-secondary">Who was the best player last round?</div>
             </div>
             <button
-              onClick={() => setShowMVP(!showMVP)}
+              onClick={() => setShowLastRoundMVP(!showLastRoundMVP)}
               className="px-3 py-1 bg-nrl-green text-white text-xs font-semibold rounded-lg hover:bg-nrl-green/90"
             >
-              {showMVP ? "Hide" : "Vote Now"}
+              {showLastRoundMVP ? "Hide" : "Vote Now"}
             </button>
           </div>
           
-          {showMVP && (
+          {showLastRoundMVP && (
             <div className="space-y-3 mt-3">
               <div className="text-xs font-bold text-nrl-text-secondary mb-2">ROUND 5 MVP</div>
               <div className="text-xs text-nrl-text-secondary mb-3">Who was the best player this round?</div>
@@ -734,19 +732,19 @@ function WeeklyActivities({ user, teamData }: any) {
               <input
                 type="text"
                 placeholder="Search player..."
-                value={playerSearch}
-                onChange={(e) => setPlayerSearch(e.target.value)}
+                value={playerSearchLastRound}
+                onChange={(e) => setPlayerSearchLastRound(e.target.value)}
                 className="w-full bg-nrl-dark-card border border-nrl-border-light rounded-lg px-3 py-2 text-sm text-white placeholder-nrl-text-muted focus:outline-none focus:border-nrl-green"
               />
               
               {/* Player Options */}
               <div className="space-y-2 max-h-48 overflow-y-auto">
-                {filteredPlayers.map((player) => (
+                {filteredPlayersLastRound.map((player) => (
                   <button
                     key={player.id}
-                    onClick={() => setSelectedPlayer(player.name)}
+                    onClick={() => setSelectedLastRoundPlayer(player.name)}
                     className={`w-full bg-nrl-dark-card border rounded-lg p-3 text-left transition-colors ${
-                      selectedPlayer === player.name 
+                      selectedLastRoundPlayer === player.name 
                         ? 'border-nrl-green bg-nrl-green/10' 
                         : 'border-nrl-border-light hover:border-nrl-green'
                     }`}
@@ -759,7 +757,7 @@ function WeeklyActivities({ user, teamData }: any) {
                         <div className="text-sm font-semibold text-white">{player.name}</div>
                         <div className="text-xs text-nrl-text-secondary">{player.stats}</div>
                       </div>
-                      {selectedPlayer === player.name && (
+                      {selectedLastRoundPlayer === player.name && (
                         <span className="text-nrl-green">✓</span>
                       )}
                     </div>
@@ -767,7 +765,7 @@ function WeeklyActivities({ user, teamData }: any) {
                 ))}
               </div>
               
-              {selectedPlayer && (
+              {selectedLastRoundPlayer && (
                 <div className="mt-3 pt-3 border-t border-nrl-border-light">
                   <div className="text-xs text-nrl-text-secondary mb-2">
                     +10 Fuel • +25 pts
@@ -781,47 +779,83 @@ function WeeklyActivities({ user, teamData }: any) {
           )}
         </div>
 
-        {/* Read: Check recent fixture results */}
-        <ActivityButton 
-          title="Read: Check recent fixture results"
-          points="+25"
-          completed={false}
-        />
-
-        {/* Read: Weekly wrap for fixtures */}
-        <ActivityButton 
-          title="Read: Weekly wrap for fixtures"
-          points="+25"
-          completed={false}
-        />
-
-        {/* Share tipping scores on socials */}
-        <ActivityButton 
-          title="Share tipping scores on socials"
-          points="+15"
-          completed={false}
-        />
-
-        {/* Share fantasy scores on socials */}
-        <ActivityButton 
-          title="Share fantasy scores on socials"
-          points="+15"
-          completed={false}
-        />
-
-        {/* Hot take Thursday */}
-        <ActivityButton 
-          title="Hot take Thursday"
-          points="+20"
-          completed={false}
-        />
-
-        {/* Most dominant team this week */}
+        {/* Telstra Tuesday MVP Predict (next week) */}
         <div className="bg-nrl-dark-hover border border-nrl-border-light rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <div className="text-sm font-semibold text-white">Most dominant team this week</div>
-              <div className="text-xs text-nrl-text-secondary">Vote for the most dominant team</div>
+              <div className="text-sm font-semibold text-white">Telstra Tuesday MVP Predict</div>
+              <div className="text-xs text-nrl-text-secondary">Predict best player of next week's fixtures</div>
+            </div>
+            <button
+              onClick={() => setShowNextWeekMVP(!showNextWeekMVP)}
+              className="px-3 py-1 bg-nrl-green text-white text-xs font-semibold rounded-lg hover:bg-nrl-green/90"
+            >
+              {showNextWeekMVP ? "Hide" : "Predict"}
+            </button>
+          </div>
+          
+          {showNextWeekMVP && (
+            <div className="space-y-3 mt-3">
+              <div className="text-xs font-bold text-nrl-text-secondary mb-2">ROUND 6 MVP PREDICTION</div>
+              <div className="text-xs text-nrl-text-secondary mb-3">Who will be the best player next round?</div>
+              
+              {/* Player Search */}
+              <input
+                type="text"
+                placeholder="Search player..."
+                value={playerSearchNextWeek}
+                onChange={(e) => setPlayerSearchNextWeek(e.target.value)}
+                className="w-full bg-nrl-dark-card border border-nrl-border-light rounded-lg px-3 py-2 text-sm text-white placeholder-nrl-text-muted focus:outline-none focus:border-nrl-green"
+              />
+              
+              {/* Player Options */}
+              <div className="space-y-2 max-h-48 overflow-y-auto">
+                {filteredPlayersNextWeek.map((player) => (
+                  <button
+                    key={player.id}
+                    onClick={() => setSelectedNextWeekPlayer(player.name)}
+                    className={`w-full bg-nrl-dark-card border rounded-lg p-3 text-left transition-colors ${
+                      selectedNextWeekPlayer === player.name 
+                        ? 'border-nrl-green bg-nrl-green/10' 
+                        : 'border-nrl-border-light hover:border-nrl-green'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-nrl-dark-hover flex items-center justify-center text-lg">
+                        {player.photo}
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm font-semibold text-white">{player.name}</div>
+                        <div className="text-xs text-nrl-text-secondary">{player.stats}</div>
+                      </div>
+                      {selectedNextWeekPlayer === player.name && (
+                        <span className="text-nrl-green">✓</span>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+              
+              {selectedNextWeekPlayer && (
+                <div className="mt-3 pt-3 border-t border-nrl-border-light">
+                  <div className="text-xs text-nrl-text-secondary mb-2">
+                    +10 Fuel • +25 pts
+                  </div>
+                  <div className="text-xs text-nrl-text-muted">
+                    Prediction locked until next round
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Most dominant team prediction */}
+        <div className="bg-nrl-dark-hover border border-nrl-border-light rounded-xl p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <div className="text-sm font-semibold text-white">Most dominant team prediction</div>
+              <div className="text-xs text-nrl-text-secondary">Predict most dominant team of next week's fixtures</div>
             </div>
             <button
               onClick={() => setShowDominantTeam(!showDominantTeam)}
@@ -846,23 +880,30 @@ function WeeklyActivities({ user, teamData }: any) {
               
               {selectedTeam && (
                 <div className="mt-3 pt-3 border-t border-nrl-border-light">
-                  <div className="text-xs font-semibold text-white mb-2">Voting Results:</div>
-                  <div className="space-y-2">
-                    {teamVotes.map((team) => (
-                      <div key={team.name} className="flex items-center gap-2">
-                        <div className="w-20 text-xs text-nrl-text-secondary">{team.name}</div>
-                        <div className="flex-1 bg-nrl-dark-card rounded-full h-2">
-                          <div
-                            className="h-2 rounded-full bg-nrl-green"
-                            style={{ width: `${team.percentage}%` }}
-                          />
-                        </div>
-                        <div className="w-10 text-xs text-nrl-text-secondary text-right">{team.percentage}%</div>
-                      </div>
-                    ))}
+                  <div className="text-xs text-nrl-text-secondary mb-2">
+                    +10 Fuel • +25 pts
                   </div>
                 </div>
               )}
+              
+              {/* Voting Results */}
+              <div className="mt-3 pt-3 border-t border-nrl-border-light">
+                <div className="text-xs font-semibold text-white mb-2">Current Voting Results:</div>
+                <div className="space-y-2">
+                  {teamVotes.map((team) => (
+                    <div key={team.name} className="flex items-center gap-2">
+                      <div className="w-20 text-xs text-nrl-text-secondary">{team.name}</div>
+                      <div className="flex-1 bg-nrl-dark-card rounded-full h-2">
+                        <div
+                          className="h-2 rounded-full bg-nrl-green"
+                          style={{ width: `${team.percentage}%` }}
+                        />
+                      </div>
+                      <div className="w-10 text-xs text-nrl-text-secondary text-right">{team.percentage}%</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -870,6 +911,7 @@ function WeeklyActivities({ user, teamData }: any) {
     </div>
   );
 }
+
 
 // Activity Button Component
 function ActivityButton({ title, points, completed }: { title: string; points: string; completed: boolean }) {
@@ -936,58 +978,238 @@ function SponsorQuestCard() {
   );
 }
 
-// Streak Overview Card (Right Column - Simplified)
-function StreakOverviewCard({ streakData }: { streakData: StreakData }) {
-  const [showInfo, setShowInfo] = useState(false);
-  const flameEmoji = getFlameEmoji(streakData.currentWeek.flameLevel);
-  const flameName = getFlameLevelName(streakData.currentWeek.flameLevel);
+// Profile Card Full (Right Column)
+function ProfileCardFull({ tier, points, progressPercent, pointsToNext, nextTier, teamData, profileCompletion, user }: any) {
+  return (
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+      <div className="flex items-center gap-4 mb-4">
+        <div 
+          className="w-16 h-16 rounded-full border-2 flex items-center justify-center"
+          style={{ borderColor: tier.color }}
+        >
+          <span className="text-2xl">⭐</span>
+        </div>
+        <div>
+          <div className="text-sm font-bold uppercase" style={{ color: tier.color }}>
+            {tier.name} Tier
+          </div>
+          <div className="text-3xl font-bold text-white">{points.toLocaleString()}</div>
+          <div className="text-xs text-nrl-text-secondary">points</div>
+        </div>
+      </div>
+      
+      {/* Progress Bar */}
+      <div className="w-full bg-nrl-dark-hover rounded-full h-2 mb-2">
+        <div
+          className="h-2 rounded-full transition-all"
+          style={{ 
+            width: `${progressPercent}%`,
+            backgroundColor: tier.color 
+          }}
+        />
+      </div>
+      <div className="text-xs text-nrl-text-secondary mb-4">
+        {pointsToNext > 0 ? `${pointsToNext} to ${nextTier.name}` : "Max tier reached"}
+      </div>
+      
+      {/* Badges */}
+      <div className="border-t border-nrl-border-light pt-4">
+        <div className="text-xs font-bold uppercase text-nrl-text-secondary mb-3">Badges</div>
+        <div className="grid grid-cols-3 gap-2">
+          {[
+            { name: "I Was There", icon: "🎟️" },
+            { name: "Dedicated", icon: "🔥" },
+            { name: "Top Fan", icon: "⭐" },
+          ].map((badge, idx) => (
+            <div key={idx} className="bg-nrl-dark-hover rounded-lg p-2 text-center border border-nrl-border-light">
+              <div className="text-lg mb-1">{badge.icon}</div>
+              <div className="text-[10px] font-semibold text-white">{badge.name}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
+// Leaderboards Card (Right Column)
+function LeaderboardsCard({ user, teamData }: any) {
+  return (
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+      <h3 className="text-lg font-bold text-white mb-4">Leaderboards</h3>
+      <div className="bg-nrl-dark-hover rounded-xl p-4 mb-4 border border-nrl-border-light">
+        <div className="text-3xl font-bold text-nrl-green mb-2">#847</div>
+        <div className="text-sm text-white font-semibold mb-1">Top 12% of {teamData?.name || "Broncos"} fans</div>
+        <div className="text-xs text-nrl-text-secondary">Up 23 places this week</div>
+      </div>
+      <div className="space-y-2">
+        <div className="text-xs text-nrl-text-secondary mb-2">Top Fans This Week</div>
+        {[
+          { rank: 1, name: "BroncosFan23", points: "12,450", change: "+5" },
+          { rank: 2, name: "QLD4Life", points: "11,890", change: "+2" },
+          { rank: 3, name: "MaroonArmy", points: "11,200", change: "-1" },
+        ].map((fan, idx) => (
+          <div key={idx} className="flex items-center justify-between py-2 border-b border-nrl-border-light last:border-0">
+            <div className="flex items-center gap-3">
+              <div className="w-6 h-6 rounded-full bg-nrl-green/20 flex items-center justify-center text-xs font-bold text-nrl-green">
+                {fan.rank}
+              </div>
+              <div>
+                <div className="text-sm font-semibold text-white">{fan.name}</div>
+                <div className="text-xs text-nrl-text-secondary">{fan.points} pts</div>
+              </div>
+            </div>
+            <div className={`text-xs font-semibold ${fan.change.startsWith('+') ? 'text-nrl-green' : 'text-nrl-text-muted'}`}>
+              {fan.change}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Season Stats Card (Right Column)
+function SeasonStatsCard({ user }: any) {
+  return (
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+      <h3 className="text-lg font-bold text-white mb-4">Season Stats</h3>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <div className="text-2xl font-bold text-white">{user?.lifetimePoints || 0}</div>
+          <div className="text-xs text-nrl-text-secondary">Lifetime Points</div>
+        </div>
+        <div>
+          <div className="text-2xl font-bold text-white">5/7</div>
+          <div className="text-xs text-nrl-text-secondary">Games Attended</div>
+        </div>
+        <div>
+          <div className="text-2xl font-bold text-white">#847</div>
+          <div className="text-xs text-nrl-text-secondary">Tipping Rank</div>
+        </div>
+        <div>
+          <div className="text-2xl font-bold text-white">23</div>
+          <div className="text-xs text-nrl-text-secondary">Week Streak</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Profile Completion Simplified (Right Column)
+function ProfileCompletionSimplified({ user, profileCompletion }: any) {
   return (
     <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-bold text-white">Streak Overview</h3>
-        <button
-          onMouseEnter={() => setShowInfo(true)}
-          onMouseLeave={() => setShowInfo(false)}
-          className="relative w-5 h-5 rounded-full border border-nrl-border-light flex items-center justify-center text-xs text-nrl-text-secondary hover:border-nrl-green hover:text-nrl-green transition-colors"
-        >
-          i
-          {showInfo && (
-            <div className="absolute top-full right-0 mt-2 w-64 bg-nrl-dark-card border border-nrl-border-light rounded-lg p-3 text-xs text-nrl-text-secondary z-10 shadow-xl">
-              <div className="font-semibold text-white mb-2">Streak Benefits:</div>
-              <div className="space-y-1">
-                <div>💰 {streakData.benefits.pointsMultiplier}x points multiplier</div>
-                <div>🎁 +{streakData.benefits.weeklyBonus} pts weekly bonus</div>
-                <div>🎰 {streakData.spins.baseSpins} base spins + {streakData.spins.bonusSpins} bonus</div>
-                <div>🛡️ {streakData.shields.available} shields available</div>
-              </div>
-            </div>
-          )}
-        </button>
+        <h3 className="text-lg font-bold text-white">Profile Completion</h3>
+        <span className="text-sm font-bold text-nrl-green">{profileCompletion}%</span>
       </div>
       
-      <div className="text-center mb-4">
-        <div className="text-3xl mb-2">{flameEmoji}</div>
-        <div className="text-2xl font-bold text-white mb-1">
-          {streakData.fanStreak.currentWeeks}
-        </div>
-        <div className="text-sm text-nrl-text-secondary mb-2">week streak</div>
-        <div className="text-xs text-nrl-amber font-semibold">
-          {flameName} • {streakData.currentWeek.fuel} Fuel
-        </div>
-      </div>
-
-      {/* Fuel Progress */}
-      <div className="w-full bg-nrl-dark-hover rounded-full h-2 mb-2">
+      <div className="w-full bg-nrl-dark-hover rounded-full h-2 mb-4">
         <div
-          className="h-2 rounded-full transition-all bg-gradient-to-r from-orange-500 to-red-500"
-          style={{ width: `${Math.min((streakData.currentWeek.fuel / 300) * 100, 100)}%` }}
+          className="h-2 rounded-full transition-all duration-500 bg-gradient-to-r from-nrl-green to-nrl-amber"
+          style={{ width: `${profileCompletion}%` }}
         />
       </div>
-      <div className="text-xs text-nrl-text-secondary text-center">
-        {streakData.currentWeek.fuel} / {streakData.currentWeek.target} Fuel
+      
+      <button className="w-full bg-nrl-green text-white font-bold py-3 rounded-xl hover:bg-nrl-green/90 transition-colors">
+        Upgrade Profile for More Points!
+      </button>
+    </div>
+  );
+}
+
+// Tiers Rewards Card (Right Column)
+function TiersRewardsCard({ currentTier, userPoints }: any) {
+  const tiers = [
+    { name: "Silver", minPoints: 1000, reward: "NRL / Broncos Hat" },
+    { name: "Gold", minPoints: 2000, reward: "Team Jersey" },
+    { name: "Platinum", minPoints: 3500, reward: "Game ticket" },
+    { name: "Diehard", minPoints: 5000, reward: "Signed team jersey" },
+    { name: "Legend", minPoints: 10000, reward: "Premiership package - flight + ticket + accommodation" },
+  ];
+
+  return (
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+      <h3 className="text-lg font-bold text-white mb-4">Tier Rewards</h3>
+      <div className="space-y-3">
+        {tiers.map((tier, idx) => {
+          const isUnlocked = userPoints >= tier.minPoints;
+          const isCurrent = currentTier.name === tier.name;
+          
+          return (
+            <div
+              key={idx}
+              className={`bg-nrl-dark-hover border rounded-xl p-3 ${
+                isUnlocked ? 'border-nrl-green' : 'border-nrl-border-light'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-2">
+                  {isUnlocked && <span className="text-nrl-green">✓</span>}
+                  <span className={`text-sm font-semibold ${isUnlocked ? 'text-white' : 'text-nrl-text-secondary'}`}>
+                    {tier.name} tier
+                  </span>
+                  {isCurrent && (
+                    <span className="text-xs px-2 py-0.5 bg-nrl-green/20 text-nrl-green rounded">Current</span>
+                  )}
+                </div>
+                <span className="text-xs font-bold text-nrl-text-secondary">{tier.minPoints.toLocaleString()} points</span>
+              </div>
+              <div className="text-xs text-nrl-text-secondary">{tier.reward}</div>
+            </div>
+          );
+        })}
       </div>
     </div>
+  );
+}
+
+// Prize Wheel Card (Right Column)
+function PrizeWheelCard({ streakData, teamData }: any) {
+  const [showWheel, setShowWheel] = useState(false);
+
+  return (
+    <>
+      <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+        <h3 className="text-lg font-bold text-white mb-4">Prize Wheel</h3>
+        {streakData.spins.available > 0 ? (
+          <div className="text-center">
+            <div className="text-4xl mb-4">🎰</div>
+            <div className="text-2xl font-bold text-nrl-green mb-2">
+              {streakData.spins.available} Spins Available
+            </div>
+            <div className="text-sm text-nrl-text-secondary mb-4">
+              Your {streakData.fanStreak.currentWeeks}-week streak gives you {streakData.spins.baseSpins} base spins
+              {streakData.spins.bonusSpins > 0 && ` + ${streakData.spins.bonusSpins} bonus spins`}
+            </div>
+            <button
+              onClick={() => setShowWheel(true)}
+              className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 rounded-xl hover:from-orange-600 hover:to-red-600 transition-all"
+            >
+              Spin the Wheel
+            </button>
+          </div>
+        ) : (
+          <div className="text-center">
+            <div className="text-4xl mb-4">🔒</div>
+            <div className="text-lg font-semibold text-white mb-2">No Spins Available</div>
+            <div className="text-sm text-nrl-text-secondary">
+              Start a streak to earn weekly spins!
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Prize Wheel Modal */}
+      {showWheel && (
+        <PrizeWheel 
+          streakData={streakData}
+          teamData={teamData}
+          onClose={() => setShowWheel(false)}
+        />
+      )}
+    </>
   );
 }
 
