@@ -552,10 +552,10 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                   unoptimized
                 />
               </div>
-              <h2 className="text-2xl font-bold text-nrl-text-primary mb-2">
+              <h2 className="text-2xl font-black text-nrl-text-primary mb-2">
                 Welcome to {selectedTeam.name}!
               </h2>
-              <p className="text-nrl-text-secondary">
+              <p className="text-nrl-text-secondary/70">
                 Connect your socials for bonus points
               </p>
             </div>
