@@ -315,25 +315,36 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
   const [isSpinning, setIsSpinning] = useState(false);
   const [prizeWon, setPrizeWon] = useState<any>(null);
   const [spinsRemaining, setSpinsRemaining] = useState(streakData.spins.available);
+  const [rotation, setRotation] = useState(0);
 
+  // 20 prizes with alternating color scheme: purple, orange, green, blue, gray
+  const colorScheme = ['#8B5CF6', '#F97316', '#10B981', '#3B82F6', '#6B7280']; // purple, orange, green, blue, gray
+  
   const prizes = [
-    { id: 1, name: '25 Points', tier: 'common', icon: '🪙', color: teamData?.primaryColor || '#73003c' },
-    { id: 2, name: '$10 Telstra Credit', tier: 'uncommon', icon: '📱', color: '#00A8E8', sponsor: 'Telstra' },
-    { id: 3, name: '50 Points', tier: 'common', icon: '🪙', color: teamData?.secondaryColor || '#FFB81C' },
-    { id: 4, name: '100 Points', tier: 'uncommon', icon: '🪙', color: '#1E1E1E' },
-    { id: 5, name: '10 Points', tier: 'common', icon: '🪙', color: '#FFFFFF' },
-    { id: 6, name: '$10 KFC Voucher', tier: 'rare', icon: '🍗', color: '#E4002B', sponsor: 'KFC' },
-    { id: 7, name: '25 Points', tier: 'common', icon: '🪙', color: teamData?.primaryColor || '#73003c' },
-    { id: 8, name: 'Free Shield 🛡️', tier: 'uncommon', icon: '🛡️', color: teamData?.secondaryColor || '#FFB81C' },
-    { id: 9, name: '50 Points', tier: 'common', icon: '🪙', color: '#1E1E1E' },
-    { id: 10, name: '$25 NRL Shop Voucher', tier: 'epic', icon: '🛍️', color: '#00A651', sponsor: 'NRL' },
-    { id: 11, name: '250 Points', tier: 'rare', icon: '🪙', color: '#FFFFFF' },
-    { id: 12, name: 'Signed Mini Ball', tier: 'epic', icon: '🏉', color: teamData?.primaryColor || '#73003c' },
-    { id: 13, name: '25 Points', tier: 'common', icon: '🪙', color: teamData?.secondaryColor || '#FFB81C' },
-    { id: 14, name: '500 Points', tier: 'rare', icon: '🪙', color: '#1E1E1E' },
-    { id: 15, name: '$20 Uber Eats', tier: 'uncommon', icon: '🍔', color: '#000000', sponsor: 'Uber Eats' },
-    { id: 16, name: 'Match Tickets', tier: 'legendary', icon: '🎟️', color: '#FFD700' },
-  ];
+    { id: 1, name: '25 Points', tier: 'common', icon: '🪙', shortName: '25 PTS' },
+    { id: 2, name: '$10 Telstra', tier: 'uncommon', icon: '📱', shortName: '$10 TELSTRA', sponsor: 'Telstra' },
+    { id: 3, name: '50 Points', tier: 'common', icon: '🪙', shortName: '50 PTS' },
+    { id: 4, name: '100 Points', tier: 'uncommon', icon: '🪙', shortName: '100 PTS' },
+    { id: 5, name: '10 Points', tier: 'common', icon: '🪙', shortName: '10 PTS' },
+    { id: 6, name: '$10 KFC', tier: 'rare', icon: '🍗', shortName: '$10 KFC', sponsor: 'KFC' },
+    { id: 7, name: '25 Points', tier: 'common', icon: '🪙', shortName: '25 PTS' },
+    { id: 8, name: 'Free Shield', tier: 'uncommon', icon: '🛡️', shortName: 'SHIELD' },
+    { id: 9, name: '50 Points', tier: 'common', icon: '🪙', shortName: '50 PTS' },
+    { id: 10, name: '$25 NRL Shop', tier: 'epic', icon: '🛍️', shortName: '$25 NRL', sponsor: 'NRL' },
+    { id: 11, name: '250 Points', tier: 'rare', icon: '🪙', shortName: '250 PTS' },
+    { id: 12, name: 'Signed Ball', tier: 'epic', icon: '🏉', shortName: 'BALL' },
+    { id: 13, name: '25 Points', tier: 'common', icon: '🪙', shortName: '25 PTS' },
+    { id: 14, name: '500 Points', tier: 'rare', icon: '🪙', shortName: '500 PTS' },
+    { id: 15, name: '$20 Uber Eats', tier: 'uncommon', icon: '🍔', shortName: '$20 UBER', sponsor: 'Uber Eats' },
+    { id: 16, name: '100 Points', tier: 'uncommon', icon: '🪙', shortName: '100 PTS' },
+    { id: 17, name: 'Match Tickets', tier: 'legendary', icon: '🎟️', shortName: 'TICKETS' },
+    { id: 18, name: '25 Points', tier: 'common', icon: '🪙', shortName: '25 PTS' },
+    { id: 19, name: '50 Points', tier: 'common', icon: '🪙', shortName: '50 PTS' },
+    { id: 20, name: '$15 Voucher', tier: 'uncommon', icon: '🎁', shortName: '$15 VOUCHER' },
+  ].map((prize, idx) => ({
+    ...prize,
+    color: colorScheme[idx % colorScheme.length],
+  }));
 
   const handleSpin = () => {
     if (spinsRemaining === 0 || isSpinning) return;
@@ -341,9 +352,27 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
     setIsSpinning(true);
     setPrizeWon(null);
     
-    // Simulate spin (3-5 seconds)
-    const spinDuration = 3000 + Math.random() * 2000;
+    // Random prize selection
     const randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
+    const prizeIndex = prizes.findIndex(p => p.id === randomPrize.id);
+    
+    // Simulate spin duration based on tier
+    const spinDuration = randomPrize.tier === 'legendary' ? 7000 :
+                        randomPrize.tier === 'epic' ? 6000 :
+                        randomPrize.tier === 'rare' ? 5000 :
+                        4000;
+    
+    // Calculate rotation: full spins (3-5) + position of prize
+    // Pointer is at 3 o'clock (0 degrees), so we need to rotate to center the prize
+    const fullSpins = 3 + Math.random() * 2; // 3-5 full rotations
+    const segmentAngle = 360 / 20; // 18 degrees per segment
+    // Prize should be centered at the pointer (3 o'clock = 0 degrees)
+    // So we rotate the wheel so the prize segment centers at 0 degrees
+    const targetAngle = prizeIndex * segmentAngle;
+    const finalRotation = fullSpins * 360 + (360 - targetAngle) + segmentAngle / 2;
+    
+    // Animate rotation
+    setRotation(finalRotation);
     
     setTimeout(() => {
       setIsSpinning(false);
@@ -353,55 +382,123 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div 
-        className="bg-nrl-dark-card rounded-2xl p-8 max-w-md w-full border border-nrl-border-light"
+        className="bg-black rounded-2xl p-8 max-w-2xl w-full"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold text-white">🎁 Weekly Prize Wheel</h2>
           <button
             onClick={onClose}
-            className="text-nrl-text-muted hover:text-white transition-colors"
+            className="text-white/60 hover:text-white transition-colors text-2xl leading-none"
           >
             ✕
           </button>
         </div>
 
         {/* Wheel Visual */}
-        <div className="relative w-full aspect-square mb-6 flex items-center justify-center">
-          <div className="relative w-64 h-64 rounded-full border-4 border-nrl-border-light overflow-hidden">
-            {isSpinning ? (
-              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-500/20 to-red-500/20">
-                <div className="text-white font-bold animate-spin">SPINNING...</div>
+        <div className="relative w-full mb-8 flex items-center justify-center">
+          <div className="relative" style={{ width: '500px', height: '500px' }}>
+            {/* Pointer at 3 o'clock (right side) */}
+            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-2 z-20">
+              <div className="w-0 h-0 border-t-[20px] border-b-[20px] border-l-[30px] border-transparent border-l-white drop-shadow-lg"></div>
+            </div>
+            
+            {/* Wheel Container */}
+            <div 
+              className="relative w-[500px] h-[500px] rounded-full overflow-hidden shadow-2xl"
+              style={{
+                transform: `rotate(${rotation}deg)`,
+                transition: isSpinning ? 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)' : 'transform 0s',
+              }}
+            >
+              <svg width="500" height="500" viewBox="0 0 500 500" className="absolute inset-0">
+                <defs>
+                  <clipPath id="wheel-clip">
+                    <circle cx="250" cy="250" r="250" />
+                  </clipPath>
+                </defs>
+                <g clipPath="url(#wheel-clip)">
+                  {prizes.map((prize, idx) => {
+                    const segmentAngle = 360 / 20; // 18 degrees
+                    // SVG coordinates: 0° = 3 o'clock (right), 90° = 6 o'clock (bottom)
+                    // Start from top (12 o'clock = -90° in SVG) and go clockwise
+                    const startAngle = (idx * segmentAngle - 90) * (Math.PI / 180);
+                    const endAngle = ((idx + 1) * segmentAngle - 90) * (Math.PI / 180);
+                    const centerAngle = (idx * segmentAngle + segmentAngle / 2 - 90) * (Math.PI / 180);
+                    
+                    const x1 = 250 + 250 * Math.cos(startAngle);
+                    const y1 = 250 + 250 * Math.sin(startAngle);
+                    const x2 = 250 + 250 * Math.cos(endAngle);
+                    const y2 = 250 + 250 * Math.sin(endAngle);
+                    
+                    // Icon position (closer to center)
+                    const iconRadius = 120;
+                    const iconX = 250 + iconRadius * Math.cos(centerAngle);
+                    const iconY = 250 + iconRadius * Math.sin(centerAngle);
+                    
+                    // Text position (between icon and edge)
+                    const textRadius = 200;
+                    const textX = 250 + textRadius * Math.cos(centerAngle);
+                    const textY = 250 + textRadius * Math.sin(centerAngle);
+                    
+                    // Text rotation: align with segment direction (centerAngle + 90° to make text horizontal when segment is vertical)
+                    const textRotation = (centerAngle * 180 / Math.PI);
+                    
+                    return (
+                      <g key={prize.id}>
+                        {/* Segment */}
+                        <path
+                          d={`M 250 250 L ${x1} ${y1} A 250 250 0 0 1 ${x2} ${y2} Z`}
+                          fill={prize.color}
+                          stroke="#000"
+                          strokeWidth="2"
+                        />
+                        {/* Icon */}
+                        <text
+                          x={iconX}
+                          y={iconY}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          fontSize="36"
+                          fill="white"
+                          fontWeight="bold"
+                        >
+                          {prize.icon}
+                        </text>
+                        {/* Text - rotated to follow segment direction */}
+                        <text
+                          x={textX}
+                          y={textY}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          fontSize="11"
+                          fill="white"
+                          fontWeight="bold"
+                          transform={`rotate(${textRotation}, ${textX}, ${textY})`}
+                        >
+                          {prize.shortName}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </g>
+              </svg>
+              
+              {/* Center Circle with Logo */}
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-black rounded-full border-4 border-white/20 flex items-center justify-center z-10 shadow-xl">
+                <div className="text-2xl font-bold text-white">NRL</div>
               </div>
-            ) : (
-              <div className="grid grid-cols-4 w-full h-full">
-                {prizes.slice(0, 16).map((prize, idx) => (
-                  <div
-                    key={prize.id}
-                    className="flex items-center justify-center text-xs font-bold text-white border border-nrl-border-light"
-                    style={{ backgroundColor: prize.color }}
-                  >
-                    {prize.icon}
-                  </div>
-                ))}
-              </div>
-            )}
-            {/* Pointer */}
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2">
-              <div className="w-0 h-0 border-l-8 border-r-8 border-t-12 border-transparent border-t-white"></div>
             </div>
           </div>
         </div>
 
-        {/* Spins Remaining */}
-        <div className="text-center mb-4">
-          <div className="text-sm text-nrl-text-secondary mb-1">
-            Spins Remaining: <span className="font-bold text-white">{spinsRemaining}</span>
-          </div>
-          <div className="text-xs text-nrl-text-muted">
-            Your streak: {streakData.fanStreak.currentWeeks} weeks ({streakData.spins.baseSpins} base + {streakData.spins.bonusSpins} {getFlameLevelName(streakData.currentWeek.flameLevel)} bonus)
+        {/* Spins Remaining - Bottom Overlay */}
+        <div className="bg-black/80 rounded-xl px-6 py-4 flex items-center justify-center gap-3 mb-6">
+          <div className="text-2xl animate-spin">🎰</div>
+          <div className="text-white font-semibold">
+            Spins Remaining • <span className="text-nrl-green">{spinsRemaining}</span>
           </div>
         </div>
 
