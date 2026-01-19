@@ -147,6 +147,12 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
 
   const handleComplete = (overrideName?: string, overrideEmail?: string) => {
     if (selectedTeam) {
+      // Validate email authentication: if email is selected as auth method, email must be provided
+      if (selectedAuthMethod === "email" && buildProfileEmail.trim() === "") {
+        // Don't proceed if email auth is selected but email is empty
+        return;
+      }
+
       // Handle authentication if selected in build profile step
       let finalName = overrideName !== undefined 
         ? overrideName 
@@ -296,11 +302,12 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
           filter: 'brightness(0.65)', // Less darkening to show more background
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/40"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50"></div>
         
         <div className="w-full max-w-md relative z-10">
-          <div className="bg-nrl-dark-card backdrop-blur-md rounded-2xl p-8 border-2 border-nrl-amber/30 shadow-2xl" style={{
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(251, 191, 36, 0.1)',
+          <div className="bg-nrl-dark-card rounded-2xl p-8 border-2 border-nrl-amber/60 shadow-2xl" style={{
+            boxShadow: '0 25px 70px rgba(0, 0, 0, 0.7), 0 0 60px rgba(251, 191, 36, 0.25)',
+            backgroundColor: 'rgba(17, 24, 39, 0.98)', // More solid dark background
           }}>
             <div className="text-center mb-8">
               <h1 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-nrl-amber via-white to-nrl-amber bg-clip-text text-transparent">
@@ -796,9 +803,18 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                       value={buildProfileEmail}
                       onChange={(e) => setBuildProfileEmail(e.target.value)}
                       placeholder="Enter your email"
-                      className="w-full bg-white/10 border border-nrl-border-light rounded-xl pl-12 pr-4 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted/60 focus:outline-none focus:border-nrl-green focus:bg-white/15 transition-all"
+                      className={`w-full bg-white/10 border rounded-xl pl-12 pr-4 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted/60 focus:outline-none focus:bg-white/15 transition-all ${
+                        buildProfileEmail.trim() === "" 
+                          ? "border-red-500/50 focus:border-red-500" 
+                          : "border-nrl-border-light focus:border-nrl-green"
+                      }`}
                     />
                   </div>
+                  {buildProfileEmail.trim() === "" && (
+                    <p className="mt-2 text-xs text-red-400">
+                      Please enter your email to continue
+                    </p>
+                  )}
                 </div>
               )}
             </div>
@@ -909,15 +925,20 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
               </button>
               <button
                 onClick={() => handleComplete()}
-                className="flex-1 text-white font-bold py-3 rounded-xl transition-all transform hover:scale-[1.02]"
+                disabled={selectedAuthMethod === "email" && buildProfileEmail.trim() === ""}
+                className="flex-1 text-white font-bold py-3 rounded-xl transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 style={{
                   backgroundColor: selectedTeam.primaryColor,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = '0.9';
+                  if (!e.currentTarget.disabled) {
+                    e.currentTarget.style.opacity = '0.9';
+                  }
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = '1';
+                  if (!e.currentTarget.disabled) {
+                    e.currentTarget.style.opacity = '1';
+                  }
                 }}
               >
                 Continue
