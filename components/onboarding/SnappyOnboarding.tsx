@@ -180,6 +180,15 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         }
       }
       
+      // Ensure nameForCompletion matches finalName if finalName is not a placeholder
+      // This prevents mismatch between userData.name and profile completion calculation
+      // If finalName is a placeholder, nameForCompletion should remain undefined
+      if (nameForCompletion === undefined && !isPlaceholderName(finalName)) {
+        nameForCompletion = finalName;
+      } else if (nameForCompletion !== undefined && isPlaceholderName(nameForCompletion)) {
+        nameForCompletion = undefined;
+      }
+      
       const userData = {
         name: finalName,
         email: finalEmail,
