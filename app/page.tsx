@@ -26,8 +26,9 @@ export default function Home() {
     if (onboarded === "true" && userData) {
       try {
         const parsed = JSON.parse(userData);
-        // Validate user data has required fields
-        if (parsed && parsed.team) {
+        // Validate user data has required fields (name or email)
+        // Allow users without team (fast sign-in flow)
+        if (parsed && (parsed.name || parsed.email)) {
           setIsOnboarded(true);
           setUser(parsed);
         }
