@@ -535,6 +535,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
           backgroundSize: isBroncos ? 'cover' : 'auto',
           backgroundPosition: isBroncos ? 'center' : 'auto',
           backgroundBlendMode: isBroncos ? 'overlay' : 'normal',
+          filter: 'brightness(0.92)', // Darken background images 8% for modal clarity
         }}
       >
         <div className="w-full max-w-2xl relative z-10">
