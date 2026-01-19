@@ -1100,8 +1100,29 @@ function SeasonStatsCard({ user }: any) {
   );
 }
 
-// Profile Completion Simplified (Right Column)
+// Profile Completion Simplified (Left Column)
 function ProfileCompletionSimplified({ user, profileCompletion }: any) {
+  const activities = [
+    { 
+      id: "homeGround", 
+      label: "Local home ground", 
+      completed: !!user?.homeGround,
+      points: 25
+    },
+    { 
+      id: "dob", 
+      label: "DOB", 
+      completed: !!user?.dob,
+      points: 20
+    },
+    { 
+      id: "gender", 
+      label: "Gender", 
+      completed: !!user?.gender,
+      points: 15
+    },
+  ];
+
   return (
     <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
       <div className="flex items-center justify-between mb-4">
@@ -1114,6 +1135,35 @@ function ProfileCompletionSimplified({ user, profileCompletion }: any) {
           className="h-2 rounded-full transition-all duration-500 bg-gradient-to-r from-nrl-green to-nrl-amber"
           style={{ width: `${profileCompletion}%` }}
         />
+      </div>
+      
+      <div className="space-y-2 mb-4">
+        {activities.map((activity) => (
+          <button
+            key={activity.id}
+            className={`w-full bg-nrl-dark-hover border rounded-xl p-3 text-left transition-colors ${
+              activity.completed 
+                ? 'border-nrl-green bg-nrl-green/10' 
+                : 'border-nrl-border-light hover:border-nrl-green'
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {activity.completed ? (
+                  <span className="text-nrl-green">✓</span>
+                ) : (
+                  <span className="text-nrl-text-muted">○</span>
+                )}
+                <span className={`text-sm font-semibold ${activity.completed ? 'text-white' : 'text-nrl-text-secondary'}`}>
+                  {activity.label}
+                </span>
+              </div>
+              <span className="text-xs font-bold text-nrl-green">
+                +{activity.points} pts
+              </span>
+            </div>
+          </button>
+        ))}
       </div>
       
       <button className="w-full bg-nrl-green text-white font-bold py-3 rounded-xl hover:bg-nrl-green/90 transition-colors">
