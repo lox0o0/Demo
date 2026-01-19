@@ -29,7 +29,12 @@ export default function FanScore({ user }: FanScoreProps) {
   const progressPercent = isMaxTier 
     ? 100 
     : nextTier 
-      ? Math.min(((userPoints - currentTier.minPoints) / (nextTier.minPoints - currentTier.minPoints)) * 100, 100)
+      ? (() => {
+          const tierRange = nextTier.minPoints - currentTier.minPoints;
+          // Prevent division by zero if tiers have same minPoints
+          if (tierRange <= 0) return 100;
+          return Math.min(((userPoints - currentTier.minPoints) / tierRange) * 100, 100);
+        })()
       : 100;
 
   const teamData = user?.teamData;

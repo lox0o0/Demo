@@ -395,7 +395,14 @@ function ProfileView({ user, teamData }: { user: any; teamData: any }) {
             <div
               className="bg-gradient-to-r from-nrl-green to-nrl-amber h-3 rounded-full transition-all"
               style={{
-                width: `${isMaxTier ? 100 : nextTier ? Math.min(((userPoints - currentTier.minPoints) / (nextTier.minPoints - currentTier.minPoints)) * 100, 100) : 100}%`,
+                width: `${(() => {
+                  if (isMaxTier) return 100;
+                  if (!nextTier) return 100;
+                  const tierRange = nextTier.minPoints - currentTier.minPoints;
+                  // Prevent division by zero if tiers have same minPoints
+                  if (tierRange <= 0) return 100;
+                  return Math.min(((userPoints - currentTier.minPoints) / tierRange) * 100, 100);
+                })()}%`,
               }}
             />
           </div>
