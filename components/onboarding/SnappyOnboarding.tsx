@@ -64,7 +64,7 @@ const SOCIAL_PLATFORMS = [
 
 export default function SnappyOnboarding({ entryPoint, entryData, onComplete, initialTeam = null }: SnappyOnboardingProps) {
   // If initialTeam is provided, skip welcome and go straight to sign-in step
-  const [step, setStep] = useState<"welcome" | "club" | "celebration" | "signin" | "social-connections" | "complete">(initialTeam ? "signin" : "welcome");
+  const [step, setStep] = useState<"welcome" | "club" | "celebration" | "signin" | "social-connections">(initialTeam ? "signin" : "welcome");
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(initialTeam);
   const [connectedSocials, setConnectedSocials] = useState<string[]>([]);
   const [name, setName] = useState("");
