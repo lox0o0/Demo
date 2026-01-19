@@ -16,7 +16,7 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ user }: DashboardProps) {
-  const [activeSection, setActiveSection] = useState<NavSection>("home");
+  const [activeSection, setActiveSection] = useState<NavSection>("dashboard");
   const [activeSubSection, setActiveSubSection] = useState<LatestSubSection | StatsSubSection | SocialSubSection | undefined>(undefined);
 
   const teamData = user?.teamData || NRL_TEAMS.find(t => t.name === user?.team) || NRL_TEAMS[0];
@@ -62,8 +62,9 @@ export default function Dashboard({ user }: DashboardProps) {
           }}
         />
 
-        {/* Premium Header */}
-        <header className="bg-nrl-dark-card border-b border-nrl-border-light sticky top-16 z-20 backdrop-blur-sm bg-opacity-95">
+        {/* Premium Header - Only show when not on dashboard */}
+        {activeSection !== "dashboard" && (
+          <header className="bg-nrl-dark-card border-b border-nrl-border-light sticky top-16 z-20 backdrop-blur-sm bg-opacity-95">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -108,6 +109,7 @@ export default function Dashboard({ user }: DashboardProps) {
             </div>
           </div>
         </header>
+        )}
 
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-8">

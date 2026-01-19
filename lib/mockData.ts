@@ -2,11 +2,11 @@
 // This file only contains quests, tiers, and mock data
 
 export const TIERS = [
-  { name: "Rookie", minPoints: 0, color: "gray", reward: "Welcome badge" },
-  { name: "Bronze", minPoints: 250, color: "#CD7F32", reward: "Exclusive content" },
-  { name: "Silver", minPoints: 500, color: "#C0C0C0", reward: "Early ticket access" },
-  { name: "Gold", minPoints: 1000, color: "#FFD700", reward: "2 tickets to local game" },
-  { name: "Legend", minPoints: 2500, color: "#FFB800", reward: "VIP experiences" },
+  { name: "Rookie", minPoints: 0, color: "gray", reward: "Welcome badge", access: "Welcome badge" },
+  { name: "Bronze", minPoints: 250, color: "#CD7F32", reward: "Exclusive content", access: "Exclusive content access" },
+  { name: "Silver", minPoints: 500, color: "#C0C0C0", reward: "Early ticket access", access: "Early ticket access" },
+  { name: "Gold", minPoints: 1000, color: "#FFD700", reward: "2 tickets to local game", access: "2 tickets to local game" },
+  { name: "Legend", minPoints: 2500, color: "#FFB800", reward: "VIP experiences", access: "VIP experience access" },
 ];
 
 export const DAILY_QUESTS = [

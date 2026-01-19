@@ -112,9 +112,10 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
     socialsToCount: string[] = connectedSocials,
     overrideName?: string,
     overrideEmail?: string,
-    includeAuthSelection?: boolean
+    includeAuthSelection?: boolean,
+    hasTeam: boolean = true
   ) => {
-    let completion = 20; // Base (team selected)
+    let completion = hasTeam ? 20 : 0; // Base (20% if team selected, 0% if no team)
     // Use override values if provided, otherwise use state
     const finalName = overrideName !== undefined ? overrideName : name;
     const finalEmail = overrideEmail !== undefined ? overrideEmail : email;
@@ -226,9 +227,11 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
 
   // Welcome page handlers
   const handleWelcomeGoogleSignIn = () => {
-    // Fast sign-in: go straight to dashboard with 15% completion, no team selected
+    // Fast sign-in: go straight to dashboard, no team selected
     const googleName = "User"; // Would come from Google OAuth
     const googleEmail = "user@gmail.com"; // Would come from Google OAuth
+    // Calculate profile completion: 0% (no team) + 30% (name + email) = 30%
+    const profileCompletion = calculateProfileCompletion([], googleName, googleEmail, false, false);
     const userData = {
       name: googleName,
       email: googleEmail,
@@ -241,7 +244,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       memberSince: new Date().getFullYear(),
       streak: 0,
       connectedSocials: [],
-      profileCompletion: 15, // 15% for fast sign-in (name + email)
+      profileCompletion, // Use calculated value for consistency
       entryPoint,
       entryData,
     };
@@ -249,9 +252,11 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
   };
 
   const handleWelcomeAppleSignIn = () => {
-    // Fast sign-in: go straight to dashboard with 15% completion, no team selected
+    // Fast sign-in: go straight to dashboard, no team selected
     const appleName = "User"; // Would come from Apple Sign In
     const appleEmail = "user@icloud.com"; // Would come from Apple Sign In
+    // Calculate profile completion: 0% (no team) + 30% (name + email) = 30%
+    const profileCompletion = calculateProfileCompletion([], appleName, appleEmail, false, false);
     const userData = {
       name: appleName,
       email: appleEmail,
@@ -264,7 +269,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       memberSince: new Date().getFullYear(),
       streak: 0,
       connectedSocials: [],
-      profileCompletion: 15, // 15% for fast sign-in (name + email)
+      profileCompletion, // Use calculated value for consistency
       entryPoint,
       entryData,
     };

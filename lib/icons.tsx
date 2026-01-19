@@ -61,7 +61,7 @@ export const NavIcon = ({ type }: { type: string }) => {
   const icons: Record<string, string> = {
     latest: "LATEST",
     home: "HOME",
-    dashboard: "DASH",
+    dashboard: "DASHBOARD",
     stats: "STATS",
     fantasy: "FANTASY",
     tipping: "TIP",
