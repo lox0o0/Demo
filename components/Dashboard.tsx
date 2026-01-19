@@ -63,14 +63,14 @@ export default function Dashboard({ user }: DashboardProps) {
                     badgeColor="green"
                   />
                   <ContentCard
-                    image="/images/cards/predictions.jpg"
+                    image="/images/cards/profile-upgrade.jpg"
                     title="Upgrade your profile"
                     subtitle="Complete profile data to earn points!"
                     progressPercent={30}
                     badge="+200 pts available"
                   />
                   <ContentCard
-                    image="/images/cards/predictions.jpg"
+                    image="/images/cards/prize-wheel.png"
                     title="Prize Wheel"
                     subtitle="Spin to win exclusive rewards"
                     badge="🎰 5 spins available"
@@ -105,7 +105,7 @@ export default function Dashboard({ user }: DashboardProps) {
                     ctaButton="Get Started →"
                   />
                   <ContentCard
-                    image="/images/cards/fantasy-team.jpg"
+                    image="/images/cards/tipping.jpeg"
                     title="Tipping"
                     subtitle="Tips made for upcoming weekend fixtures"
                     progressRing={{ current: 6, total: 8 }}
