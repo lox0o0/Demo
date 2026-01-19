@@ -56,8 +56,8 @@ const SOCIAL_PLATFORMS = [
 ];
 
 export default function SnappyOnboarding({ entryPoint, entryData, onComplete, initialTeam = null }: SnappyOnboardingProps) {
-  // If initialTeam is provided, skip club selection and go straight to sign-in step
-  const [step, setStep] = useState<"club" | "celebration" | "signin" | "social-connections" | "complete">(initialTeam ? "signin" : "club");
+  // If initialTeam is provided, skip welcome and go straight to sign-in step
+  const [step, setStep] = useState<"welcome" | "club" | "celebration" | "signin" | "social-connections" | "complete">(initialTeam ? "signin" : "welcome");
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(initialTeam);
   const [connectedSocials, setConnectedSocials] = useState<string[]>([]);
   const [name, setName] = useState("");
@@ -273,6 +273,105 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       // Don't complete onboarding yet
     }
   };
+
+  // Welcome page - initial entry point
+  if (step === "welcome") {
+    const backgroundImagePath = "/broncos/nrlimage1.jpeg";
+
+    return (
+      <div 
+        className="min-h-screen flex items-center justify-center p-4 relative"
+        style={{
+          backgroundImage: `url(${backgroundImagePath})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'brightness(0.4)', // Darken background for text readability
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
+        
+        <div className="w-full max-w-md relative z-10">
+          <div className="bg-nrl-dark-card/95 backdrop-blur-sm rounded-2xl p-8 border border-nrl-border-light">
+            <div className="text-center mb-8">
+              <h1 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-nrl-amber via-white to-nrl-amber bg-clip-text text-transparent">
+                Welcome
+              </h1>
+            </div>
+
+            {/* Fast Sign-in Section */}
+            <div className="mb-8">
+              <h2 className="text-lg font-bold text-nrl-text-primary mb-4 text-center">
+                Fast sign-in
+              </h2>
+              <div className="flex justify-center gap-3 mb-4">
+                <button
+                  onClick={handleWelcomeGoogleSignIn}
+                  className="w-14 h-14 rounded-full bg-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg hover:shadow-xl"
+                  aria-label="Sign in with Google"
+                >
+                  <AuthIcon provider="google" size={32} />
+                </button>
+                <button
+                  onClick={handleWelcomeAppleSignIn}
+                  className="w-14 h-14 rounded-full bg-black flex items-center justify-center hover:scale-110 transition-transform shadow-lg hover:shadow-xl border border-white/20"
+                  aria-label="Sign in with Apple"
+                >
+                  <AuthIcon provider="apple" size={32} />
+                </button>
+              </div>
+              <div className="relative mb-3">
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                  <svg className="w-4 h-4 text-nrl-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <input
+                  type="email"
+                  value={preClubEmail}
+                  onChange={(e) => setPreClubEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="w-full bg-nrl-dark-card border border-nrl-border-light rounded-xl pl-11 pr-4 py-2.5 text-sm text-nrl-text-primary placeholder:text-nrl-text-muted/60 focus:outline-none focus:border-nrl-amber focus:ring-2 focus:ring-nrl-amber/20 transition-all"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && preClubEmail.trim() !== "") {
+                      handleWelcomeEmailContinue();
+                    }
+                  }}
+                />
+              </div>
+              {preClubEmail.trim() !== "" && (
+                <button
+                  onClick={handleWelcomeEmailContinue}
+                  className="w-full bg-nrl-amber text-nrl-dark font-bold py-2.5 rounded-xl hover:bg-nrl-amber/90 transition-all transform hover:scale-[1.02] text-sm mb-4"
+                >
+                  Continue
+                </button>
+              )}
+            </div>
+
+            {/* Divider */}
+            <div className="flex items-center gap-4 mb-8">
+              <div className="flex-1 h-px bg-nrl-border-light"></div>
+              <span className="text-sm text-nrl-text-secondary/70">or</span>
+              <div className="flex-1 h-px bg-nrl-border-light"></div>
+            </div>
+
+            {/* Build Profile Option */}
+            <button
+              onClick={handleBuildProfile}
+              className="w-full bg-nrl-dark-hover border-2 border-nrl-amber text-nrl-text-primary font-bold py-4 rounded-xl hover:bg-nrl-amber/10 transition-all transform hover:scale-[1.02]"
+            >
+              <div className="text-center">
+                <div className="text-lg mb-1">Build profile</div>
+                <div className="text-sm text-nrl-text-secondary/80 font-normal">
+                  Earn rewards, unlock experiences, get closer to your team.
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (step === "club") {
     // Filter teams based on search query
