@@ -42,7 +42,7 @@ export default function Dashboard({ user }: DashboardProps) {
         {/* Scrollable Content */}
         <main className="flex-1 overflow-y-auto pl-8 pr-6 py-6">
           {activeSection === "home" && (
-            <div className="space-y-12">
+            <div className="space-y-12 max-w-[95%]">
               {/* SECTION 1: ACTIVITIES */}
               <section>
                 <SectionHeader
