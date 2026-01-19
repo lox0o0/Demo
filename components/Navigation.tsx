@@ -5,6 +5,7 @@ import { NavIcon } from "@/lib/icons";
 
 export type NavSection = 
   | "home"
+  | "dashboard"
   | "latest"
   | "stats"
   | "fantasy"
@@ -34,27 +35,12 @@ export default function Navigation({
 
   const navItems = [
     {
-      id: "latest" as NavSection,
-      label: "Latest",
-      dropdown: [
-        { id: "news" as LatestSubSection, label: "News" },
-        { id: "watch" as LatestSubSection, label: "Watch" },
-        { id: "highlights" as LatestSubSection, label: "Highlights" },
-      ],
-    },
-    {
       id: "home" as NavSection,
       label: "Home",
     },
     {
-      id: "stats" as NavSection,
-      label: "Stats",
-      dropdown: [
-        { id: "ladder" as StatsSubSection, label: "Ladder" },
-        { id: "draw" as StatsSubSection, label: "Draw" },
-        { id: "players" as StatsSubSection, label: "Players" },
-        { id: "stats" as StatsSubSection, label: "Stats" },
-      ],
+      id: "dashboard" as NavSection,
+      label: "Dashboard",
     },
     {
       id: "fantasy" as NavSection,
@@ -63,10 +49,6 @@ export default function Navigation({
     {
       id: "tipping" as NavSection,
       label: "Tipping",
-    },
-    {
-      id: "lockerroom" as NavSection,
-      label: "Lockerroom",
     },
     {
       id: "shop" as NavSection,
@@ -78,7 +60,7 @@ export default function Navigation({
     },
     {
       id: "memberships" as NavSection,
-      label: "Memberships",
+      label: "Member",
     },
     {
       id: "social" as NavSection,
@@ -124,11 +106,11 @@ export default function Navigation({
         />
       )}
 
-      {/* Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-nrl-dark-card border-t border-nrl-border-light backdrop-blur-sm bg-opacity-95 z-50 shadow-lg">
+      {/* Navigation Bar - Top */}
+      <nav className="fixed top-0 left-0 right-0 bg-nrl-dark-card border-b border-nrl-border-light backdrop-blur-sm bg-opacity-95 z-50 shadow-lg">
         {/* Dropdown Menu */}
         {openDropdown && (
-          <div className="absolute bottom-full left-0 right-0 bg-nrl-dark-card border-t border-nrl-border-light max-h-64 overflow-y-auto">
+          <div className="absolute top-full left-0 right-0 bg-nrl-dark-card border-b border-nrl-border-light max-h-64 overflow-y-auto">
             <div className="max-w-7xl mx-auto px-4 py-3">
               {navItems
                 .find((item) => item.id === openDropdown)

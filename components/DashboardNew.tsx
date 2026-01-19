@@ -8,6 +8,7 @@ import Navigation, { NavSection } from "./Navigation";
 
 interface DashboardProps {
   user: any;
+  hideNavigation?: boolean;
 }
 
 // Mock data matching spec
@@ -110,8 +111,8 @@ const mockDashboardData = {
   ]
 };
 
-export default function DashboardNew({ user }: DashboardProps) {
-  const [activeSection, setActiveSection] = useState<NavSection>("home");
+export default function DashboardNew({ user, hideNavigation = false }: DashboardProps) {
+  const [activeSection, setActiveSection] = useState<NavSection>("dashboard");
   
   // Use user data or fall back to mock data
   const dashboardData = user ? {
@@ -159,8 +160,13 @@ export default function DashboardNew({ user }: DashboardProps) {
 
   return (
     <div className="min-h-screen bg-nrl-dark">
+      {/* Navigation at top */}
+      {!hideNavigation && (
+        <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
+      )}
+
       {/* Header - Spec: G'day [FirstName] 👋 with club logo */}
-      <header className="bg-transparent sticky top-0 z-20 px-5 py-4">
+      <header className={`bg-transparent px-5 py-4 ${hideNavigation ? 'mt-0' : 'mt-16'}`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <h1 className="text-lg font-semibold text-white">
@@ -182,8 +188,8 @@ export default function DashboardNew({ user }: DashboardProps) {
       </header>
 
       {/* Main Content - Mobile-first layout */}
-      <main className="px-5 pb-32">
-        {activeSection === "home" && (
+      <main className="px-5 pb-8">
+        {activeSection === "dashboard" && (
           <div className="space-y-4">
             {/* Status Card */}
             <StatusCard data={dashboardData.status} teamData={teamData} />
@@ -210,9 +216,14 @@ export default function DashboardNew({ user }: DashboardProps) {
             <NewsCarousel data={dashboardData.news} />
           </div>
         )}
-      </main>
 
-      <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
+        {/* Other sections can be added here */}
+        {activeSection !== "dashboard" && (
+          <div className="text-center py-20">
+            <p className="text-nrl-text-secondary">Coming soon: {activeSection}</p>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

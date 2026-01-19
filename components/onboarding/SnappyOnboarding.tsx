@@ -11,10 +11,12 @@ import { TeamCelebration } from "./PickYourClub";
 function TeamLogoWithFallback({ src, alt }: { src: string; alt: string }) {
   const [imgSrc, setImgSrc] = useState(src);
   const [hasError, setHasError] = useState(false);
+  const [hasTriedFallback, setHasTriedFallback] = useState(false);
 
   useEffect(() => {
     setImgSrc(src);
     setHasError(false);
+    setHasTriedFallback(false);
   }, [src]);
 
   return (
@@ -27,9 +29,14 @@ function TeamLogoWithFallback({ src, alt }: { src: string; alt: string }) {
           className="object-contain"
           unoptimized
           onError={() => {
-            setHasError(true);
-            // Fallback to a placeholder or team initial
-            setImgSrc(`data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" fill="#1a1a1a"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold">${alt.charAt(0)}</text></svg>`)}`);
+            if (!hasTriedFallback) {
+              // Try SVG fallback first
+              setHasTriedFallback(true);
+              setImgSrc(`data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" fill="#1a1a1a"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold">${alt.charAt(0)}</text></svg>`)}`);
+            } else {
+              // SVG fallback also failed, show text fallback
+              setHasError(true);
+            }
           }}
         />
       ) : (

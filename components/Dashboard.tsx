@@ -9,6 +9,7 @@ import QuestsPanel from "./QuestsPanel";
 import StatusCards from "./StatusCards";
 import ActivityFeed from "./ActivityFeed";
 import Navigation, { NavSection, LatestSubSection, StatsSubSection, SocialSubSection } from "./Navigation";
+import DashboardNew from "./DashboardNew";
 
 interface DashboardProps {
   user: any;
@@ -51,8 +52,18 @@ export default function Dashboard({ user }: DashboardProps) {
         }}
       />
       <div className="relative z-10">
+        {/* Top Navigation */}
+        <Navigation 
+          activeSection={activeSection} 
+          activeSubSection={activeSubSection}
+          setActiveSection={(section, subSection) => {
+            setActiveSection(section);
+            if (subSection) setActiveSubSection(subSection);
+          }}
+        />
+
         {/* Premium Header */}
-        <header className="bg-nrl-dark-card border-b border-nrl-border-light sticky top-0 z-20 backdrop-blur-sm bg-opacity-95">
+        <header className="bg-nrl-dark-card border-b border-nrl-border-light sticky top-16 z-20 backdrop-blur-sm bg-opacity-95">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -99,7 +110,11 @@ export default function Dashboard({ user }: DashboardProps) {
         </header>
 
         {/* Main Content */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-8">
+          {activeSection === "dashboard" && (
+            <DashboardNew user={user} hideNavigation={true} />
+          )}
+
           {activeSection === "home" && (
             <div className="space-y-8">
               {/* Hero Section - Featured Content */}
@@ -302,16 +317,6 @@ export default function Dashboard({ user }: DashboardProps) {
             </div>
           )}
         </main>
-
-        {/* Bottom Navigation */}
-        <Navigation 
-          activeSection={activeSection} 
-          activeSubSection={activeSubSection}
-          setActiveSection={(section, subSection) => {
-            setActiveSection(section);
-            setActiveSubSection(subSection);
-          }} 
-        />
       </div>
     </div>
   );
