@@ -3,9 +3,8 @@
 import { useState } from "react";
 
 export type NavSection = 
-  | "dashboard"
-  | "profile"
-  | "points-shop";
+  | "home"
+  | "dashboard";
 
 // Legacy types kept for compatibility but not used in new navigation
 export type LatestSubSection = "news" | "watch" | "highlights";
@@ -25,16 +24,12 @@ export default function Navigation({
 }: NavigationProps) {
   const navItems = [
     {
+      id: "home" as NavSection,
+      label: "Home",
+    },
+    {
       id: "dashboard" as NavSection,
       label: "Dashboard",
-    },
-    {
-      id: "profile" as NavSection,
-      label: "Profile",
-    },
-    {
-      id: "points-shop" as NavSection,
-      label: "Points Shop",
     },
   ];
 

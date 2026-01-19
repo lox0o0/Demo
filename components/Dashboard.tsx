@@ -10,15 +10,13 @@ import StatusCards from "./StatusCards";
 import ActivityFeed from "./ActivityFeed";
 import Navigation, { NavSection, LatestSubSection, StatsSubSection, SocialSubSection } from "./Navigation";
 import DashboardNew from "./DashboardNew";
-import ProfilePage from "./ProfilePage";
-import PointsShopPage from "./PointsShopPage";
 
 interface DashboardProps {
   user: any;
 }
 
 export default function Dashboard({ user }: DashboardProps) {
-  const [activeSection, setActiveSection] = useState<NavSection>("dashboard");
+  const [activeSection, setActiveSection] = useState<NavSection>("home");
   const [activeSubSection, setActiveSubSection] = useState<LatestSubSection | StatsSubSection | SocialSubSection | undefined>(undefined);
 
   const teamData = user?.teamData || NRL_TEAMS.find(t => t.name === user?.team) || NRL_TEAMS[0];
@@ -64,8 +62,8 @@ export default function Dashboard({ user }: DashboardProps) {
           }}
         />
 
-        {/* Premium Header - Only show when not on dashboard */}
-        {activeSection !== "dashboard" && (
+        {/* Premium Header - Only show when not on home */}
+        {activeSection !== "home" && (
           <header className="bg-nrl-dark-card border-b border-nrl-border-light sticky top-16 z-20 backdrop-blur-sm bg-opacity-95">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
@@ -115,6 +113,65 @@ export default function Dashboard({ user }: DashboardProps) {
 
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-8">
+          {activeSection === "home" && (
+            <div className="space-y-8">
+              {/* Hero Section - Featured Content */}
+              <div className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10" />
+                <div className="absolute inset-0 z-20 flex flex-col justify-end p-8 md:p-12">
+                  <div className="text-xs font-bold uppercase tracking-wider text-nrl-amber mb-2">
+                    {featuredContent.category}
+                  </div>
+                  <h2 className="text-3xl md:text-4xl font-black text-white mb-3 group-hover:text-nrl-green transition-colors">
+                    {featuredContent.title}
+                  </h2>
+                  <p className="text-lg text-nrl-text-secondary font-medium max-w-2xl">
+                    {featuredContent.subtitle}
+                  </p>
+                </div>
+                <div className="absolute inset-0 bg-nrl-dark opacity-40" />
+              </div>
+
+              {/* Fan Score and Status Cards */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                  <FanScore user={user} teamData={teamData} />
+                </div>
+                <div className="lg:col-span-1">
+                  <StatusCards user={user} teamData={teamData} />
+                </div>
+              </div>
+
+              {/* Must Watch Grid */}
+              <div>
+                <h3 className="text-xl font-bold text-white mb-4">Must Watch</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {mustWatchContent.map((item) => (
+                    <div key={item.id} className="relative group cursor-pointer">
+                      <div className="aspect-video bg-nrl-dark-card rounded-xl overflow-hidden border border-nrl-border-light group-hover:border-nrl-green transition-colors">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+                        <div className="absolute bottom-2 left-2 right-2 z-20">
+                          <div className="text-xs font-semibold text-white mb-1">{item.title}</div>
+                          <div className="text-[10px] text-nrl-text-secondary">{item.duration}</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quests and Activity Feed */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                  <QuestsPanel user={user} />
+                </div>
+                <div className="lg:col-span-1">
+                  <ActivityFeed user={user} />
+                </div>
+              </div>
+            </div>
+          )}
+          
           {activeSection === "dashboard" && (
             <DashboardNew 
               user={user} 
@@ -122,17 +179,9 @@ export default function Dashboard({ user }: DashboardProps) {
               onNavigate={(section) => setActiveSection(section)}
             />
           )}
-          
-          {activeSection === "profile" && (
-            <ProfilePage user={user} />
-          )}
-          
-          {activeSection === "points-shop" && (
-            <PointsShopPage user={user} />
-          )}
 
           {/* Default fallback for any unrecognized sections */}
-          {!["dashboard", "profile", "points-shop"].includes(activeSection) && (
+          {!["home", "dashboard"].includes(activeSection) && (
             <div className="text-center py-20">
               <p className="text-nrl-text-secondary">Section not found: {activeSection}</p>
             </div>
