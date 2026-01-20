@@ -102,7 +102,7 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
       {/* Background Image */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <Image
-          src="/images/choose-team.webp"
+          src="/images/choose-team.jpg"
           alt="Choose Team Background"
           fill
           className="object-cover"
