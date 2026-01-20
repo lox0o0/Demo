@@ -626,6 +626,8 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       // For demo purposes, we use placeholders but don't count them for profile completion
       const googleName = "User"; // Would come from Google OAuth (could be null if user doesn't share name)
       const googleEmail = "user@gmail.com"; // Would come from Google OAuth
+      // Set the auth method so handleComplete can execute OAuth-specific logic
+      setSelectedAuthMethod("google");
       // Update state for UI consistency, but pass undefined for name since it's a placeholder
       // This ensures profile completion only counts real authentication, not placeholder values
       setName(googleName);
@@ -643,6 +645,8 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       // For demo purposes, we use placeholders but don't count them for profile completion
       const appleName = "User"; // Would come from Apple (could be null if user doesn't share name)
       const appleEmail = "user@icloud.com"; // Would come from Apple Sign In
+      // Set the auth method so handleComplete can execute OAuth-specific logic
+      setSelectedAuthMethod("apple");
       // Update state for UI consistency, but pass undefined for name since it's a placeholder
       // This ensures profile completion only counts real authentication, not placeholder values
       setName(appleName);
