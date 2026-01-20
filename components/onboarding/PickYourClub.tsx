@@ -107,12 +107,18 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
       }}
     >
       {/* Light overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/40 z-0" />
+      <div 
+        className="absolute inset-0 z-0" 
+        style={{
+          background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.4))'
+        }}
+      />
       
-      <div className="container mx-auto px-4 py-12 relative z-10">
+      <div className="container mx-auto px-4 py-12 relative" style={{ zIndex: 10 }}>
         <div className="text-center mb-12">
           <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-nrl-green to-white bg-clip-text text-transparent drop-shadow-2xl">
             Pick Your Club
