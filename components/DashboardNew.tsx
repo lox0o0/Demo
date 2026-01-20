@@ -2537,43 +2537,66 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
 
       {/* Profile Completion Section - Below Activities */}
       <div className="px-4 pt-3 pb-4 border-t border-white/10">
-        <div className="text-sm font-semibold text-white/80 mb-3">Complete Your Profile</div>
+        <div className="flex items-center justify-between mb-3">
+          <div className="text-sm font-semibold text-white/80">Complete Your Profile</div>
+          <div className="inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-semibold border border-white/10 text-neutral-50 bg-neutral-950/40">
+            +120 pts
+          </div>
+        </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between py-2 hover:bg-white/5 transition-colors rounded px-2">
             <span className="text-xs text-white/70">Date of Birth</span>
-            <button className="text-xs text-emerald-400 hover:text-emerald-300">Add</button>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-emerald-400">+20 pts</span>
+              <button className="text-xs text-emerald-400 hover:text-emerald-300">Add</button>
+            </div>
           </div>
           <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
             <span className="text-xs text-white/70">Nearest Home Ground</span>
-            <button className="text-xs text-emerald-400 hover:text-emerald-300">Add</button>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-emerald-400">+20 pts</span>
+              <button className="text-xs text-emerald-400 hover:text-emerald-300">Add</button>
+            </div>
           </div>
           <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
             <div className="flex items-center gap-2">
               <Image src="/social-logos/instagram.png" alt="Instagram" width={16} height={16} className="object-contain" unoptimized />
               <span className="text-xs text-white/70">Connect Instagram</span>
             </div>
-            <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-emerald-400">+20 pts</span>
+              <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+            </div>
           </div>
           <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
             <div className="flex items-center gap-2">
               <Image src="/social-logos/facebook.png" alt="Facebook" width={16} height={16} className="object-contain" unoptimized />
               <span className="text-xs text-white/70">Connect Facebook</span>
             </div>
-            <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-emerald-400">+20 pts</span>
+              <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+            </div>
           </div>
           <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
             <div className="flex items-center gap-2">
               <Image src="/social-logos/x.png" alt="X" width={16} height={16} className="object-contain" unoptimized />
               <span className="text-xs text-white/70">Connect X (Twitter)</span>
             </div>
-            <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-emerald-400">+20 pts</span>
+              <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+            </div>
           </div>
           <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
             <div className="flex items-center gap-2">
               <Image src="/social-logos/tiktok.png" alt="TikTok" width={16} height={16} className="object-contain" unoptimized />
               <span className="text-xs text-white/70">Connect TikTok</span>
             </div>
-            <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-emerald-400">+20 pts</span>
+              <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+            </div>
           </div>
         </div>
       </div>
