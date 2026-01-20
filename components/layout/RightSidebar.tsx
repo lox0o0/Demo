@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
-import { Trophy, Star, Ticket, Shirt, Award, Crown, Flame, ChevronDown, Copy, Minus } from "lucide-react";
+import { Trophy, Star, Ticket, Shirt, Award, Crown, Flame, ChevronDown, Copy, Minus, Gift } from "lucide-react";
 
 interface RightSidebarProps {
   user: any;
@@ -11,7 +11,6 @@ interface RightSidebarProps {
 
 export default function RightSidebar({ user }: RightSidebarProps) {
   const [activeTab, setActiveTab] = useState<"quests" | "leaderboard" | "achievements">("quests");
-  const [openAccordions, setOpenAccordions] = useState<Set<string>>(new Set(["achievements", "my-quests"]));
   
   const userPoints = user?.points || 0;
   const teamData = user?.teamData;
@@ -22,15 +21,10 @@ export default function RightSidebar({ user }: RightSidebarProps) {
     return userPoints >= t.minPoints && (!nextTier || userPoints < nextTier.minPoints);
   }) || TIERS[0];
 
-  const toggleAccordion = (id: string) => {
-    const newOpen = new Set(openAccordions);
-    if (newOpen.has(id)) {
-      newOpen.delete(id);
-    } else {
-      newOpen.add(id);
-    }
-    setOpenAccordions(newOpen);
-  };
+  // Calculate progress for Fan Journey
+  const maxTier = TIERS[TIERS.length - 1];
+  const maxPoints = maxTier.minPoints;
+  const progressPercent = Math.min((userPoints / maxPoints) * 100, 100);
 
   // Mock leaderboard data
   const leaderboardData = [
@@ -151,178 +145,10 @@ export default function RightSidebar({ user }: RightSidebarProps) {
                 </button>
               </div>
 
-              {/* Quests Tab Content */}
+              {/* Quests Tab Content - Fan Journey Tier Rewards */}
               {activeTab === "quests" && (
-                <div className="mt-4 space-y-3">
-                  {/* Weekly Leaderboard Accordion */}
-                  <div className="border-b border-white/20">
-                    <h3 className="flex">
-                      <button
-                        type="button"
-                        onClick={() => toggleAccordion("weekly-leaderboard")}
-                        className="flex flex-1 items-center justify-between font-medium transition-all text-white/80 text-xs hover:text-white hover:font-medium py-2"
-                      >
-                        <div className="flex items-center gap-2">
-                          <Trophy className="w-4 h-4 text-yellow-400" />
-                          <span>Weekly Leaderboard</span>
-                        </div>
-                        <ChevronDown
-                          className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
-                            openAccordions.has("weekly-leaderboard") ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-                    </h3>
-                    {openAccordions.has("weekly-leaderboard") && (
-                      <div className="pb-4 pt-2">
-                        <div className="text-white/80 text-xs">Coming soon...</div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Gems Balance Accordion */}
-                  <div className="border-b border-white/20">
-                    <h3 className="flex">
-                      <button
-                        type="button"
-                        onClick={() => toggleAccordion("gems")}
-                        className="flex flex-1 items-center justify-between font-medium transition-all text-white/80 text-xs hover:text-white hover:font-medium py-2"
-                      >
-                        <div className="flex items-center justify-between w-full mr-4">
-                          <span>Points Balance</span>
-                          <div className="flex items-center gap-1">
-                            <Star className="w-3 h-3 text-white" />
-                            <span className="text-white text-xs">{userPoints.toLocaleString()}</span>
-                          </div>
-                        </div>
-                        <ChevronDown
-                          className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
-                            openAccordions.has("gems") ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-                    </h3>
-                    {openAccordions.has("gems") && (
-                      <div className="pb-4 pt-2">
-                        <div className="text-white/80 text-xs">Total points earned this season</div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Achievements Accordion */}
-                  <div className="border-b border-white/20">
-                    <h3 className="flex">
-                      <button
-                        type="button"
-                        onClick={() => toggleAccordion("achievements")}
-                        className="flex flex-1 items-center justify-between font-medium transition-all text-white/80 text-xs hover:text-white hover:font-medium py-2"
-                      >
-                        Achievements
-                        <ChevronDown
-                          className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
-                            openAccordions.has("achievements") ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-                    </h3>
-                    {openAccordions.has("achievements") && (
-                      <div className="pb-4 pt-2">
-                        <div className="flex justify-between gap-2">
-                          {achievements.map((achievement) => (
-                            <div key={achievement.id} className="flex flex-col items-center gap-1">
-                              <div
-                                className={`w-10 h-10 rounded-full flex items-center justify-center text-lg border-2 ${
-                                  achievement.earned
-                                    ? "border-yellow-400/50 bg-yellow-400/10 text-yellow-400"
-                                    : "border-white/20 bg-white/5 text-white/40"
-                                }`}
-                              >
-                                {achievement.icon}
-                              </div>
-                              <span
-                                className={`text-xs text-center leading-tight ${
-                                  achievement.earned ? "text-white/80" : "text-white/40"
-                                }`}
-                              >
-                                {achievement.name}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* My Quests Accordion */}
-                  <div className="border-b border-white/20">
-                    <h3 className="flex">
-                      <button
-                        type="button"
-                        onClick={() => toggleAccordion("my-quests")}
-                        className="flex flex-1 items-center justify-between font-medium transition-all text-white/80 text-xs hover:text-white py-2"
-                      >
-                        My Quests
-                        <ChevronDown
-                          className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
-                            openAccordions.has("my-quests") ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-                    </h3>
-                    {openAccordions.has("my-quests") && (
-                      <div className="pb-4 pt-2">
-                        <div className="relative overflow-auto h-[400px] w-full">
-                          <div className="h-full w-full rounded-[inherit] overflow-hidden scroll">
-                            <div className="relative w-full overflow-auto">
-                              <table className="w-full caption-bottom text-sm">
-                                <thead className="[&_tr]:border-b">
-                                  <tr className="border-b transition-colors hover:bg-white/5 border-white/20">
-                                    <th className="h-12 px-4 text-left align-middle font-medium text-white/80 text-xs">
-                                      Game
-                                    </th>
-                                    <th className="h-12 px-4 align-middle font-medium text-white/80 text-xs text-right">
-                                      Position
-                                    </th>
-                                  </tr>
-                                </thead>
-                                <tbody className="[&_tr:last-child]:border-0">
-                                  {questData.map((quest, idx) => (
-                                    <tr
-                                      key={idx}
-                                      className="border-b transition-colors border-white/10 hover:bg-white/5"
-                                    >
-                                      <td className="p-4 align-middle py-3">
-                                        <div className="flex items-center gap-2">
-                                          <div className="w-9 h-9 rounded flex items-center justify-center flex-shrink-0 overflow-hidden bg-white/10">
-                                            <Trophy className="w-5 h-5 text-yellow-400" />
-                                          </div>
-                                          <div className="min-w-0">
-                                            <div className="text-xs font-medium truncate text-white">
-                                              {quest.game}
-                                            </div>
-                                            <div className="text-white/60 text-xs flex items-center gap-1">
-                                              <Star className="w-2.5 h-2.5" />
-                                              {quest.xp} XP
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </td>
-                                      <td className="p-4 align-middle text-right py-3">
-                                        <div className="text-xs font-medium text-white">#{quest.position}</div>
-                                        <div className="text-white/60 text-xs flex items-center justify-end gap-1">
-                                          <span>{quest.players} players</span>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                  ))}
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                <div className="mt-4">
+                  <FanJourneyTierRewards userPoints={userPoints} currentTier={currentTier} />
                 </div>
               )}
 
@@ -380,31 +206,8 @@ export default function RightSidebar({ user }: RightSidebarProps) {
 
               {/* Achievements Tab Content */}
               {activeTab === "achievements" && (
-                <div className="mt-4 space-y-3">
-                  <div className="pb-4 pt-2">
-                    <div className="flex justify-between gap-2 flex-wrap">
-                      {achievements.map((achievement) => (
-                        <div key={achievement.id} className="flex flex-col items-center gap-1">
-                          <div
-                            className={`w-10 h-10 rounded-full flex items-center justify-center text-lg border-2 ${
-                              achievement.earned
-                                ? "border-yellow-400/50 bg-yellow-400/10 text-yellow-400"
-                                : "border-white/20 bg-white/5 text-white/40"
-                            }`}
-                          >
-                            {achievement.icon}
-                          </div>
-                          <span
-                            className={`text-xs text-center leading-tight ${
-                              achievement.earned ? "text-white/80" : "text-white/40"
-                            }`}
-                          >
-                            {achievement.name}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                <div className="mt-4">
+                  <FanJourneyTierRewards userPoints={userPoints} currentTier={currentTier} />
                 </div>
               )}
             </div>
@@ -412,5 +215,158 @@ export default function RightSidebar({ user }: RightSidebarProps) {
         </div>
       </div>
     </aside>
+  );
+}
+
+// Fan Journey Tier Rewards Component
+function FanJourneyTierRewards({ userPoints, currentTier }: { userPoints: number; currentTier: any }) {
+  const maxTier = TIERS[TIERS.length - 1];
+  const maxPoints = maxTier.minPoints;
+  
+  // Calculate progress fill height
+  const progressPercent = Math.min((userPoints / maxPoints) * 100, 100);
+  
+  // Get reward icons for each tier
+  const getRewardIcon = (tierName: string) => {
+    if (tierName === "Silver") return <Shirt className="w-3 h-3" />;
+    if (tierName === "Gold") return <Shirt className="w-3 h-3" />;
+    if (tierName === "Platinum") return <Ticket className="w-3 h-3" />;
+    if (tierName === "Diehard") return <Award className="w-3 h-3" />;
+    if (tierName === "Legend") return <Crown className="w-3 h-3" />;
+    return <Gift className="w-3 h-3" />;
+  };
+
+  return (
+    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-4">
+      <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Fan Journey</h3>
+      
+      {/* Vertical Progress Bar Container */}
+      <div className="relative">
+        {/* Progress Fill Line */}
+        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-700/50">
+          <div
+            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-green-500 to-cyan-500 transition-all duration-1000 ease-out"
+            style={{ height: `${progressPercent}%` }}
+          >
+            {/* Shine animation on progress fill */}
+            <div 
+              className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-transparent"
+              style={{
+                animation: 'shimmer 2s ease-in-out infinite',
+                backgroundSize: '100% 200%',
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Tier Markers */}
+        <div className="space-y-6 relative">
+          {TIERS.map((tier, index) => {
+            const isCurrentTier = tier.name === currentTier.name;
+            const isReached = userPoints >= tier.minPoints;
+            const tierPosition = (tier.minPoints / maxPoints) * 100;
+            
+            return (
+              <div key={tier.name} className="relative flex items-start gap-3">
+                {/* Tier Circle Marker */}
+                <div className="relative z-10 flex-shrink-0">
+                  <div
+                    className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${
+                      isCurrentTier
+                        ? "shadow-[0_0_12px_rgba(34,197,94,0.6)] animate-pulse-glow"
+                        : isReached
+                        ? ""
+                        : "border-white/20 bg-white/5"
+                    }`}
+                    style={
+                      isCurrentTier
+                        ? { 
+                            borderColor: "#22c55e", 
+                            backgroundColor: "rgba(34, 197, 94, 0.2)",
+                            boxShadow: "0 0 12px rgba(34, 197, 94, 0.6)"
+                          }
+                        : isReached
+                        ? { 
+                            borderColor: tier.color, 
+                            backgroundColor: `${tier.color}33`
+                          }
+                        : {}
+                    }
+                  >
+                    {isReached ? (
+                      <Star className="w-4 h-4 text-white" fill="currentColor" />
+                    ) : (
+                      <div className="w-2 h-2 rounded-full bg-white/40" />
+                    )}
+                  </div>
+                </div>
+
+                {/* Tier Info */}
+                <div className="flex-1 min-w-0 pt-0.5">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span
+                      className={`text-xs font-bold uppercase ${
+                        isCurrentTier ? "" : isReached ? "" : "text-white/60"
+                      }`}
+                      style={
+                        isCurrentTier 
+                          ? { color: "#22c55e" } 
+                          : isReached 
+                          ? { color: tier.color } 
+                          : {}
+                      }
+                    >
+                      {tier.name}
+                    </span>
+                    {isCurrentTier && (
+                      <div 
+                        className="px-2 py-0.5 rounded text-[10px] font-semibold animate-pulse-glow"
+                        style={{
+                          backgroundColor: "rgba(34, 197, 94, 0.2)",
+                          borderColor: "rgba(34, 197, 94, 0.5)",
+                          borderWidth: "1px",
+                          borderStyle: "solid",
+                          color: "#22c55e"
+                        }}
+                      >
+                        YOU ARE HERE
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Points threshold */}
+                  <div className="text-[10px] text-white/60 mb-1">
+                    {tier.minPoints.toLocaleString()} pts
+                  </div>
+                  
+                  {/* Reward description */}
+                  <div className="flex items-center gap-1.5 text-[10px] text-white/70">
+                    {getRewardIcon(tier.name)}
+                    <span>{tier.reward || tier.access}</span>
+                  </div>
+                  
+                  {/* Legend tier special callout */}
+                  {tier.name === "Legend" && isReached && (
+                    <div 
+                      className="mt-2 px-2 py-1 rounded text-[10px] flex items-center gap-1"
+                      style={{
+                        background: "linear-gradient(to right, rgba(255, 184, 0, 0.2), rgba(255, 184, 0, 0.1))",
+                        borderColor: "rgba(255, 184, 0, 0.4)",
+                        borderWidth: "1px",
+                        borderStyle: "solid",
+                        color: "#FFB800"
+                      }}
+                    >
+                      <Trophy className="w-3 h-3" />
+                      <span className="font-semibold">Grand Final Pack</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }
