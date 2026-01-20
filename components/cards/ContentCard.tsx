@@ -15,6 +15,7 @@ interface ContentCardProps {
   progressPercent?: number;
   ctaButton?: string;
   ctaStyle?: "default" | "wide" | "centered" | "subtitle";
+  completed?: boolean;
   onCardClick?: () => void;
   onCtaClick?: () => void;
 }
@@ -30,6 +31,7 @@ export default function ContentCard({
   progressPercent,
   ctaButton,
   ctaStyle = "default",
+  completed = false,
   onCardClick,
   onCtaClick,
 }: ContentCardProps) {
@@ -43,7 +45,11 @@ export default function ContentCard({
 
   return (
     <div
-      className="relative group cursor-pointer rounded-xl overflow-hidden border border-[#2a2a2d] hover:border-[#22c55e] transition-all duration-300 hover:scale-[1.02] bg-[#0a0a0b]"
+      className={`relative group cursor-pointer rounded-xl overflow-hidden border transition-all duration-300 hover:scale-[1.02] bg-[#0a0a0b] ${
+        completed 
+          ? "border-[#2a2a2d]/50 opacity-75 hover:border-[#2a2a2d]/70" 
+          : "border-[#2a2a2d] hover:border-[#22c55e]"
+      }`}
       onClick={onCardClick}
     >
       {/* Background Image with padding and border */}
@@ -64,8 +70,8 @@ export default function ContentCard({
             </div>
           )}
           
-          {/* Dark overlay across entire image (15-20% opacity) */}
-          <div className="absolute inset-0 bg-black/18" />
+          {/* Dark overlay across entire image (15-20% opacity, stronger if completed) */}
+          <div className={`absolute inset-0 ${completed ? "bg-black/30" : "bg-black/18"}`} />
           
           {/* Strengthened Gradient Overlay - ensures bottom 40% is dark enough for white text */}
           {/* Starts at 70% opacity black at bottom, maintains 50%+ opacity through bottom 40% */}
@@ -82,12 +88,21 @@ export default function ContentCard({
       <div className="absolute bottom-0 left-0 right-0 p-4">
         {/* Title and Badge Row */}
         <div className="flex items-start justify-between gap-3 mb-2">
-          <h3 
-            className="text-lg font-bold text-white flex-1"
-            style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
-          >
-            {title}
-          </h3>
+          <div className="flex items-center gap-2 flex-1">
+            {completed && (
+              <div className="flex-shrink-0">
+                <div className="w-6 h-6 rounded-full bg-[#22c55e]/20 flex items-center justify-center border border-[#22c55e]/50">
+                  <Check size={14} className="text-[#22c55e]" strokeWidth={3} />
+                </div>
+              </div>
+            )}
+            <h3 
+              className={`text-lg font-bold flex-1 ${completed ? "text-white/70" : "text-white"}`}
+              style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
+            >
+              {title}
+            </h3>
+          </div>
           {/* Badge with dark pill background */}
           {badge && (
             <div className="flex-shrink-0">
@@ -119,7 +134,7 @@ export default function ContentCard({
           </div>
         ) : (
           <p 
-            className="text-sm font-normal text-white mb-2"
+            className={`text-sm font-normal mb-2 ${completed ? "text-white/60" : "text-white"}`}
             style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
           >
             {subtitle}
@@ -187,7 +202,11 @@ export default function ContentCard({
                 e.stopPropagation();
                 onCtaClick?.();
               }}
-              className="w-full px-4 py-2 bg-[#1a1a1d] border border-[#f59e0b]/40 text-white text-sm font-semibold rounded-lg transition-all text-center shadow-[0_0_8px_rgba(245,158,11,0.3)] hover:shadow-[0_0_12px_rgba(245,158,11,0.5)] hover:border-[#f59e0b]/60"
+              className={`w-full px-4 py-2 text-sm font-semibold rounded-lg transition-all text-center ${
+                completed
+                  ? "bg-[#1a1a1d]/60 border border-[#2a2a2d] text-white/70 hover:border-[#2a2a2d]/80"
+                  : "bg-[#1a1a1d] border border-[#f59e0b]/40 text-white shadow-[0_0_8px_rgba(245,158,11,0.3)] hover:shadow-[0_0_12px_rgba(245,158,11,0.5)] hover:border-[#f59e0b]/60"
+              }`}
             >
               {ctaButton}
             </button>

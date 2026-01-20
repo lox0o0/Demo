@@ -210,13 +210,23 @@ export default function RightSidebar({ user }: RightSidebarProps) {
             <div className="text-xs text-[#a1a1aa] mb-1">Overall Points</div>
             <div className="text-2xl font-bold text-white">{userPoints.toLocaleString()}</div>
           </div>
-          <div>
-            <div className="text-xs text-[#a1a1aa] mb-1">Current Streak</div>
-            <div className="flex items-center gap-1 text-lg font-semibold text-[#f59e0b]">
-              <Flame size={18} className="text-[#f59e0b]" strokeWidth={2} />
-              <span>{user?.streak || 0} {user?.streak === 1 ? "week" : "weeks"}</span>
+          {(user?.streak && user.streak > 0) ? (
+            <div>
+              <div className="text-xs text-[#a1a1aa] mb-1">Current Streak</div>
+              <div className="flex items-center gap-1 text-lg font-semibold text-[#f59e0b]">
+                <Flame size={18} className="text-[#f59e0b]" strokeWidth={2} />
+                <span>{user.streak} {user.streak === 1 ? "week" : "weeks"}</span>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div>
+              <div className="text-xs text-[#a1a1aa] mb-1">Start Your Streak</div>
+              <div className="flex items-center gap-1 text-sm font-semibold text-[#22c55e]">
+                <Flame size={16} className="text-[#22c55e]" strokeWidth={2} />
+                <span>Complete an activity this week!</span>
+              </div>
+            </div>
+          )}
           <div>
             <div className="text-xs text-[#a1a1aa] mb-1">Leaderboard Position</div>
             <div className="text-lg font-semibold text-white">#847 overall</div>

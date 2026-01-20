@@ -61,7 +61,8 @@ export default function Dashboard({ user }: DashboardProps) {
                     subtitle="Round 6 Telstra MVP prediction made"
                     badge="+50 pts"
                     badgeColor="gold"
-                    ctaButton="Check predictions"
+                    ctaButton="View your pick"
+                    completed={true}
                   />
                   <ContentCard
                     image="/images/cards/profile-upgrade.jpg"
