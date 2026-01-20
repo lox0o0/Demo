@@ -81,9 +81,10 @@ export default function Dashboard({ user }: DashboardProps) {
                     badgeColor="gold"
                     ctaButton="Get Started →"
                     ctaStyle="wide"
+                    backgroundSize="90%"
                   />
                   <ContentCard
-                    image="/images/cards/tipping.jpeg"
+                    image="/images/cards/tipping.jpg"
                     title="Tipping"
                     subtitle="Tips made for upcoming weekend fixtures"
                     badge="+35 pts"
@@ -170,7 +171,6 @@ export default function Dashboard({ user }: DashboardProps) {
                     badge="+30 pts"
                     badgeColor="gold"
                     ctaStyle="subtitle"
-                    backgroundSize="85%"
                   />
                   <ContentCard
                     image="/images/cards/top-performers.avif"
