@@ -13,6 +13,7 @@ import SectionHeader from "./cards/SectionHeader";
 import ContentCard from "./cards/ContentCard";
 import BackgroundVideo from "./BackgroundVideo";
 import HeroCarousel from "./HeroCarousel";
+import TierProgressModal from "./TierProgressModal";
 
 interface DashboardProps {
   user: any;
@@ -21,6 +22,7 @@ interface DashboardProps {
 export default function Dashboard({ user }: DashboardProps) {
   const [activeSection, setActiveSection] = useState<NavSection>("home");
   const [activeSubSection, setActiveSubSection] = useState<LatestSubSection | StatsSubSection | SocialSubSection | undefined>(undefined);
+  const [showProgressModal, setShowProgressModal] = useState(false);
 
   const teamData = user?.teamData || NRL_TEAMS.find(t => t.name === user?.team) || NRL_TEAMS[0];
   const teamColors = teamData 
@@ -28,10 +30,41 @@ export default function Dashboard({ user }: DashboardProps) {
     : { primary: "#00A651", secondary: "#FFB800" };
 
   // Demo: Override user points for different pages
-  // Home page: 1,000 points (Silver tier)
-  const homeUser = { ...user, points: 1000, lifetimePoints: 1000 };
+  // Home page: 950 points (Bronze tier, close to Silver) for progress modal demo
+  const homeUser = { ...user, points: 950, lifetimePoints: 950 };
   // Locker Room page: 5,000 points (Diehard tier)
   const lockerRoomUser = { ...user, points: 5000, lifetimePoints: 5000 };
+
+  // Calculate tier info for progress modal
+  const userPoints = homeUser?.points || 0;
+  const currentTier = TIERS.find((t, i) => {
+    const nextTier = TIERS[i + 1];
+    return userPoints >= t.minPoints && (!nextTier || userPoints < nextTier.minPoints);
+  }) || TIERS[0];
+  
+  const nextTier = TIERS.find((t) => t.minPoints > userPoints);
+  const pointsToNext = nextTier ? nextTier.minPoints - userPoints : 0;
+
+  // Show modal if user is close to next tier (within 100 points) and hasn't dismissed it
+  useEffect(() => {
+    if (activeSection === "home" && pointsToNext > 0 && pointsToNext <= 100) {
+      const dismissed = localStorage.getItem('tierProgressModalDismissed');
+      if (!dismissed) {
+        setShowProgressModal(true);
+      }
+    }
+  }, [activeSection, pointsToNext]);
+
+  const handleDismissModal = () => {
+    setShowProgressModal(false);
+    localStorage.setItem('tierProgressModalDismissed', 'true');
+  };
+
+  const handleCompleteProfile = () => {
+    setShowProgressModal(false);
+    // Navigate to profile completion or locker room
+    setActiveSection("dashboard");
+  };
 
 
   return (
@@ -203,6 +236,18 @@ export default function Dashboard({ user }: DashboardProps) {
 
       {/* Right Sidebar */}
       <RightSidebar user={activeSection === "home" ? homeUser : activeSection === "dashboard" ? lockerRoomUser : user} />
+
+      {/* Tier Progress Modal */}
+      {showProgressModal && activeSection === "home" && nextTier && (
+        <TierProgressModal
+          userPoints={userPoints}
+          currentTier={currentTier}
+          nextTier={nextTier}
+          pointsToNext={pointsToNext}
+          onDismiss={handleDismissModal}
+          onCompleteProfile={handleCompleteProfile}
+        />
+      )}
     </div>
   );
 }
