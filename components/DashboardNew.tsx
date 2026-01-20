@@ -2651,7 +2651,7 @@ function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightP
           ) : (
             <Circle size={18} className="text-white/40" strokeWidth={2} />
           )}
-          <SocialIcon platform="instagram" size={20} />
+          <SocialIcon platform="instagram" size={28} />
           <span className={`text-xs font-medium ${completedItems.includes('instagram') ? 'text-white' : 'text-white/70'}`}>
             Connect Instagram
           </span>
