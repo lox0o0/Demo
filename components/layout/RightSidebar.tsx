@@ -72,98 +72,93 @@ function CurrentTierStatsCard({
   trophies 
 }: any) {
   const firstName = user?.name?.split(' ')[0] || "Fan";
-  
-  // Get tier badge gradient
-  const getTierBadgeStyle = (tierName: string) => {
-    if (tierName === "Legend") {
-      return "bg-gradient-to-r from-yellow-500 to-amber-400 text-black";
-    }
-    if (tierName === "Gold") {
-      return "bg-gradient-to-r from-yellow-400 to-yellow-600 text-black";
-    }
-    if (tierName === "Silver") {
-      return "bg-gradient-to-r from-gray-300 to-gray-400 text-black";
-    }
-    if (tierName === "Bronze") {
-      return "bg-gradient-to-r from-amber-600 to-amber-800 text-white";
-    }
-    return "bg-gray-600 text-white";
-  };
 
   return (
-    <div className="bg-gray-900/70 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-6">
-      {/* Header row */}
-      <div className="flex items-center gap-3 mb-4">
-        {teamData && (
-          <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-            <Image
-              src={teamData.logoUrl}
-              alt={teamData.name}
-              width={48}
-              height={48}
-              className="w-full h-full object-contain"
-              unoptimized
-            />
+    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-4">
+      {/* Profile Header - Old Design */}
+      <div className="p-4 border-b border-white/10 mb-4">
+        <div className="flex items-start gap-4">
+          <div className="flex-shrink-0">
+            <span className="relative flex shrink-0 overflow-hidden rounded-full w-16 h-16 border border-white/30 shadow-lg cursor-pointer hover:scale-105 transition-transform">
+              {teamData ? (
+                <Image
+                  src={teamData.logoUrl}
+                  alt={teamData.name}
+                  width={64}
+                  height={64}
+                  className="aspect-square h-full w-full object-cover"
+                  unoptimized
+                />
+              ) : (
+                <div className="w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                  <span className="text-xl font-bold text-white">
+                    {user?.name?.charAt(0) || "F"}
+                  </span>
+                </div>
+              )}
+            </span>
           </div>
-        )}
-        <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-white truncate">{firstName}</h3>
-          <div className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-bold ${getTierBadgeStyle(currentTier.name)}`}>
-            {currentTier.name.toUpperCase()}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-4 mb-2">
+              <div className="flex-1">
+                <h3 className="text-white font-semibold text-lg">{user?.name || "Fan"}</h3>
+                <div className="flex items-center gap-2 mt-1">
+                  <div className="inline-flex items-center rounded-full px-2.5 py-0.5 font-semibold bg-white/20 backdrop-blur-md text-white border border-white/30 text-xs">
+                    {currentTier.name} Tier
+                  </div>
+                </div>
+                <div className="space-y-1 mt-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-white/80 text-sm">Current Points:</span>
+                    <span className="text-white font-semibold text-sm font-mono">{userPoints.toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Current Points display */}
-      <div className="mb-4">
-        <div className="text-gray-400 text-sm mb-1">Current Points:</div>
-        <div className="text-2xl font-bold text-white">{userPoints.toLocaleString()}</div>
       </div>
 
       {/* Stats grid (2x2) */}
-      <div className="grid grid-cols-2 gap-4 mt-4">
-        <div className="bg-gray-800/50 rounded-lg p-3 text-center">
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 text-center border border-white/10">
           <div className="text-xl font-bold text-white">{lifetimePoints.toLocaleString()}</div>
-          <div className="text-xs text-gray-400 uppercase mt-1">Lifetime Points</div>
+          <div className="text-xs text-white/60 uppercase mt-1">Lifetime Points</div>
         </div>
-        <div className="bg-gray-800/50 rounded-lg p-3 text-center">
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 text-center border border-white/10">
           <div className="text-xl font-bold text-white">{gamesAttended}</div>
-          <div className="text-xs text-gray-400 uppercase mt-1">Games Attended</div>
+          <div className="text-xs text-white/60 uppercase mt-1">Games Attended</div>
         </div>
-        <div className="bg-gray-800/50 rounded-lg p-3 text-center">
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 text-center border border-white/10">
           <div className="text-xl font-bold text-white">{tippingRank}</div>
-          <div className="text-xs text-gray-400 uppercase mt-1">Tipping Rank</div>
+          <div className="text-xs text-white/60 uppercase mt-1">Tipping Rank</div>
         </div>
-        <div className="bg-gray-800/50 rounded-lg p-3 text-center">
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 text-center border border-white/10">
           <div className="text-xl font-bold text-white">{badgesEarned}</div>
-          <div className="text-xs text-gray-400 uppercase mt-1">Badges Earned</div>
+          <div className="text-xs text-white/60 uppercase mt-1">Badges Earned</div>
         </div>
       </div>
 
       {/* Trophy Case section */}
-      <div className="mt-6">
-        <div className="text-sm font-semibold text-gray-300 mb-3">Trophy Case</div>
-        <div className="flex justify-between mt-3">
+      <div className="pt-4 border-t border-white/10">
+        <div className="text-sm font-semibold text-white/80 mb-3">Trophy Case</div>
+        <div className="flex justify-between">
           {trophies.map((trophy: { id: string; name: string; icon: any; earned: boolean }) => {
             const Icon = trophy.icon;
             return (
               <div key={trophy.id} className="flex flex-col items-center gap-2">
                 <div
-                  className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                  className={`w-12 h-12 rounded-lg flex items-center justify-center border-2 ${
                     trophy.earned
-                      ? "bg-gradient-to-br from-yellow-500/20 to-amber-500/20 border-2 border-yellow-500/50 shadow-lg shadow-yellow-500/20"
-                      : "bg-gray-800/50 border-2 border-gray-700/50 opacity-50"
+                      ? "border-yellow-400/50 bg-yellow-400/10 text-yellow-400"
+                      : "border-white/20 bg-white/5 text-white/40"
                   }`}
                 >
-                  <Icon
-                    className={`w-6 h-6 ${
-                      trophy.earned ? "text-yellow-400" : "text-gray-600"
-                    }`}
-                  />
+                  <Icon className="w-6 h-6" />
                 </div>
                 <span
-                  className={`text-xs text-center ${
-                    trophy.earned ? "text-yellow-400" : "text-gray-600"
+                  className={`text-xs text-center leading-tight ${
+                    trophy.earned ? "text-white/80" : "text-white/40"
                   }`}
                 >
                   {trophy.name}
