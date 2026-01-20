@@ -1,5 +1,7 @@
 "use client";
 
+import { Check } from "lucide-react";
+
 interface StatusCardsProps {
   user: any;
 }
@@ -50,7 +52,7 @@ export default function StatusCards({ user }: StatusCardsProps) {
             <span className="text-xs text-nrl-text-secondary font-medium">rank</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2 bg-nrl-green/10 rounded-lg border border-nrl-green/20 w-fit">
-            <span className="text-sm text-nrl-green">✓</span>
+            <Check size={14} className="text-nrl-green" strokeWidth={2} />
             <span className="text-sm font-bold text-nrl-green">Team Set</span>
           </div>
         </div>

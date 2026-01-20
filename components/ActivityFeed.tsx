@@ -1,5 +1,7 @@
 "use client";
 
+import { Check } from "lucide-react";
+
 import { MOCK_MATES } from "@/lib/mockData";
 
 interface ActivityFeedProps {
@@ -24,7 +26,7 @@ export default function ActivityFeed({ expanded = false }: ActivityFeedProps) {
               <div className="text-xs text-nrl-text-muted mt-1">{mate.time}</div>
             </div>
             <button className="text-nrl-green hover:text-nrl-green/80 transition-colors text-sm font-bold">
-              ✓
+              <Check size={14} className="text-nrl-green" strokeWidth={2} />
             </button>
           </div>
         ))}

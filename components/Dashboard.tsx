@@ -258,7 +258,7 @@ function ProfileView({ user, teamData }: { user: any; teamData: any }) {
 
       <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
         <h3 className="text-lg font-semibold mb-4 text-nrl-text-primary">
-          {isMaxTier ? `🏆 ${currentTier.name} Tier - Maximum Achieved!` : `Progress to ${nextTier?.name || currentTier.name}`}
+          {isMaxTier ? `${currentTier.name} Tier - Maximum Achieved!` : `Progress to ${nextTier?.name || currentTier.name}`}
         </h3>
         <div className="mb-2">
           <div className="flex justify-between text-sm mb-2">

@@ -1,6 +1,7 @@
 "use client";
 
 import { TIERS } from "@/lib/mockData";
+import { Trophy } from "lucide-react";
 
 interface FanScoreProps {
   user: any;
@@ -80,7 +81,10 @@ export default function FanScore({ user }: FanScoreProps) {
           <div className="flex justify-between text-sm mb-3">
             {isMaxTier ? (
               <>
-                <span className="text-nrl-text-secondary font-medium">🏆 Maximum tier achieved!</span>
+                <span className="flex items-center gap-1 text-nrl-text-secondary font-medium">
+                  <Trophy size={14} className="text-white/60" strokeWidth={2} />
+                  Maximum tier achieved!
+                </span>
                 <span className="text-nrl-amber font-semibold">{currentTier.reward}</span>
               </>
             ) : nextTier ? (
