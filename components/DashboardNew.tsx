@@ -44,17 +44,21 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
   
   // Get user data
   const profileCompletion = user?.profileCompletion || 0;
-  // If profile completion is 90% or higher (team + auth + all 4 socials), give Bronze tier (250 points minimum)
-  // Note: Maximum completion from onboarding is 90% (20% team + 30% auth + 40% from 4 socials)
-  const userPoints = profileCompletion >= 90 
-    ? Math.max(user?.points || 0, 250) 
-    : (user?.points || 0);
-  const currentTier = calculateTier(userPoints, profileCompletion);
+  // Use actual user points (not boosted) for display in the tier card
+  const actualUserPoints = user?.points || 0;
+  // Calculate tier based on actual points (not boosted) - this shows the user's real current tier
+  const currentTier = calculateTier(actualUserPoints, profileCompletion);
   const nextTier = TIERS.find(t => t.minPoints > currentTier.minPoints) || TIERS[TIERS.length - 1];
-  const pointsToNext = Math.max(0, nextTier.minPoints - userPoints);
+  const pointsToNext = Math.max(0, nextTier.minPoints - actualUserPoints);
   const progressPercent = nextTier.minPoints > currentTier.minPoints
-    ? Math.min(((userPoints - currentTier.minPoints) / (nextTier.minPoints - currentTier.minPoints)) * 100, 100)
+    ? Math.min(((actualUserPoints - currentTier.minPoints) / (nextTier.minPoints - currentTier.minPoints)) * 100, 100)
     : 100;
+  
+  // For other calculations that need boosted points (like minimum Bronze for 90% completion)
+  // Use boosted points only where needed, but display actual points in the card
+  const userPoints = profileCompletion >= 90 
+    ? Math.max(actualUserPoints, 250) 
+    : actualUserPoints;
 
   const teamData = user?.teamData || NRL_TEAMS.find(t => t.name === user?.team) || NRL_TEAMS[0];
   const firstName = user?.name?.split(' ')[0] || "Fan";
