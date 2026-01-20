@@ -108,9 +108,10 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
           className="object-cover"
           priority
           unoptimized
+          style={{ zIndex: 0 }}
         />
-        {/* Dark Overlay for Content Readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
+        {/* Lighter Overlay for Content Readability - allows background to show through */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50" style={{ zIndex: 1 }} />
       </div>
       
       <div className="container mx-auto px-4 py-12 relative z-10">
