@@ -101,16 +101,17 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   
   return (
     <div 
-      className="min-h-screen w-full relative overflow-hidden"
       style={{
-        backgroundImage: `url(${backgroundImagePath}) !important`,
-        backgroundSize: 'cover !important',
-        backgroundPosition: 'center !important',
-        backgroundRepeat: 'no-repeat !important',
-        backgroundAttachment: 'fixed !important',
+        minHeight: '100vh',
+        width: '100%',
         position: 'relative',
-        backgroundColor: 'transparent !important',
-      } as React.CSSProperties}
+        overflow: 'hidden',
+        backgroundImage: `url(${backgroundImagePath})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+      }}
     >
       {/* Light overlay for text readability */}
       <div 
