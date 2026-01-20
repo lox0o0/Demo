@@ -98,7 +98,8 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
             {/* Section A: Weekly Activities for Points */}
             <WeeklyActivitiesSection user={user} />
             
-            {/* Section B: (Placeholder for next section) */}
+            {/* Section B: Prizes & Streak */}
+            <PrizesAndStreakSection user={user} streakData={streakData} currentTier={currentTier} />
             
             {/* Section C: (Placeholder for next section) */}
           </div>
@@ -2420,6 +2421,347 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Section B: Prizes & Streak
+function PrizesAndStreakSection({ user, streakData, currentTier }: { user: any; streakData: StreakData; currentTier: any }) {
+  const [showWheel, setShowWheel] = useState(false);
+  const teamData = user?.teamData || NRL_TEAMS.find(t => t.name === user?.team) || NRL_TEAMS[0];
+  
+  // Mock recent winners data
+  const recentWinners = [
+    { name: "BroncosFan23", prize: "Match Tickets", tier: "legendary" },
+    { name: "NRL_Legend", prize: "$25 NRL Shop", tier: "epic" },
+    { name: "StormChaser", prize: "250 Points", tier: "rare" },
+    { name: "PantherPower", prize: "Signed Ball", tier: "epic" },
+    { name: "RoosterRally", prize: "$10 Telstra", tier: "uncommon" },
+    { name: "SharkAttack", prize: "100 Points", tier: "uncommon" },
+  ];
+
+  // Calculate countdown to next weekly draw (mock: 3 days, 14 hours, 23 minutes)
+  const drawCountdown = { days: 3, hours: 14, minutes: 23 };
+  const entryCount = 1247;
+
+  return (
+    <div className="space-y-6">
+      {/* Section Header */}
+      <div className="flex items-center gap-3">
+        <Trophy className="w-5 h-5 text-emerald-400" />
+        <h2 className="text-lg font-bold text-white">PRIZES & STREAK</h2>
+      </div>
+
+      {/* 3 Cards in Horizontal Row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Card 1: Streak */}
+        <StreakCardPrizes streakData={streakData} />
+
+        {/* Card 2: Prize Wheel */}
+        <PrizeWheelCardPrizes streakData={streakData} onSpinClick={() => setShowWheel(true)} />
+
+        {/* Card 3: Weekly Prize Draw */}
+        <WeeklyPrizeDrawCard currentTier={currentTier} drawCountdown={drawCountdown} entryCount={entryCount} />
+      </div>
+
+      {/* Recent Winners Row */}
+      <RecentWinnersRow winners={recentWinners} />
+
+      {/* Prize Wheel Modal */}
+      {showWheel && (
+        <PrizeWheel 
+          streakData={streakData}
+          teamData={teamData}
+          onClose={() => setShowWheel(false)}
+        />
+      )}
+    </div>
+  );
+}
+
+// Card 1: Streak Card
+function StreakCardPrizes({ streakData }: { streakData: StreakData }) {
+  const streakWeeks = streakData.fanStreak.currentWeeks;
+  const flameLevel = streakData.currentWeek.flameLevel;
+  const fuel = streakData.currentWeek.fuel;
+  const target = streakData.currentWeek.target;
+  const fuelPercent = Math.min(100, (fuel / target) * 100);
+  const nextMilestone = streakData.nextMilestone;
+  const progressToNext = nextMilestone ? Math.min(100, (streakWeeks / nextMilestone.weeks) * 100) : 100;
+
+  // Get flame icon size and color based on level
+  const getFlameProps = () => {
+    switch (flameLevel) {
+      case 'inferno':
+        return { size: 48, color: 'text-red-500', glow: 'drop-shadow-[0_0_20px_rgba(239,68,68,0.8)]' };
+      case 'blazing':
+        return { size: 40, color: 'text-orange-500', glow: 'drop-shadow-[0_0_16px_rgba(249,115,22,0.7)]' };
+      case 'burning':
+        return { size: 36, color: 'text-yellow-500', glow: 'drop-shadow-[0_0_12px_rgba(234,179,8,0.6)]' };
+      case 'lit':
+        return { size: 32, color: 'text-amber-500', glow: 'drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]' };
+      default:
+        return { size: 28, color: 'text-gray-400', glow: '' };
+    }
+  };
+
+  const flameProps = getFlameProps();
+  const pointsMultiplier = streakData.benefits.pointsMultiplier;
+  const is2xActive = pointsMultiplier >= 2.0;
+
+  return (
+    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-6 hover:border-white/30 transition-all">
+      {/* Animated Flame Icon */}
+      <div className="flex justify-center mb-4">
+        <Flame 
+          size={flameProps.size} 
+          className={`${flameProps.color} animate-pulse`}
+          style={{ filter: flameProps.glow ? `drop-shadow(0 0 20px ${flameProps.color.includes('red') ? 'rgba(239,68,68,0.8)' : flameProps.color.includes('orange') ? 'rgba(249,115,22,0.7)' : 'rgba(245,158,11,0.5)'})` : 'none' }}
+        />
+      </div>
+
+      {/* Big Streak Number with Glow */}
+      <div className="text-center mb-2">
+        <div className="text-6xl font-bold text-white mb-1" style={{ 
+          textShadow: '0 0 20px rgba(251,191,36,0.8), 0 0 40px rgba(251,191,36,0.4)',
+          filter: 'drop-shadow(0 0 10px rgba(251,191,36,0.6))'
+        }}>
+          {streakWeeks}
+        </div>
+        <div className="text-xs font-semibold text-white/80 uppercase tracking-wider">WEEK STREAK</div>
+      </div>
+
+      {/* 2x Points Active Badge */}
+      {is2xActive && (
+        <div className="flex justify-center mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/20 border border-emerald-500/50 rounded-full">
+            <Sparkles size={14} className="text-emerald-400" />
+            <span className="text-xs font-bold text-emerald-400">2x POINTS ACTIVE</span>
+          </div>
+        </div>
+      )}
+
+      {/* Progress to Next Streak Reward */}
+      {nextMilestone && (
+        <div className="mt-4 space-y-2">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-white/60">Progress to {nextMilestone.name}</span>
+            <span className="text-white/80 font-semibold">{Math.round(progressToNext)}%</span>
+          </div>
+          <div className="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+            <div
+              className="bg-gradient-to-r from-emerald-500 to-cyan-500 h-2 rounded-full transition-all duration-500"
+              style={{ width: `${progressToNext}%` }}
+            />
+          </div>
+          <div className="text-xs text-white/60 text-center">
+            {nextMilestone.weeksRemaining} weeks to {nextMilestone.reward}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Card 2: Prize Wheel Card
+function PrizeWheelCardPrizes({ streakData, onSpinClick }: { streakData: StreakData; onSpinClick: () => void }) {
+  const spinsAvailable = streakData.spins.available;
+  const baseSpins = streakData.spins.baseSpins;
+  const bonusSpins = streakData.spins.bonusSpins;
+
+  return (
+    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-6 hover:border-white/30 transition-all">
+      {/* Animated Spinning Wheel Preview */}
+      <div className="flex justify-center mb-4">
+        <div className="relative w-32 h-32">
+          {/* Wheel segments with colors */}
+          <div className="absolute inset-0 rounded-full overflow-hidden">
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-full h-full"
+                style={{
+                  transform: `rotate(${i * 45}deg)`,
+                  clipPath: `polygon(50% 50%, 50% 0%, ${50 + 25 * Math.cos(Math.PI / 4)}% ${50 - 25 * Math.sin(Math.PI / 4)}%)`,
+                  backgroundColor: i % 4 === 0 ? 'rgba(139, 92, 246, 0.3)' : i % 4 === 1 ? 'rgba(249, 115, 22, 0.3)' : i % 4 === 2 ? 'rgba(34, 197, 94, 0.3)' : 'rgba(59, 130, 246, 0.3)',
+                }}
+              />
+            ))}
+          </div>
+          {/* Spinning border */}
+          <div className="absolute inset-0 rounded-full border-4 border-white/30 animate-spin" style={{ animationDuration: '4s' }} />
+          {/* Center circle */}
+          <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center border-2 border-white/20">
+            <CircleDot size={24} className="text-white/60" />
+          </div>
+        </div>
+      </div>
+
+      {/* Spins Available */}
+      <div className="text-center mb-4">
+        <div className="text-3xl font-bold text-white mb-1">{spinsAvailable}</div>
+        <div className="text-xs font-semibold text-white/80 uppercase tracking-wider">Spins Available</div>
+        {bonusSpins > 0 && (
+          <div className="text-xs text-emerald-400 mt-1">
+            {baseSpins} base + {bonusSpins} bonus
+          </div>
+        )}
+      </div>
+
+      {/* Spin Button with Pulse Animation */}
+      <button
+        onClick={onSpinClick}
+        disabled={spinsAvailable === 0}
+        className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 rounded-xl hover:from-orange-600 hover:to-red-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed animate-pulse"
+      >
+        SPIN THE WHEEL
+      </button>
+
+      {/* Prize Categories */}
+      <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
+        <div className="flex items-center gap-1.5 text-white/60">
+          <Ticket size={12} className="text-blue-400" />
+          <span>Tickets</span>
+        </div>
+        <div className="flex items-center gap-1.5 text-white/60">
+          <Gift size={12} className="text-purple-400" />
+          <span>Vouchers</span>
+        </div>
+        <div className="flex items-center gap-1.5 text-white/60">
+          <Coins size={12} className="text-yellow-400" />
+          <span>Points</span>
+        </div>
+        <div className="flex items-center gap-1.5 text-white/60">
+          <Shirt size={12} className="text-green-400" />
+          <span>Merch</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Card 3: Weekly Prize Draw Card
+function WeeklyPrizeDrawCard({ currentTier, drawCountdown, entryCount }: { currentTier: any; drawCountdown: { days: number; hours: number; minutes: number }; entryCount: number }) {
+  // Featured prize based on tier
+  const getFeaturedPrize = () => {
+    if (currentTier.name === "Legend") return { name: "SIGNED TEAM JERSEY", icon: Shirt, color: "text-yellow-400" };
+    if (currentTier.name === "Diehard") return { name: "VIP GAME TICKET", icon: Ticket, color: "text-purple-400" };
+    if (currentTier.name === "Platinum") return { name: "TEAM JERSEY", icon: Shirt, color: "text-blue-400" };
+    if (currentTier.name === "Gold") return { name: "NRL HAT", icon: Trophy, color: "text-amber-400" };
+    return { name: "SIGNED TEAM JERSEY", icon: Shirt, color: "text-yellow-400" };
+  };
+
+  const featuredPrize = getFeaturedPrize();
+  const PrizeIcon = featuredPrize.icon;
+
+  return (
+    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-6 hover:border-white/30 transition-all">
+      {/* Current Tier Badge */}
+      <div className="flex justify-center mb-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ 
+          backgroundColor: typeof currentTier.color === 'string' && currentTier.color.startsWith('#') 
+            ? `${currentTier.color}33` 
+            : currentTier.color === 'gray' 
+              ? 'rgba(156, 163, 175, 0.2)' 
+              : 'rgba(251, 191, 36, 0.2)',
+          border: typeof currentTier.color === 'string' && currentTier.color.startsWith('#')
+            ? `1px solid ${currentTier.color}80`
+            : currentTier.color === 'gray'
+              ? '1px solid rgba(156, 163, 175, 0.5)'
+              : '1px solid rgba(251, 191, 36, 0.5)'
+        }}>
+          <Crown size={14} className={featuredPrize.color} />
+          <span className="text-xs font-bold uppercase" style={{ 
+            color: typeof currentTier.color === 'string' && currentTier.color.startsWith('#')
+              ? currentTier.color
+              : currentTier.color === 'gray'
+                ? '#9CA3AF'
+                : '#FBBF24'
+          }}>
+            {currentTier.name} TIER
+          </span>
+        </div>
+      </div>
+
+      {/* Featured Prize - Premium Look */}
+      <div className="text-center mb-4">
+        <div className="mb-3">
+          <PrizeIcon size={48} className={`${featuredPrize.color} mx-auto mb-2`} style={{ 
+            filter: 'drop-shadow(0 0 12px rgba(251,191,36,0.6))'
+          }} />
+        </div>
+        <div className="text-lg font-bold text-white mb-1">{featuredPrize.name}</div>
+        <div className="text-xs text-white/60">This Week's Featured Prize</div>
+      </div>
+
+      {/* Draw Countdown */}
+      <div className="bg-white/5 rounded-lg p-3 mb-3">
+        <div className="text-xs text-white/60 mb-2 text-center">Draw in</div>
+        <div className="flex items-center justify-center gap-2 text-sm font-bold text-white">
+          <div className="flex items-center gap-1">
+            <Clock size={14} className="text-emerald-400" />
+            <span>{drawCountdown.days}d</span>
+          </div>
+          <span className="text-white/40">:</span>
+          <span>{drawCountdown.hours}h</span>
+          <span className="text-white/40">:</span>
+          <span>{drawCountdown.minutes}m</span>
+        </div>
+      </div>
+
+      {/* Entry Count */}
+      <div className="text-center">
+        <div className="text-xs text-white/60">{entryCount.toLocaleString()} entries</div>
+      </div>
+    </div>
+  );
+}
+
+// Recent Winners Row
+function RecentWinnersRow({ winners }: { winners: Array<{ name: string; prize: string; tier: string }> }) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const getTierColor = (tier: string) => {
+    switch (tier) {
+      case 'legendary': return 'text-yellow-400 border-yellow-400/50 bg-yellow-400/10';
+      case 'epic': return 'text-purple-400 border-purple-400/50 bg-purple-400/10';
+      case 'rare': return 'text-blue-400 border-blue-400/50 bg-blue-400/10';
+      case 'uncommon': return 'text-green-400 border-green-400/50 bg-green-400/10';
+      default: return 'text-gray-400 border-gray-400/50 bg-gray-400/10';
+    }
+  };
+
+  return (
+    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-4">
+      <div className="flex items-center gap-2 mb-4">
+        <Trophy className="w-4 h-4 text-yellow-400" />
+        <h3 className="text-sm font-bold text-white uppercase">Recent Winners</h3>
+      </div>
+      
+      <div 
+        ref={scrollContainerRef}
+        className="overflow-x-auto scrollbar-hide -mx-4 px-4"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+        <div className="flex gap-4" style={{ width: 'max-content' }}>
+          {winners.map((winner, index) => (
+            <div
+              key={index}
+              className="min-w-[200px] bg-white/5 border border-white/10 rounded-lg p-3 flex items-center gap-3"
+            >
+              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                <User size={20} className="text-white/60" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-semibold text-white truncate">{winner.name}</div>
+                <div className={`text-xs px-2 py-0.5 rounded-full border inline-block mt-1 ${getTierColor(winner.tier)}`}>
+                  {winner.prize}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
