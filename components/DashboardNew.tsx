@@ -2570,6 +2570,211 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
   );
 }
 
+// Profile Completion Flow Component with Animations
+function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightProfileCompletion }: { user: any; highlightProfileCompletion: boolean; setHighlightProfileCompletion?: (value: boolean) => void }) {
+  const [completedItems, setCompletedItems] = useState<string[]>(user?.completedProfileItems || []);
+  const [totalPoints, setTotalPoints] = useState(0);
+  const [pointsAnimation, setPointsAnimation] = useState<{ item: string; points: number } | null>(null);
+  const [homeGroundSearch, setHomeGroundSearch] = useState("");
+  const [showHomeGroundDropdown, setShowHomeGroundDropdown] = useState(false);
+  
+  const homeGrounds = [
+    "Suncorp Stadium",
+    "Lang Park",
+    "ANZ Stadium",
+    "Allianz Stadium",
+    "AAMI Park",
+    "McDonald Jones Stadium",
+    "GIO Stadium",
+  ];
+
+  const filteredHomeGrounds = homeGrounds.filter(g => 
+    g.toLowerCase().includes(homeGroundSearch.toLowerCase())
+  );
+
+  const handleConnectSocial = async (platform: string) => {
+    if (completedItems.includes(platform)) return;
+    
+    // Simulate OAuth connection
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const points = 25;
+    setCompletedItems([...completedItems, platform]);
+    setTotalPoints(prev => prev + points);
+    setPointsAnimation({ item: platform, points });
+    
+    setTimeout(() => setPointsAnimation(null), 2000);
+    
+    // Stop highlighting after first interaction
+    if (setHighlightProfileCompletion && highlightProfileCompletion) {
+      setTimeout(() => setHighlightProfileCompletion(false), 1000);
+    }
+  };
+
+  const handleSelectHomeGround = (ground: string) => {
+    if (completedItems.includes('homeGround')) return;
+    
+    const points = 25;
+    setCompletedItems([...completedItems, 'homeGround']);
+    setTotalPoints(prev => prev + points);
+    setPointsAnimation({ item: 'homeGround', points });
+    setHomeGroundSearch(ground);
+    setShowHomeGroundDropdown(false);
+    
+    setTimeout(() => setPointsAnimation(null), 2000);
+    
+    if (setHighlightProfileCompletion && highlightProfileCompletion) {
+      setTimeout(() => setHighlightProfileCompletion(false), 1000);
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      {/* Running Points Total */}
+      {totalPoints > 0 && (
+        <div className="mb-3 p-2 bg-emerald-500/20 border border-emerald-500/50 rounded-lg">
+          <div className="text-xs text-emerald-400 font-semibold text-center">
+            +{totalPoints} pts earned!
+          </div>
+        </div>
+      )}
+
+      {/* Connect Instagram */}
+      <div className={`flex items-center justify-between py-2.5 px-3 rounded-lg transition-all ${
+        completedItems.includes('instagram') 
+          ? 'bg-emerald-500/10 border border-emerald-500/30' 
+          : 'hover:bg-white/5 border border-transparent'
+      }`}>
+        <div className="flex items-center gap-2">
+          {completedItems.includes('instagram') ? (
+            <Check size={18} className="text-emerald-400" strokeWidth={3} />
+          ) : (
+            <Circle size={18} className="text-white/40" strokeWidth={2} />
+          )}
+          <SocialIcon platform="instagram" size={20} />
+          <span className={`text-xs font-medium ${completedItems.includes('instagram') ? 'text-white' : 'text-white/70'}`}>
+            Connect Instagram
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          {pointsAnimation?.item === 'instagram' && (
+            <span className="text-xs font-bold text-emerald-400 animate-bounce">
+              +{pointsAnimation.points} pts
+            </span>
+          )}
+          {!completedItems.includes('instagram') && (
+            <button
+              onClick={() => handleConnectSocial('instagram')}
+              className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
+            >
+              Connect
+            </button>
+          )}
+          {!pointsAnimation && !completedItems.includes('instagram') && (
+            <span className="text-xs text-emerald-400">+25 pts</span>
+          )}
+        </div>
+      </div>
+
+      {/* Connect Facebook */}
+      <div className={`flex items-center justify-between py-2.5 px-3 rounded-lg transition-all ${
+        completedItems.includes('facebook') 
+          ? 'bg-emerald-500/10 border border-emerald-500/30' 
+          : 'hover:bg-white/5 border border-transparent'
+      }`}>
+        <div className="flex items-center gap-2">
+          {completedItems.includes('facebook') ? (
+            <Check size={18} className="text-emerald-400" strokeWidth={3} />
+          ) : (
+            <Circle size={18} className="text-white/40" strokeWidth={2} />
+          )}
+          <SocialIcon platform="facebook" size={20} />
+          <span className={`text-xs font-medium ${completedItems.includes('facebook') ? 'text-white' : 'text-white/70'}`}>
+            Connect Facebook
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          {pointsAnimation?.item === 'facebook' && (
+            <span className="text-xs font-bold text-emerald-400 animate-bounce">
+              +{pointsAnimation.points} pts
+            </span>
+          )}
+          {!completedItems.includes('facebook') && (
+            <button
+              onClick={() => handleConnectSocial('facebook')}
+              className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
+            >
+              Connect
+            </button>
+          )}
+          {!pointsAnimation && !completedItems.includes('facebook') && (
+            <span className="text-xs text-emerald-400">+25 pts</span>
+          )}
+        </div>
+      </div>
+
+      {/* Select Home Ground */}
+      <div className={`relative py-2.5 px-3 rounded-lg transition-all ${
+        completedItems.includes('homeGround') 
+          ? 'bg-emerald-500/10 border border-emerald-500/30' 
+          : 'hover:bg-white/5 border border-transparent'
+      }`}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 flex-1">
+            {completedItems.includes('homeGround') ? (
+              <Check size={18} className="text-emerald-400" strokeWidth={3} />
+            ) : (
+              <Circle size={18} className="text-white/40" strokeWidth={2} />
+            )}
+            {completedItems.includes('homeGround') ? (
+              <span className="text-xs font-medium text-white">
+                Home Ground: {homeGroundSearch}
+              </span>
+            ) : (
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  value={homeGroundSearch}
+                  onChange={(e) => {
+                    setHomeGroundSearch(e.target.value);
+                    setShowHomeGroundDropdown(true);
+                  }}
+                  onFocus={() => setShowHomeGroundDropdown(true)}
+                  placeholder="Select your home ground"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-white/40 focus:outline-none focus:border-emerald-500/50"
+                />
+                {showHomeGroundDropdown && filteredHomeGrounds.length > 0 && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-nrl-dark-card border border-white/20 rounded-lg overflow-hidden z-10 max-h-40 overflow-y-auto">
+                    {filteredHomeGrounds.map((ground) => (
+                      <button
+                        key={ground}
+                        onClick={() => handleSelectHomeGround(ground)}
+                        className="w-full text-left px-3 py-2 text-xs text-white hover:bg-white/10 transition-colors"
+                      >
+                        {ground}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-2 ml-2">
+            {pointsAnimation?.item === 'homeGround' && (
+              <span className="text-xs font-bold text-emerald-400 animate-bounce">
+                +{pointsAnimation.points} pts
+              </span>
+            )}
+            {!pointsAnimation && !completedItems.includes('homeGround') && (
+              <span className="text-xs text-emerald-400">+25 pts</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Section B: Prizes & Streak
 function PrizesAndStreakSection({ user, streakData, currentTier }: { user: any; streakData: StreakData; currentTier: any }) {
   const [showWheel, setShowWheel] = useState(false);
