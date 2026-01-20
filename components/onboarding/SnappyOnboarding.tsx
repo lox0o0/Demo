@@ -156,6 +156,13 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
 
   const handleSkip = () => {
     if (selectedTeam) {
+      // Validate email authentication: if email is selected as auth method, email must be provided
+      // This ensures consistent behavior with handleComplete
+      if (selectedAuthMethod === "email" && buildProfileEmail.trim() === "") {
+        // Don't proceed if email auth is selected but email is empty
+        return;
+      }
+
       // When skipping, don't include social connection points - only base welcome bonus
       const basePoints = 50; // Base welcome bonus only
       const emptySocials: string[] = []; // Explicitly empty for skip
