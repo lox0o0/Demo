@@ -2368,7 +2368,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
           user={user} 
           highlightProfileCompletion={highlightProfileCompletion}
           setHighlightProfileCompletion={setHighlightProfileCompletion}
-          onTierUpgrade={handleTierUpgrade}
+          onTierUpgrade={onTierUpgrade}
         />
       </div>
 
