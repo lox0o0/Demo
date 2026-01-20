@@ -63,8 +63,8 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
     }
   }, []);
   
-  const handleTierUpgrade = (oldTier: any, newTier: any) => {
-    setCelebrationData({ oldTier, newTier });
+  const handleTierUpgrade = (oldTier: any, newTier: any, startPoints?: number) => {
+    setCelebrationData({ oldTier, newTier, startPoints: startPoints ?? oldTier.minPoints });
     setShowTierCelebration(true);
   };
   
@@ -152,6 +152,7 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
           oldTier={celebrationData.oldTier}
           newTier={celebrationData.newTier}
           reward={celebrationData.newTier.reward}
+          startPoints={celebrationData.startPoints}
           onDismiss={() => {
             setShowTierCelebration(false);
             setCelebrationData(null);
@@ -2647,7 +2648,7 @@ function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightP
     // Trigger celebration if tier changed
     if (oldTier.name !== newTier.name) {
       setTimeout(() => {
-        onTierUpgrade(oldTier, newTier);
+        onTierUpgrade(oldTier, newTier, oldPoints); // Pass oldPoints as startPoints
       }, 500); // Small delay after points animation
     }
   };

@@ -8,6 +8,7 @@ interface TierUpgradeCelebrationProps {
   oldTier: any;
   newTier: any;
   reward: string;
+  startPoints?: number; // User's actual current points (e.g., 950)
   onDismiss: () => void;
   onViewRewards?: () => void;
 }
@@ -16,6 +17,7 @@ export default function TierUpgradeCelebration({
   oldTier,
   newTier,
   reward,
+  startPoints: userStartPoints,
   onDismiss,
   onViewRewards,
 }: TierUpgradeCelebrationProps) {
@@ -24,8 +26,8 @@ export default function TierUpgradeCelebration({
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [showTierReveal, setShowTierReveal] = useState(false);
   const [showReward, setShowReward] = useState(false);
-  // Start from old tier's max points (just before new tier)
-  const startPoints = oldTier.minPoints;
+  // Start from user's actual current points (e.g., 950) or old tier's minPoints as fallback
+  const startPoints = userStartPoints ?? oldTier.minPoints;
   const [points, setPoints] = useState(startPoints);
   const targetPoints = newTier.minPoints;
   const confettiRef = useRef<HTMLCanvasElement>(null);
