@@ -100,13 +100,11 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
               />
             </div>
 
-            {/* Right Column - Prize Wheel, Leaderboards, Tier Rewards */}
+            {/* Right Column - Prize Wheel, Leaderboards */}
             <div className="space-y-6">
               <PrizeWheelCard streakData={streakData} teamData={teamData} />
               
               <LeaderboardsCard user={user} teamData={teamData} userPoints={userPoints} />
-              
-              <TiersRewardsCard currentTier={currentTier} userPoints={userPoints} />
             </div>
             </div>
           </div>
