@@ -67,14 +67,32 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
   const streakData = generateMockStreakData(user);
 
   return (
-    <div className="min-h-screen bg-nrl-dark">
+    <div className="min-h-screen bg-nrl-dark relative">
+      {/* Background Image */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <Image
+          src="/locker-room/background.webp"
+          alt="Locker Room Background"
+          fill
+          className="object-cover"
+          priority
+          unoptimized
+        />
+        {/* Dark Overlay for Content Readability */}
+        <div className="absolute inset-0 bg-black/40"></div>
+        {/* Additional gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50"></div>
+      </div>
+
       {/* Navigation at top */}
       {!hideNavigation && (
-        <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
+        <div className="relative z-10">
+          <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
+        </div>
       )}
 
       {/* Main Content - 3 Column Layout */}
-      <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 ${hideNavigation ? 'pt-6' : 'pt-24'}`}>
+      <main className={`relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 ${hideNavigation ? 'pt-6' : 'pt-24'}`}>
         {activeSection === "dashboard" && (
           <div className="space-y-8">
             {/* Streak Celebration Hero Zone */}
