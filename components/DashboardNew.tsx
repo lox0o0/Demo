@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
 import { NRL_TEAMS } from "@/lib/data/teams";
@@ -9,7 +9,7 @@ import { generateMockStreakData, getFlameLevelName, type StreakData } from "@/li
 import { 
   List, Shirt, Trophy, Clock, Star, Flame, Ticket, Gift, Coins, 
   CircleDot, Lock, Check, Circle, HelpCircle, User, Sparkles, 
-  TrendingUp, Calendar, Award, Crown, Target, Share2, Video
+  TrendingUp, Calendar, Award, Crown, Target, Share2, Video, ChevronLeft, ChevronRight
 } from "lucide-react";
 
 interface DashboardProps {
@@ -2140,13 +2140,36 @@ function FantasyCard({ teamData }: any) {
 
 // Section A: Weekly Activities for Points
 function WeeklyActivitiesSection({ user }: { user: any }) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [expandedMission, setExpandedMission] = useState<number | null>(null);
   const [selectedTeam, setSelectedTeam] = useState("");
+  const [selectedLastRoundPlayer, setSelectedLastRoundPlayer] = useState("");
+  const [selectedNextWeekPlayer, setSelectedNextWeekPlayer] = useState("");
+  const [playerSearchLastRound, setPlayerSearchLastRound] = useState("");
+  const [playerSearchNextWeek, setPlayerSearchNextWeek] = useState("");
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
   
   const weeklyCompleted = 5;
   const weeklyTotal = 7;
   const seasonCompleted = 34;
   const seasonTotal = 49;
+
+  // Mock players for MVP search
+  const players = [
+    { id: 1, name: "Nathan Cleary", stats: "2 tries, 6 goals" },
+    { id: 2, name: "Reece Walsh", stats: "3 try assists" },
+    { id: 3, name: "Jahrome Hughes", stats: "250m, 2 linebreaks" },
+    { id: 4, name: "Kalyn Ponga", stats: "1 try, 4 goals" },
+    { id: 5, name: "Cameron Munster", stats: "2 tries, 1 assist" },
+  ];
+
+  const filteredPlayersLastRound = players.filter(p => 
+    p.name.toLowerCase().includes(playerSearchLastRound.toLowerCase())
+  );
+  
+  const filteredPlayersNextWeek = players.filter(p => 
+    p.name.toLowerCase().includes(playerSearchNextWeek.toLowerCase())
+  );
 
   // Mock team voting results
   const teamVotes = [
@@ -2157,8 +2180,67 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
     { name: "Roosters", percentage: 9 },
   ];
 
+  // Mock fixtures for tips
+  const fixtures = [
+    { id: 1, home: "Broncos", away: "Storm", date: "Fri 8:00pm", userTip: "Broncos" },
+    { id: 2, home: "Panthers", away: "Roosters", date: "Sat 3:00pm", userTip: null },
+    { id: 3, home: "Sharks", away: "Eels", date: "Sat 5:30pm", userTip: "Sharks" },
+    { id: 4, home: "Cowboys", away: "Titans", date: "Sat 7:30pm", userTip: null },
+    { id: 5, home: "Warriors", away: "Dragons", date: "Sun 2:00pm", userTip: "Warriors" },
+    { id: 6, home: "Sea Eagles", away: "Bulldogs", date: "Sun 4:00pm", userTip: null },
+    { id: 7, home: "Raiders", away: "Knights", date: "Sun 6:00pm", userTip: "Raiders" },
+    { id: 8, home: "Rabbitohs", away: "Tigers", date: "Mon 7:00pm", userTip: null },
+  ];
+
+  // Mock highlights
+  const highlights = [
+    { id: 1, title: "Broncos vs Storm - Round 5", duration: "5:23", watched: true },
+    { id: 2, title: "Panthers vs Roosters - Round 5", duration: "4:15", watched: true },
+    { id: 3, title: "Sharks vs Eels - Round 5", duration: "6:10", watched: false },
+  ];
+
   // Get all teams for dropdown
   const allTeams = NRL_TEAMS.map(t => t.name);
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth = 280 + 16; // card width + gap
+      scrollContainerRef.current.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+      setCurrentCardIndex(Math.max(0, currentCardIndex - 1));
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth = 280 + 16; // card width + gap
+      scrollContainerRef.current.scrollBy({ left: cardWidth, behavior: 'smooth' });
+      setCurrentCardIndex(Math.min(6, currentCardIndex + 1));
+    }
+  };
+
+  const scrollToCard = (index: number) => {
+    if (scrollContainerRef.current) {
+      const cardWidth = 280 + 16; // card width + gap
+      scrollContainerRef.current.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+      setCurrentCardIndex(index);
+    }
+  };
+
+  // Track scroll position to update current card index
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const cardWidth = 280 + 16;
+      const scrollLeft = container.scrollLeft;
+      const newIndex = Math.round(scrollLeft / cardWidth);
+      setCurrentCardIndex(Math.max(0, Math.min(missions.length - 1, newIndex)));
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [missions.length]);
 
   const missions = [
     {
@@ -2263,21 +2345,81 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
         </div>
       </div>
 
-      {/* Horizontal Scrollable Card Row */}
-      <div className="overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-6 px-6" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-        <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
-          {missions.map((mission) => (
-            <MissionCardHorizontal 
-              key={mission.id} 
-              mission={mission}
-              isExpanded={expandedMission === mission.id}
-              onExpand={() => handleCardClick(mission.id)}
-              selectedTeam={selectedTeam}
-              onTeamSelect={setSelectedTeam}
-              teamVotes={teamVotes}
-              allTeams={allTeams}
-            />
-          ))}
+      {/* Horizontal Scrollable Card Row with Navigation */}
+      <div className="relative">
+        {/* Navigation Buttons */}
+        <div className="flex items-center justify-center gap-4 mb-4">
+          <button
+            onClick={scrollLeft}
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border hover:text-accent-foreground h-8 w-8 rounded-full bg-gray-800/80 border-gray-600/60 hover:bg-gray-700/90 backdrop-blur-md"
+            aria-label="Previous card"
+          >
+            <ChevronLeft className="h-4 w-4 text-white" />
+          </button>
+
+          {/* Dot Indicators */}
+          <div className="flex space-x-2">
+            {missions.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToCard(index)}
+                className={`rounded-full transition-all duration-300 ${
+                  index === currentCardIndex
+                    ? "bg-purple-400 w-6 h-2"
+                    : "bg-gray-600 hover:bg-gray-500 w-2 h-2"
+                }`}
+                aria-label={`Go to card ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={scrollRight}
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border hover:text-accent-foreground h-8 w-8 rounded-full bg-gray-800/80 border-gray-600/60 hover:bg-gray-700/90 backdrop-blur-md"
+            aria-label="Next card"
+          >
+            <ChevronRight className="h-4 w-4 text-white" />
+          </button>
+        </div>
+
+        {/* Horizontal Lines Frame */}
+        <div className="relative">
+          <div className="absolute top-0 left-0 right-0 h-px bg-white/20" />
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-white/20" />
+          
+          {/* Scrollable Card Container */}
+          <div 
+            ref={scrollContainerRef}
+            className="overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-6 px-6" 
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
+              {missions.map((mission) => (
+                <MissionCardHorizontal 
+                  key={mission.id} 
+                  mission={mission}
+                  isExpanded={expandedMission === mission.id}
+                  onExpand={() => handleCardClick(mission.id)}
+                  selectedTeam={selectedTeam}
+                  onTeamSelect={setSelectedTeam}
+                  teamVotes={teamVotes}
+                  allTeams={allTeams}
+                  selectedLastRoundPlayer={selectedLastRoundPlayer}
+                  onLastRoundPlayerSelect={setSelectedLastRoundPlayer}
+                  playerSearchLastRound={playerSearchLastRound}
+                  onPlayerSearchLastRoundChange={setPlayerSearchLastRound}
+                  filteredPlayersLastRound={filteredPlayersLastRound}
+                  selectedNextWeekPlayer={selectedNextWeekPlayer}
+                  onNextWeekPlayerSelect={setSelectedNextWeekPlayer}
+                  playerSearchNextWeek={playerSearchNextWeek}
+                  onPlayerSearchNextWeekChange={setPlayerSearchNextWeek}
+                  filteredPlayersNextWeek={filteredPlayersNextWeek}
+                  fixtures={fixtures}
+                  highlights={highlights}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -2292,7 +2434,19 @@ function MissionCardHorizontal({
   selectedTeam,
   onTeamSelect,
   teamVotes,
-  allTeams
+  allTeams,
+  selectedLastRoundPlayer,
+  onLastRoundPlayerSelect,
+  playerSearchLastRound,
+  onPlayerSearchLastRoundChange,
+  filteredPlayersLastRound,
+  selectedNextWeekPlayer,
+  onNextWeekPlayerSelect,
+  playerSearchNextWeek,
+  onPlayerSearchNextWeekChange,
+  filteredPlayersNextWeek,
+  fixtures,
+  highlights
 }: { 
   mission: any;
   isExpanded?: boolean;
@@ -2301,6 +2455,18 @@ function MissionCardHorizontal({
   onTeamSelect?: (team: string) => void;
   teamVotes?: Array<{ name: string; percentage: number }>;
   allTeams?: string[];
+  selectedLastRoundPlayer?: string;
+  onLastRoundPlayerSelect?: (player: string) => void;
+  playerSearchLastRound?: string;
+  onPlayerSearchLastRoundChange?: (search: string) => void;
+  filteredPlayersLastRound?: Array<{ id: number; name: string; stats: string }>;
+  selectedNextWeekPlayer?: string;
+  onNextWeekPlayerSelect?: (player: string) => void;
+  playerSearchNextWeek?: string;
+  onPlayerSearchNextWeekChange?: (search: string) => void;
+  filteredPlayersNextWeek?: Array<{ id: number; name: string; stats?: string }>;
+  fixtures?: Array<{ id: number; home: string; away: string; date: string; userTip: string | null }>;
+  highlights?: Array<{ id: number; title: string; duration: string; watched: boolean }>;
 }) {
   const Icon = mission.icon;
 
@@ -2350,8 +2516,151 @@ function MissionCardHorizontal({
         </div>
       )}
 
-      {/* Expandable content for Most dominant team prediction */}
-      {isExpanded && mission.hasDropdown && mission.id === 4 && (
+      {/* Expandable content for Telstra Tuesday MVP Predict (id 1) */}
+      {isExpanded && mission.id === 1 && (
+        <div className="mt-2 pt-3 border-t border-gray-700/50 space-y-3" onClick={(e) => e.stopPropagation()}>
+          <div className="text-xs font-bold text-white/80 mb-2">ROUND 6 MVP PREDICTION</div>
+          <div className="text-xs text-white/60 mb-3">Who will be the best player next round?</div>
+          
+          <input
+            type="text"
+            placeholder="Search player..."
+            value={playerSearchNextWeek || ""}
+            onChange={(e) => onPlayerSearchNextWeekChange?.(e.target.value)}
+            className="w-full bg-gray-800/50 border border-gray-700/50 rounded-lg px-3 py-2 text-sm text-white placeholder-white/40 focus:outline-none focus:border-emerald-500"
+          />
+          
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {filteredPlayersNextWeek?.map((player) => (
+              <button
+                key={player.id}
+                onClick={() => onNextWeekPlayerSelect?.(player.name)}
+                className={`w-full bg-gray-800/50 border rounded-lg p-3 text-left transition-colors ${
+                  selectedNextWeekPlayer === player.name 
+                    ? 'border-emerald-500 bg-emerald-500/10' 
+                    : 'border-gray-700/50 hover:border-emerald-500'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                    <User size={20} className="text-white/60" strokeWidth={2} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm font-semibold text-white">{player.name}</div>
+                    {player.stats && (
+                      <div className="text-xs text-white/60">{player.stats}</div>
+                    )}
+                  </div>
+                  {selectedNextWeekPlayer === player.name && (
+                    <Check size={16} className="text-emerald-400" strokeWidth={2} />
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+          
+          {selectedNextWeekPlayer && (
+            <div className="pt-3 border-t border-gray-700/50">
+              <div className="text-xs text-emerald-400 mb-2">
+                +25 pts
+              </div>
+              <div className="text-xs text-white/60">
+                Prediction locked until next round
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Expandable content for Tips made for weekend fixtures (id 2) */}
+      {isExpanded && mission.id === 2 && (
+        <div className="mt-2 pt-3 border-t border-gray-700/50 space-y-3" onClick={(e) => e.stopPropagation()}>
+          <div className="text-xs font-bold text-white/80 mb-2">WEEKEND FIXTURES</div>
+          <div className="text-xs text-white/60 mb-3">6 of 8 tips completed</div>
+          
+          <div className="space-y-2 max-h-64 overflow-y-auto">
+            {fixtures?.map((fixture) => (
+              <div key={fixture.id} className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-xs text-white/60">{fixture.date}</div>
+                  {fixture.userTip && (
+                    <Check size={14} className="text-emerald-400" strokeWidth={2} />
+                  )}
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="text-sm font-semibold text-white">
+                    {fixture.home} vs {fixture.away}
+                  </div>
+                  {fixture.userTip ? (
+                    <div className="text-xs text-emerald-400 font-semibold">✓ {fixture.userTip}</div>
+                  ) : (
+                    <button className="text-xs text-white/60 hover:text-emerald-400 transition-colors">
+                      Pick winner →
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Expandable content for Vote for MVP of last round (id 3) */}
+      {isExpanded && mission.id === 3 && (
+        <div className="mt-2 pt-3 border-t border-gray-700/50 space-y-3" onClick={(e) => e.stopPropagation()}>
+          <div className="text-xs font-bold text-white/80 mb-2">ROUND 5 MVP</div>
+          <div className="text-xs text-white/60 mb-3">Who was the best player this round?</div>
+          
+          <input
+            type="text"
+            placeholder="Search player..."
+            value={playerSearchLastRound || ""}
+            onChange={(e) => onPlayerSearchLastRoundChange?.(e.target.value)}
+            className="w-full bg-gray-800/50 border border-gray-700/50 rounded-lg px-3 py-2 text-sm text-white placeholder-white/40 focus:outline-none focus:border-emerald-500"
+          />
+          
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {filteredPlayersLastRound?.map((player) => (
+              <button
+                key={player.id}
+                onClick={() => onLastRoundPlayerSelect?.(player.name)}
+                className={`w-full bg-gray-800/50 border rounded-lg p-3 text-left transition-colors ${
+                  selectedLastRoundPlayer === player.name 
+                    ? 'border-emerald-500 bg-emerald-500/10' 
+                    : 'border-gray-700/50 hover:border-emerald-500'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                    <User size={20} className="text-white/60" strokeWidth={2} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm font-semibold text-white">{player.name}</div>
+                    <div className="text-xs text-white/60">{player.stats}</div>
+                  </div>
+                  {selectedLastRoundPlayer === player.name && (
+                    <Check size={16} className="text-emerald-400" strokeWidth={2} />
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+          
+          {selectedLastRoundPlayer && (
+            <div className="pt-3 border-t border-gray-700/50">
+              <div className="text-xs text-emerald-400 mb-2">
+                +25 pts
+              </div>
+              <div className="text-xs text-white/60">
+                Winner announced: Wednesday 12pm
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Expandable content for Most dominant team prediction (id 4) */}
+      {isExpanded && mission.id === 4 && (
         <div className="mt-2 pt-3 border-t border-gray-700/50 space-y-3" onClick={(e) => e.stopPropagation()}>
           <select
             value={selectedTeam || ""}
@@ -2387,6 +2696,59 @@ function MissionCardHorizontal({
                   <div className="w-10 text-xs text-white/70 text-right">{team.percentage}%</div>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Expandable content for Watch match highlights (id 6) */}
+      {isExpanded && mission.id === 6 && (
+        <div className="mt-2 pt-3 border-t border-gray-700/50 space-y-3" onClick={(e) => e.stopPropagation()}>
+          <div className="text-xs font-bold text-white/80 mb-2">MATCH HIGHLIGHTS</div>
+          <div className="text-xs text-white/60 mb-3">2 of 3 highlights watched</div>
+          
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {highlights?.map((highlight) => (
+              <div key={highlight.id} className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="text-sm font-semibold text-white">{highlight.title}</div>
+                    <div className="text-xs text-white/60">{highlight.duration}</div>
+                  </div>
+                  {highlight.watched ? (
+                    <Check size={16} className="text-emerald-400" strokeWidth={2} />
+                  ) : (
+                    <button className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors">
+                      Watch →
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Expandable content for Share on social media (id 7) */}
+      {isExpanded && mission.id === 7 && (
+        <div className="mt-2 pt-3 border-t border-gray-700/50 space-y-3" onClick={(e) => e.stopPropagation()}>
+          <div className="text-xs font-bold text-white/80 mb-2">SHARE YOUR ACHIEVEMENTS</div>
+          <div className="text-xs text-white/60 mb-3">Share on social media to earn points</div>
+          
+          <div className="grid grid-cols-2 gap-2">
+            {["Facebook", "Instagram", "Twitter", "TikTok"].map((platform) => (
+              <button
+                key={platform}
+                className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-3 text-sm text-white hover:border-emerald-500 transition-colors"
+              >
+                {platform}
+              </button>
+            ))}
+          </div>
+          
+          <div className="pt-2 border-t border-gray-700/50">
+            <div className="text-xs text-emerald-400">
+              +5 pts per platform shared
             </div>
           </div>
         </div>
