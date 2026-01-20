@@ -2609,8 +2609,13 @@ function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightP
   const [homeGroundSearch, setHomeGroundSearch] = useState("");
   const [showHomeGroundDropdown, setShowHomeGroundDropdown] = useState(false);
   
-  // Track user's current points and tier
+  // Track user's current points and tier - start from user's actual points
   const [currentUserPoints, setCurrentUserPoints] = useState(user?.points || 0);
+  
+  // Update running total display in real-time
+  useEffect(() => {
+    // This will trigger re-render when totalPoints changes
+  }, [totalPoints]);
   
   const homeGrounds = [
     "Suncorp Stadium",

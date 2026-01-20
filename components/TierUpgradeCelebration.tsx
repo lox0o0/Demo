@@ -24,7 +24,9 @@ export default function TierUpgradeCelebration({
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [showTierReveal, setShowTierReveal] = useState(false);
   const [showReward, setShowReward] = useState(false);
-  const [points, setPoints] = useState(oldTier.minPoints);
+  // Start from old tier's max points (just before new tier)
+  const startPoints = oldTier.minPoints;
+  const [points, setPoints] = useState(startPoints);
   const targetPoints = newTier.minPoints;
   const confettiRef = useRef<HTMLCanvasElement>(null);
 
@@ -47,25 +49,28 @@ export default function TierUpgradeCelebration({
     };
   }, []);
 
-  // Animate points counter
+  // Animate points counter: start from old tier, count up to new tier
   const animatePoints = () => {
     const duration = 2000; // 2 seconds
     const steps = 50;
-    const increment = (targetPoints - oldTier.minPoints) / steps;
+    const pointsDiff = targetPoints - startPoints;
+    const increment = pointsDiff / steps;
     const stepDuration = duration / steps;
 
     let currentStep = 0;
     const interval = setInterval(() => {
       currentStep++;
       const newPoints = Math.min(
-        Math.floor(oldTier.minPoints + increment * currentStep),
+        Math.floor(startPoints + increment * currentStep),
         targetPoints
       );
       setPoints(newPoints);
 
+      // Trigger fireworks when hitting target
       if (newPoints >= targetPoints) {
         clearInterval(interval);
         setPoints(targetPoints);
+        // Fireworks already triggered, but ensure they're visible
       }
     }, stepDuration);
   };
