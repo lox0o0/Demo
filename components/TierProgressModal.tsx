@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { X, Trophy } from "lucide-react";
 import { TIERS } from "@/lib/mockData";
-import Image from "next/image";
 
 interface TierProgressModalProps {
   userPoints: number;
@@ -31,7 +30,11 @@ export default function TierProgressModal({
 
   if (!nextTier) return null;
 
-  const progressPercent = ((userPoints - currentTier.minPoints) / (nextTier.minPoints - currentTier.minPoints)) * 100;
+  // Calculate progress percentage, handle edge cases
+  const tierRange = nextTier.minPoints - currentTier.minPoints;
+  const progressPercent = tierRange > 0 
+    ? Math.min(((userPoints - currentTier.minPoints) / tierRange) * 100, 100)
+    : 100;
 
   return (
     <div 

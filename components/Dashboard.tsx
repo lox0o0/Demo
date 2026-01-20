@@ -47,17 +47,25 @@ export default function Dashboard({ user }: DashboardProps) {
 
   // Show modal if user is close to next tier (within 100 points) and hasn't dismissed it
   useEffect(() => {
-    if (activeSection === "home" && pointsToNext > 0 && pointsToNext <= 100) {
-      const dismissed = localStorage.getItem('tierProgressModalDismissed');
+    if (activeSection === "home" && pointsToNext > 0 && pointsToNext <= 100 && nextTier) {
+      // Check if modal was dismissed for this specific tier
+      const dismissedKey = `tierProgressModalDismissed_${nextTier.name}`;
+      const dismissed = localStorage.getItem(dismissedKey);
       if (!dismissed) {
         setShowProgressModal(true);
       }
+    } else {
+      setShowProgressModal(false);
     }
-  }, [activeSection, pointsToNext]);
+  }, [activeSection, pointsToNext, nextTier]);
 
   const handleDismissModal = () => {
     setShowProgressModal(false);
-    localStorage.setItem('tierProgressModalDismissed', 'true');
+    // Store dismissal per tier so it can show again for next tier
+    if (nextTier) {
+      const dismissedKey = `tierProgressModalDismissed_${nextTier.name}`;
+      localStorage.setItem(dismissedKey, 'true');
+    }
   };
 
   const handleCompleteProfile = () => {
