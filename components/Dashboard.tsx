@@ -59,8 +59,8 @@ export default function Dashboard({ user }: DashboardProps) {
                     image="/images/cards/predictions.jpg"
                     title="Predictions"
                     subtitle="Round 6 Telstra MVP prediction made"
-                    badge="✓ Complete"
-                    badgeColor="green"
+                    badge="+50 pts"
+                    badgeColor="gold"
                     ctaButton="Check predictions"
                   />
                   <ContentCard
@@ -68,14 +68,16 @@ export default function Dashboard({ user }: DashboardProps) {
                     title="Upgrade your profile"
                     subtitle="Complete profile data to earn points!"
                     progressPercent={30}
-                    badge="+200 pts available"
+                    badge="+45 pts"
+                    badgeColor="gold"
                     ctaButton="Complete profile data"
                   />
                   <ContentCard
                     image="/images/cards/prize-wheel.png"
                     title="Prize Wheel"
                     subtitle="Spin to win exclusive rewards"
-                    badge="🎰 5 spins available"
+                    badge="+60 pts"
+                    badgeColor="gold"
                     ctaButton="Spin Now →"
                     ctaStyle="centered"
                   />
@@ -143,21 +145,24 @@ export default function Dashboard({ user }: DashboardProps) {
                     image="/images/cards/ben-hunt-highlights.jpeg"
                     title="Ben Hunt stuns in Premiership performance"
                     subtitle="Grand Final Highlights"
-                    badge="▶ 12 min"
+                    badge="+25 pts"
+                    badgeColor="gold"
                     ctaStyle="subtitle"
                   />
                   <ContentCard
                     image="/images/cards/broncos-storm-replay.jpg"
                     title="Extended Highlights: Broncos vs Storm"
                     subtitle="Grand Final Full Replay"
-                    badge="▶ 45 min"
+                    badge="+30 pts"
+                    badgeColor="gold"
                     ctaStyle="subtitle"
                   />
                   <ContentCard
                     image="/images/cards/top-performers.avif"
                     title="Top Performers from Premiership"
                     subtitle="Stats Overview"
-                    badge="📊 Stats"
+                    badge="+28 pts"
+                    badgeColor="gold"
                     ctaStyle="subtitle"
                   />
                 </div>
