@@ -22,7 +22,9 @@ export default function BackgroundVideo({ className = "" }: BackgroundVideoProps
   useEffect(() => {
     // Randomly select a video on mount
     const randomIndex = Math.floor(Math.random() * VIDEO_FILES.length);
-    setSelectedVideo(VIDEO_FILES[randomIndex]);
+    const videoPath = VIDEO_FILES[randomIndex];
+    setSelectedVideo(videoPath);
+    console.log("Background video selected:", videoPath);
   }, []);
 
   const handleVideoLoaded = () => {
@@ -32,6 +34,13 @@ export default function BackgroundVideo({ className = "" }: BackgroundVideoProps
       videoRef.current.play().catch((error) => {
         console.log("Video autoplay prevented:", error);
       });
+      // Force play attempt
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay was prevented, but that's okay for background videos
+        });
+      }
     }
   };
 
@@ -47,7 +56,7 @@ export default function BackgroundVideo({ className = "" }: BackgroundVideoProps
   if (!selectedVideo) return null;
 
   return (
-    <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
+    <div className={`fixed inset-0 overflow-hidden pointer-events-none ${className}`} style={{ zIndex: -1 }}>
       {/* Video Background */}
       <video
         ref={videoRef}
@@ -60,14 +69,16 @@ export default function BackgroundVideo({ className = "" }: BackgroundVideoProps
         muted
         playsInline
         onLoadedData={handleVideoLoaded}
+        onCanPlay={handleVideoLoaded}
         onError={handleVideoError}
+        style={{ minWidth: '100%', minHeight: '100%', width: 'auto', height: 'auto' }}
       />
       
-      {/* Dark Overlay for Content Readability - stronger gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/75" />
+      {/* Dark Overlay for Content Readability - reduced opacity to show video */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/55" />
       
-      {/* Additional overlay for better text contrast */}
-      <div className="absolute inset-0 bg-black/25" />
+      {/* Additional subtle overlay for better text contrast */}
+      <div className="absolute inset-0 bg-black/15" />
     </div>
   );
 }

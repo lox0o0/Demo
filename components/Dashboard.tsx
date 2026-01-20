@@ -44,8 +44,8 @@ export default function Dashboard({ user }: DashboardProps) {
         <main className="flex-1 overflow-y-auto pl-8 pr-6 py-6 relative">
           {activeSection === "home" && (
             <>
-              {/* Background Video - positioned behind content */}
-              <BackgroundVideo className="absolute inset-0 -z-10" />
+              {/* Background Video - fixed to viewport behind all content */}
+              <BackgroundVideo />
               
               {/* Content with relative positioning */}
               <div className="space-y-12 max-w-[95%] relative z-10">
