@@ -106,7 +106,7 @@ export default function HeroCarousel() {
   };
 
   return (
-    <section className="space-y-6 w-full" style={{ height: "35vh", minHeight: "300px", maxHeight: "500px" }}>
+    <section className="space-y-6 w-full" style={{ height: "48vh", minHeight: "400px", maxHeight: "650px" }}>
       <div className="relative w-full h-full">
         <div className="relative w-full h-full" role="region" aria-roledescription="carousel">
           <div ref={containerRef} className="overflow-hidden h-full rounded-lg" style={{ width: "100%" }}>
@@ -157,12 +157,12 @@ export default function HeroCarousel() {
                           ) : null}
 
                           {/* Content */}
-                          <div className="flex flex-col items-start text-left text-white space-y-3 relative z-10">
+                          <div className="flex flex-col items-start text-left text-white space-y-4 relative z-10">
                             <h3 className="text-xl font-bold">{slide.headline}</h3>
                             <p className="text-2xl text-white/80 max-w-2xl leading-relaxed">{slide.subtext}</p>
                             <button
                               onClick={slide.ctaAction}
-                              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border hover:text-accent-foreground h-10 px-4 py-2 border-white/20 text-white hover:bg-white/10 bg-white/5 backdrop-blur-sm hover:backdrop-blur-md transition-all duration-300"
+                              className="group/cta inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-base font-semibold h-12 px-6 bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md shadow-[0_0_15px_rgba(251,191,36,0.5)] hover:shadow-[0_0_25px_rgba(251,191,36,0.7)] transition-all duration-300 hover:scale-105"
                             >
                               {slide.ctaText}
                             </button>
