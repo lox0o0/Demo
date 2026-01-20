@@ -11,6 +11,7 @@ import RightSidebar from "./layout/RightSidebar";
 import StatusBar from "./layout/StatusBar";
 import SectionHeader from "./cards/SectionHeader";
 import ContentCard from "./cards/ContentCard";
+import BackgroundVideo from "./BackgroundVideo";
 
 interface DashboardProps {
   user: any;
@@ -40,9 +41,14 @@ export default function Dashboard({ user }: DashboardProps) {
         <StatusBar user={user} />
 
         {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto pl-8 pr-6 py-6">
+        <main className="flex-1 overflow-y-auto pl-8 pr-6 py-6 relative">
           {activeSection === "home" && (
-            <div className="space-y-12 max-w-[95%]">
+            <>
+              {/* Background Video - positioned behind content */}
+              <BackgroundVideo className="absolute inset-0 -z-10" />
+              
+              {/* Content with relative positioning */}
+              <div className="space-y-12 max-w-[95%] relative z-10">
               {/* SECTION 1: ACTIVITIES */}
               <section>
                 <SectionHeader
@@ -168,7 +174,8 @@ export default function Dashboard({ user }: DashboardProps) {
                   />
                 </div>
               </section>
-            </div>
+              </div>
+            </>
           )}
           
           {activeSection === "dashboard" && (
