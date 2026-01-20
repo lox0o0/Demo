@@ -42,28 +42,30 @@ export default function ContentCard({
 
   return (
     <div
-      className="relative group cursor-pointer rounded-xl overflow-hidden border border-[#2a2a2d] hover:border-[#22c55e] transition-all duration-300 hover:scale-[1.02]"
+      className="relative group cursor-pointer rounded-xl overflow-hidden border border-[#2a2a2d] hover:border-[#22c55e] transition-all duration-300 hover:scale-[1.02] bg-[#0a0a0b]"
       onClick={onCardClick}
     >
-      {/* Background Image */}
-      <div className="relative aspect-video w-full">
-        {!imageError ? (
-          <Image
-            src={image}
-            alt={title}
-            fill
-            className="object-cover"
-            onError={() => setImageError(true)}
-            unoptimized
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-[#1a1a1d] to-[#0a0a0b] flex items-center justify-center">
-            <span className="text-4xl">📺</span>
-          </div>
-        )}
-        
-        {/* Gradient Overlay (bottom-heavy) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+      {/* Background Image with padding and border */}
+      <div className="relative aspect-video w-full p-3">
+        <div className="relative w-full h-full rounded-lg overflow-hidden border border-[#2a2a2d]/50 bg-[#1a1a1d]">
+          {!imageError ? (
+            <Image
+              src={image}
+              alt={title}
+              fill
+              className="object-cover"
+              onError={() => setImageError(true)}
+              unoptimized
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-[#1a1a1d] to-[#0a0a0b] flex items-center justify-center">
+              <span className="text-4xl">📺</span>
+            </div>
+          )}
+          
+          {/* Gradient Overlay (bottom-heavy) */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+        </div>
       </div>
 
       {/* Content Overlay */}
@@ -91,7 +93,7 @@ export default function ContentCard({
                 e.stopPropagation();
                 onCtaClick?.();
               }}
-              className="w-full px-4 py-2 bg-[#1a1a1d] border border-[#2a2a2d] hover:border-[#22c55e] text-white text-sm font-semibold rounded-lg transition-colors text-center"
+              className="w-full px-4 py-2 bg-[#1a1a1d] border border-[#f59e0b]/40 text-white text-sm font-semibold rounded-lg transition-all text-center shadow-[0_0_8px_rgba(245,158,11,0.3)] hover:shadow-[0_0_12px_rgba(245,158,11,0.5)] hover:border-[#f59e0b]/60"
             >
               {subtitle}
             </button>
@@ -161,7 +163,7 @@ export default function ContentCard({
                 e.stopPropagation();
                 onCtaClick?.();
               }}
-              className="w-full px-4 py-2 bg-[#1a1a1d] border border-[#2a2a2d] hover:border-[#22c55e] text-white text-sm font-semibold rounded-lg transition-colors text-center"
+              className="w-full px-4 py-2 bg-[#1a1a1d] border border-[#f59e0b]/40 text-white text-sm font-semibold rounded-lg transition-all text-center shadow-[0_0_8px_rgba(245,158,11,0.3)] hover:shadow-[0_0_12px_rgba(245,158,11,0.5)] hover:border-[#f59e0b]/60"
             >
               {ctaButton}
             </button>
