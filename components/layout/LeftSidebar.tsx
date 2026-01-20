@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 interface LeftSidebarProps {
   activeSection: string;
   onNavigate: (section: string) => void;
