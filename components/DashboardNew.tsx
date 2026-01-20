@@ -12,6 +12,8 @@ import {
   TrendingUp, Calendar, Award, Crown, Target, Share2, Video, ChevronLeft, ChevronRight, Info
 } from "lucide-react";
 import { SocialIcon } from "@/lib/icons";
+import TierUpgradeCelebration from "./TierUpgradeCelebration";
+import TierUpgradeCelebration from "./TierUpgradeCelebration";
 
 interface DashboardProps {
   user: any;
@@ -43,6 +45,8 @@ const calculateTier = (points: number, profileCompletion: number) => {
 export default function DashboardNew({ user, hideNavigation = false, onNavigate }: DashboardProps) {
   const [activeSection, setActiveSection] = useState<NavSection>("dashboard");
   const [highlightProfileCompletion, setHighlightProfileCompletion] = useState(false);
+  const [showTierCelebration, setShowTierCelebration] = useState(false);
+  const [celebrationData, setCelebrationData] = useState<{ oldTier: any; newTier: any } | null>(null);
   
   // Check if we should highlight profile completion (from modal CTA)
   useEffect(() => {
@@ -59,6 +63,11 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
       }, 300);
     }
   }, []);
+  
+  const handleTierUpgrade = (oldTier: any, newTier: any) => {
+    setCelebrationData({ oldTier, newTier });
+    setShowTierCelebration(true);
+  };
   
   // Get user data
   const profileCompletion = user?.profileCompletion || 0;
@@ -2338,6 +2347,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
           user={user} 
           highlightProfileCompletion={highlightProfileCompletion}
           setHighlightProfileCompletion={setHighlightProfileCompletion}
+          onTierUpgrade={handleTierUpgrade}
         />
       </div>
 
@@ -2571,12 +2581,15 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
 }
 
 // Profile Completion Flow Component with Animations
-function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightProfileCompletion }: { user: any; highlightProfileCompletion: boolean; setHighlightProfileCompletion?: (value: boolean) => void }) {
+function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightProfileCompletion, onTierUpgrade }: { user: any; highlightProfileCompletion: boolean; setHighlightProfileCompletion?: (value: boolean) => void; onTierUpgrade?: (oldTier: any, newTier: any) => void }) {
   const [completedItems, setCompletedItems] = useState<string[]>(user?.completedProfileItems || []);
   const [totalPoints, setTotalPoints] = useState(0);
   const [pointsAnimation, setPointsAnimation] = useState<{ item: string; points: number } | null>(null);
   const [homeGroundSearch, setHomeGroundSearch] = useState("");
   const [showHomeGroundDropdown, setShowHomeGroundDropdown] = useState(false);
+  
+  // Track user's current points and tier
+  const [currentUserPoints, setCurrentUserPoints] = useState(user?.points || 0);
   
   const homeGrounds = [
     "Suncorp Stadium",
@@ -2592,6 +2605,27 @@ function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightP
     g.toLowerCase().includes(homeGroundSearch.toLowerCase())
   );
 
+  const checkTierUpgrade = (oldPoints: number, newPoints: number) => {
+    if (!onTierUpgrade) return;
+    
+    const oldTier = TIERS.find((t, i) => {
+      const nextTier = TIERS[i + 1];
+      return oldPoints >= t.minPoints && (!nextTier || oldPoints < nextTier.minPoints);
+    }) || TIERS[0];
+    
+    const newTier = TIERS.find((t, i) => {
+      const nextTier = TIERS[i + 1];
+      return newPoints >= t.minPoints && (!nextTier || newPoints < nextTier.minPoints);
+    }) || TIERS[0];
+    
+    // Trigger celebration if tier changed
+    if (oldTier.name !== newTier.name) {
+      setTimeout(() => {
+        onTierUpgrade(oldTier, newTier);
+      }, 500); // Small delay after points animation
+    }
+  };
+
   const handleConnectSocial = async (platform: string) => {
     if (completedItems.includes(platform)) return;
     
@@ -2599,11 +2633,16 @@ function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightP
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     const points = 25;
+    const newPoints = currentUserPoints + points;
     setCompletedItems([...completedItems, platform]);
     setTotalPoints(prev => prev + points);
+    setCurrentUserPoints(newPoints);
     setPointsAnimation({ item: platform, points });
     
     setTimeout(() => setPointsAnimation(null), 2000);
+    
+    // Check for tier upgrade
+    checkTierUpgrade(currentUserPoints, newPoints);
     
     // Stop highlighting after first interaction
     if (setHighlightProfileCompletion && highlightProfileCompletion) {
@@ -2615,13 +2654,18 @@ function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightP
     if (completedItems.includes('homeGround')) return;
     
     const points = 25;
+    const newPoints = currentUserPoints + points;
     setCompletedItems([...completedItems, 'homeGround']);
     setTotalPoints(prev => prev + points);
+    setCurrentUserPoints(newPoints);
     setPointsAnimation({ item: 'homeGround', points });
     setHomeGroundSearch(ground);
     setShowHomeGroundDropdown(false);
     
     setTimeout(() => setPointsAnimation(null), 2000);
+    
+    // Check for tier upgrade
+    checkTierUpgrade(currentUserPoints, newPoints);
     
     if (setHighlightProfileCompletion && highlightProfileCompletion) {
       setTimeout(() => setHighlightProfileCompletion(false), 1000);
@@ -2630,14 +2674,12 @@ function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightP
 
   return (
     <div className="space-y-2">
-      {/* Running Points Total */}
-      {totalPoints > 0 && (
-        <div className="mb-3 p-2 bg-emerald-500/20 border border-emerald-500/50 rounded-lg">
-          <div className="text-xs text-emerald-400 font-semibold text-center">
-            +{totalPoints} pts earned!
-          </div>
+      {/* Running Points Total - Real-time updates */}
+      <div className="mb-3 p-2.5 bg-emerald-500/20 border border-emerald-500/50 rounded-lg">
+        <div className="text-sm text-emerald-400 font-bold text-center">
+          {totalPoints > 0 ? `+${totalPoints} pts earned!` : 'Complete items to earn points'}
         </div>
-      )}
+      </div>
 
       {/* Connect Instagram */}
       <div className={`flex items-center justify-between py-2.5 px-3 rounded-lg transition-all ${
