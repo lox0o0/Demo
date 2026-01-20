@@ -65,13 +65,16 @@ export default function ContentCard({
           )}
           
           {/* Dark overlay across entire image (15-20% opacity) */}
-          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-0 bg-black/18" />
           
           {/* Strengthened Gradient Overlay - covers bottom 2/3 of card, darker at bottom */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 via-black/10 to-transparent" 
-               style={{
-                 background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.1) 50%, transparent 100%)'
-               }} />
+          {/* Starts at 60% opacity black at bottom, fades to transparent around middle */}
+          <div 
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.5) 20%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.15) 60%, transparent 100%)'
+            }}
+          />
         </div>
       </div>
 
