@@ -2603,7 +2603,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
 }
 
 // Profile Completion Flow Component with Animations
-function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightProfileCompletion, onTierUpgrade }: { user: any; highlightProfileCompletion: boolean; setHighlightProfileCompletion?: (value: boolean) => void; onTierUpgrade?: (oldTier: any, newTier: any) => void }) {
+function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightProfileCompletion, onTierUpgrade }: { user: any; highlightProfileCompletion: boolean; setHighlightProfileCompletion?: (value: boolean) => void; onTierUpgrade?: (oldTier: any, newTier: any, startPoints?: number) => void }) {
   const [completedItems, setCompletedItems] = useState<string[]>(user?.completedProfileItems || []);
   const [totalPoints, setTotalPoints] = useState(0);
   const [pointsAnimation, setPointsAnimation] = useState<{ item: string; points: number } | null>(null);
