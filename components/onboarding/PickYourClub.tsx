@@ -99,7 +99,7 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
 
   return (
     <div 
-      className="min-h-screen relative"
+      className="min-h-screen relative bg-black"
       style={{
         backgroundImage: 'url(/images/choose-team.jpg)',
         backgroundSize: 'cover',
@@ -108,8 +108,8 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
         backgroundAttachment: 'fixed',
       }}
     >
-      {/* Lighter Overlay for Content Readability - allows background to show through */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50 z-0" />
+      {/* Very light overlay - just enough for text readability */}
+      <div className="absolute inset-0 bg-black/10 z-0" />
       
       <div className="container mx-auto px-4 py-12 relative z-10">
         <div className="text-center mb-12">
