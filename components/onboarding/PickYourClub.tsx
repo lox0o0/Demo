@@ -98,18 +98,20 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   }
 
   return (
-    <div 
-      className="min-h-screen relative"
-      style={{
-        backgroundImage: 'url(/images/choose-team.webp)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-      }}
-    >
-      {/* Overlay for better text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
+    <div className="min-h-screen relative">
+      {/* Background Image */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <Image
+          src="/images/choose-team.webp"
+          alt="Choose Team Background"
+          fill
+          className="object-cover"
+          priority
+          unoptimized
+        />
+        {/* Dark Overlay for Content Readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
+      </div>
       
       <div className="container mx-auto px-4 py-12 relative z-10">
         <div className="text-center mb-12">
