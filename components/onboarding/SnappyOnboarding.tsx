@@ -721,18 +721,18 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                 {/* Google Button */}
                 <button
                   onClick={handleGoogleSignIn}
-                  className="w-14 h-14 rounded-full bg-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-neutral-800 hover:bg-neutral-700 flex items-center justify-center transition-all duration-200 shadow-lg"
                   aria-label="Sign in with Google"
                 >
-                  <AuthIcon provider="google" size={32} />
+                  <AuthIcon provider="google" size={28} />
                 </button>
                 {/* Apple Button */}
                 <button
                   onClick={handleAppleSignIn}
-                  className="w-14 h-14 rounded-full bg-black flex items-center justify-center hover:scale-110 transition-transform shadow-lg border border-white/20"
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-neutral-800 hover:bg-neutral-700 flex items-center justify-center transition-all duration-200 shadow-lg"
                   aria-label="Sign in with Apple"
                 >
-                  <AuthIcon provider="apple" size={32} />
+                  <AuthIcon provider="apple" size={28} />
                 </button>
               </div>
             </div>
@@ -888,8 +888,8 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                   }}
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 flex items-center justify-center rounded-full bg-white">
-                      <AuthIcon provider="google" size={32} />
+                    <div className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-neutral-800 hover:bg-neutral-700 transition-all duration-200">
+                      <AuthIcon provider="google" size={28} />
                     </div>
                     <div className="text-xs font-semibold text-nrl-text-primary">Google</div>
                     {selectedAuthMethod === "google" && (
@@ -914,8 +914,8 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                   }}
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 flex items-center justify-center rounded-full bg-black border border-white/20">
-                      <AuthIcon provider="apple" size={32} />
+                    <div className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-neutral-800 hover:bg-neutral-700 transition-all duration-200">
+                      <AuthIcon provider="apple" size={28} />
                     </div>
                     <div className="text-xs font-semibold text-nrl-text-primary">Apple</div>
                     {selectedAuthMethod === "apple" && (
@@ -940,8 +940,8 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                   }}
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10">
-                      <svg className="w-6 h-6 text-nrl-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-neutral-800 hover:bg-neutral-700 transition-all duration-200">
+                      <svg className="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
                     </div>
@@ -1008,11 +1008,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                       }}
                     >
                       <div className="flex flex-col items-center gap-3">
-                        <div className="w-16 h-16 flex items-center justify-center rounded-full" style={{
-                          backgroundColor: isConnected ? `${platform.color}20` : `${platform.color}10`,
-                        }}>
-                          <SocialIcon platform={platform.id} size={48} />
-                        </div>
+                        <SocialIcon platform={platform.id} size={56} className="md:w-14 md:h-14" />
                         <div className="text-center">
                           <div className="font-semibold text-nrl-text-primary text-sm mb-1">
                             {platform.name}

@@ -79,8 +79,8 @@ export const NavIcon = ({ type }: { type: string }) => {
   );
 };
 
-// Social Media Icon Component - optimized for professional display like Strava/NBA/NFL
-export const SocialIcon = ({ platform, size = 32 }: { platform: string; size?: number }) => {
+// Social Media Icon Component - optimized for professional display matching reference style
+export const SocialIcon = ({ platform, size = 32, className = "" }: { platform: string; size?: number; className?: string }) => {
   const logoUrl = SOCIAL_LOGOS[platform as keyof typeof SOCIAL_LOGOS];
   const [imgSrc, setImgSrc] = useState(logoUrl);
   const [hasError, setHasError] = useState(false);
@@ -101,35 +101,29 @@ export const SocialIcon = ({ platform, size = 32 }: { platform: string; size?: n
     );
   }
   
-  // Platform-specific styling for better visibility
-  const platformStyles: Record<string, { bg?: string; padding?: string }> = {
-    instagram: { bg: "bg-white/10", padding: "p-1" }, // Instagram needs background for visibility
-    facebook: { bg: "bg-white/5", padding: "p-0.5" },
-    tiktok: { bg: "bg-white/5", padding: "p-0.5" },
-    x: { bg: "bg-white/5", padding: "p-0.5" },
-  };
-  
-  const styles = platformStyles[platform] || {};
+  // Calculate icon size based on container size (approximately 50% of container)
+  const iconSize = Math.round(size * 0.5);
   
   return (
     <div 
-      className={`relative flex items-center justify-center ${styles.bg || ""} rounded ${styles.padding || ""}`}
+      className={`inline-flex items-center justify-center rounded-full bg-neutral-800 hover:bg-neutral-700 transition-all duration-200 ${className}`}
       style={{ width: size, height: size, minWidth: size, minHeight: size }}
     >
       {!hasError ? (
         <Image
           src={imgSrc}
           alt={`${platform} logo`}
-          width={size}
-          height={size}
-          className="object-contain w-full h-full"
+          width={iconSize}
+          height={iconSize}
+          className="object-contain"
+          style={{ width: `${iconSize}px`, height: `${iconSize}px` }}
           unoptimized
           onError={() => {
             setHasError(true);
           }}
         />
       ) : (
-        <span className="text-xs font-semibold uppercase text-nrl-text-primary">
+        <span className="text-xs font-semibold uppercase text-white">
           {platform.charAt(0).toUpperCase()}
         </span>
       )}

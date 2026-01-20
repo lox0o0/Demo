@@ -11,6 +11,7 @@ import {
   CircleDot, Lock, Check, Circle, HelpCircle, User, Sparkles, 
   TrendingUp, Calendar, Award, Crown, Target, Share2, Video, ChevronLeft, ChevronRight, Info
 } from "lucide-react";
+import { SocialIcon } from "@/lib/icons";
 
 interface DashboardProps {
   user: any;
@@ -1611,22 +1612,14 @@ function ProfileCompletionSimplified({ user, profileCompletion }: any) {
             return (
               <button
                 key={social.id}
-                className={`relative flex items-center justify-center transition-all ${
-                  isConnected 
-                    ? "opacity-100 hover:scale-110" 
-                    : "opacity-40 hover:opacity-60"
-                }`}
+                className="relative transition-all"
                 title={isConnected ? `${social.name} connected` : `Connect ${social.name}`}
               >
-                <div className={`relative ${isConnected ? "w-10 h-10" : "w-8 h-8"}`}>
-                  <Image
-                    src={`/social-logos/${social.id === "x" ? "x.png" : social.id === "facebook" ? "facebook.png" : social.id === "instagram" ? "instagram.png" : "tiktok.png"}`}
-                    alt={social.name}
-                    fill
-                    className={`object-contain ${isConnected ? "" : "grayscale"}`}
-                    unoptimized
-                  />
-                </div>
+                <SocialIcon 
+                  platform={social.id} 
+                  size={isConnected ? 48 : 40}
+                  className={isConnected ? "" : "opacity-60 hover:opacity-80"}
+                />
                 {isConnected && (
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-nrl-green rounded-full border-2 border-nrl-dark-card">
                     <Check size={8} className="text-white" strokeWidth={3} />
@@ -1715,15 +1708,7 @@ function ConnectSocialsCard({ user }: any) {
             key={social.id}
             className="bg-nrl-dark-hover border border-nrl-border-light rounded-xl p-4 flex flex-col items-center gap-2 hover:border-nrl-green transition-colors"
           >
-            <div className="relative w-12 h-12">
-              <Image
-                src={social.logo}
-                alt={social.name}
-                fill
-                className="object-contain"
-                unoptimized
-              />
-            </div>
+            <SocialIcon platform={social.id} size={48} />
             <span className="text-xs font-semibold text-white">{social.name}</span>
           </button>
         ))}
@@ -2560,7 +2545,7 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
           </div>
           <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
             <div className="flex items-center gap-2">
-              <Image src="/social-logos/instagram.png" alt="Instagram" width={16} height={16} className="object-contain" unoptimized />
+              <SocialIcon platform="instagram" size={20} />
               <span className="text-xs text-white/70">Connect Instagram</span>
             </div>
             <div className="flex items-center gap-2">
@@ -2570,7 +2555,7 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
           </div>
           <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
             <div className="flex items-center gap-2">
-              <Image src="/social-logos/facebook.png" alt="Facebook" width={16} height={16} className="object-contain" unoptimized />
+              <SocialIcon platform="facebook" size={20} />
               <span className="text-xs text-white/70">Connect Facebook</span>
             </div>
             <div className="flex items-center gap-2">
@@ -2580,7 +2565,7 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
           </div>
           <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
             <div className="flex items-center gap-2">
-              <Image src="/social-logos/x.png" alt="X" width={16} height={16} className="object-contain" unoptimized />
+              <SocialIcon platform="x" size={20} />
               <span className="text-xs text-white/70">Connect X (Twitter)</span>
             </div>
             <div className="flex items-center gap-2">
@@ -2590,7 +2575,7 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
           </div>
           <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
             <div className="flex items-center gap-2">
-              <Image src="/social-logos/tiktok.png" alt="TikTok" width={16} height={16} className="object-contain" unoptimized />
+              <SocialIcon platform="tiktok" size={20} />
               <span className="text-xs text-white/70">Connect TikTok</span>
             </div>
             <div className="flex items-center gap-2">
