@@ -211,7 +211,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         profileCompletion: calculateProfileCompletion(
           emptySocials, 
           nameForCompletion, 
-          finalEmail || undefined,
+          finalEmail !== "" ? finalEmail : undefined,
           shouldIncludeAuthSelection
         ), // Use finalEmail which includes buildProfileEmail if applicable, and includeAuthSelection for OAuth
         entryPoint,
