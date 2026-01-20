@@ -162,7 +162,7 @@ export default function HeroCarousel() {
                             <p className="text-2xl text-white/80 max-w-2xl leading-relaxed">{slide.subtext}</p>
                             <button
                               onClick={slide.ctaAction}
-                              className="group/cta inline-flex items-center justify-center gap-3 whitespace-nowrap rounded-lg text-2xl font-bold h-20 px-12 bg-gray-900/90 hover:bg-gray-800/95 text-white border-2 border-yellow-400/50 hover:border-yellow-400/80 backdrop-blur-md shadow-[0_0_20px_rgba(251,191,36,0.6)] hover:shadow-[0_0_35px_rgba(251,191,36,0.9)] transition-all duration-300 hover:scale-110 hover:-translate-y-1"
+                              className="group/cta inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-lg font-bold h-14 px-8 bg-gray-900/90 hover:bg-gray-800/95 text-white border-2 border-yellow-400/50 hover:border-yellow-400/80 backdrop-blur-md shadow-[0_0_20px_rgba(251,191,36,0.6)] hover:shadow-[0_0_35px_rgba(251,191,36,0.9)] transition-all duration-300 hover:scale-110 hover:-translate-y-1"
                             >
                               {slide.ctaText}
                             </button>
