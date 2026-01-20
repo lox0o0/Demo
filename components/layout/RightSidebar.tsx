@@ -256,13 +256,14 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
             
             return (
               <div key={tier.name} className="flex items-start gap-4 relative">
-                {/* Tier Marker - centered on the progress line */}
+                {/* Tier Marker - centered on the progress line (at 16px from left) */}
                 <div 
-                  className="absolute left-0 flex items-center justify-center"
+                  className="absolute flex items-center justify-center"
                   style={{ 
-                    left: '0px',
-                    width: '32px',
-                    height: '32px',
+                    left: '16px', // Center of the 32px container, where the progress bar line is
+                    width: '24px',
+                    height: '24px',
+                    transform: 'translateX(-50%)', // Center the marker on the line
                   }}
                 >
                   <div
@@ -277,12 +278,10 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                             boxShadow: isCurrentTier 
                               ? `0 0 16px ${tierColor}, 0 0 24px ${tierColor}80`
                               : `0 0 4px ${tierColor}60`,
-                            margin: '0 auto', // Center the marker
                           }
                         : {
                             borderColor: "#6b7280",
                             backgroundColor: "transparent",
-                            margin: '0 auto', // Center the marker
                           }
                     }
                   >
