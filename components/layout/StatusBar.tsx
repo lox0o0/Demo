@@ -66,26 +66,20 @@ export default function StatusBar({ user }: StatusBarProps) {
             </div>
             {/* Floating Pill Container */}
             <div 
-              className="w-full px-4 py-3 rounded-full backdrop-blur-md bg-white/5 border border-white/20"
+              className="bg-transparent backdrop-blur-md border border-white/20 rounded-full py-[8px] px-4"
               style={{
                 filter: 'drop-shadow(rgba(0, 0, 0, 0.4) 0px 10px 25px)'
               }}
             >
               {/* Progress Bar Track */}
-              <div className="w-full h-3 bg-gray-700/50 rounded-full border border-gray-600/50 overflow-hidden relative">
+              <div className="flex-1 relative bg-gray-700/50 rounded-full h-4 overflow-hidden border border-gray-600/50 min-w-[240px]">
                 {/* Progress Fill with Gradient */}
                 <div
-                  className="h-full bg-gradient-to-r from-green-500 to-cyan-500 rounded-full transition-all duration-1000 relative overflow-hidden"
+                  className="bg-gradient-to-r from-green-500 to-cyan-500 h-4 rounded-full transition-all duration-1000 ease-out relative"
                   style={{ width: `${progressPercent}%` }}
                 >
-                  {/* Shine Animation - Subtle shimmer */}
-                  <div 
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                    style={{
-                      animation: 'shimmer 2s ease-in-out infinite',
-                      backgroundSize: '200% 100%',
-                    }}
-                  />
+                  {/* Shine Animation Inside Progress Fill */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
                 </div>
               </div>
             </div>
