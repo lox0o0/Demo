@@ -36,19 +36,17 @@ export default function Dashboard({ user }: DashboardProps) {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col ml-[70px] mr-[280px] overflow-hidden">
+      <div className="flex-1 flex flex-col ml-[70px] mr-[280px] overflow-hidden relative">
+        {/* Background Video - only on home section, fixed to viewport */}
+        {activeSection === "home" && <BackgroundVideo />}
+        
         {/* Status Bar */}
         <StatusBar user={user} />
 
         {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto pl-8 pr-6 py-6 relative">
+        <main className="flex-1 overflow-y-auto pl-8 pr-6 py-6 relative z-10">
           {activeSection === "home" && (
-            <>
-              {/* Background Video - fixed to viewport behind all content */}
-              <BackgroundVideo />
-              
-              {/* Content with relative positioning */}
-              <div className="space-y-12 max-w-[95%] relative z-10">
+            <div className="space-y-12 max-w-[95%] relative">
               {/* SECTION 1: ACTIVITIES */}
               <section>
                 <SectionHeader
@@ -174,8 +172,7 @@ export default function Dashboard({ user }: DashboardProps) {
                   />
                 </div>
               </section>
-              </div>
-            </>
+            </div>
           )}
           
           {activeSection === "dashboard" && (

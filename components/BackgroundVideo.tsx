@@ -75,10 +75,10 @@ export default function BackgroundVideo({ className = "" }: BackgroundVideoProps
       />
       
       {/* Dark Overlay for Content Readability - reduced opacity to show video */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/55" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/45" />
       
       {/* Additional subtle overlay for better text contrast */}
-      <div className="absolute inset-0 bg-black/15" />
+      <div className="absolute inset-0 bg-black/10" />
     </div>
   );
 }
