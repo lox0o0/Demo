@@ -101,16 +101,16 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   
   return (
     <div 
+      className="min-h-screen"
       style={{
-        minHeight: '100vh',
         width: '100%',
         position: 'relative',
-        overflow: 'hidden',
         backgroundImage: `url(${backgroundImagePath})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundAttachment: 'fixed',
+        backgroundColor: '#000',
       }}
     >
       {/* Light overlay for text readability */}
