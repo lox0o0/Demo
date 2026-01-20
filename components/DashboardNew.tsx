@@ -974,8 +974,8 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-nrl-dark-card flex items-center justify-center text-lg">
-                            {player.photo}
+                          <div className="w-10 h-10 rounded-full bg-nrl-dark-card flex items-center justify-center">
+                            <User size={20} className="text-white/60" strokeWidth={2} />
                           </div>
                           <div className="flex-1">
                             <div className="text-sm font-semibold text-white">{player.name}</div>
