@@ -221,13 +221,20 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
       
       {/* Fixed height container with flexbox layout */}
       <div className="relative" style={{ minHeight: '600px' }}>
-        {/* Vertical Progress Line - positioned on left */}
-        <div className="absolute left-2 top-0 bottom-0 w-1 flex flex-col">
+        {/* Vertical Progress Line - positioned on left, centered for markers */}
+        <div className="absolute left-0 top-0 bottom-0" style={{ width: '32px' }}>
+          {/* Background track (gray) */}
+          <div 
+            className="absolute left-1/2 top-0 bottom-0 w-1 bg-gray-700/50" 
+            style={{ transform: 'translateX(-50%)' }}
+          />
+          
           {/* Filled portion - colored up to current tier */}
           <div
-            className="w-full transition-all duration-1000 ease-out"
+            className="absolute left-1/2 bottom-0 w-1 transition-all duration-1000 ease-out"
             style={{
               height: `${progressPercent}%`,
+              transform: 'translateX(-50%)',
               background: `linear-gradient(to top, 
                 #6b7280 0%,
                 #CD7F32 16%,
@@ -238,40 +245,24 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                 #FFB800 100%
               )`,
             }}
-          >
-            {/* Shine animation */}
-            <div 
-              className="w-full h-full bg-gradient-to-b from-transparent via-white/20 to-transparent"
-              style={{
-                animation: 'shimmer 2s ease-in-out infinite',
-              }}
-            />
-          </div>
-          
-          {/* Empty/gray portion above current tier */}
-          <div 
-            className="w-full bg-gray-700/50 flex-1"
-            style={{
-              height: `${100 - progressPercent}%`,
-            }}
           />
         </div>
 
         {/* Tier Rows - using flexbox with explicit gaps */}
-        <div className="flex flex-col pl-8" style={{ gap: '48px' }}>
+        <div className="flex flex-col pl-10" style={{ gap: '48px' }}>
           {TIERS.map((tier, index) => {
             const { isReached, isCurrentTier } = getTierStatus(tier);
             const tierColor = tierColors[tier.name] || "#6b7280";
             
             return (
               <div key={tier.name} className="flex items-start gap-4 relative">
-                {/* Tier Marker - positioned on the progress line */}
+                {/* Tier Marker - centered on the progress line */}
                 <div 
                   className="absolute left-0 flex items-center justify-center"
                   style={{ 
-                    left: '-24px',
-                    width: '24px',
-                    height: '24px',
+                    left: '0px',
+                    width: '32px',
+                    height: '32px',
                   }}
                 >
                   <div
@@ -286,10 +277,12 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                             boxShadow: isCurrentTier 
                               ? `0 0 16px ${tierColor}, 0 0 24px ${tierColor}80`
                               : `0 0 4px ${tierColor}60`,
+                            margin: '0 auto', // Center the marker
                           }
                         : {
                             borderColor: "#6b7280",
                             backgroundColor: "transparent",
+                            margin: '0 auto', // Center the marker
                           }
                     }
                   >
