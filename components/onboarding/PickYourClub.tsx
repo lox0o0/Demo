@@ -98,17 +98,22 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   }
 
   return (
-    <div className="min-h-screen relative bg-black">
+    <div className="min-h-screen relative" style={{ backgroundColor: '#000' }}>
       {/* Background Image - using same approach as locker room */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <Image
+      <div className="fixed inset-0 z-0 pointer-events-none" style={{ position: 'fixed' }}>
+        <img
           src="/images/choose-team.png"
           alt="Choose Team Background"
-          fill
-          className="object-cover"
-          priority
-          unoptimized
-          style={{ zIndex: 0 }}
+          className="w-full h-full object-cover"
+          style={{ 
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: 0
+          }}
         />
         {/* Very light overlay - just for text readability */}
         <div className="absolute inset-0 bg-black/5" style={{ zIndex: 1 }} />
