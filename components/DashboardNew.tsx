@@ -87,7 +87,7 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
               <ConnectSocialsCard user={user} />
             </div>
 
-            {/* Middle Column - Your Season, Leaderboards */}
+            {/* Middle Column - Your Season */}
             <div className="space-y-6">
               <YourSeasonCard
                 tier={currentTier}
@@ -98,8 +98,6 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
                 teamData={teamData}
                 user={user}
               />
-              
-              <LeaderboardsCard user={user} teamData={teamData} />
             </div>
 
             {/* Right Column - Prize Wheel, Leaderboards, Tier Rewards */}
@@ -155,81 +153,39 @@ function StreakHeroZone({ streakData, user }: { streakData: StreakData; user: an
   };
 
   return (
-    <div className="relative bg-gradient-to-r from-[#1a1a1d] via-[#2a1a1d] to-[#1a1a1d] rounded-2xl p-8 border border-[#f59e0b]/20 overflow-hidden">
+    <div className="relative bg-gradient-to-r from-[#1a1a1d] via-[#2a1a1d] to-[#1a1a1d] rounded-2xl p-4 md:p-6 border border-[#f59e0b]/20 overflow-hidden" style={{ maxHeight: '25vh', minHeight: '20vh' }}>
       {/* Subtle glow effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#f59e0b]/5 via-transparent to-transparent pointer-events-none" />
       
-      <div className="relative flex flex-col md:flex-row items-center justify-between gap-8">
-        {/* Left: Streak Number */}
-        <div className="flex-1 text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-4 mb-4">
-            <div className="animate-pulse">
-              <Flame size={getFlameIconSize()} className="text-[#f59e0b]" strokeWidth={2} />
+      <div className="relative flex items-center justify-between gap-4 md:gap-6">
+        {/* Left: Streak Number with inline milestone */}
+        <div className="flex items-center gap-3 md:gap-4">
+          <div className="animate-pulse">
+            <Flame size={getFlameIconSize()} className="text-[#f59e0b]" strokeWidth={2} />
+          </div>
+          <div>
+            <div className="text-5xl md:text-6xl font-bold text-white leading-none">
+              {streakWeeks}
             </div>
-            <div>
-              <div className="text-7xl md:text-8xl font-bold text-white mb-2 leading-none">
-                {streakWeeks}
-              </div>
-              <div className="text-lg md:text-xl text-[#a1a1aa] font-semibold">
-                week streak
-              </div>
+            <div className="text-sm md:text-base text-[#a1a1aa] font-semibold">
+              week streak
             </div>
           </div>
-          
-          {/* Contextual praise */}
-          <div className="text-sm md:text-base text-[#f59e0b] font-semibold">
+        </div>
+
+        {/* Center: Contextual praise */}
+        <div className="flex-1 text-center">
+          <div className="text-xs md:text-sm text-[#f59e0b] font-semibold">
             {getPercentileMessage(streakWeeks)}
           </div>
         </div>
 
-        {/* Right: Next Milestone Progress */}
+        {/* Right: Next Milestone - Inline */}
         {nextMilestone && (
-          <div className="flex-shrink-0 w-full md:w-auto">
-            <div className="bg-[#0a0a0b]/60 backdrop-blur-sm rounded-xl p-6 border border-[#2a2a2d] min-w-[280px]">
-              <div className="text-xs font-bold uppercase text-[#a1a1aa] mb-3 tracking-wider">
-                Next Milestone
-              </div>
-              
-              {/* Circular Progress Ring */}
-              <div className="relative w-32 h-32 mx-auto mb-4">
-                <svg className="transform -rotate-90 w-32 h-32" viewBox="0 0 120 120">
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="50"
-                    stroke="#2a2a2d"
-                    strokeWidth="8"
-                    fill="none"
-                  />
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="50"
-                    stroke="#f59e0b"
-                    strokeWidth="8"
-                    fill="none"
-                    strokeDasharray={`${(milestoneProgress / 100) * 314} 314`}
-                    strokeLinecap="round"
-                    className="transition-all duration-1000"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <div className="text-2xl font-bold text-white">
-                    {nextMilestone.weeksRemaining}
-                  </div>
-                  <div className="text-xs text-[#a1a1aa]">weeks</div>
-                </div>
-              </div>
-              
-              <div className="text-center">
-                <div className="text-sm font-bold text-white mb-1">
-                  {nextMilestone.weeks} weeks: {nextMilestone.name}
-                </div>
-                <div className="text-xs text-[#a1a1aa]">
-                  {nextMilestone.reward}
-                </div>
-              </div>
-            </div>
+          <div className="flex-shrink-0 text-right">
+            <div className="text-xs text-[#a1a1aa] mb-1">Next: {nextMilestone.weeks} weeks</div>
+            <div className="text-xs font-semibold text-white">{nextMilestone.name}</div>
+            <div className="text-[10px] text-[#a1a1aa] mt-1">{nextMilestone.weeksRemaining} weeks to go</div>
           </div>
         )}
       </div>
@@ -924,7 +880,7 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
   });
 
   return (
-    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light h-full flex flex-col">
       <h3 className="text-lg font-bold text-white mb-4">This Week's Missions</h3>
       <div className="space-y-3">
         {sortedMissions.map((mission) => {
@@ -1280,44 +1236,37 @@ function YourSeasonCard({ tier, points, progressPercent, pointsToNext, nextTier,
   const unearnedBadges = allBadges.filter(b => !b.earned);
 
   return (
-    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
-      {/* Tier Badge - Large and Prominent */}
-      <div className="text-center mb-6">
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light h-full flex flex-col">
+      {/* Current Tier - Primary Info */}
+      <div className="text-center mb-4">
         <div 
-          className="relative w-24 h-24 mx-auto rounded-full border-4 flex items-center justify-center mb-3"
-          style={{ 
-            borderColor: tier.color,
-            boxShadow: `0 0 20px ${tier.color}40, inset 0 0 20px ${tier.color}20`
-          }}
-        >
-          {/* Metallic shine effect */}
-          <div 
-            className="absolute inset-0 rounded-full opacity-30"
-            style={{
-              background: `linear-gradient(135deg, ${tier.color}80 0%, transparent 50%, ${tier.color}40 100%)`
-            }}
-          />
-          <Star size={32} className="text-white/70 relative z-10" fill="currentColor" strokeWidth={2} />
-        </div>
-        <div 
-          className="text-xl font-bold uppercase tracking-wider"
+          className="text-lg font-bold uppercase tracking-wider mb-2"
           style={{ color: tier.color }}
         >
           {tier.name} TIER
         </div>
+        <div 
+          className="relative w-16 h-16 mx-auto rounded-full border-[3px] flex items-center justify-center mb-2"
+          style={{ 
+            borderColor: tier.color,
+            boxShadow: `0 0 15px ${tier.color}40`
+          }}
+        >
+          <Star size={24} className="text-white/70" fill="currentColor" strokeWidth={2} />
+        </div>
       </div>
 
-      {/* Points Total */}
-      <div className="text-center mb-6">
-        <div className="text-5xl font-bold text-white mb-1">{points.toLocaleString()}</div>
-        <div className="text-sm text-nrl-text-secondary">points</div>
+      {/* User's Actual Points - Large Number */}
+      <div className="text-center mb-4">
+        <div className="text-4xl font-bold text-white mb-1">{points.toLocaleString()}</div>
+        <div className="text-xs text-nrl-text-secondary">your points</div>
       </div>
 
-      {/* Progress Bar - Substantial */}
+      {/* Progress to Next Tier - Secondary Info */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-semibold text-white">
-            {pointsToNext > 0 ? `${pointsToNext} to ${nextTier.name}` : "Max tier reached"}
+          <span className="text-xs font-semibold text-nrl-text-secondary">
+            {pointsToNext > 0 ? `Progress to ${nextTier.name}` : "Max tier reached"}
           </span>
           <span className="text-xs text-nrl-text-secondary">
             {Math.round(progressPercent)}%
@@ -1344,9 +1293,8 @@ function YourSeasonCard({ tier, points, progressPercent, pointsToNext, nextTier,
         
         {/* Next Tier Preview */}
         {pointsToNext > 0 && (
-          <div className="flex items-center gap-2 text-xs text-nrl-text-secondary">
-            <span className="font-semibold text-white">{nextTier.name}:</span>
-            <span>{nextTier.reward || nextTier.access}</span>
+          <div className="text-xs text-nrl-text-secondary mt-2">
+            <span className="font-semibold text-white">{pointsToNext} points</span> to unlock {nextTier.name}
           </div>
         )}
       </div>
@@ -1372,7 +1320,7 @@ function YourSeasonCard({ tier, points, progressPercent, pointsToNext, nextTier,
       </div>
 
       {/* Trophy Case - Badges Showcase */}
-      <div>
+      <div className="mt-auto">
         <div className="text-sm font-bold uppercase text-nrl-text-secondary mb-4 tracking-wider">
           Trophy Case
         </div>
@@ -1473,7 +1421,7 @@ function LeaderboardsCard({ user, teamData, userPoints }: any) {
   ];
 
   return (
-    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light h-full flex flex-col">
       <h3 className="text-lg font-bold text-white mb-4">Leaderboards</h3>
       
       {/* User's Position with Rivalry Framing */}
@@ -1548,46 +1496,36 @@ function LeaderboardsCard({ user, teamData, userPoints }: any) {
         )}
       </div>
 
-      {/* Top Fans This Week */}
-      <div className="space-y-2 mb-4">
-        <div className="text-xs font-bold uppercase text-nrl-text-secondary mb-2 tracking-wider">Top Fans This Week</div>
-        {[
-          { rank: 1, name: "ChampionFan", points: "12,450", change: "+5", movement: "up" },
-          { rank: 2, name: "EliteSupporter", points: "11,890", change: "+2", movement: "up" },
-          { rank: 3, name: "TopTierFan", points: "11,200", change: "-1", movement: "down" },
-        ].map((fan, idx) => (
-          <div key={idx} className="flex items-center justify-between py-2 border-b border-nrl-border-light last:border-0">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full bg-nrl-green/20 flex items-center justify-center text-xs font-bold text-nrl-green">
-                {fan.rank}
-              </div>
-              <div>
-                <div className="text-sm font-semibold text-white">{fan.name}</div>
-                <div className="text-xs text-nrl-text-secondary">{fan.points} pts</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-1">
-              {fan.movement === "up" && <span className="text-nrl-green text-sm">↑</span>}
-              {fan.movement === "down" && <span className="text-red-500 text-sm">↓</span>}
-              <span className={`text-xs font-bold ${fan.change.startsWith('+') ? 'text-nrl-green' : 'text-nrl-text-muted'}`}>
-                {fan.change}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* This Week's Climbers */}
+      {/* Top Climbers This Week - Consolidated */}
       <div className="pt-4 border-t border-nrl-border-light">
-        <div className="text-xs font-bold uppercase text-nrl-text-secondary mb-3 tracking-wider">This Week's Climbers</div>
+        <div className="text-xs font-bold uppercase text-nrl-text-secondary mb-3 tracking-wider">Top Climbers This Week</div>
         <div className="space-y-2">
-          {topClimbers.map((climber, idx) => (
+          {[
+            { rank: 1, name: "ChampionFan", points: "12,450", change: "+5", movement: "up" },
+            { rank: 2, name: "EliteSupporter", points: "11,890", change: "+2", movement: "up" },
+            { rank: 3, name: "TopTierFan", points: "11,200", change: "-1", movement: "down" },
+            ...topClimbers.map((c, idx) => ({ rank: idx + 4, name: c.name, points: "", change: c.change, movement: c.movement }))
+          ].slice(0, 5).map((fan, idx) => (
             <div key={idx} className="flex items-center justify-between py-2 px-3 bg-nrl-dark-hover rounded-lg border border-nrl-border-light">
-              <div className="flex items-center gap-2">
-                <Flame size={16} className="text-nrl-green" strokeWidth={2} />
-                <span className="text-sm font-semibold text-white">{climber.name}</span>
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 rounded-full bg-nrl-green/20 flex items-center justify-center text-xs font-bold text-nrl-green">
+                  {fan.rank}
+                </div>
+                <div className="flex items-center gap-2">
+                  {fan.movement === "up" && <Flame size={14} className="text-nrl-green" strokeWidth={2} />}
+                  <div>
+                    <div className="text-sm font-semibold text-white">{fan.name}</div>
+                    {fan.points && <div className="text-xs text-nrl-text-secondary">{fan.points} pts</div>}
+                  </div>
+                </div>
               </div>
-              <span className="text-xs font-bold text-nrl-green">{climber.change}</span>
+              <div className="flex items-center gap-1">
+                {fan.movement === "up" && <span className="text-nrl-green text-sm">↑</span>}
+                {fan.movement === "down" && <span className="text-red-500 text-sm">↓</span>}
+                <span className={`text-xs font-bold ${fan.change.startsWith('+') ? 'text-nrl-green' : 'text-nrl-text-muted'}`}>
+                  {fan.change}
+                </span>
+              </div>
             </div>
           ))}
         </div>
@@ -1681,7 +1619,7 @@ function TiersRewardsCard({ currentTier, userPoints }: any) {
   ];
 
   return (
-    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light h-full flex flex-col">
       <h3 className="text-lg font-bold text-white mb-4">Tier Rewards</h3>
       <div className="space-y-3">
         {tiers.map((tier, idx) => {
