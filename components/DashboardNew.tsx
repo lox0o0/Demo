@@ -42,6 +42,23 @@ const calculateTier = (points: number, profileCompletion: number) => {
 
 export default function DashboardNew({ user, hideNavigation = false, onNavigate }: DashboardProps) {
   const [activeSection, setActiveSection] = useState<NavSection>("dashboard");
+  const [highlightProfileCompletion, setHighlightProfileCompletion] = useState(false);
+  
+  // Check if we should highlight profile completion (from modal CTA)
+  useEffect(() => {
+    const shouldHighlight = sessionStorage.getItem('highlightProfileCompletion');
+    if (shouldHighlight === 'true') {
+      setHighlightProfileCompletion(true);
+      sessionStorage.removeItem('highlightProfileCompletion');
+      // Scroll to profile completion after a brief delay
+      setTimeout(() => {
+        const element = document.getElementById('profile-completion-section');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 300);
+    }
+  }, []);
   
   // Get user data
   const profileCompletion = user?.profileCompletion || 0;
@@ -2127,7 +2144,7 @@ function FantasyCard({ teamData }: any) {
 }
 
 // Section A: Weekly Activities for Points
-function WeeklyActivitiesSection({ user }: { user: any }) {
+function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, setHighlightProfileCompletion }: { user: any; highlightProfileCompletion?: boolean; setHighlightProfileCompletion?: (value: boolean) => void }) {
   const [expandedMission, setExpandedMission] = useState<number | null>(null);
   const [selectedTeam, setSelectedTeam] = useState("");
   const [selectedLastRoundPlayer, setSelectedLastRoundPlayer] = useState("");
@@ -2293,6 +2310,35 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
           </div>
         </div>
         <hr className="h-px bg-foreground opacity-5 mt-4" />
+      </div>
+
+      {/* Profile Completion Section - At Top */}
+      <div 
+        id="profile-completion-section"
+        className={`px-4 pt-4 pb-4 border-b border-white/10 transition-all duration-500 ${
+          highlightProfileCompletion ? 'animate-pulse-glow' : ''
+        }`}
+        style={{
+          ...(highlightProfileCompletion && {
+            boxShadow: '0 0 30px rgba(0, 166, 81, 0.6), inset 0 0 20px rgba(0, 166, 81, 0.2)',
+            borderColor: 'rgba(0, 166, 81, 0.6)',
+            borderWidth: '2px',
+            borderRadius: '0.75rem',
+            margin: '0 0.5rem 0.5rem 0.5rem',
+          }),
+        }}
+      >
+        <div className="flex items-center justify-between mb-3">
+          <div className="text-sm font-semibold text-white/80">Complete Your Profile</div>
+          <div className="inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-semibold border border-white/10 text-neutral-50 bg-neutral-950/40">
+            +120 pts
+          </div>
+        </div>
+        <ProfileCompletionFlow 
+          user={user} 
+          highlightProfileCompletion={highlightProfileCompletion}
+          setHighlightProfileCompletion={setHighlightProfileCompletion}
+        />
       </div>
 
       {/* Mission List */}
@@ -2520,71 +2566,6 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
         </ul>
       </div>
 
-      {/* Profile Completion Section - Below Activities */}
-      <div className="px-4 pt-3 pb-4 border-t border-white/10">
-        <div className="flex items-center justify-between mb-3">
-          <div className="text-sm font-semibold text-white/80">Complete Your Profile</div>
-          <div className="inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-semibold border border-white/10 text-neutral-50 bg-neutral-950/40">
-            +120 pts
-          </div>
-        </div>
-        <div className="space-y-2">
-          <div className="flex items-center justify-between py-2 hover:bg-white/5 transition-colors rounded px-2">
-            <span className="text-xs text-white/70">Date of Birth</span>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-emerald-400">+20 pts</span>
-              <button className="text-xs text-emerald-400 hover:text-emerald-300">Add</button>
-            </div>
-          </div>
-          <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
-            <span className="text-xs text-white/70">Nearest Home Ground</span>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-emerald-400">+20 pts</span>
-              <button className="text-xs text-emerald-400 hover:text-emerald-300">Add</button>
-            </div>
-          </div>
-          <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
-            <div className="flex items-center gap-2">
-              <SocialIcon platform="instagram" size={20} />
-              <span className="text-xs text-white/70">Connect Instagram</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-emerald-400">+20 pts</span>
-              <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
-            </div>
-          </div>
-          <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
-            <div className="flex items-center gap-2">
-              <SocialIcon platform="facebook" size={20} />
-              <span className="text-xs text-white/70">Connect Facebook</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-emerald-400">+20 pts</span>
-              <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
-            </div>
-          </div>
-          <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
-            <div className="flex items-center gap-2">
-              <SocialIcon platform="x" size={20} />
-              <span className="text-xs text-white/70">Connect X (Twitter)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-emerald-400">+20 pts</span>
-              <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
-            </div>
-          </div>
-          <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
-            <div className="flex items-center gap-2">
-              <SocialIcon platform="tiktok" size={20} />
-              <span className="text-xs text-white/70">Connect TikTok</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-emerald-400">+20 pts</span>
-              <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

@@ -72,6 +72,8 @@ export default function Dashboard({ user }: DashboardProps) {
     setShowProgressModal(false);
     // Navigate to profile completion or locker room
     setActiveSection("dashboard");
+    // Store flag to highlight profile completion section
+    sessionStorage.setItem('highlightProfileCompletion', 'true');
   };
 
 

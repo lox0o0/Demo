@@ -110,23 +110,56 @@ export default function TierProgressModal({
           </p>
         </div>
 
-        {/* Next Tier Reward Preview */}
-        <div className="glass rounded-xl p-4 mb-6 border border-white/10">
-          <div className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-2 text-center">
-            {nextTier.name} Reward
-          </div>
-          <div className="flex items-center justify-center gap-3">
-            <div 
-              className="w-16 h-16 rounded-lg bg-white/5 border flex items-center justify-center"
-              style={{
-                borderColor: `${nextTier.color || '#C0C0C0'}40`,
-                boxShadow: `0 0 20px ${nextTier.color || '#C0C0C0'}30`,
-              }}
-            >
-              <Trophy className="w-8 h-8" style={{ color: nextTier.color || '#C0C0C0' }} />
+        {/* Next Tier Reward Preview - Enhanced with glow */}
+        <div 
+          className="glass rounded-xl p-5 mb-6 border-2 relative overflow-hidden"
+          style={{
+            borderColor: `${nextTier.color || '#C0C0C0'}60`,
+            backgroundColor: 'rgba(20, 20, 20, 0.8)',
+            boxShadow: `0 0 40px ${nextTier.color || '#C0C0C0'}40, inset 0 0 30px ${nextTier.color || '#C0C0C0'}10`,
+          }}
+        >
+          {/* Animated glow effect */}
+          <div 
+            className="absolute inset-0 opacity-30 animate-pulse"
+            style={{
+              background: `radial-gradient(circle at center, ${nextTier.color || '#C0C0C0'}40 0%, transparent 70%)`,
+            }}
+          />
+          
+          <div className="relative z-10">
+            <div className="text-xs font-bold text-white/80 uppercase tracking-wider mb-3 text-center flex items-center justify-center gap-2">
+              <Trophy className="w-4 h-4" style={{ color: nextTier.color || '#C0C0C0' }} />
+              <span style={{ color: nextTier.color || '#C0C0C0' }}>{nextTier.name} Reward</span>
             </div>
-            <div className="flex-1">
-              <div className="font-bold text-white text-sm">{nextTier.reward}</div>
+            <div className="flex items-center justify-center gap-4">
+              <div 
+                className="w-20 h-20 rounded-xl bg-white/10 border-2 flex items-center justify-center relative"
+                style={{
+                  borderColor: `${nextTier.color || '#C0C0C0'}80`,
+                  boxShadow: `0 0 30px ${nextTier.color || '#C0C0C0'}60, inset 0 0 20px ${nextTier.color || '#C0C0C0'}20`,
+                }}
+              >
+                <Trophy 
+                  className="w-10 h-10 animate-pulse" 
+                  style={{ 
+                    color: nextTier.color || '#C0C0C0',
+                    filter: `drop-shadow(0 0 8px ${nextTier.color || '#C0C0C0'})`,
+                  }} 
+                />
+                {/* Sparkle effect */}
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-ping" />
+              </div>
+              <div className="flex-1">
+                <div 
+                  className="font-black text-white text-base leading-tight"
+                  style={{
+                    textShadow: `0 0 10px ${nextTier.color || '#C0C0C0'}60`,
+                  }}
+                >
+                  {nextTier.reward}
+                </div>
+              </div>
             </div>
           </div>
         </div>

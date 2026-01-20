@@ -213,3 +213,19 @@ body {
     transform: translateX(200%) skewX(-20deg);
   }
 }
+
+/* Pulse glow animation for profile completion highlight */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 166, 81, 0.4), inset 0 0 20px rgba(0, 166, 81, 0.1);
+    border-color: rgba(0, 166, 81, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 166, 81, 0.8), inset 0 0 30px rgba(0, 166, 81, 0.3);
+    border-color: rgba(0, 166, 81, 0.8);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
