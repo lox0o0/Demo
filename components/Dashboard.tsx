@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
 import { NRL_TEAMS } from "@/lib/data/teams";
