@@ -260,7 +260,7 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                 <div 
                   className="absolute flex items-center justify-center"
                   style={{ 
-                    left: '-24px', // Tier row starts at 40px (pl-10), progress bar center is at 16px, so 16-40 = -24px. Container at -24px with flex center puts circle center at -24px from tier row = 16px from parent ✓
+                    left: '-36px', // Tier row at 40px, progress bar center at 16px, so circle center needs to be at -24px from tier row. Container is 24px wide, so left edge at -36px puts center at -24px ✓
                     top: '50%',
                     transform: 'translateY(-50%)', // Center vertically only
                     width: '24px',
