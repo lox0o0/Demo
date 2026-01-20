@@ -2688,7 +2688,7 @@ function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightP
           ) : (
             <Circle size={18} className="text-white/40" strokeWidth={2} />
           )}
-          <SocialIcon platform="facebook" size={20} />
+          <SocialIcon platform="facebook" size={28} />
           <span className={`text-xs font-medium ${completedItems.includes('facebook') ? 'text-white' : 'text-white/70'}`}>
             Connect Facebook
           </span>
