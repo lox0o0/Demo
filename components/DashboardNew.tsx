@@ -97,11 +97,13 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
               <LeaderboardsCard user={user} teamData={teamData} />
             </div>
 
-            {/* Right Column - Tier Rewards, Prize Wheel */}
+            {/* Right Column - Prize Wheel, Leaderboards, Tier Rewards */}
             <div className="space-y-6">
-              <TiersRewardsCard currentTier={currentTier} userPoints={userPoints} />
-              
               <PrizeWheelCard streakData={streakData} teamData={teamData} />
+              
+              <LeaderboardsCard user={user} teamData={teamData} userPoints={userPoints} />
+              
+              <TiersRewardsCard currentTier={currentTier} userPoints={userPoints} />
             </div>
             </div>
           </div>
@@ -1374,21 +1376,115 @@ function YourSeasonCard({ tier, points, progressPercent, pointsToNext, nextTier,
 }
 
 // Leaderboards Card (Right Column)
-function LeaderboardsCard({ user, teamData }: any) {
+function LeaderboardsCard({ user, teamData, userPoints }: any) {
+  // Mock leaderboard data with user's position and rivals
+  const userRank = 847;
+  const userPointsValue = userPoints || 380;
+  
+  const leaderboard = [
+    { rank: 845, name: "BroncosFan23", points: 425, change: "+5", movement: "up" },
+    { rank: 846, name: "QLD4Life", points: 400, change: "+2", movement: "up" },
+    { rank: 847, name: user?.name || "You", points: userPointsValue, change: "+23", movement: "up", isUser: true },
+    { rank: 848, name: "MaroonArmy", points: 350, change: "-1", movement: "down" },
+    { rank: 849, name: "StormChaser", points: 320, change: "+8", movement: "up" },
+  ];
+  
+  const userPosition = leaderboard.find(f => f.isUser);
+  const aboveUser = leaderboard.find(f => f.rank === userRank - 1);
+  const belowUser = leaderboard.find(f => f.rank === userRank + 1);
+  const pointsBehind = aboveUser ? aboveUser.points - userPointsValue : 0;
+  const pointsAhead = belowUser ? userPointsValue - belowUser.points : 0;
+  
+  // Top climbers this week
+  const topClimbers = [
+    { name: "RisingStar", change: "+47", movement: "up" },
+    { name: "ClimbMaster", change: "+35", movement: "up" },
+    { name: "UpwardFan", change: "+28", movement: "up" },
+  ];
+
   return (
     <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
       <h3 className="text-lg font-bold text-white mb-4">Leaderboards</h3>
+      
+      {/* User's Position with Rivalry Framing */}
       <div className="bg-nrl-dark-hover rounded-xl p-4 mb-4 border border-nrl-border-light">
-        <div className="text-3xl font-bold text-nrl-green mb-2">#847</div>
+        <div className="flex items-center justify-between mb-3">
+          <div className="text-3xl font-bold text-nrl-green">#{userRank}</div>
+          <div className={`flex items-center gap-1 px-2 py-1 rounded-full bg-nrl-green/20 ${
+            userPosition?.movement === "up" ? "text-nrl-green" : "text-nrl-text-muted"
+          }`}>
+            {userPosition?.movement === "up" && <span className="text-sm">🔥</span>}
+            <span className="text-xs font-bold">{userPosition?.change}</span>
+          </div>
+        </div>
         <div className="text-sm text-white font-semibold mb-1">Top 12% of {teamData?.name || "Broncos"} fans</div>
-        <div className="text-xs text-nrl-text-secondary">Up 23 places this week</div>
+        
+        {/* Rivalry Framing */}
+        {aboveUser && (
+          <div className="mt-3 pt-3 border-t border-nrl-border-light">
+            <div className="text-xs text-nrl-text-secondary mb-1">
+              <span className="font-semibold text-white">{pointsBehind} points behind {aboveUser.name}</span>
+            </div>
+            <div className="text-xs text-nrl-amber">
+              Complete 2 missions to pass them
+            </div>
+          </div>
+        )}
       </div>
-      <div className="space-y-2">
-        <div className="text-xs text-nrl-text-secondary mb-2">Top Fans This Week</div>
+
+      {/* Rivals - Above and Below */}
+      <div className="space-y-2 mb-4">
+        <div className="text-xs font-bold uppercase text-nrl-text-secondary mb-2 tracking-wider">Your Rivals</div>
+        {aboveUser && (
+          <div className="flex items-center justify-between py-2 px-3 bg-nrl-dark-hover rounded-lg border border-nrl-border-light">
+            <div className="flex items-center gap-3">
+              <div className="w-6 h-6 rounded-full bg-nrl-green/20 flex items-center justify-center text-xs font-bold text-nrl-green">
+                {aboveUser.rank}
+              </div>
+              <div>
+                <div className="text-sm font-semibold text-white">{aboveUser.name}</div>
+                <div className="text-xs text-nrl-text-secondary">{aboveUser.points} pts</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-1">
+              {aboveUser.movement === "up" && <span className="text-nrl-green text-sm">↑</span>}
+              {aboveUser.movement === "down" && <span className="text-red-500 text-sm">↓</span>}
+              <span className={`text-xs font-bold ${aboveUser.change.startsWith('+') ? 'text-nrl-green' : 'text-nrl-text-muted'}`}>
+                {aboveUser.change}
+              </span>
+            </div>
+          </div>
+        )}
+        
+        {belowUser && (
+          <div className="flex items-center justify-between py-2 px-3 bg-nrl-dark-hover rounded-lg border border-nrl-border-light">
+            <div className="flex items-center gap-3">
+              <div className="w-6 h-6 rounded-full bg-nrl-green/20 flex items-center justify-center text-xs font-bold text-nrl-green">
+                {belowUser.rank}
+              </div>
+              <div>
+                <div className="text-sm font-semibold text-white">{belowUser.name}</div>
+                <div className="text-xs text-nrl-text-secondary">{belowUser.points} pts</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-1">
+              {belowUser.movement === "up" && <span className="text-nrl-green text-sm">↑</span>}
+              {belowUser.movement === "down" && <span className="text-red-500 text-sm">↓</span>}
+              <span className={`text-xs font-bold ${belowUser.change.startsWith('+') ? 'text-nrl-green' : 'text-nrl-text-muted'}`}>
+                {belowUser.change}
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Top Fans This Week */}
+      <div className="space-y-2 mb-4">
+        <div className="text-xs font-bold uppercase text-nrl-text-secondary mb-2 tracking-wider">Top Fans This Week</div>
         {[
-          { rank: 1, name: "BroncosFan23", points: "12,450", change: "+5" },
-          { rank: 2, name: "QLD4Life", points: "11,890", change: "+2" },
-          { rank: 3, name: "MaroonArmy", points: "11,200", change: "-1" },
+          { rank: 1, name: "ChampionFan", points: "12,450", change: "+5", movement: "up" },
+          { rank: 2, name: "EliteSupporter", points: "11,890", change: "+2", movement: "up" },
+          { rank: 3, name: "TopTierFan", points: "11,200", change: "-1", movement: "down" },
         ].map((fan, idx) => (
           <div key={idx} className="flex items-center justify-between py-2 border-b border-nrl-border-light last:border-0">
             <div className="flex items-center gap-3">
@@ -1400,11 +1496,31 @@ function LeaderboardsCard({ user, teamData }: any) {
                 <div className="text-xs text-nrl-text-secondary">{fan.points} pts</div>
               </div>
             </div>
-            <div className={`text-xs font-semibold ${fan.change.startsWith('+') ? 'text-nrl-green' : 'text-nrl-text-muted'}`}>
-              {fan.change}
+            <div className="flex items-center gap-1">
+              {fan.movement === "up" && <span className="text-nrl-green text-sm">↑</span>}
+              {fan.movement === "down" && <span className="text-red-500 text-sm">↓</span>}
+              <span className={`text-xs font-bold ${fan.change.startsWith('+') ? 'text-nrl-green' : 'text-nrl-text-muted'}`}>
+                {fan.change}
+              </span>
             </div>
           </div>
         ))}
+      </div>
+
+      {/* This Week's Climbers */}
+      <div className="pt-4 border-t border-nrl-border-light">
+        <div className="text-xs font-bold uppercase text-nrl-text-secondary mb-3 tracking-wider">This Week's Climbers</div>
+        <div className="space-y-2">
+          {topClimbers.map((climber, idx) => (
+            <div key={idx} className="flex items-center justify-between py-2 px-3 bg-nrl-dark-hover rounded-lg border border-nrl-border-light">
+              <div className="flex items-center gap-2">
+                <span className="text-nrl-green text-lg">🔥</span>
+                <span className="text-sm font-semibold text-white">{climber.name}</span>
+              </div>
+              <span className="text-xs font-bold text-nrl-green">{climber.change}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -1579,27 +1695,79 @@ function ConnectSocialsCard({ user }: any) {
 function PrizeWheelCard({ streakData, teamData }: any) {
   const [showWheel, setShowWheel] = useState(false);
 
+  // Prize preview icons
+  const prizeIcons = [
+    { icon: "🎟️", label: "Tickets" },
+    { icon: "🎁", label: "Vouchers" },
+    { icon: "🪙", label: "Points" },
+    { icon: "👕", label: "Merch" },
+  ];
+
+  // Recent wins feed
+  const recentWins = [
+    { name: "BroncosFan23", prize: "100 pts" },
+    { name: "QLD4Life", prize: "$10 Voucher" },
+    { name: "MaroonArmy", prize: "Match Tickets" },
+  ];
+
   return (
     <>
       <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
         <h3 className="text-lg font-bold text-white mb-1">Prize Wheel</h3>
         <div className="text-xs text-nrl-text-secondary mb-4">(win tickets, vouchers and points!)</div>
         {streakData.spins.available > 0 ? (
-          <div className="text-center">
-            <div className="text-4xl mb-4">🎰</div>
-            <div className="text-2xl font-bold text-nrl-green mb-2">
-              {streakData.spins.available} Spins Available
+          <div>
+            {/* Hero Text - Spins Available with Glow */}
+            <div className="text-center mb-4">
+              <div className="text-5xl font-bold text-nrl-green mb-2 animate-pulse" style={{
+                textShadow: "0 0 20px rgba(34, 197, 94, 0.5), 0 0 40px rgba(34, 197, 94, 0.3)"
+              }}>
+                {streakData.spins.available} Spins Available
+              </div>
+              <div className="text-sm text-nrl-text-secondary">
+                Your {streakData.fanStreak.currentWeeks}-week streak gives you {streakData.spins.baseSpins} base spins
+                {streakData.spins.bonusSpins > 0 && ` + ${streakData.spins.bonusSpins} bonus spins`}
+              </div>
             </div>
-            <div className="text-sm text-nrl-text-secondary mb-4">
-              Your {streakData.fanStreak.currentWeeks}-week streak gives you {streakData.spins.baseSpins} base spins
-              {streakData.spins.bonusSpins > 0 && ` + ${streakData.spins.bonusSpins} bonus spins`}
+
+            {/* Prize Preview Icons */}
+            <div className="grid grid-cols-4 gap-2 mb-4">
+              {prizeIcons.map((prize, idx) => (
+                <div key={idx} className="bg-nrl-dark-hover rounded-lg p-2 text-center border border-nrl-border-light">
+                  <div className="text-2xl mb-1">{prize.icon}</div>
+                  <div className="text-[10px] text-nrl-text-secondary">{prize.label}</div>
+                </div>
+              ))}
             </div>
+
+            {/* Spin Button - Most Prominent CTA */}
             <button
               onClick={() => setShowWheel(true)}
-              className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 rounded-xl hover:from-orange-600 hover:to-red-600 transition-all"
+              className="w-full bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 text-white font-bold py-4 rounded-xl hover:from-orange-600 hover:via-red-600 hover:to-orange-600 transition-all transform hover:scale-[1.02] hover:shadow-lg hover:shadow-orange-500/50 text-lg mb-4 relative overflow-hidden group"
+              style={{
+                backgroundSize: "200% 100%",
+                animation: "shimmer 3s infinite"
+              }}
             >
-              Spin the Wheel
+              <span className="relative z-10">🎰 SPIN THE WHEEL</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
             </button>
+
+            {/* Recent Wins Feed */}
+            <div className="pt-4 border-t border-nrl-border-light">
+              <div className="text-xs font-bold uppercase text-nrl-text-secondary mb-3 tracking-wider">Recent Wins</div>
+              <div className="space-y-2">
+                {recentWins.map((win, idx) => (
+                  <div key={idx} className="flex items-center justify-between py-2 px-3 bg-nrl-dark-hover rounded-lg border border-nrl-border-light">
+                    <div className="flex items-center gap-2">
+                      <span className="text-nrl-green text-sm">🎉</span>
+                      <span className="text-sm text-white">{win.name}</span>
+                    </div>
+                    <span className="text-xs font-semibold text-nrl-amber">won {win.prize}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         ) : (
           <div className="text-center">

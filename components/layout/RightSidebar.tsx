@@ -147,12 +147,29 @@ export default function RightSidebar({ user }: RightSidebarProps) {
                       <span className="text-xs text-[#a1a1aa]">{tier.minPoints.toLocaleString()}</span>
                     </div>
                     
-                    {/* Legend tier special callout */}
+                    {/* Reward preview icon at tier marker */}
+                    <div className="absolute left-[18px] top-[-2px] w-3 h-3 flex items-center justify-center">
+                      {tier.name === "Bronze" && <span className="text-[10px]">🎩</span>}
+                      {tier.name === "Silver" && <span className="text-[10px]">🎩</span>}
+                      {tier.name === "Gold" && <span className="text-[10px]">👕</span>}
+                      {tier.name === "Platinum" && <span className="text-[10px]">🎟️</span>}
+                      {tier.name === "Diehard" && <span className="text-[10px]">⭐</span>}
+                      {tier.name === "Legend" && <span className="text-[10px]">🏆</span>}
+                    </div>
+                    
+                    {/* Legend tier special callout - Enhanced */}
                     {isLegend && (
-                      <div className="mt-2 p-2 bg-[#1a1a1d] border border-[#2a2a2d] rounded text-xs">
-                        <div className="text-[#f59e0b] font-semibold mb-1">🎁 Grand Final Pack</div>
-                        <div className="text-[#a1a1aa] text-[10px] leading-tight">
-                          Flights + Tix + Hotel
+                      <div className="mt-2 p-3 bg-gradient-to-br from-[#f59e0b]/20 to-[#8b5cf6]/20 border-2 border-[#f59e0b]/50 rounded-lg text-xs relative overflow-hidden">
+                        {/* Golden glow effect */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#f59e0b]/10 to-transparent" />
+                        <div className="relative">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-lg">🏆</span>
+                            <span className="text-[#f59e0b] font-bold">Grand Final Pack</span>
+                          </div>
+                          <div className="text-[#a1a1aa] text-[10px] leading-tight">
+                            Flights + Tix + Hotel
+                          </div>
                         </div>
                       </div>
                     )}
