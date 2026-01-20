@@ -9,7 +9,7 @@ import { generateMockStreakData, getFlameLevelName, type StreakData } from "@/li
 import { 
   List, Shirt, Trophy, Clock, Star, Flame, Ticket, Gift, Coins, 
   CircleDot, Lock, Check, Circle, HelpCircle, User, Sparkles, 
-  TrendingUp, Calendar, Award, Crown, Target, Share2, Video, ChevronLeft, ChevronRight
+  TrendingUp, Calendar, Award, Crown, Target, Share2, Video, ChevronLeft, ChevronRight, Info
 } from "lucide-react";
 
 interface DashboardProps {
@@ -94,14 +94,16 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
       {/* Main Content - Single Column Layout */}
       <main className={`relative z-10 max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 ${hideNavigation ? 'pt-6' : 'pt-24'}`}>
         {activeSection === "dashboard" && (
-          <div className="space-y-6">
-            {/* Section A: Weekly Activities for Points */}
-            <WeeklyActivitiesSection user={user} />
+          <div className="grid grid-cols-5 gap-6" style={{ minHeight: '600px' }}>
+            {/* Left Column: Weekly Activities (60% = 3/5) */}
+            <div className="col-span-3">
+              <WeeklyActivitiesSection user={user} />
+            </div>
             
-            {/* Section B: Prizes & Streak */}
-            <PrizesAndStreakSection user={user} streakData={streakData} currentTier={currentTier} />
-            
-            {/* Section C: (Placeholder for next section) */}
+            {/* Right Column: Prizes & Streak (40% = 2/5) */}
+            <div className="col-span-2">
+              <PrizesAndStreakSection user={user} streakData={streakData} currentTier={currentTier} />
+            </div>
           </div>
         )}
 
@@ -2141,14 +2143,12 @@ function FantasyCard({ teamData }: any) {
 
 // Section A: Weekly Activities for Points
 function WeeklyActivitiesSection({ user }: { user: any }) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [expandedMission, setExpandedMission] = useState<number | null>(null);
   const [selectedTeam, setSelectedTeam] = useState("");
   const [selectedLastRoundPlayer, setSelectedLastRoundPlayer] = useState("");
   const [selectedNextWeekPlayer, setSelectedNextWeekPlayer] = useState("");
   const [playerSearchLastRound, setPlayerSearchLastRound] = useState("");
   const [playerSearchNextWeek, setPlayerSearchNextWeek] = useState("");
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
   
   const weeklyCompleted = 5;
   const weeklyTotal = 7;
@@ -2202,30 +2202,6 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
 
   // Get all teams for dropdown
   const allTeams = NRL_TEAMS.map(t => t.name);
-
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      const cardWidth = 280 + 16; // card width + gap
-      scrollContainerRef.current.scrollBy({ left: -cardWidth, behavior: 'smooth' });
-      setCurrentCardIndex(Math.max(0, currentCardIndex - 1));
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      const cardWidth = 280 + 16; // card width + gap
-      scrollContainerRef.current.scrollBy({ left: cardWidth, behavior: 'smooth' });
-      setCurrentCardIndex(Math.min(6, currentCardIndex + 1));
-    }
-  };
-
-  const scrollToCard = (index: number) => {
-    if (scrollContainerRef.current) {
-      const cardWidth = 280 + 16; // card width + gap
-      scrollContainerRef.current.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
-      setCurrentCardIndex(index);
-    }
-  };
 
   const missions = [
     {
@@ -2294,7 +2270,7 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
     },
   ];
 
-  const handleCardClick = (missionId: number) => {
+  const handleMissionClick = (missionId: number) => {
     if (expandedMission === missionId) {
       setExpandedMission(null);
     } else {
@@ -2302,126 +2278,261 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
     }
   };
 
-  // Track scroll position to update current card index
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const handleScroll = () => {
-      const cardWidth = 280 + 16;
-      const scrollLeft = container.scrollLeft;
-      const newIndex = Math.round(scrollLeft / cardWidth);
-      setCurrentCardIndex(Math.max(0, Math.min(missions.length - 1, newIndex)));
-    };
-
-    container.addEventListener('scroll', handleScroll);
-    return () => container.removeEventListener('scroll', handleScroll);
-  }, [missions.length]);
+  const getStatusText = (mission: any) => {
+    if (mission.statusType === "completed") {
+      return "Completed";
+    }
+    if (mission.statusType === "urgent") {
+      return mission.status || "Urgent";
+    }
+    if (mission.statusType === "progress" && mission.progress) {
+      return `${mission.progress.current}/${mission.progress.total} complete`;
+    }
+    return mission.status || "Not started";
+  };
 
   return (
-    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-6">
-      {/* Section Header with Completion Bar */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <Target className="w-5 h-5 text-emerald-400" />
-          <h2 className="text-lg font-bold text-white">Weekly Activities</h2>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="text-sm text-white/80">
-            <span className="font-semibold text-white">{weeklyCompleted}/{weeklyTotal}</span> this week
+    <div className="w-full overflow-hidden rounded-xl border border-white/20 backdrop-blur-[32px] bg-white/5 min-h-[400px] flex flex-col flex-1 h-full">
+      <div className="w-full z-10 px-2 py-6">
+        <h1 className="font-semibold text-2xl leading-8 text-neutral-50 text-left px-4">Weekly Activities</h1>
+        <p className="font-suisse text-sm text-white/60 px-4 mt-1">Complete missions to earn points and fuel your streak</p>
+        <div className="flex items-center gap-5 mt-4 px-4">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-50/20 flex-1">
+            <div 
+              className="h-full bg-emerald-500 transition-all duration-300 ease-in-out rounded-full" 
+              style={{ width: `${(weeklyCompleted / weeklyTotal) * 100}%` }}
+            />
           </div>
-          <div className="text-sm text-white/80">
-            <span className="font-semibold text-white">{seasonCompleted}/{seasonTotal}</span> this season
+          <div className="inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-semibold border border-white/10 text-neutral-50 bg-neutral-950/40">
+            {weeklyCompleted}/{weeklyTotal}
           </div>
         </div>
+        <hr className="h-px bg-foreground opacity-5 mt-4" />
       </div>
 
-      {/* Progress Bar */}
-      <div className="mb-6">
-        <div className="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
-          <div
-            className="bg-emerald-500 h-2 rounded-full transition-all duration-500"
-            style={{ width: `${(weeklyCompleted / weeklyTotal) * 100}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Horizontal Scrollable Card Row with Navigation */}
-      <div className="relative">
-        {/* Navigation Buttons */}
-        <div className="flex items-center justify-center gap-4 mb-4">
-          <button
-            onClick={scrollLeft}
-            className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border hover:text-accent-foreground h-8 w-8 rounded-full bg-gray-800/80 border-gray-600/60 hover:bg-gray-700/90 backdrop-blur-md"
-            aria-label="Previous card"
-          >
-            <ChevronLeft className="h-4 w-4 text-white" />
-          </button>
-
-          {/* Dot Indicators */}
-          <div className="flex space-x-2">
-            {missions.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => scrollToCard(index)}
-                className={`rounded-full transition-all duration-300 ${
-                  index === currentCardIndex
-                    ? "bg-purple-400 w-6 h-2"
-                    : "bg-gray-600 hover:bg-gray-500 w-2 h-2"
-                }`}
-                aria-label={`Go to card ${index + 1}`}
-              />
-            ))}
-          </div>
-
-          <button
-            onClick={scrollRight}
-            className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border hover:text-accent-foreground h-8 w-8 rounded-full bg-gray-800/80 border-gray-600/60 hover:bg-gray-700/90 backdrop-blur-md"
-            aria-label="Next card"
-          >
-            <ChevronRight className="h-4 w-4 text-white" />
-          </button>
-        </div>
-
-        {/* Horizontal Lines Frame */}
-        <div className="relative">
-          <div className="absolute top-0 left-0 right-0 h-px bg-white/20" />
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-white/20" />
-          
-          {/* Scrollable Card Container */}
-          <div 
-            ref={scrollContainerRef}
-            className="overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-6 px-6" 
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
-              {missions.map((mission) => (
-                <MissionCardHorizontal 
-                  key={mission.id} 
-                  mission={mission}
-                  isExpanded={expandedMission === mission.id}
-                  onExpand={() => handleCardClick(mission.id)}
-                  selectedTeam={selectedTeam}
-                  onTeamSelect={setSelectedTeam}
-                  teamVotes={teamVotes}
-                  allTeams={allTeams}
-                  selectedLastRoundPlayer={selectedLastRoundPlayer}
-                  onLastRoundPlayerSelect={setSelectedLastRoundPlayer}
-                  playerSearchLastRound={playerSearchLastRound}
-                  onPlayerSearchLastRoundChange={setPlayerSearchLastRound}
-                  filteredPlayersLastRound={filteredPlayersLastRound}
-                  selectedNextWeekPlayer={selectedNextWeekPlayer}
-                  onNextWeekPlayerSelect={setSelectedNextWeekPlayer}
-                  playerSearchNextWeek={playerSearchNextWeek}
-                  onPlayerSearchNextWeekChange={setPlayerSearchNextWeek}
-                  filteredPlayersNextWeek={filteredPlayersNextWeek}
-                  fixtures={fixtures}
-                  highlights={highlights}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+      {/* Scrollable Mission List */}
+      <div className="flex-1 overflow-y-auto">
+        <ul className="w-full">
+          {missions.map((mission, index) => {
+            const Icon = mission.icon;
+            const isExpanded = expandedMission === mission.id;
+            
+            return (
+              <li key={mission.id}>
+                <div 
+                  className="flex items-center w-full px-3 py-2.5 hover:bg-white/5 transition-all duration-300 cursor-pointer"
+                  onClick={() => handleMissionClick(mission.id)}
+                >
+                  <div className="flex items-center w-full gap-3">
+                    <div className="w-12 h-12 rounded border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center">
+                      <Icon className="w-5 h-5 text-white/70" />
+                    </div>
+                    <div className="flex flex-col min-w-0 flex-1 gap-1">
+                      <p className="font-medium text-sm text-white">{mission.title}</p>
+                      <div className="text-xs text-white/60">{getStatusText(mission)}</div>
+                    </div>
+                    <div className="flex flex-col items-end gap-1">
+                      <div className="inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-semibold border border-white/10 text-neutral-50 bg-neutral-950/40">
+                        {mission.points}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr className="h-px bg-foreground opacity-5" />
+                
+                {/* Expandable content */}
+                {isExpanded && (
+                  <div className="px-3 py-4 bg-white/2 border-t border-white/10">
+                    {mission.id === 1 && (
+                      <div className="space-y-3">
+                        <div className="text-xs font-bold text-white/80 mb-2">ROUND 6 MVP PREDICTION</div>
+                        <div className="text-xs text-white/60 mb-3">Who will be the best player next round?</div>
+                        <input
+                          type="text"
+                          placeholder="Search player..."
+                          value={playerSearchNextWeek}
+                          onChange={(e) => setPlayerSearchNextWeek(e.target.value)}
+                          className="w-full bg-gray-800/50 border border-gray-700/50 rounded-lg px-3 py-2 text-sm text-white placeholder-white/40 focus:outline-none focus:border-emerald-500"
+                        />
+                        <div className="space-y-2 max-h-48 overflow-y-auto">
+                          {filteredPlayersNextWeek?.map((player) => (
+                            <button
+                              key={player.id}
+                              onClick={() => setSelectedNextWeekPlayer(player.name)}
+                              className={`w-full bg-gray-800/50 border rounded-lg p-3 text-left transition-colors ${
+                                selectedNextWeekPlayer === player.name 
+                                  ? 'border-emerald-500 bg-emerald-500/10' 
+                                  : 'border-gray-700/50 hover:border-emerald-500'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-gray-700/50 flex items-center justify-center">
+                                  <User size={20} className="text-white/60" />
+                                </div>
+                                <div className="flex-1">
+                                  <div className="text-sm font-semibold text-white">{player.name}</div>
+                                  {player.stats && <div className="text-xs text-white/60">{player.stats}</div>}
+                                </div>
+                                {selectedNextWeekPlayer === player.name && (
+                                  <Check size={16} className="text-emerald-500" />
+                                )}
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                        {selectedNextWeekPlayer && (
+                          <div className="pt-3 border-t border-gray-700/50">
+                            <div className="text-xs text-white/60 mb-2">+10 Fuel • {mission.points}</div>
+                            <div className="text-xs text-white/40">Prediction locked until next round</div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    {mission.id === 2 && (
+                      <div className="space-y-3">
+                        <div className="text-xs font-bold text-white/80 mb-2">ROUND 6 FIXTURES</div>
+                        <div className="text-xs text-white/60 mb-3">Make your tips for the upcoming games!</div>
+                        <div className="space-y-2 max-h-48 overflow-y-auto">
+                          {fixtures?.map((fixture) => (
+                            <div key={fixture.id} className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-3">
+                              <div className="flex items-center justify-between text-sm font-semibold text-white mb-1">
+                                <span>{fixture.home} vs {fixture.away}</span>
+                                {fixture.userTip && <Check size={16} className="text-emerald-500" />}
+                              </div>
+                              <div className="text-xs text-white/60 mb-2">{fixture.date}</div>
+                              {fixture.userTip ? (
+                                <div className="text-xs text-white/80">Your tip: <span className="font-semibold">{fixture.userTip}</span></div>
+                              ) : (
+                                <button className="text-xs text-emerald-500 hover:underline">Make Tip</button>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {mission.id === 3 && (
+                      <div className="space-y-3">
+                        <div className="text-xs font-bold text-white/80 mb-2">ROUND 5 MVP</div>
+                        <div className="text-xs text-white/60 mb-3">Who was the best player this round?</div>
+                        <input
+                          type="text"
+                          placeholder="Search player..."
+                          value={playerSearchLastRound}
+                          onChange={(e) => setPlayerSearchLastRound(e.target.value)}
+                          className="w-full bg-gray-800/50 border border-gray-700/50 rounded-lg px-3 py-2 text-sm text-white placeholder-white/40 focus:outline-none focus:border-emerald-500"
+                        />
+                        <div className="space-y-2 max-h-48 overflow-y-auto">
+                          {filteredPlayersLastRound?.map((player) => (
+                            <button
+                              key={player.id}
+                              onClick={() => setSelectedLastRoundPlayer(player.name)}
+                              className={`w-full bg-gray-800/50 border rounded-lg p-3 text-left transition-colors ${
+                                selectedLastRoundPlayer === player.name 
+                                  ? 'border-emerald-500 bg-emerald-500/10' 
+                                  : 'border-gray-700/50 hover:border-emerald-500'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-gray-700/50 flex items-center justify-center">
+                                  <User size={20} className="text-white/60" />
+                                </div>
+                                <div className="flex-1">
+                                  <div className="text-sm font-semibold text-white">{player.name}</div>
+                                  {player.stats && <div className="text-xs text-white/60">{player.stats}</div>}
+                                </div>
+                                {selectedLastRoundPlayer === player.name && (
+                                  <Check size={16} className="text-emerald-500" />
+                                )}
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                        {selectedLastRoundPlayer && (
+                          <div className="pt-3 border-t border-gray-700/50">
+                            <div className="text-xs text-white/60 mb-2">+10 Fuel • {mission.points}</div>
+                            <div className="text-xs text-white/40">Winner announced: Wednesday 12pm</div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    {mission.id === 4 && (
+                      <div className="space-y-3">
+                        <div className="text-xs font-bold text-white/80 mb-2">MOST DOMINANT TEAM PREDICTION</div>
+                        <div className="text-xs text-white/60 mb-3">Which team will dominate next round?</div>
+                        <select
+                          value={selectedTeam}
+                          onChange={(e) => setSelectedTeam(e.target.value)}
+                          className="w-full bg-gray-800/50 border border-gray-700/50 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                        >
+                          <option value="">Select a team...</option>
+                          {allTeams?.map((teamName) => (
+                            <option key={teamName} value={teamName}>{teamName}</option>
+                          ))}
+                        </select>
+                        {selectedTeam && (
+                          <div className="pt-3 border-t border-gray-700/50">
+                            <div className="text-xs text-white/60 mb-2">+10 Fuel • {mission.points}</div>
+                          </div>
+                        )}
+                        <div className="pt-3 border-t border-gray-700/50">
+                          <div className="text-xs font-semibold text-white/80 mb-2">Current Voting Results:</div>
+                          <div className="space-y-2">
+                            {teamVotes?.map((team) => (
+                              <div key={team.name} className="flex items-center gap-2">
+                                <div className="w-20 text-xs text-white/60">{team.name}</div>
+                                <div className="flex-1 bg-gray-800/50 rounded-full h-2">
+                                  <div
+                                    className="h-2 rounded-full bg-emerald-500"
+                                    style={{ width: `${team.percentage}%` }}
+                                  />
+                                </div>
+                                <div className="w-10 text-xs text-white/60 text-right">{team.percentage}%</div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {mission.id === 5 && (
+                      <div className="text-xs text-white/60">Your team is set for the upcoming round.</div>
+                    )}
+                    {mission.id === 6 && (
+                      <div className="space-y-2">
+                        {highlights?.map((highlight) => (
+                          <div key={highlight.id} className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-3">
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1">
+                                <div className="text-sm font-semibold text-white">{highlight.title}</div>
+                                <div className="text-xs text-white/60">{highlight.duration}</div>
+                              </div>
+                              {highlight.watched ? (
+                                <Check size={16} className="text-emerald-400" />
+                              ) : (
+                                <button className="text-xs text-emerald-400 hover:text-emerald-300">Watch →</button>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {mission.id === 7 && (
+                      <div className="grid grid-cols-2 gap-2">
+                        {["Facebook", "Instagram", "Twitter", "TikTok"].map((platform) => (
+                          <button
+                            key={platform}
+                            className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-3 text-sm text-white hover:border-emerald-500 transition-colors"
+                          >
+                            {platform}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </div>
   );
@@ -2447,15 +2558,8 @@ function PrizesAndStreakSection({ user, streakData, currentTier }: { user: any; 
   const entryCount = 1247;
 
   return (
-    <div className="space-y-6">
-      {/* Section Header */}
-      <div className="flex items-center gap-3">
-        <Trophy className="w-5 h-5 text-emerald-400" />
-        <h2 className="text-lg font-bold text-white">PRIZES & STREAK</h2>
-      </div>
-
-      {/* 3 Cards in Horizontal Row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="w-full overflow-hidden rounded-xl border border-white/20 backdrop-blur-[32px] bg-white/5 min-h-[400px] flex flex-col flex-1 h-full">
+      <div className="flex-1 overflow-y-auto space-y-4 p-4">
         {/* Card 1: Streak */}
         <StreakCardPrizes streakData={streakData} />
 
@@ -2464,10 +2568,10 @@ function PrizesAndStreakSection({ user, streakData, currentTier }: { user: any; 
 
         {/* Card 3: Weekly Prize Draw */}
         <WeeklyPrizeDrawCard currentTier={currentTier} drawCountdown={drawCountdown} entryCount={entryCount} />
-      </div>
 
-      {/* Recent Winners Row */}
-      <RecentWinnersRow winners={recentWinners} />
+        {/* Recent Winners Row */}
+        <RecentWinnersRow winners={recentWinners} />
+      </div>
 
       {/* Prize Wheel Modal */}
       {showWheel && (
@@ -2512,7 +2616,17 @@ function StreakCardPrizes({ streakData }: { streakData: StreakData }) {
   const is2xActive = pointsMultiplier >= 2.0;
 
   return (
-    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-6 hover:border-white/30 transition-all relative overflow-hidden">
+    <div className="bg-white/5 backdrop-blur-[32px] border border-white/20 rounded-xl p-6 hover:border-white/30 transition-all relative overflow-hidden">
+      {/* Info Icon - Top Right */}
+      <div className="absolute top-4 right-4 z-20 group">
+        <Info className="w-4 h-4 text-white/60 hover:text-white cursor-help transition-colors" />
+        <div className="absolute right-0 top-6 w-64 p-3 bg-gray-900/95 border border-white/20 rounded-lg text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-30">
+          <div className="font-semibold mb-1">2 week streak benefits:</div>
+          <div className="text-white/80">• 50 additional weekly points</div>
+          <div className="text-white/80">• 2 extra spins</div>
+        </div>
+      </div>
+      
       {/* Animated background fire effect */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div 
@@ -2626,7 +2740,7 @@ function PrizeWheelCardPrizes({ streakData, onSpinClick }: { streakData: StreakD
   const bonusSpins = streakData.spins.bonusSpins;
 
   return (
-    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-6 hover:border-white/30 transition-all relative overflow-hidden">
+    <div className="bg-white/5 backdrop-blur-[32px] border border-white/20 rounded-xl p-6 hover:border-white/30 transition-all relative overflow-hidden">
       {/* Animated Spinning Wheel Preview with smooth rotation */}
       <div className="flex justify-center mb-4">
         <div className="relative w-32 h-32">
@@ -2705,23 +2819,30 @@ function PrizeWheelCardPrizes({ streakData, onSpinClick }: { streakData: StreakD
         SPIN THE WHEEL
       </button>
 
-      {/* Prize Categories */}
-      <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
-        <div className="flex items-center gap-1.5 text-white/60">
-          <Ticket size={12} className="text-blue-400" />
-          <span>Tickets</span>
-        </div>
-        <div className="flex items-center gap-1.5 text-white/60">
-          <Gift size={12} className="text-purple-400" />
-          <span>Vouchers</span>
-        </div>
-        <div className="flex items-center gap-1.5 text-white/60">
-          <Coins size={12} className="text-yellow-400" />
-          <span>Points</span>
-        </div>
-        <div className="flex items-center gap-1.5 text-white/60">
-          <Shirt size={12} className="text-green-400" />
-          <span>Merch</span>
+      {/* Prize Categories - Hero Section */}
+      <div className="mt-6 space-y-3">
+        <div className="text-xs font-bold text-white/90 uppercase tracking-wider text-center mb-3">Available Rewards</div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/40 rounded-lg hover:border-blue-400/60 transition-all">
+            <Ticket size={20} className="text-blue-400" style={{ filter: 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.8))' }} />
+            <span className="text-sm font-bold text-white">Tickets</span>
+            <span className="text-xs text-white/70">Game Access</span>
+          </div>
+          <div className="flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/40 rounded-lg hover:border-purple-400/60 transition-all">
+            <Gift size={20} className="text-purple-400" style={{ filter: 'drop-shadow(0 0 8px rgba(168, 85, 247, 0.8))' }} />
+            <span className="text-sm font-bold text-white">Vouchers</span>
+            <span className="text-xs text-white/70">Shop Credits</span>
+          </div>
+          <div className="flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 border border-yellow-500/40 rounded-lg hover:border-yellow-400/60 transition-all">
+            <Coins size={20} className="text-yellow-400" style={{ filter: 'drop-shadow(0 0 8px rgba(234, 179, 8, 0.8))' }} />
+            <span className="text-sm font-bold text-white">Points</span>
+            <span className="text-xs text-white/70">Boost Progress</span>
+          </div>
+          <div className="flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/40 rounded-lg hover:border-green-400/60 transition-all">
+            <Shirt size={20} className="text-green-400" style={{ filter: 'drop-shadow(0 0 8px rgba(34, 197, 94, 0.8))' }} />
+            <span className="text-sm font-bold text-white">Merch</span>
+            <span className="text-xs text-white/70">Team Gear</span>
+          </div>
         </div>
       </div>
     </div>
@@ -2743,7 +2864,7 @@ function WeeklyPrizeDrawCard({ currentTier, drawCountdown, entryCount }: { curre
   const PrizeIcon = featuredPrize.icon;
 
   return (
-    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-6 hover:border-white/30 transition-all">
+    <div className="bg-white/5 backdrop-blur-[32px] border border-white/20 rounded-xl p-6 hover:border-white/30 transition-all">
       {/* Current Tier Badge */}
       <div className="flex justify-center mb-4">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ 

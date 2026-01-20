@@ -119,46 +119,63 @@ function CurrentTierStatsCard({
         </div>
       </div>
 
-      {/* Stats grid (2x2) */}
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 text-center border border-white/10">
-          <div className="text-xl font-bold text-white">{lifetimePoints.toLocaleString()}</div>
-          <div className="text-xs text-white/60 uppercase mt-1">Lifetime Points</div>
+      {/* Stats row (3 columns) */}
+      <div className="grid grid-cols-3 gap-3 mb-3">
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/10">
+          <div className="text-lg font-bold text-white">{gamesAttended}</div>
+          <div className="text-xs text-white/60 uppercase mt-0.5">Games Attended</div>
         </div>
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 text-center border border-white/10">
-          <div className="text-xl font-bold text-white">{gamesAttended}</div>
-          <div className="text-xs text-white/60 uppercase mt-1">Games Attended</div>
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/10">
+          <div className="text-lg font-bold text-white">{tippingRank}</div>
+          <div className="text-xs text-white/60 uppercase mt-0.5">Tipping Rank</div>
         </div>
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 text-center border border-white/10">
-          <div className="text-xl font-bold text-white">{tippingRank}</div>
-          <div className="text-xs text-white/60 uppercase mt-1">Tipping Rank</div>
-        </div>
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 text-center border border-white/10">
-          <div className="text-xl font-bold text-white">{badgesEarned}</div>
-          <div className="text-xs text-white/60 uppercase mt-1">Badges Earned</div>
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/10">
+          <div className="text-lg font-bold text-white">{badgesEarned}</div>
+          <div className="text-xs text-white/60 uppercase mt-0.5">Badges Earned</div>
         </div>
       </div>
 
-      {/* Trophy Case section */}
-      <div className="pt-4 border-t border-white/10">
-        <div className="text-sm font-semibold text-white/80 mb-3">Trophy Case</div>
-        <div className="flex justify-between">
+      {/* Trophy Case section - Celebratory */}
+      <div className="pt-3 border-t border-white/10">
+        <div className="text-sm font-semibold text-white/80 mb-2">Trophy Case</div>
+        <div className="flex justify-between gap-2">
           {trophies.map((trophy: { id: string; name: string; icon: any; earned: boolean }) => {
             const Icon = trophy.icon;
             return (
-              <div key={trophy.id} className="flex flex-col items-center gap-2">
+              <div 
+                key={trophy.id} 
+                className="flex flex-col items-center gap-1.5 flex-1 group relative"
+              >
                 <div
-                  className={`w-12 h-12 rounded-lg flex items-center justify-center border-2 ${
+                  className={`w-14 h-14 rounded-lg flex items-center justify-center border-2 relative overflow-hidden transition-all duration-300 ${
                     trophy.earned
-                      ? "border-yellow-400/50 bg-yellow-400/10 text-yellow-400"
+                      ? "border-amber-400/60 bg-gradient-to-br from-amber-500/20 via-yellow-500/15 to-amber-500/20 text-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.3)] group-hover:shadow-[0_0_20px_rgba(251,191,36,0.5)] group-hover:scale-110"
                       : "border-white/20 bg-white/5 text-white/40"
                   }`}
                 >
-                  <Icon className="w-6 h-6" />
+                  {/* Shimmer effect on hover */}
+                  {trophy.earned && (
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden">
+                      <div 
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-300/40 to-transparent"
+                        style={{
+                          transform: 'translateX(-100%)',
+                          animation: 'shimmerSweep 1.5s ease-in-out infinite',
+                        }}
+                      />
+                    </div>
+                  )}
+                  <Icon className="w-7 h-7 relative z-10" />
+                  {/* Checkmark indicator */}
+                  {trophy.earned && (
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center border-2 border-white/90 shadow-lg z-20">
+                      <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                    </div>
+                  )}
                 </div>
                 <span
-                  className={`text-xs text-center leading-tight ${
-                    trophy.earned ? "text-white/80" : "text-white/40"
+                  className={`text-xs text-center leading-tight font-medium ${
+                    trophy.earned ? "text-amber-300" : "text-white/40"
                   }`}
                 >
                   {trophy.name}

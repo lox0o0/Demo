@@ -184,6 +184,16 @@ body {
   animation: shineSweep 1.5s ease-in-out;
 }
 
+/* Shimmer sweep animation for trophy case */
+@keyframes shimmerSweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
 /* Spin animation for prize wheel */
 @keyframes spin {
   from {
