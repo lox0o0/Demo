@@ -94,7 +94,7 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
       {/* Main Content - Single Column Layout */}
       <main className={`relative z-10 max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 ${hideNavigation ? 'pt-6' : 'pt-24'}`}>
         {activeSection === "dashboard" && (
-          <div className="grid grid-cols-5 gap-6" style={{ minHeight: '600px' }}>
+          <div className="grid grid-cols-5 gap-6">
             {/* Left Column: Weekly Activities (60% = 3/5) */}
             <div className="col-span-3">
               <WeeklyActivitiesSection user={user} />
@@ -2292,7 +2292,7 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
   };
 
   return (
-    <div className="w-full overflow-hidden rounded-xl border border-white/20 backdrop-blur-[32px] bg-white/5 min-h-[400px] flex flex-col flex-1 h-full">
+    <div className="w-full overflow-hidden rounded-xl border border-white/20 backdrop-blur-[32px] bg-white/5 flex flex-col">
       <div className="w-full z-10 px-2 py-6">
         <h1 className="font-semibold text-2xl leading-8 text-neutral-50 text-left px-4">Weekly Activities</h1>
         <p className="font-suisse text-sm text-white/60 px-4 mt-1">Complete missions to earn points and fuel your streak</p>
@@ -2310,8 +2310,8 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
         <hr className="h-px bg-foreground opacity-5 mt-4" />
       </div>
 
-      {/* Scrollable Mission List */}
-      <div className="flex-1 overflow-y-auto">
+      {/* Mission List */}
+      <div className="overflow-y-auto">
         <ul className="w-full">
           {missions.map((mission, index) => {
             const Icon = mission.icon;
@@ -2536,7 +2536,7 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
       </div>
 
       {/* Profile Completion Section - Below Activities */}
-      <div className="px-4 py-4 border-t border-white/10">
+      <div className="px-4 pt-3 pb-4 border-t border-white/10">
         <div className="text-sm font-semibold text-white/80 mb-3">Complete Your Profile</div>
         <div className="space-y-2">
           <div className="flex items-center justify-between py-2 hover:bg-white/5 transition-colors rounded px-2">
