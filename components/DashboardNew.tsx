@@ -1261,7 +1261,7 @@ function YourSeasonCard({ tier, points, progressPercent, pointsToNext, nextTier,
             {Math.round(progressPercent)}%
           </span>
         </div>
-        <div className="w-full bg-nrl-dark-hover rounded-full h-4 mb-3 overflow-hidden">
+        <div className="w-full bg-nrl-dark-hover rounded-full h-4 mb-3 overflow-hidden relative">
           <div
             className="h-full rounded-full transition-all duration-500 relative"
             style={{ 
@@ -1270,7 +1270,13 @@ function YourSeasonCard({ tier, points, progressPercent, pointsToNext, nextTier,
             }}
           >
             {/* Shine effect on progress bar */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
+            <div 
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+              style={{
+                animation: "shimmer 2s infinite",
+                backgroundSize: "200% 100%"
+              }}
+            />
           </div>
         </div>
         
