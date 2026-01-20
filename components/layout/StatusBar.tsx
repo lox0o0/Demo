@@ -24,11 +24,16 @@ export default function StatusBar({ user }: StatusBarProps) {
     : 100;
 
   return (
-    <div className="sticky top-0 z-40 bg-[#0a0a0b]/80 backdrop-blur-md border-b border-[#2a2a2d] mb-6">
+    <div className="sticky top-0 z-40 bg-transparent backdrop-blur-md border-b border-white/20 shadow-xl mb-6">
       <div className="flex items-center justify-between px-6 py-4">
         {/* Left: Activity label with icon */}
         <div className="flex items-center gap-3">
-          <div className="text-[#22c55e]">
+          <div 
+            className="text-green-500 transition-transform duration-300 hover:scale-110"
+            style={{
+              filter: "drop-shadow(rgba(255, 255, 255, 0.6) 0px 0px 8px) drop-shadow(rgba(34, 197, 94, 0.8) 0px 0px 16px) drop-shadow(rgba(34, 197, 94, 0.4) 0px 0px 24px)"
+            }}
+          >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
             </svg>
@@ -38,8 +43,13 @@ export default function StatusBar({ user }: StatusBarProps) {
 
         {/* Center: Avatar and Progress */}
         <div className="flex-1 flex items-center justify-center gap-4 mx-8">
-          {/* Avatar */}
-          <div className="relative w-8 h-8 rounded-full overflow-hidden border border-[#2a2a2d]">
+          {/* Avatar with Glass Effect and Glow */}
+          <div 
+            className="relative w-8 h-8 rounded-full overflow-hidden border border-white/30 shadow-lg cursor-pointer hover:scale-105 transition-transform duration-300 backdrop-blur-sm bg-white/5"
+            style={{
+              boxShadow: "rgba(34, 197, 94, 0.5) 0px 4px 14px 0px"
+            }}
+          >
             {teamData ? (
               <Image
                 src={teamData.logoUrl}
@@ -49,7 +59,7 @@ export default function StatusBar({ user }: StatusBarProps) {
                 unoptimized
               />
             ) : (
-              <div className="w-full h-full bg-[#1a1a1d] flex items-center justify-center">
+              <div className="w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
                 <span className="text-xs font-bold text-white">
                   {user?.name?.charAt(0) || "F"}
                 </span>
@@ -64,9 +74,9 @@ export default function StatusBar({ user }: StatusBarProps) {
                 {userPoints} / {nextTier?.minPoints || currentTier.minPoints}
               </span>
             </div>
-            {/* Floating Pill Container */}
+            {/* Floating Pill Container with Enhanced Glass Effect */}
             <div 
-              className="bg-transparent backdrop-blur-md border border-white/20 rounded-full py-[8px] px-4"
+              className="bg-transparent backdrop-blur-md border border-white/20 rounded-full py-[8px] px-4 shadow-xl"
               style={{
                 filter: 'drop-shadow(rgba(0, 0, 0, 0.4) 0px 10px 25px)'
               }}
@@ -75,15 +85,21 @@ export default function StatusBar({ user }: StatusBarProps) {
               <div className="flex-1 relative bg-gray-700/50 rounded-full h-4 overflow-hidden border border-gray-600/50 min-w-[240px]">
                 {/* Progress Fill with Gradient */}
                 <div
-                  className="bg-gradient-to-r from-green-500 to-cyan-500 h-4 rounded-full transition-all duration-1000 ease-out relative"
+                  className="bg-gradient-to-r from-green-500 to-cyan-500 h-4 rounded-full transition-all duration-1000 ease-out relative overflow-hidden"
                   style={{ width: `${progressPercent}%` }}
                 >
                   {/* Shine Animation Inside Progress Fill */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
+                  <div 
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                    style={{
+                      animation: 'shimmer 2s ease-in-out infinite',
+                      backgroundSize: '200% 100%',
+                    }}
+                  />
                 </div>
               </div>
             </div>
-            <div className="text-xs text-[#a1a1aa] mt-2 text-center">
+            <div className="text-xs text-white/80 mt-2 text-center">
               Points to {nextTier?.name || "Max"} Tier
             </div>
           </div>
