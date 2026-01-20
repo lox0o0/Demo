@@ -177,12 +177,15 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
   const maxTier = TIERS[TIERS.length - 1];
   const maxPoints = maxTier.minPoints;
   
-  // Calculate progress fill height based on actual user points
-  // Fill from bottom (0%) to the user's current position
-  const progressPercent = Math.min((userPoints / maxPoints) * 100, 100);
+  // Calculate which tiers are reached
+  const getTierStatus = (tier: any) => {
+    const isReached = userPoints >= tier.minPoints;
+    const isCurrentTier = tier.name === currentTier.name;
+    return { isReached, isCurrentTier };
+  };
   
-  // Tier colors for gradient
-  const tierColors = {
+  // Tier colors
+  const tierColors: Record<string, string> = {
     Rookie: "#6b7280",      // gray
     Bronze: "#CD7F32",      // bronze
     Silver: "#C0C0C0",       // silver
@@ -192,33 +195,17 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
     Legend: "#FFB800",       // gold/yellow
   };
   
-  // Create smooth gradient that transitions through tier colors
-  // Gradient goes from bottom (Rookie/gray) to top (current tier)
-  // Using key color stops for smooth transitions
-  const gradientColors = [
-    tierColors.Rookie,      // 0% - gray
-    tierColors.Bronze,     // ~2.5% - bronze
-    tierColors.Silver,     // ~10% - silver
-    tierColors.Gold,       // ~20% - gold
-    tierColors.Platinum,   // ~35% - platinum
-    tierColors.Diehard,    // ~50% - maroon
-  ];
+  // Calculate progress line fill - fills from bottom to current tier position
+  // Each tier takes up equal space (100% / total tiers)
+  const currentTierIndex = TIERS.findIndex(t => t.name === currentTier.name);
+  const totalTiers = TIERS.length;
+  // Calculate position: (tier index + 1) / total tiers * 100%
+  // Add 0.5 to center the marker on the filled portion
+  const progressPercent = currentTierIndex >= 0 
+    ? ((currentTierIndex + 0.5) / totalTiers) * 100 
+    : 0;
   
-  const gradientStops = [
-    `${gradientColors[0]} 0%`,
-    `${gradientColors[1]} 5%`,
-    `${gradientColors[2]} 12%`,
-    `${gradientColors[3]} 22%`,
-    `${gradientColors[4]} 37%`,
-    `${gradientColors[5]} 52%`,
-  ].join(", ");
-  
-  // Get tier position percentage
-  const getTierPosition = (tier: any) => {
-    return (tier.minPoints / maxPoints) * 100;
-  };
-  
-  // Get reward icons for each tier
+  // Get reward icons
   const getRewardIcon = (tierName: string) => {
     if (tierName === "Silver") return <Shirt className="w-3 h-3" />;
     if (tierName === "Gold") return <Shirt className="w-3 h-3" />;
@@ -230,148 +217,158 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
 
   return (
     <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-4">
-      <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Fan Journey</h3>
+      <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider">Fan Journey</h3>
       
-      {/* Container for progress bar and tier markers */}
-      <div className="relative" style={{ minHeight: '500px', paddingBottom: '20px' }}>
-        {/* Single Continuous Vertical Progress Bar - Centered for markers */}
-        <div className="absolute left-0 top-0 bottom-0" style={{ width: '32px' }}>
-          {/* Background track (gray) */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gray-700/50" style={{ transform: 'translateX(-50%)' }} />
-          
-          {/* Filled portion - gradient through tier colors (fills from bottom to current position) */}
+      {/* Fixed height container with flexbox layout */}
+      <div className="relative" style={{ minHeight: '600px' }}>
+        {/* Vertical Progress Line - positioned on left */}
+        <div className="absolute left-2 top-0 bottom-0 w-1 flex flex-col">
+          {/* Filled portion - colored up to current tier */}
           <div
-            className="absolute left-1/2 bottom-0 w-0.5 transition-all duration-1000 ease-out"
-            style={{ 
+            className="w-full transition-all duration-1000 ease-out"
+            style={{
               height: `${progressPercent}%`,
-              transform: 'translateX(-50%)',
-              background: `linear-gradient(to top, ${gradientStops})`,
+              background: `linear-gradient(to top, 
+                #6b7280 0%,
+                #CD7F32 16%,
+                #C0C0C0 33%,
+                #FFD700 50%,
+                #E5E4E2 66%,
+                #8B0000 83%,
+                #FFB800 100%
+              )`,
             }}
           >
-            {/* Shine animation on progress fill */}
+            {/* Shine animation */}
             <div 
-              className="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-transparent"
+              className="w-full h-full bg-gradient-to-b from-transparent via-white/20 to-transparent"
               style={{
                 animation: 'shimmer 2s ease-in-out infinite',
               }}
             />
           </div>
+          
+          {/* Empty/gray portion above current tier */}
+          <div 
+            className="w-full bg-gray-700/50 flex-1"
+            style={{
+              height: `${100 - progressPercent}%`,
+            }}
+          />
         </div>
 
-        {/* Tier Markers - Positioned ON the progress bar */}
-        {TIERS.map((tier) => {
-          const isCurrentTier = tier.name === currentTier.name;
-          const isReached = userPoints >= tier.minPoints;
-          const tierPosition = getTierPosition(tier);
-          const tierColor = tierColors[tier.name as keyof typeof tierColors] || "#6b7280";
-          
-          return (
-            <div
-              key={tier.name}
-              className="absolute left-0 right-0 flex items-center gap-3"
-              style={{
-                top: `${tierPosition}%`,
-                transform: 'translateY(-50%)',
-              }}
-            >
-              {/* Tier Circle/Star Marker - Centered ON the progress bar */}
-              <div className="relative z-10 flex-shrink-0" style={{ width: '32px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                {/* Marker circle/star - sits directly on the bar */}
-                <div
-                  className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                    isCurrentTier
-                      ? "animate-pulse-glow"
-                      : ""
-                  }`}
-                  style={
-                    isReached
-                      ? {
-                          borderColor: tierColor,
-                          backgroundColor: tierColor,
-                          boxShadow: isCurrentTier 
-                            ? `0 0 16px ${tierColor}, 0 0 24px ${tierColor}80`
-                            : `0 0 4px ${tierColor}60`,
-                        }
-                      : {
-                          borderColor: "#6b7280",
-                          backgroundColor: "transparent",
-                        }
-                  }
+        {/* Tier Rows - using flexbox with explicit gaps */}
+        <div className="flex flex-col pl-8" style={{ gap: '48px' }}>
+          {TIERS.map((tier, index) => {
+            const { isReached, isCurrentTier } = getTierStatus(tier);
+            const tierColor = tierColors[tier.name] || "#6b7280";
+            
+            return (
+              <div key={tier.name} className="flex items-start gap-4 relative">
+                {/* Tier Marker - positioned on the progress line */}
+                <div 
+                  className="absolute left-0 flex items-center justify-center"
+                  style={{ 
+                    left: '-24px',
+                    width: '24px',
+                    height: '24px',
+                  }}
                 >
-                  {isReached ? (
-                    <Star 
-                      className="w-3 h-3 text-white" 
-                      fill="white"
-                      style={{ filter: 'drop-shadow(0 0 2px rgba(0,0,0,0.5))' }}
-                    />
-                  ) : (
-                    <div className="w-2 h-2 rounded-full bg-gray-500" />
-                  )}
-                </div>
-              </div>
-
-              {/* Tier Info */}
-              <div className="flex-1 min-w-0 pl-4">
-                <div className="flex items-center gap-2 mb-1">
-                  <span
-                    className="text-xs font-bold uppercase"
+                  <div
+                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                      isCurrentTier ? "animate-pulse-glow" : ""
+                    }`}
                     style={
-                      isCurrentTier
-                        ? { color: tierColor }
-                        : isReached
-                        ? { color: tierColor }
-                        : { color: "#9ca3af" }
+                      isReached
+                        ? {
+                            borderColor: tierColor,
+                            backgroundColor: tierColor,
+                            boxShadow: isCurrentTier 
+                              ? `0 0 16px ${tierColor}, 0 0 24px ${tierColor}80`
+                              : `0 0 4px ${tierColor}60`,
+                          }
+                        : {
+                            borderColor: "#6b7280",
+                            backgroundColor: "transparent",
+                          }
                     }
                   >
-                    {tier.name}
-                  </span>
-                  {isCurrentTier && (
-                    <div 
-                      className="px-2 py-0.5 rounded text-[10px] font-semibold animate-pulse-glow"
-                      style={{
-                        backgroundColor: `${tierColor}33`,
-                        borderColor: `${tierColor}80`,
-                        borderWidth: "1px",
-                        borderStyle: "solid",
-                        color: tierColor,
-                        boxShadow: `0 0 8px ${tierColor}40`,
-                      }}
+                    {isReached ? (
+                      <Star 
+                        className="w-3 h-3 text-white" 
+                        fill="white"
+                        style={{ filter: 'drop-shadow(0 0 2px rgba(0,0,0,0.5))' }}
+                      />
+                    ) : (
+                      <div className="w-2 h-2 rounded-full bg-gray-500" />
+                    )}
+                  </div>
+                </div>
+
+                {/* Tier Info - properly spaced, no overlap */}
+                <div className="flex-1 min-w-0">
+                  {/* Tier Name Row */}
+                  <div className="flex items-center gap-2 mb-2">
+                    <span
+                      className="text-xs font-bold uppercase"
+                      style={
+                        isCurrentTier
+                          ? { color: tierColor }
+                          : isReached
+                          ? { color: tierColor }
+                          : { color: "#9ca3af" }
+                      }
                     >
-                      YOU ARE HERE
+                      {tier.name}
+                    </span>
+                    {isCurrentTier && (
+                      <div 
+                        className="px-2 py-0.5 rounded text-[10px] font-semibold animate-pulse-glow"
+                        style={{
+                          backgroundColor: `${tierColor}33`,
+                          borderColor: `${tierColor}80`,
+                          borderWidth: "1px",
+                          borderStyle: "solid",
+                          color: tierColor,
+                          boxShadow: `0 0 8px ${tierColor}40`,
+                        }}
+                      >
+                        YOU ARE HERE
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Points Row */}
+                  <div className="text-[10px] text-white/60 mb-2">
+                    {tier.minPoints.toLocaleString()} pts
+                  </div>
+                  
+                  {/* Prize Row */}
+                  <div className={`flex items-center gap-1.5 text-[10px] ${
+                    isReached ? "text-white/80" : "text-white/50"
+                  }`}>
+                    {getRewardIcon(tier.name)}
+                    <span>{tier.reward || tier.access}</span>
+                  </div>
+                  
+                  {/* Legend tier special callout */}
+                  {tier.name === "Legend" && (
+                    <div className="mt-3 px-2 py-1.5 bg-gradient-to-r from-yellow-400/20 via-amber-400/20 to-yellow-400/20 border border-yellow-400/40 rounded text-[10px]">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <Plane className="w-3 h-3 text-yellow-300" />
+                        <Hotel className="w-3 h-3 text-yellow-300" />
+                        <Ticket className="w-3 h-3 text-yellow-300" />
+                      </div>
+                      <div className="text-yellow-200 font-semibold">
+                        Complete VIP Experience
+                      </div>
                     </div>
                   )}
                 </div>
-                
-                {/* Points threshold */}
-                <div className="text-[10px] text-white/60 mb-1">
-                  {tier.minPoints.toLocaleString()} pts
-                </div>
-                
-                {/* Reward description */}
-                <div className={`flex items-center gap-1.5 text-[10px] ${
-                  isReached ? "text-white/80" : "text-white/50"
-                }`}>
-                  {getRewardIcon(tier.name)}
-                  <span>{tier.reward || tier.access}</span>
-                </div>
-                
-                {/* Legend tier special callout */}
-                {tier.name === "Legend" && (
-                  <div className="mt-2 px-2 py-1.5 bg-gradient-to-r from-yellow-400/20 via-amber-400/20 to-yellow-400/20 border border-yellow-400/40 rounded text-[10px]">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <Plane className="w-3 h-3 text-yellow-300" />
-                      <Hotel className="w-3 h-3 text-yellow-300" />
-                      <Ticket className="w-3 h-3 text-yellow-300" />
-                    </div>
-                    <div className="text-yellow-200 font-semibold">
-                      Complete VIP Experience
-                    </div>
-                  </div>
-                )}
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
