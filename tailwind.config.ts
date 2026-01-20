@@ -41,6 +41,7 @@ const config: Config = {
         "shimmer-border": "shimmer-border 3s ease-in-out infinite",
         "shimmer-legend": "shimmer-legend 4s ease-in-out infinite",
         "pulse-glow": "pulseGlow 2s ease-in-out infinite",
+        "shine-sweep": "shineSweep 3s ease-in-out infinite",
       },
       keyframes: {
         bounceIn: {
@@ -104,6 +105,14 @@ const config: Config = {
           "50%": { 
             boxShadow: "0 0 16px rgba(34, 197, 94, 0.8), 0 0 32px rgba(34, 197, 94, 0.5)",
             borderColor: "#22c55e"
+          },
+        },
+        shineSweep: {
+          "0%": { 
+            transform: "translateX(-100%) translateY(-100%) rotate(45deg)",
+          },
+          "100%": { 
+            transform: "translateX(200%) translateY(200%) rotate(45deg)",
           },
         },
       },

@@ -169,3 +169,17 @@ body {
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
+
+/* Shine sweep animation for cards */
+@keyframes shineSweep {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+.animate-shine-sweep {
+  animation: shineSweep 1.5s ease-in-out;
+}

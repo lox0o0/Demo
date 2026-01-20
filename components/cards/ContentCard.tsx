@@ -45,16 +45,28 @@ export default function ContentCard({
 
   return (
     <div
-      className={`relative group cursor-pointer rounded-xl overflow-hidden border transition-all duration-300 hover:scale-[1.02] bg-[#0a0a0b] ${
+      className={`relative group cursor-pointer rounded-xl overflow-hidden transition-all duration-500 ${
         completed 
-          ? "border-[#2a2a2d]/50 opacity-75 hover:border-[#2a2a2d]/70" 
-          : "border-[#2a2a2d] hover:border-[#22c55e]"
+          ? "opacity-75" 
+          : ""
       }`}
       onClick={onCardClick}
     >
-      {/* Background Image with padding and border */}
-      <div className="relative aspect-video w-full p-3">
-        <div className="relative w-full h-full rounded-lg overflow-hidden border border-[#2a2a2d]/50 bg-[#1a1a1d]">
+      {/* Glassmorphism Wrapper */}
+      <div className="relative w-full h-full rounded-xl backdrop-blur-md bg-gradient-to-br from-white/5 via-white/3 to-transparent border border-white/10 shadow-glass hover:shadow-glass-strong transition-all duration-500 hover:scale-[1.02] hover:border-white/20 overflow-hidden">
+        {/* Shine Sweep Effect */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl">
+          <div 
+            className="absolute -inset-10 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shine-sweep transition-opacity duration-300"
+            style={{
+              width: '200%',
+              height: '200%',
+            }}
+          />
+        </div>
+        {/* Background Image with padding and border */}
+        <div className="relative aspect-video w-full p-3">
+          <div className="relative w-full h-full rounded-lg overflow-hidden bg-[#1a1a1d]/50 backdrop-blur-sm border border-white/5">
           {!imageError ? (
             <Image
               src={image}
@@ -194,7 +206,7 @@ export default function ContentCard({
           </div>
         )}
         
-        {/* CTA Button - Centered */}
+        {/* CTA Button - Centered with Glow Effect */}
         {ctaButton && ctaStyle !== "subtitle" && (
           <div className="w-full flex justify-center mt-2">
             <button
@@ -202,16 +214,21 @@ export default function ContentCard({
                 e.stopPropagation();
                 onCtaClick?.();
               }}
-              className={`w-full px-4 py-2 text-sm font-semibold rounded-lg transition-all text-center ${
+              className={`relative w-full px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 text-center overflow-hidden ${
                 completed
                   ? "bg-[#1a1a1d]/60 border border-[#2a2a2d] text-white/70 hover:border-[#2a2a2d]/80"
-                  : "bg-[#1a1a1d] border border-[#f59e0b]/40 text-white shadow-[0_0_8px_rgba(245,158,11,0.3)] hover:shadow-[0_0_12px_rgba(245,158,11,0.5)] hover:border-[#f59e0b]/60"
+                  : "bg-gradient-to-r from-[#1a1a1d] to-[#2a2a2d] border border-[#f59e0b]/50 text-white shadow-[0_0_12px_rgba(245,158,11,0.4)] hover:shadow-[0_0_20px_rgba(245,158,11,0.6)] hover:border-[#f59e0b]/80 hover:scale-[1.02]"
               }`}
             >
-              {ctaButton}
+              {/* Button Glow Effect */}
+              {!completed && (
+                <div className="absolute inset-0 bg-gradient-to-r from-[#f59e0b]/20 via-[#f59e0b]/40 to-[#f59e0b]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-shimmer" />
+              )}
+              <span className="relative z-10">{ctaButton}</span>
             </button>
           </div>
         )}
+      </div>
       </div>
     </div>
   );
