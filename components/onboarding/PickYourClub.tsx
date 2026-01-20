@@ -97,18 +97,20 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
     return <TeamCelebration team={selectedTeam} />;
   }
 
+  const backgroundImagePath = "/broncos/choose-team.png";
+  
   return (
     <div 
-      className="min-h-screen flex items-center justify-center p-4 relative"
+      className="min-h-screen relative"
       style={{
-        backgroundImage: 'url(/broncos/choose-team.png)',
+        backgroundImage: `url(${backgroundImagePath})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        filter: 'brightness(0.9)',
+        backgroundRepeat: 'no-repeat',
       }}
     >
       {/* Light overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/30 z-0" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/40 z-0" />
       
       <div className="container mx-auto px-4 py-12 relative z-10">
         <div className="text-center mb-12">
