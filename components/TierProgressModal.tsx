@@ -335,7 +335,8 @@ export default function TierProgressModal({
               color: tokens.colors.white,
               borderRadius: tokens.radii.button,
               boxShadow: '0 2px 8px rgba(115, 0, 60, 0.3)',
-            }}
+              '--tw-ring-color': tokens.colors.gold,
+            } as React.CSSProperties & { '--tw-ring-color': string }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = '#8a0048';
               e.currentTarget.style.boxShadow = '0 4px 12px rgba(115, 0, 60, 0.4)';
@@ -345,9 +346,6 @@ export default function TierProgressModal({
               e.currentTarget.style.backgroundColor = tokens.colors.maroon;
               e.currentTarget.style.boxShadow = '0 2px 8px rgba(115, 0, 60, 0.3)';
               e.currentTarget.style.transform = 'translateY(0)';
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.ringColor = tokens.colors.gold;
             }}
           >
             Complete Profile →
