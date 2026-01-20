@@ -8,14 +8,13 @@ interface LeftSidebarProps {
 }
 
 export default function LeftSidebar({ activeSection, onNavigate }: LeftSidebarProps) {
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const navItems = [
     { 
       id: "home", 
       label: "Home", 
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
           <polyline points="9 22 9 12 15 12 15 22" />
         </svg>
@@ -25,7 +24,7 @@ export default function LeftSidebar({ activeSection, onNavigate }: LeftSidebarPr
       id: "dashboard", 
       label: "Locker Room", 
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="3" width="7" height="7" />
           <rect x="14" y="3" width="7" height="7" />
           <rect x="14" y="14" width="7" height="7" />
@@ -37,7 +36,7 @@ export default function LeftSidebar({ activeSection, onNavigate }: LeftSidebarPr
       id: "fantasy", 
       label: "Fantasy & Tipping", 
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
           <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
           <path d="M4 22h16" />
@@ -51,7 +50,7 @@ export default function LeftSidebar({ activeSection, onNavigate }: LeftSidebarPr
       id: "watch", 
       label: "Watch", 
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <polygon points="5 3 19 12 5 21 5 3" />
         </svg>
       )
@@ -59,89 +58,115 @@ export default function LeftSidebar({ activeSection, onNavigate }: LeftSidebarPr
   ];
 
   return (
-    <aside className="fixed left-0 top-0 bottom-0 w-[70px] bg-[#0a0a0b] border-r border-[#2a2a2d] z-50 flex flex-col">
+    <aside className="fixed left-0 top-0 bottom-0 w-[70px] bg-transparent backdrop-blur-md border-r border-white/20 shadow-xl z-50 flex flex-col">
       {/* Navigation Items */}
-      <nav className="flex-1 pt-4">
-        {navItems.map((item) => {
+      <nav className="flex-1 pt-4 px-2">
+        {navItems.map((item, index) => {
           const isActive = activeSection === item.id;
-          const isHovered = hoveredItem === item.id;
 
           return (
-            <div key={item.id} className="relative group">
+            <div 
+              key={item.id} 
+              className="relative group animate-fade-in-up"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
               <button
                 onClick={() => onNavigate(item.id)}
-                onMouseEnter={() => setHoveredItem(item.id)}
-                onMouseLeave={() => setHoveredItem(null)}
-                className={`w-full flex items-center justify-center py-4 transition-all duration-200 relative ${
-                  isActive ? "text-[#22c55e]" : "text-white/60 hover:text-white"
+                className={`flex w-full items-center gap-3 p-2 h-12 px-4 rounded-lg text-sm bg-transparent hover:bg-white/10 backdrop-blur-sm transition-all duration-300 ease-out hover:shadow-lg hover:shadow-white/20 relative overflow-hidden ${
+                  isActive 
+                    ? "text-purple-300 font-bold" 
+                    : "text-white/90 hover:text-white"
                 }`}
               >
-                {/* Active indicator bar */}
-                {isActive && (
-                  <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#22c55e]" />
-                )}
-                
-                {/* Icon */}
-                <div className="flex items-center justify-center">
+                {/* Hover Gradient Overlay */}
+                <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent rounded-lg"></div>
+                </div>
+
+                {/* Icon with Glow Effect */}
+                <div 
+                  className="flex items-center justify-center w-5 h-5 transition-transform duration-300 group-hover:scale-110"
+                  style={isActive 
+                    ? {
+                        filter: "drop-shadow(rgba(255, 255, 255, 0.8) 0px 0px 12px) drop-shadow(rgb(139, 92, 246) 0px 0px 24px) drop-shadow(rgba(139, 92, 246, 0.6) 0px 0px 36px)"
+                      }
+                    : {
+                        filter: "drop-shadow(rgba(255, 255, 255, 0.6) 0px 0px 8px) drop-shadow(rgba(103, 126, 234, 0.8) 0px 0px 16px) drop-shadow(rgba(103, 126, 234, 0.4) 0px 0px 24px)"
+                      }
+                  }
+                >
                   {item.icon}
                 </div>
               </button>
-              
-              {/* Tooltip on hover */}
-              {isHovered && !isActive && (
-                <div className="absolute left-full ml-3 px-3 py-2 bg-[#1a1a1d] border border-[#2a2a2d] rounded-lg text-xs font-semibold text-white whitespace-nowrap z-50 shadow-lg">
-                  {item.label}
-                  {/* Tooltip arrow */}
-                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-[#2a2a2d]" />
-                </div>
-              )}
             </div>
           );
         })}
       </nav>
 
       {/* Bottom Actions */}
-      <div className="pb-4 border-t border-[#2a2a2d] pt-4">
+      <div className="pb-4 border-t border-white/20 pt-4 px-2">
         <button
           onClick={() => {
             localStorage.removeItem("nrl_onboarded");
             localStorage.removeItem("nrl_user");
             window.location.reload();
           }}
-          className="w-full flex flex-col items-center justify-center py-3 text-white/60 hover:text-white transition-colors"
+          className="flex w-full items-center gap-3 p-2 h-12 px-4 rounded-lg text-sm text-white/90 hover:text-white bg-transparent hover:bg-white/10 backdrop-blur-sm transition-all duration-300 ease-out hover:shadow-lg hover:shadow-white/20 group relative overflow-hidden"
           title="Reset Demo"
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          {/* Hover Gradient Overlay */}
+          <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent rounded-lg"></div>
+          </div>
+          <div 
+            className="flex items-center justify-center w-5 h-5 transition-transform duration-300 group-hover:scale-110"
+            style={{
+              filter: "drop-shadow(rgba(255, 255, 255, 0.6) 0px 0px 8px) drop-shadow(rgba(103, 126, 234, 0.8) 0px 0px 16px) drop-shadow(rgba(103, 126, 234, 0.4) 0px 0px 24px)"
+            }}
           >
-            <circle cx="12" cy="12" r="3" />
-            <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24" />
-          </svg>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="3" />
+              <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24" />
+            </svg>
+          </div>
         </button>
         <button
-          className="w-full flex flex-col items-center justify-center py-3 text-white/60 hover:text-white transition-colors mt-2"
+          className="flex w-full items-center gap-3 p-2 h-12 px-4 rounded-lg text-sm text-white/90 hover:text-white bg-transparent hover:bg-white/10 backdrop-blur-sm transition-all duration-300 ease-out hover:shadow-lg hover:shadow-white/20 group relative overflow-hidden mt-2"
           title="Help"
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          {/* Hover Gradient Overlay */}
+          <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent rounded-lg"></div>
+          </div>
+          <div 
+            className="flex items-center justify-center w-5 h-5 transition-transform duration-300 group-hover:scale-110"
+            style={{
+              filter: "drop-shadow(rgba(255, 255, 255, 0.6) 0px 0px 8px) drop-shadow(rgba(103, 126, 234, 0.8) 0px 0px 16px) drop-shadow(rgba(103, 126, 234, 0.4) 0px 0px 24px)"
+            }}
           >
-            <circle cx="12" cy="12" r="10" />
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" />
-          </svg>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" />
+            </svg>
+          </div>
         </button>
       </div>
     </aside>
