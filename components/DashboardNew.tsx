@@ -141,6 +141,23 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
           </div>
         )}
       </main>
+
+      {/* Tier Upgrade Celebration Modal */}
+      {showTierCelebration && celebrationData && (
+        <TierUpgradeCelebration
+          oldTier={celebrationData.oldTier}
+          newTier={celebrationData.newTier}
+          reward={celebrationData.newTier.reward}
+          onDismiss={() => {
+            setShowTierCelebration(false);
+            setCelebrationData(null);
+          }}
+          onViewRewards={() => {
+            setShowTierCelebration(false);
+            setCelebrationData(null);
+          }}
+        />
+      )}
     </div>
   );
 }
