@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { SocialIcon } from "@/lib/icons";
 import TierUpgradeCelebration from "./TierUpgradeCelebration";
-import TierUpgradeCelebration from "./TierUpgradeCelebration";
 
 interface DashboardProps {
   user: any;
