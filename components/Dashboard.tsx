@@ -71,7 +71,7 @@ export default function Dashboard({ user }: DashboardProps) {
                     completed={true}
                   />
                   <ContentCard
-                    image="/images/cards/profile-upgrade.jpg"
+                    image="/images/cards/profile-upgade.jpg"
                     title="Upgrade your profile"
                     subtitle="Complete profile data to earn points!"
                     progressPercent={30}
