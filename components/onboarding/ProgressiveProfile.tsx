@@ -50,7 +50,7 @@ export default function ProgressiveProfile({
         points: 50,
         lifetimePoints: 50,
         memberSince: new Date().getFullYear(),
-        streak: 0,
+        streak: 2,
         smsReminders: formData.smsReminders,
         entryPoint,
         entryData,

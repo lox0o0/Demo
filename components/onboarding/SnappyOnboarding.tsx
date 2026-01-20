@@ -205,7 +205,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         points: basePoints,
         lifetimePoints: basePoints,
         memberSince: new Date().getFullYear(),
-        streak: 0,
+        streak: 2,
         connectedSocials: emptySocials, // Empty array matches the base points calculation
         profileCompletion: calculateProfileCompletion(
           emptySocials, 
@@ -304,7 +304,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         points: calculatePoints(),
         lifetimePoints: calculatePoints(),
         memberSince: new Date().getFullYear(),
-        streak: 0,
+        streak: 2,
         connectedSocials,
         profileCompletion: calculateProfileCompletion(
           connectedSocials, 
