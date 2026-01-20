@@ -98,7 +98,7 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   }
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative bg-black">
       {/* Background Image - using same approach as locker room */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <Image
@@ -108,9 +108,10 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
           className="object-cover"
           priority
           unoptimized
+          style={{ zIndex: 0 }}
         />
-        {/* Minimal overlay - just for text readability */}
-        <div className="absolute inset-0 bg-black/5" />
+        {/* Very light overlay - just for text readability */}
+        <div className="absolute inset-0 bg-black/5" style={{ zIndex: 1 }} />
       </div>
       
       <div className="container mx-auto px-4 py-12 relative z-10">
