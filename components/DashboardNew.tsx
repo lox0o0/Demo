@@ -82,22 +82,19 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
               <ConnectSocialsCard user={user} />
             </div>
 
-            {/* Middle Column - Profile, Leaderboards, Stats */}
+            {/* Middle Column - Your Season, Leaderboards */}
             <div className="space-y-6">
-              <ProfileCardFull 
+              <YourSeasonCard
                 tier={currentTier}
                 points={userPoints}
                 progressPercent={progressPercent}
                 pointsToNext={pointsToNext}
                 nextTier={nextTier}
                 teamData={teamData}
-                profileCompletion={profileCompletion}
                 user={user}
               />
               
               <LeaderboardsCard user={user} teamData={teamData} />
-              
-              <SeasonStatsCard user={user} />
             </div>
 
             {/* Right Column - Tier Rewards, Prize Wheel */}
@@ -1203,53 +1200,167 @@ function SponsorQuestCard() {
 }
 
 // Profile Card Full (Right Column)
-function ProfileCardFull({ tier, points, progressPercent, pointsToNext, nextTier, teamData, profileCompletion, user }: any) {
+// Your Season Card - Merged Profile and Season Stats
+function YourSeasonCard({ tier, points, progressPercent, pointsToNext, nextTier, teamData, user }: any) {
+  const [hoveredBadge, setHoveredBadge] = useState<string | null>(null);
+  
+  // All possible badges
+  const allBadges = [
+    { id: "i-was-there", name: "I Was There", icon: "🎟️", earned: true, description: "Attended 5+ games this season" },
+    { id: "dedicated", name: "Dedicated", icon: "🔥", earned: true, description: "Maintained a 10+ week streak" },
+    { id: "top-fan", name: "Top Fan", icon: "⭐", earned: true, description: "Reached top 15% of team fans" },
+    { id: "prediction-master", name: "Prediction Master", icon: "🔮", earned: false, description: "Made 20+ accurate predictions" },
+    { id: "tipping-champion", name: "Tipping Champion", icon: "🏆", earned: false, description: "Won 3+ tipping rounds" },
+    { id: "fantasy-legend", name: "Fantasy Legend", icon: "👑", earned: false, description: "Top 100 in Fantasy league" },
+  ];
+
+  const earnedBadges = allBadges.filter(b => b.earned);
+  const unearnedBadges = allBadges.filter(b => !b.earned);
+
   return (
     <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
-      <div className="flex items-center gap-4 mb-4">
+      {/* Tier Badge - Large and Prominent */}
+      <div className="text-center mb-6">
         <div 
-          className="w-16 h-16 rounded-full border-2 flex items-center justify-center"
-          style={{ borderColor: tier.color }}
+          className="relative w-24 h-24 mx-auto rounded-full border-4 flex items-center justify-center mb-3"
+          style={{ 
+            borderColor: tier.color,
+            boxShadow: `0 0 20px ${tier.color}40, inset 0 0 20px ${tier.color}20`
+          }}
         >
-          <span className="text-2xl">⭐</span>
+          {/* Metallic shine effect */}
+          <div 
+            className="absolute inset-0 rounded-full opacity-30"
+            style={{
+              background: `linear-gradient(135deg, ${tier.color}80 0%, transparent 50%, ${tier.color}40 100%)`
+            }}
+          />
+          <span className="text-4xl relative z-10">⭐</span>
+        </div>
+        <div 
+          className="text-xl font-bold uppercase tracking-wider"
+          style={{ color: tier.color }}
+        >
+          {tier.name} TIER
+        </div>
+      </div>
+
+      {/* Points Total */}
+      <div className="text-center mb-6">
+        <div className="text-5xl font-bold text-white mb-1">{points.toLocaleString()}</div>
+        <div className="text-sm text-nrl-text-secondary">points</div>
+      </div>
+
+      {/* Progress Bar - Substantial */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-semibold text-white">
+            {pointsToNext > 0 ? `${pointsToNext} to ${nextTier.name}` : "Max tier reached"}
+          </span>
+          <span className="text-xs text-nrl-text-secondary">
+            {Math.round(progressPercent)}%
+          </span>
+        </div>
+        <div className="w-full bg-nrl-dark-hover rounded-full h-4 mb-3 overflow-hidden">
+          <div
+            className="h-full rounded-full transition-all duration-500 relative"
+            style={{ 
+              width: `${progressPercent}%`,
+              background: `linear-gradient(90deg, ${tier.color} 0%, ${nextTier.color || tier.color} 100%)`
+            }}
+          >
+            {/* Shine effect on progress bar */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
+          </div>
+        </div>
+        
+        {/* Next Tier Preview */}
+        {pointsToNext > 0 && (
+          <div className="flex items-center gap-2 text-xs text-nrl-text-secondary">
+            <span className="font-semibold text-white">{nextTier.name}:</span>
+            <span>{nextTier.reward || nextTier.access}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Season Stats - 2x2 Grid */}
+      <div className="grid grid-cols-2 gap-4 mb-6 pb-6 border-b border-nrl-border-light">
+        <div>
+          <div className="text-2xl font-bold text-white">{user?.lifetimePoints || points}</div>
+          <div className="text-xs text-nrl-text-secondary">Lifetime Points</div>
         </div>
         <div>
-          <div className="text-sm font-bold uppercase" style={{ color: tier.color }}>
-            {tier.name} Tier
-          </div>
-          <div className="text-3xl font-bold text-white">{points.toLocaleString()}</div>
-          <div className="text-xs text-nrl-text-secondary">points</div>
+          <div className="text-2xl font-bold text-white">5/7</div>
+          <div className="text-xs text-nrl-text-secondary">Games Attended</div>
+        </div>
+        <div>
+          <div className="text-2xl font-bold text-white">#847</div>
+          <div className="text-xs text-nrl-text-secondary">Tipping Rank</div>
+        </div>
+        <div>
+          <div className="text-2xl font-bold text-white">{earnedBadges.length}</div>
+          <div className="text-xs text-nrl-text-secondary">Badges Earned</div>
         </div>
       </div>
-      
-      {/* Progress Bar */}
-      <div className="w-full bg-nrl-dark-hover rounded-full h-2 mb-2">
-        <div
-          className="h-2 rounded-full transition-all"
-          style={{ 
-            width: `${progressPercent}%`,
-            backgroundColor: tier.color 
-          }}
-        />
-      </div>
-      <div className="text-xs text-nrl-text-secondary mb-4">
-        {pointsToNext > 0 ? `${pointsToNext} to ${nextTier.name}` : "Max tier reached"}
-      </div>
-      
-      {/* Badges */}
-      <div className="border-t border-nrl-border-light pt-4">
-        <div className="text-xs font-bold uppercase text-nrl-text-secondary mb-3">Badges</div>
-        <div className="grid grid-cols-3 gap-2">
-          {[
-            { name: "I Was There", icon: "🎟️" },
-            { name: "Dedicated", icon: "🔥" },
-            { name: "Top Fan", icon: "⭐" },
-          ].map((badge, idx) => (
-            <div key={idx} className="bg-nrl-dark-hover rounded-lg p-2 text-center border border-nrl-border-light">
-              <div className="text-lg mb-1">{badge.icon}</div>
-              <div className="text-[10px] font-semibold text-white">{badge.name}</div>
-            </div>
-          ))}
+
+      {/* Trophy Case - Badges Showcase */}
+      <div>
+        <div className="text-sm font-bold uppercase text-nrl-text-secondary mb-4 tracking-wider">
+          Trophy Case
+        </div>
+        
+        {/* Shelf visual treatment */}
+        <div className="relative">
+          {/* Shelf top border */}
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-nrl-border-light to-transparent" />
+          
+          <div className="grid grid-cols-3 gap-3 pt-4">
+            {/* Earned Badges */}
+            {earnedBadges.map((badge) => (
+              <div
+                key={badge.id}
+                className="relative group"
+                onMouseEnter={() => setHoveredBadge(badge.id)}
+                onMouseLeave={() => setHoveredBadge(null)}
+              >
+                <div className="bg-nrl-dark-hover rounded-xl p-3 text-center border-2 border-nrl-green/50 hover:border-nrl-green transition-all cursor-pointer">
+                  <div className="text-3xl mb-2">{badge.icon}</div>
+                  <div className="text-xs font-semibold text-white">{badge.name}</div>
+                </div>
+                
+                {/* Tooltip */}
+                {hoveredBadge === badge.id && (
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-[#1a1a1d] border border-nrl-border-light rounded-lg text-xs text-white whitespace-nowrap z-10 shadow-lg">
+                    {badge.description}
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-nrl-border-light" />
+                  </div>
+                )}
+              </div>
+            ))}
+            
+            {/* Unearned Badges - Silhouettes */}
+            {unearnedBadges.slice(0, 3 - earnedBadges.length).map((badge) => (
+              <div
+                key={badge.id}
+                className="relative group"
+                onMouseEnter={() => setHoveredBadge(badge.id)}
+                onMouseLeave={() => setHoveredBadge(null)}
+              >
+                <div className="bg-nrl-dark-hover rounded-xl p-3 text-center border-2 border-nrl-border-light opacity-40">
+                  <div className="text-3xl mb-2 filter grayscale">❓</div>
+                  <div className="text-xs font-semibold text-nrl-text-muted">Locked</div>
+                </div>
+                
+                {/* Tooltip */}
+                {hoveredBadge === badge.id && (
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-[#1a1a1d] border border-nrl-border-light rounded-lg text-xs text-white whitespace-nowrap z-10 shadow-lg">
+                    {badge.description}
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-nrl-border-light" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -1293,32 +1404,6 @@ function LeaderboardsCard({ user, teamData }: any) {
   );
 }
 
-// Season Stats Card (Right Column)
-function SeasonStatsCard({ user }: any) {
-  return (
-    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
-      <h3 className="text-lg font-bold text-white mb-4">Season Stats</h3>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <div className="text-2xl font-bold text-white">{user?.lifetimePoints || 0}</div>
-          <div className="text-xs text-nrl-text-secondary">Lifetime Points</div>
-        </div>
-        <div>
-          <div className="text-2xl font-bold text-white">5/7</div>
-          <div className="text-xs text-nrl-text-secondary">Games Attended</div>
-        </div>
-        <div>
-          <div className="text-2xl font-bold text-white">#847</div>
-          <div className="text-xs text-nrl-text-secondary">Tipping Rank</div>
-        </div>
-        <div>
-          <div className="text-2xl font-bold text-white">23</div>
-          <div className="text-xs text-nrl-text-secondary">Week Streak</div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // Profile Completion Simplified (Left Column)
 function ProfileCompletionSimplified({ user, profileCompletion }: any) {
