@@ -1720,7 +1720,7 @@ function PrizeWheelCard({ streakData, teamData }: any) {
 
   return (
     <>
-      <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
+      <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light h-full flex flex-col">
         <h3 className="text-lg font-bold text-white mb-1">Prize Wheel</h3>
         <div className="text-xs text-nrl-text-secondary mb-4">(win tickets, vouchers and points!)</div>
         {streakData.spins.available > 0 ? (
