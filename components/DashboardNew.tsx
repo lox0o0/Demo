@@ -91,7 +91,7 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
             <div className="space-y-6">
               <YourSeasonCard
                 tier={currentTier}
-                points={userPoints}
+                points={actualUserPoints}
                 progressPercent={progressPercent}
                 pointsToNext={pointsToNext}
                 nextTier={nextTier}
