@@ -149,6 +149,20 @@ export default function RightSidebar({ user }: RightSidebarProps) {
                       <span className="text-xs text-[#a1a1aa]">{tier.minPoints.toLocaleString()}</span>
                     </div>
                     
+                    {/* Prize description - compact, one line, muted */}
+                    {tier.name === "Silver" && (
+                      <div className="text-[10px] text-[#6b7280] mb-1">NRL / Broncos Hat</div>
+                    )}
+                    {tier.name === "Gold" && (
+                      <div className="text-[10px] text-[#6b7280] mb-1">Team Jersey</div>
+                    )}
+                    {tier.name === "Platinum" && (
+                      <div className="text-[10px] text-[#6b7280] mb-1">VIP Game Ticket</div>
+                    )}
+                    {tier.name === "Diehard" && (
+                      <div className="text-[10px] text-[#6b7280] mb-1">Signed Team Jersey</div>
+                    )}
+                    
                     {/* Reward preview icon at tier marker */}
                     <div className="absolute left-[16px] top-[-4px] w-4 h-4 flex items-center justify-center">
                       {tier.name === "Bronze" && <Award size={12} className="text-white/60" strokeWidth={2} />}
