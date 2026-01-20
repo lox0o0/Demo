@@ -232,12 +232,43 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
     return <Gift className="w-3 h-3" />;
   };
 
+  // Calculate next tier and progress
+  const nextTier = TIERS.find((t) => t.minPoints > userPoints);
+  const pointsToNext = nextTier ? nextTier.minPoints - userPoints : 0;
+  const tierRange = nextTier && currentTier ? nextTier.minPoints - currentTier.minPoints : 0;
+  const progressToNext = tierRange > 0 ? ((userPoints - currentTier.minPoints) / tierRange) * 100 : 0;
+  const isCloseToNextTier = progressToNext >= 90 && progressToNext < 100;
+
   return (
     <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-4">
-      <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider">Fan Journey</h3>
+      <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Fan Journey</h3>
       
-      {/* Fixed height container with flexbox layout */}
-      <div className="relative" style={{ minHeight: '600px' }}>
+      {/* Progress Bar - Show when close to next tier (90%+) */}
+      {isCloseToNextTier && nextTier && (
+        <div className="mb-4 p-3 bg-white/5 rounded-lg border border-white/10">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold text-white/80">
+              {pointsToNext} pts to {nextTier.name}
+            </span>
+            <span className="text-xs text-white/60">
+              {userPoints} / {nextTier.minPoints} pts
+            </span>
+          </div>
+          <div className="w-full rounded-full overflow-hidden relative" style={{ height: '6px', backgroundColor: 'rgba(255, 255, 255, 0.1)' }}>
+            <div
+              className="h-full rounded-full transition-all duration-500"
+              style={{
+                width: `${Math.min(progressToNext, 100)}%`,
+                background: `linear-gradient(to right, ${currentTier.color}, ${nextTier.color})`,
+                boxShadow: `0 0 8px ${nextTier.color}60`,
+              }}
+            />
+          </div>
+        </div>
+      )}
+      
+      {/* Reduced height container with flexbox layout */}
+      <div className="relative" style={{ minHeight: '400px' }}>
         {/* Vertical Progress Line - positioned on left, centered for markers */}
         <div className="absolute left-0 top-0 bottom-0" style={{ width: '32px' }}>
           {/* Background track (gray) - full height */}
@@ -265,8 +296,8 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
           />
         </div>
 
-        {/* Tier Rows - using flexbox with explicit gaps */}
-        <div className="flex flex-col pl-10" style={{ gap: '48px' }}>
+        {/* Tier Rows - using flexbox with reduced gaps */}
+        <div className="flex flex-col pl-10" style={{ gap: '32px' }}>
           {TIERS.map((tier, index) => {
             const { isReached, isCurrentTier } = getTierStatus(tier);
             const tierColor = tierColors[tier.name] || "#6b7280";

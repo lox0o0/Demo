@@ -188,7 +188,7 @@ export default function TierUpgradeCelebration({
 
       {/* Main Content */}
       <div
-        className={`relative z-10 max-w-lg w-full mx-4 transform transition-all duration-500 ${
+        className={`relative z-10 max-w-md w-full mx-4 transform transition-all duration-500 ${
           showCelebration ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
         }`}
         style={{
@@ -196,9 +196,9 @@ export default function TierUpgradeCelebration({
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           border: '1px solid rgba(255, 255, 255, 0.1)',
-          borderRadius: '24px',
-          padding: '48px 32px',
-          boxShadow: '0 32px 64px rgba(0, 0, 0, 0.5)',
+          borderRadius: '16px',
+          padding: '32px 24px',
+          boxShadow: '0 24px 48px rgba(0, 0, 0, 0.5)',
         }}
       >
         {/* Close button */}
@@ -219,35 +219,33 @@ export default function TierUpgradeCelebration({
           <X className="w-4 h-4 text-white/70" strokeWidth={2} />
         </button>
 
-        {/* Points Counter */}
-        <div className="text-center mb-6">
+        {/* Points Counter - Minimal */}
+        <div className="text-center mb-4">
           <div
-            className="text-5xl font-black mb-2"
+            className="text-3xl font-black mb-1"
             style={{
               color: '#ffd700',
-              textShadow: '0 0 30px rgba(255, 215, 0, 0.6), 0 0 60px rgba(255, 215, 0, 0.3)',
-              fontFamily: 'system-ui, -apple-system, sans-serif',
+              textShadow: '0 0 20px rgba(255, 215, 0, 0.5)',
             }}
           >
             {points.toLocaleString()}
           </div>
-          <div className="text-sm text-white/60 font-medium">points</div>
+          <div className="text-xs text-white/60">points</div>
         </div>
 
-        {/* LEVEL UP! Text */}
+        {/* LEVEL UP! Text - Minimal */}
         {showLevelUp && (
           <div
-            className={`text-center mb-6 transform transition-all duration-500 ${
+            className={`text-center mb-4 transform transition-all duration-500 ${
               showLevelUp ? 'scale-100 opacity-100' : 'scale-90 opacity-0'
             }`}
           >
             <h1
               id="celebration-title"
-              className="text-4xl font-black uppercase tracking-wider mb-2"
+              className="text-2xl font-black uppercase tracking-wider"
               style={{
                 color: '#ffffff',
-                textShadow: '0 0 40px rgba(255, 215, 0, 0.8), 0 0 80px rgba(255, 215, 0, 0.4)',
-                animation: 'pulse 2s ease-in-out infinite',
+                textShadow: '0 0 20px rgba(255, 215, 0, 0.6)',
               }}
             >
               LEVEL UP!
@@ -255,80 +253,65 @@ export default function TierUpgradeCelebration({
           </div>
         )}
 
-        {/* Tier Reveal */}
+        {/* Tier Reveal - Minimal */}
         {showTierReveal && (
           <div
-            className={`text-center mb-8 transform transition-all duration-700 ${
-              showTierReveal ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-4'
+            className={`text-center mb-5 transform transition-all duration-500 ${
+              showTierReveal ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-2'
             }`}
           >
-            {/* Tier Badge with Shine Effect */}
-            <div className="relative inline-block mb-4">
+            {/* Tier Badge */}
+            <div className="mb-3">
               <div
-                className="px-6 py-3 rounded-full text-lg font-bold uppercase tracking-wider relative overflow-hidden"
+                className="px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider inline-block"
                 style={{
                   backgroundColor: `${newTier.color}20`,
-                  border: `2px solid ${newTier.color}`,
+                  border: `1px solid ${newTier.color}`,
                   color: newTier.color,
-                  boxShadow: `0 0 30px ${newTier.color}50`,
                 }}
               >
-                {/* Shine animation */}
-                <div
-                  className="absolute inset-0 animate-shine"
-                  style={{
-                    background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%)',
-                  }}
-                />
-                <span className="relative z-10">{newTier.name} Tier</span>
+                {newTier.name} Tier
               </div>
             </div>
-            <p className="text-xl font-bold text-white">Welcome to {newTier.name.toUpperCase()} Tier!</p>
+            <p className="text-base font-semibold text-white/90">Welcome to {newTier.name} Tier!</p>
           </div>
         )}
 
-        {/* Reward Reveal */}
+        {/* Reward Reveal - Minimal */}
         {showReward && (
           <div
-            className={`text-center mb-8 transform transition-all duration-700 ${
-              showReward ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-4'
+            className={`text-center mb-5 transform transition-all duration-500 ${
+              showReward ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-2'
             }`}
           >
-            <div className="mb-4">
-              <Sparkles className="w-8 h-8 mx-auto mb-2" style={{ color: '#ffd700' }} />
-              <p className="text-lg font-semibold text-white/90 mb-4">
-                🎉 Congratulations! You WON:
-              </p>
-            </div>
+            <p className="text-sm font-semibold text-white/80 mb-3">
+              🎉 You WON:
+            </p>
 
-            {/* Reward Image/Icon - Large icon for training access */}
-            <div className="mb-4">
+            {/* Reward Icon - Smaller */}
+            <div className="mb-3">
               <div
-                className="w-40 h-40 mx-auto rounded-2xl flex items-center justify-center relative"
+                className="w-20 h-20 mx-auto rounded-xl flex items-center justify-center"
                 style={{
                   backgroundColor: 'rgba(255, 215, 0, 0.1)',
-                  border: '2px solid rgba(255, 215, 0, 0.4)',
-                  boxShadow: '0 0 40px rgba(255, 215, 0, 0.5)',
+                  border: '1px solid rgba(255, 215, 0, 0.3)',
                 }}
               >
-                {/* Use Trophy icon for training access reward */}
                 <Trophy
-                  className="w-20 h-20"
+                  className="w-10 h-10"
                   style={{
                     color: '#ffd700',
-                    filter: 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.8))',
                   }}
                   strokeWidth={2}
                 />
               </div>
             </div>
 
-            {/* Reward Text with Golden Glow */}
+            {/* Reward Text */}
             <div
-              className="text-2xl font-bold mb-6"
+              className="text-base font-bold mb-4"
               style={{
                 color: '#ffd700',
-                textShadow: '0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.4)',
               }}
             >
               {reward}
