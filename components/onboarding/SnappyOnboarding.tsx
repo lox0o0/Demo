@@ -220,10 +220,13 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
     }
   };
 
-  const handleComplete = (overrideName?: string, overrideEmail?: string) => {
+  const handleComplete = (overrideName?: string, overrideEmail?: string, overrideAuthMethod?: "google" | "apple" | "email" | null) => {
     if (selectedTeam) {
+      // Use override auth method if provided, otherwise use state
+      const authMethod = overrideAuthMethod !== undefined ? overrideAuthMethod : selectedAuthMethod;
+      
       // Validate email authentication: if email is selected as auth method, email must be provided
-      if (selectedAuthMethod === "email" && buildProfileEmail.trim() === "") {
+      if (authMethod === "email" && buildProfileEmail.trim() === "") {
         // Don't proceed if email auth is selected but email is empty
         return;
       }
@@ -239,7 +242,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       
       // If auth method was selected in build profile, authenticate now
       // Note: We only set placeholder values for display purposes, but don't count them for profile completion
-      if (selectedAuthMethod === "google") {
+      if (authMethod === "google") {
         // Only set placeholders if we don't have real values (for display purposes)
         // But these won't count toward profile completion if they're placeholders
         if (!finalName || isPlaceholderName(finalName)) {
@@ -252,7 +255,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         } else {
           hasRealAuthData = true; // We have a real email from Google
         }
-      } else if (selectedAuthMethod === "apple") {
+      } else if (authMethod === "apple") {
         // Only set placeholders if we don't have real values (for display purposes)
         if (!finalName || isPlaceholderName(finalName)) {
           finalName = "User"; // Placeholder for display
@@ -264,7 +267,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         } else {
           hasRealAuthData = true; // We have a real email from Apple
         }
-      } else if (selectedAuthMethod === "email" && buildProfileEmail.trim() !== "") {
+      } else if (authMethod === "email" && buildProfileEmail.trim() !== "") {
         finalEmail = buildProfileEmail.trim();
         // Email auth always provides a real email, so count it
         hasRealAuthData = true;
@@ -284,12 +287,12 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       // For OAuth (Google/Apple), use includeAuthSelection to count auth even with placeholder values
       // For email auth, don't count extracted names (only count if user actually provided a name)
       const nameForCompletion = (finalName && !isPlaceholderName(finalName) && 
-        !(selectedAuthMethod === "email" && !name && !username)) ? finalName : undefined;
+        !(authMethod === "email" && !name && !username)) ? finalName : undefined;
       const emailForCompletion = finalEmail && !isPlaceholderEmail(finalEmail) ? finalEmail : undefined;
       
       // For OAuth methods, count authentication even if we only have placeholder values
       // This ensures OAuth sign-ins get the 30% bonus they deserve
-      const shouldIncludeAuthSelection = (selectedAuthMethod === "google" || selectedAuthMethod === "apple") && !hasRealAuthData;
+      const shouldIncludeAuthSelection = (authMethod === "google" || authMethod === "apple") && !hasRealAuthData;
       
       const userData = {
         name: finalName,
@@ -626,16 +629,16 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       // For demo purposes, we use placeholders but don't count them for profile completion
       const googleName = "User"; // Would come from Google OAuth (could be null if user doesn't share name)
       const googleEmail = "user@gmail.com"; // Would come from Google OAuth
-      // Set the auth method so handleComplete can execute OAuth-specific logic
-      setSelectedAuthMethod("google");
       // Update state for UI consistency, but pass undefined for name since it's a placeholder
       // This ensures profile completion only counts real authentication, not placeholder values
+      setSelectedAuthMethod("google");
       setName(googleName);
       setEmail(googleEmail);
       setHasAuth(true);
+      // Pass auth method directly to handleComplete to avoid async state update issue
       // Pass undefined for name since "User" is a placeholder and shouldn't count for profile completion
       // Only pass email if it's a real email (in real app, Google would provide real email)
-      handleComplete(undefined, googleEmail); // Don't count placeholder name
+      handleComplete(undefined, googleEmail, "google"); // Don't count placeholder name
     };
 
     const handleAppleSignIn = () => {
@@ -645,16 +648,16 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
       // For demo purposes, we use placeholders but don't count them for profile completion
       const appleName = "User"; // Would come from Apple (could be null if user doesn't share name)
       const appleEmail = "user@icloud.com"; // Would come from Apple Sign In
-      // Set the auth method so handleComplete can execute OAuth-specific logic
-      setSelectedAuthMethod("apple");
       // Update state for UI consistency, but pass undefined for name since it's a placeholder
       // This ensures profile completion only counts real authentication, not placeholder values
+      setSelectedAuthMethod("apple");
       setName(appleName);
       setEmail(appleEmail);
       setHasAuth(true);
+      // Pass auth method directly to handleComplete to avoid async state update issue
       // Pass undefined for name since "User" is a placeholder and shouldn't count for profile completion
       // Only pass email if it's a real email (in real app, Apple would provide real email)
-      handleComplete(undefined, appleEmail); // Don't count placeholder name
+      handleComplete(undefined, appleEmail, "apple"); // Don't count placeholder name
     };
 
     const handleBuildFanProfile = () => {
