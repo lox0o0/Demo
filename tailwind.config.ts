@@ -38,6 +38,8 @@ const config: Config = {
         "fade-in-up": "fadeInUp 0.8s ease-out",
         "float": "float 3s ease-in-out infinite",
         "shimmer": "shimmer 2s infinite",
+        "shimmer-border": "shimmer-border 3s ease-in-out infinite",
+        "shimmer-legend": "shimmer-legend 4s ease-in-out infinite",
         "pulse-glow": "pulseGlow 2s ease-in-out infinite",
       },
       keyframes: {
@@ -57,6 +59,42 @@ const config: Config = {
         shimmer: {
           "0%": { backgroundPosition: "-1000px 0" },
           "100%": { backgroundPosition: "1000px 0" },
+        },
+        "shimmer-border": {
+          "0%": { 
+            backgroundPosition: "0% 50%",
+            borderColor: "#ef4444"
+          },
+          "50%": { 
+            backgroundPosition: "100% 50%",
+            borderColor: "#dc2626"
+          },
+          "100%": { 
+            backgroundPosition: "0% 50%",
+            borderColor: "#ef4444"
+          },
+        },
+        "shimmer-legend": {
+          "0%": { 
+            backgroundPosition: "0% 50%",
+            borderColor: "#8b5cf6"
+          },
+          "25%": { 
+            backgroundPosition: "50% 50%",
+            borderColor: "#a78bfa"
+          },
+          "50%": { 
+            backgroundPosition: "100% 50%",
+            borderColor: "#c4b5fd"
+          },
+          "75%": { 
+            backgroundPosition: "50% 50%",
+            borderColor: "#a78bfa"
+          },
+          "100%": { 
+            backgroundPosition: "0% 50%",
+            borderColor: "#8b5cf6"
+          },
         },
         pulseGlow: {
           "0%, 100%": { 

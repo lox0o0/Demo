@@ -20,6 +20,8 @@ export default function RightSidebar({ user }: RightSidebarProps) {
   // Get tier color and border style
   const getTierBorderStyle = () => {
     switch (currentTier.name) {
+      case "Rookie":
+        return "border-[#2a2a2d] border";
       case "Bronze":
         return "border-[#cd7f32] border-[3px]";
       case "Silver":
@@ -27,9 +29,9 @@ export default function RightSidebar({ user }: RightSidebarProps) {
       case "Gold":
         return "border-[#ffd700] border-[3px] shadow-[0_0_10px_rgba(255,215,0,0.3)]";
       case "Diehard":
-        return "border-[#ef4444] border-[4px] animate-shimmer";
+        return "border-[4px] animate-shimmer-border border-[#ef4444]";
       case "Legend":
-        return "border-[#8b5cf6] border-[4px] animate-shimmer";
+        return "border-[4px] animate-shimmer-legend border-[#8b5cf6]";
       default:
         return "border-[#2a2a2d] border";
     }
@@ -38,6 +40,39 @@ export default function RightSidebar({ user }: RightSidebarProps) {
   // Filter tiers for progress bar (exclude Rookie if user is above it)
   const visibleTiers = TIERS.filter(t => t.name !== "Rookie" || userPoints < 250);
   const reversedTiers = [...visibleTiers].reverse();
+  
+  // Calculate progress fill height based on user's position between tiers
+  const calculateFillHeight = () => {
+    if (reversedTiers.length === 0) return 0;
+    
+    // Find current tier and next tier
+    const currentIndex = reversedTiers.findIndex(t => t.name === currentTier.name);
+    if (currentIndex === -1) return 0;
+    
+    const currentTierData = reversedTiers[currentIndex];
+    const nextTierData = reversedTiers[currentIndex - 1]; // Next tier is above (lower index)
+    
+    // Calculate progress within current tier
+    let progressInTier = 0;
+    if (nextTierData) {
+      const tierRange = nextTierData.minPoints - currentTierData.minPoints;
+      const pointsInTier = userPoints - currentTierData.minPoints;
+      progressInTier = tierRange > 0 ? Math.min(pointsInTier / tierRange, 1) : 1;
+    } else {
+      // At max tier, show full
+      progressInTier = 1;
+    }
+    
+    // Calculate fill: completed tiers + progress in current tier
+    const completedTiers = currentIndex;
+    const tierSpacing = 32; // space-y-8 = 2rem = 32px
+    const baseHeight = completedTiers * tierSpacing;
+    const currentTierProgress = progressInTier * tierSpacing;
+    
+    return baseHeight + currentTierProgress;
+  };
+  
+  const filledHeight = calculateFillHeight();
 
   return (
     <aside className="fixed right-0 top-0 bottom-0 w-[280px] bg-[#0a0a0b] border-l border-[#2a2a2d] z-50 overflow-y-auto">
@@ -77,8 +112,16 @@ export default function RightSidebar({ user }: RightSidebarProps) {
           </div>
           
           <div className="relative">
-            {/* Vertical track line */}
+            {/* Vertical track line (background) */}
             <div className="absolute left-[20px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#2a2a2d] via-[#f59e0b] to-[#8b5cf6]" />
+            
+            {/* Filled progress gradient up to current position */}
+            {filledHeight > 0 && (
+              <div 
+                className="absolute left-[20px] bottom-0 w-[2px] bg-gradient-to-t from-[#22c55e] via-[#f59e0b] to-[#8b5cf6] transition-all duration-1000"
+                style={{ height: `${filledHeight}px` }}
+              />
+            )}
             
             {/* Tier markers */}
             <div className="relative space-y-8">
@@ -105,10 +148,12 @@ export default function RightSidebar({ user }: RightSidebarProps) {
                     </div>
                     
                     {/* Legend tier special callout */}
-                    {isLegend && isUnlocked && (
+                    {isLegend && (
                       <div className="mt-2 p-2 bg-[#1a1a1d] border border-[#2a2a2d] rounded text-xs">
                         <div className="text-[#f59e0b] font-semibold mb-1">🎁 Grand Final Pack</div>
-                        <div className="text-[#a1a1aa]">Flights + Tix + Hotel</div>
+                        <div className="text-[#a1a1aa] text-[10px] leading-tight">
+                          Flights + Tix + Hotel
+                        </div>
                       </div>
                     )}
                     
