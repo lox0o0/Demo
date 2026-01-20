@@ -123,7 +123,12 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
           <div className="grid grid-cols-5 gap-6">
             {/* Left Column: Weekly Activities (60% = 3/5) */}
             <div className="col-span-3">
-              <WeeklyActivitiesSection user={user} />
+              <WeeklyActivitiesSection 
+                user={user} 
+                highlightProfileCompletion={highlightProfileCompletion}
+                setHighlightProfileCompletion={setHighlightProfileCompletion}
+                onTierUpgrade={handleTierUpgrade}
+              />
             </div>
             
             {/* Right Column: Prizes & Streak (40% = 2/5) */}
@@ -2169,7 +2174,7 @@ function FantasyCard({ teamData }: any) {
 }
 
 // Section A: Weekly Activities for Points
-function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, setHighlightProfileCompletion }: { user: any; highlightProfileCompletion?: boolean; setHighlightProfileCompletion?: (value: boolean) => void }) {
+function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, setHighlightProfileCompletion, onTierUpgrade }: { user: any; highlightProfileCompletion?: boolean; setHighlightProfileCompletion?: (value: boolean) => void; onTierUpgrade?: (oldTier: any, newTier: any) => void }) {
   const [expandedMission, setExpandedMission] = useState<number | null>(null);
   const [selectedTeam, setSelectedTeam] = useState("");
   const [selectedLastRoundPlayer, setSelectedLastRoundPlayer] = useState("");
