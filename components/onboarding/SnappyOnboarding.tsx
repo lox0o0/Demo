@@ -223,6 +223,9 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         : (username.trim() || name || "Fan");
       let finalEmail = overrideEmail !== undefined ? overrideEmail : (email || "");
 
+      // Track if we have real authentication data (not placeholders)
+      let hasRealAuthData = false;
+      
       // If auth method was selected in build profile, authenticate now
       // Note: We only set placeholder values for display purposes, but don't count them for profile completion
       if (selectedAuthMethod === "google") {
@@ -230,30 +233,52 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         // But these won't count toward profile completion if they're placeholders
         if (!finalName || isPlaceholderName(finalName)) {
           finalName = "User"; // Placeholder for display
+        } else {
+          hasRealAuthData = true; // We have a real name from Google
         }
         if (!finalEmail || isPlaceholderEmail(finalEmail)) {
           finalEmail = "user@gmail.com"; // Placeholder for display
+        } else {
+          hasRealAuthData = true; // We have a real email from Google
         }
       } else if (selectedAuthMethod === "apple") {
         // Only set placeholders if we don't have real values (for display purposes)
         if (!finalName || isPlaceholderName(finalName)) {
           finalName = "User"; // Placeholder for display
+        } else {
+          hasRealAuthData = true; // We have a real name from Apple
         }
         if (!finalEmail || isPlaceholderEmail(finalEmail)) {
           finalEmail = "user@icloud.com"; // Placeholder for display
+        } else {
+          hasRealAuthData = true; // We have a real email from Apple
         }
       } else if (selectedAuthMethod === "email" && buildProfileEmail.trim() !== "") {
         finalEmail = buildProfileEmail.trim();
+        // Email auth always provides a real email, so count it
+        hasRealAuthData = true;
         if (!finalName || isPlaceholderName(finalName)) {
           // Extract name from email if no name provided
+          // Note: Extracted names should NOT count toward profile completion
+          // as they are auto-generated, not user-provided
           const emailName = buildProfileEmail.split("@")[0];
           finalName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
+        } else {
+          // If we have a real name (not placeholder), count it
+          hasRealAuthData = true;
         }
       }
       
       // Only count name/email for profile completion if they're not placeholders
-      const nameForCompletion = finalName && !isPlaceholderName(finalName) ? finalName : undefined;
+      // For OAuth (Google/Apple), use includeAuthSelection to count auth even with placeholder values
+      // For email auth, don't count extracted names (only count if user actually provided a name)
+      const nameForCompletion = (finalName && !isPlaceholderName(finalName) && 
+        !(selectedAuthMethod === "email" && !name && !username)) ? finalName : undefined;
       const emailForCompletion = finalEmail && !isPlaceholderEmail(finalEmail) ? finalEmail : undefined;
+      
+      // For OAuth methods, count authentication even if we only have placeholder values
+      // This ensures OAuth sign-ins get the 30% bonus they deserve
+      const shouldIncludeAuthSelection = (selectedAuthMethod === "google" || selectedAuthMethod === "apple") && !hasRealAuthData;
       
       const userData = {
         name: finalName,
@@ -267,7 +292,12 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         memberSince: new Date().getFullYear(),
         streak: 0,
         connectedSocials,
-        profileCompletion: calculateProfileCompletion(connectedSocials, nameForCompletion, emailForCompletion),
+        profileCompletion: calculateProfileCompletion(
+          connectedSocials, 
+          nameForCompletion, 
+          emailForCompletion,
+          shouldIncludeAuthSelection
+        ),
         entryPoint,
         entryData,
       };
