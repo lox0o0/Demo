@@ -2532,52 +2532,50 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
               </li>
             );
           })}
-          {/* Profile Completion Section - Connected to Activities */}
-          <li>
-            <hr className="h-px bg-foreground opacity-5" />
-            <div className="px-3 py-3">
-              <div className="text-sm font-semibold text-white/80 mb-3">Complete Your Profile</div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between py-2 hover:bg-white/5 transition-colors rounded px-2">
-                  <span className="text-xs text-white/70">Date of Birth</span>
-                  <button className="text-xs text-emerald-400 hover:text-emerald-300">Add</button>
-                </div>
-                <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
-                  <span className="text-xs text-white/70">Nearest Home Ground</span>
-                  <button className="text-xs text-emerald-400 hover:text-emerald-300">Add</button>
-                </div>
-                <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
-                  <div className="flex items-center gap-2">
-                    <Image src="/social-logos/instagram.png" alt="Instagram" width={16} height={16} className="object-contain" unoptimized />
-                    <span className="text-xs text-white/70">Connect Instagram</span>
-                  </div>
-                  <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
-                </div>
-                <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
-                  <div className="flex items-center gap-2">
-                    <Image src="/social-logos/facebook.png" alt="Facebook" width={16} height={16} className="object-contain" unoptimized />
-                    <span className="text-xs text-white/70">Connect Facebook</span>
-                  </div>
-                  <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
-                </div>
-                <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
-                  <div className="flex items-center gap-2">
-                    <Image src="/social-logos/x.png" alt="X" width={16} height={16} className="object-contain" unoptimized />
-                    <span className="text-xs text-white/70">Connect X (Twitter)</span>
-                  </div>
-                  <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
-                </div>
-                <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
-                  <div className="flex items-center gap-2">
-                    <Image src="/social-logos/tiktok.png" alt="TikTok" width={16} height={16} className="object-contain" unoptimized />
-                    <span className="text-xs text-white/70">Connect TikTok</span>
-                  </div>
-                  <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
-                </div>
-              </div>
-            </div>
-          </li>
         </ul>
+      </div>
+
+      {/* Profile Completion Section - Below Activities */}
+      <div className="px-4 py-4 border-t border-white/10">
+        <div className="text-sm font-semibold text-white/80 mb-3">Complete Your Profile</div>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between py-2 hover:bg-white/5 transition-colors rounded px-2">
+            <span className="text-xs text-white/70">Date of Birth</span>
+            <button className="text-xs text-emerald-400 hover:text-emerald-300">Add</button>
+          </div>
+          <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
+            <span className="text-xs text-white/70">Nearest Home Ground</span>
+            <button className="text-xs text-emerald-400 hover:text-emerald-300">Add</button>
+          </div>
+          <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
+            <div className="flex items-center gap-2">
+              <Image src="/social-logos/instagram.png" alt="Instagram" width={16} height={16} className="object-contain" unoptimized />
+              <span className="text-xs text-white/70">Connect Instagram</span>
+            </div>
+            <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+          </div>
+          <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
+            <div className="flex items-center gap-2">
+              <Image src="/social-logos/facebook.png" alt="Facebook" width={16} height={16} className="object-contain" unoptimized />
+              <span className="text-xs text-white/70">Connect Facebook</span>
+            </div>
+            <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+          </div>
+          <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
+            <div className="flex items-center gap-2">
+              <Image src="/social-logos/x.png" alt="X" width={16} height={16} className="object-contain" unoptimized />
+              <span className="text-xs text-white/70">Connect X (Twitter)</span>
+            </div>
+            <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+          </div>
+          <div className="flex items-center justify-between py-2 border-t border-white/5 hover:bg-white/5 transition-colors rounded px-2">
+            <div className="flex items-center gap-2">
+              <Image src="/social-logos/tiktok.png" alt="TikTok" width={16} height={16} className="object-contain" unoptimized />
+              <span className="text-xs text-white/70">Connect TikTok</span>
+            </div>
+            <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -2913,12 +2911,16 @@ function WeeklyPrizeDrawCard({ currentTier, drawCountdown, entryCount }: { curre
       {/* Current Tier Badge */}
       <div className="flex justify-center mb-4">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ 
-          backgroundColor: typeof currentTier.color === 'string' && currentTier.color.startsWith('#') 
+          backgroundColor: currentTier.name === "Diehard"
+            ? 'rgba(220, 38, 38, 0.3)' // Lighter red background for Diehard for better readability
+            : typeof currentTier.color === 'string' && currentTier.color.startsWith('#') 
             ? `${currentTier.color}33` 
             : currentTier.color === 'gray' 
               ? 'rgba(156, 163, 175, 0.2)' 
               : 'rgba(251, 191, 36, 0.2)',
-          border: typeof currentTier.color === 'string' && currentTier.color.startsWith('#')
+          border: currentTier.name === "Diehard"
+            ? '1px solid rgba(220, 38, 38, 0.6)' // Lighter red border for Diehard
+            : typeof currentTier.color === 'string' && currentTier.color.startsWith('#')
             ? `1px solid ${currentTier.color}80`
             : currentTier.color === 'gray'
               ? '1px solid rgba(156, 163, 175, 0.5)'
@@ -2926,7 +2928,9 @@ function WeeklyPrizeDrawCard({ currentTier, drawCountdown, entryCount }: { curre
         }}>
           <Crown size={14} className={featuredPrize.color} />
           <span className="text-xs font-bold uppercase" style={{ 
-            color: typeof currentTier.color === 'string' && currentTier.color.startsWith('#')
+            color: currentTier.name === "Diehard"
+              ? '#FCA5A5' // Light red text for Diehard for better contrast
+              : typeof currentTier.color === 'string' && currentTier.color.startsWith('#')
               ? currentTier.color
               : currentTier.color === 'gray'
                 ? '#9CA3AF'
