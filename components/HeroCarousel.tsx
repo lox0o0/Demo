@@ -31,14 +31,14 @@ const slides: Slide[] = [
   },
   {
     id: 3,
-    logo: "/images/nrl-fantasy-logo.png",
+    logo: "/locker-room/nrl-fantasy-logo.png",
     headline: "NRL FANTASY",
     subtext: "It's round 6. Make sure your trades are made and team is set for the weekend!",
     ctaText: "Manage Team",
   },
   {
     id: 4,
-    logo: "/images/nrl-tipping-logo.png",
+    logo: "/locker-room/nrl-tipping-logo.png",
     headline: "NRL TIPPING",
     subtext: "There are multiple games this round, ensure your tips are made for this weekend!",
     ctaText: "Finish Tips",
