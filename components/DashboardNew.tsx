@@ -2140,10 +2140,25 @@ function FantasyCard({ teamData }: any) {
 
 // Section A: Weekly Activities for Points
 function WeeklyActivitiesSection({ user }: { user: any }) {
+  const [expandedMission, setExpandedMission] = useState<number | null>(null);
+  const [selectedTeam, setSelectedTeam] = useState("");
+  
   const weeklyCompleted = 5;
   const weeklyTotal = 7;
   const seasonCompleted = 34;
   const seasonTotal = 49;
+
+  // Mock team voting results
+  const teamVotes = [
+    { name: "Broncos", percentage: 44 },
+    { name: "Sharks", percentage: 20 },
+    { name: "Panthers", percentage: 15 },
+    { name: "Storm", percentage: 12 },
+    { name: "Roosters", percentage: 9 },
+  ];
+
+  // Get all teams for dropdown
+  const allTeams = NRL_TEAMS.map(t => t.name);
 
   const missions = [
     {
@@ -2181,6 +2196,7 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
       status: "Not started",
       statusType: "pending" as const,
       progress: null,
+      hasDropdown: true,
     },
     {
       id: 5,
@@ -2211,6 +2227,14 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
     },
   ];
 
+  const handleCardClick = (missionId: number) => {
+    if (expandedMission === missionId) {
+      setExpandedMission(null);
+    } else {
+      setExpandedMission(missionId);
+    }
+  };
+
   return (
     <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-6">
       {/* Section Header with Completion Bar */}
@@ -2240,10 +2264,19 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
       </div>
 
       {/* Horizontal Scrollable Card Row */}
-      <div className="overflow-x-auto snap-x snap-mandatory scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-        <div className="flex gap-4 pb-2" style={{ width: 'max-content' }}>
+      <div className="overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-6 px-6" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="flex gap-4 pb-4" style={{ width: 'max-content' }}>
           {missions.map((mission) => (
-            <MissionCardHorizontal key={mission.id} mission={mission} />
+            <MissionCardHorizontal 
+              key={mission.id} 
+              mission={mission}
+              isExpanded={expandedMission === mission.id}
+              onExpand={() => handleCardClick(mission.id)}
+              selectedTeam={selectedTeam}
+              onTeamSelect={setSelectedTeam}
+              teamVotes={teamVotes}
+              allTeams={allTeams}
+            />
           ))}
         </div>
       </div>
@@ -2252,11 +2285,27 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
 }
 
 // Horizontal Mission Card Component
-function MissionCardHorizontal({ mission }: { mission: any }) {
+function MissionCardHorizontal({ 
+  mission, 
+  isExpanded, 
+  onExpand,
+  selectedTeam,
+  onTeamSelect,
+  teamVotes,
+  allTeams
+}: { 
+  mission: any;
+  isExpanded?: boolean;
+  onExpand?: () => void;
+  selectedTeam?: string;
+  onTeamSelect?: (team: string) => void;
+  teamVotes?: Array<{ name: string; percentage: number }>;
+  allTeams?: string[];
+}) {
   const Icon = mission.icon;
 
   return (
-    <div className="min-w-[280px] bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4 flex flex-col gap-3 snap-start">
+    <div className="min-w-[280px] bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4 flex flex-col gap-3 snap-start cursor-pointer hover:border-gray-600 transition-all" onClick={onExpand}>
       {/* Icon and Points */}
       <div className="flex items-start justify-between">
         <div className="w-10 h-10 rounded-lg bg-gray-800/50 flex items-center justify-center">
@@ -2297,6 +2346,48 @@ function MissionCardHorizontal({ mission }: { mission: any }) {
               className="bg-emerald-500 h-1.5 rounded-full transition-all duration-300"
               style={{ width: `${mission.progress.percent}%` }}
             />
+          </div>
+        </div>
+      )}
+
+      {/* Expandable content for Most dominant team prediction */}
+      {isExpanded && mission.hasDropdown && mission.id === 4 && (
+        <div className="mt-2 pt-3 border-t border-gray-700/50 space-y-3" onClick={(e) => e.stopPropagation()}>
+          <select
+            value={selectedTeam || ""}
+            onChange={(e) => onTeamSelect?.(e.target.value)}
+            className="w-full bg-gray-800/50 border border-gray-700/50 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+          >
+            <option value="">Select a team...</option>
+            {allTeams?.map((teamName) => (
+              <option key={teamName} value={teamName}>{teamName}</option>
+            ))}
+          </select>
+          
+          {selectedTeam && (
+            <div className="pt-2 border-t border-gray-700/50">
+              <div className="text-xs text-emerald-400 mb-2">
+                +25 pts
+              </div>
+            </div>
+          )}
+          
+          <div className="pt-3 border-t border-gray-700/50">
+            <div className="text-xs font-semibold text-white mb-2">Current Voting Results:</div>
+            <div className="space-y-2">
+              {teamVotes?.map((team) => (
+                <div key={team.name} className="flex items-center gap-2">
+                  <div className="w-20 text-xs text-white/70 truncate">{team.name}</div>
+                  <div className="flex-1 bg-gray-800 rounded-full h-2">
+                    <div
+                      className="h-2 rounded-full bg-emerald-500"
+                      style={{ width: `${team.percentage}%` }}
+                    />
+                  </div>
+                  <div className="w-10 text-xs text-white/70 text-right">{team.percentage}%</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
