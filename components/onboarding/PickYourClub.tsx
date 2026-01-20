@@ -101,24 +101,26 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   
   return (
     <div 
-      className="min-h-screen relative"
+      className="min-h-screen w-full relative overflow-hidden"
       style={{
         backgroundImage: `url(${backgroundImagePath})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundAttachment: 'fixed',
+        position: 'relative',
       }}
     >
       {/* Light overlay for text readability */}
       <div 
-        className="absolute inset-0 z-0" 
+        className="absolute inset-0" 
         style={{
-          background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.4))'
+          background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.4))',
+          zIndex: 1,
         }}
       />
       
-      <div className="container mx-auto px-4 py-12 relative" style={{ zIndex: 10 }}>
+      <div className="container mx-auto px-4 py-12 relative" style={{ zIndex: 2, position: 'relative' }}>
         <div className="text-center mb-12">
           <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-nrl-green to-white bg-clip-text text-transparent drop-shadow-2xl">
             Pick Your Club
