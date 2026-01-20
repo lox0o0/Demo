@@ -121,17 +121,17 @@ function CurrentTierStatsCard({
 
       {/* Stats row (3 columns) */}
       <div className="grid grid-cols-3 gap-3 mb-3">
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/10">
-          <div className="text-lg font-bold text-white">{gamesAttended}</div>
-          <div className="text-xs text-white/60 uppercase mt-0.5">Games Attended</div>
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/10 flex flex-col items-center justify-center min-h-[60px]">
+          <div className="text-lg font-bold text-white leading-tight break-words">{gamesAttended}</div>
+          <div className="text-xs text-white/60 uppercase mt-0.5 leading-tight">Games Attended</div>
         </div>
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/10">
-          <div className="text-lg font-bold text-white">{tippingRank}</div>
-          <div className="text-xs text-white/60 uppercase mt-0.5">Tipping Rank</div>
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/10 flex flex-col items-center justify-center min-h-[60px]">
+          <div className="text-lg font-bold text-white leading-tight break-words">{tippingRank}</div>
+          <div className="text-xs text-white/60 uppercase mt-0.5 leading-tight">Tipping Rank</div>
         </div>
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/10">
-          <div className="text-lg font-bold text-white">{badgesEarned}</div>
-          <div className="text-xs text-white/60 uppercase mt-0.5">Badges Earned</div>
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/10 flex flex-col items-center justify-center min-h-[60px]">
+          <div className="text-lg font-bold text-white leading-tight break-words">{badgesEarned}</div>
+          <div className="text-xs text-white/60 uppercase mt-0.5 leading-tight">Badges Earned</div>
         </div>
       </div>
 
