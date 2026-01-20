@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; // useEffect imported for modal visibility logic
 import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
 import { NRL_TEAMS } from "@/lib/data/teams";
