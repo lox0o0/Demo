@@ -177,11 +177,9 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
   const maxTier = TIERS[TIERS.length - 1];
   const maxPoints = maxTier.minPoints;
   
-  // Calculate the position of current tier (where the fill should stop)
-  const currentTierIndex = TIERS.findIndex(t => t.name === currentTier.name);
-  const currentTierPosition = currentTierIndex >= 0 
-    ? ((currentTier.minPoints / maxPoints) * 100) 
-    : 0;
+  // Calculate progress fill height based on actual user points
+  // Fill from bottom (0%) to the user's current position
+  const progressPercent = Math.min((userPoints / maxPoints) * 100, 100);
   
   // Tier colors for gradient
   const tierColors = {
@@ -236,22 +234,17 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
       
       {/* Container for progress bar and tier markers */}
       <div className="relative" style={{ minHeight: '500px', paddingBottom: '20px' }}>
-        {/* Single Continuous Vertical Progress Bar */}
-        <div className="absolute left-4 top-0 bottom-0 w-1">
-          {/* Empty/Gray portion above current tier */}
-          <div 
-            className="absolute top-0 left-0 right-0 bg-gray-700/50 transition-all duration-1000"
-            style={{ 
-              height: `${100 - currentTierPosition}%`,
-              top: `${currentTierPosition}%`
-            }}
-          />
+        {/* Single Continuous Vertical Progress Bar - Centered for markers */}
+        <div className="absolute left-0 top-0 bottom-0" style={{ width: '32px' }}>
+          {/* Background track (gray) */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gray-700/50" style={{ transform: 'translateX(-50%)' }} />
           
-          {/* Filled portion - gradient through tier colors */}
+          {/* Filled portion - gradient through tier colors (fills from bottom to current position) */}
           <div
-            className="absolute bottom-0 left-0 right-0 transition-all duration-1000 ease-out"
+            className="absolute left-1/2 bottom-0 w-0.5 transition-all duration-1000 ease-out"
             style={{ 
-              height: `${currentTierPosition}%`,
+              height: `${progressPercent}%`,
+              transform: 'translateX(-50%)',
               background: `linear-gradient(to top, ${gradientStops})`,
             }}
           >
@@ -281,9 +274,9 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                 transform: 'translateY(-50%)',
               }}
             >
-              {/* Tier Circle/Star Marker - Sits ON the progress bar */}
-              <div className="relative z-10 flex-shrink-0" style={{ left: '16px', marginLeft: '-8px' }}>
-                {/* Marker circle/star */}
+              {/* Tier Circle/Star Marker - Centered ON the progress bar */}
+              <div className="relative z-10 flex-shrink-0" style={{ width: '32px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                {/* Marker circle/star - sits directly on the bar */}
                 <div
                   className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                     isCurrentTier
@@ -318,7 +311,7 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
               </div>
 
               {/* Tier Info */}
-              <div className="flex-1 min-w-0 pl-8">
+              <div className="flex-1 min-w-0 pl-4">
                 <div className="flex items-center gap-2 mb-1">
                   <span
                     className="text-xs font-bold uppercase"
