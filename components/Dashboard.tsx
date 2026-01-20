@@ -40,8 +40,8 @@ export default function Dashboard({ user }: DashboardProps) {
         {/* Background Video - only on home section, fixed to viewport */}
         {activeSection === "home" && <BackgroundVideo />}
         
-        {/* Status Bar - ensure it's above video */}
-        <div className="relative z-20">
+        {/* Status Bar - ensure it's above video but doesn't block scrolling */}
+        <div className="relative z-20 mb-4">
           <StatusBar user={user} />
         </div>
 

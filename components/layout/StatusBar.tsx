@@ -24,10 +24,10 @@ export default function StatusBar({ user }: StatusBarProps) {
     : 100;
 
   return (
-    <div className="sticky top-0 z-40 flex items-center justify-center px-6 py-4">
+    <div className="sticky top-0 z-40 flex items-center justify-center px-6 py-4 pointer-events-none">
       {/* Single Curved Rectangle Container with Logo, Progress Bar, and Text */}
       <div 
-        className="bg-transparent backdrop-blur-md border border-white/20 rounded-full py-4 px-6 flex items-center gap-4"
+        className="bg-transparent backdrop-blur-md border border-white/20 rounded-full py-4 px-8 flex items-center gap-5 min-w-[400px] max-w-[500px] pointer-events-auto"
         style={{
           filter: 'drop-shadow(rgba(0, 0, 0, 0.4) 0px 10px 25px)'
         }}
