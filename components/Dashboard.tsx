@@ -12,6 +12,7 @@ import StatusBar from "./layout/StatusBar";
 import SectionHeader from "./cards/SectionHeader";
 import ContentCard from "./cards/ContentCard";
 import BackgroundVideo from "./BackgroundVideo";
+import HeroCarousel from "./HeroCarousel";
 
 interface DashboardProps {
   user: any;
@@ -49,6 +50,11 @@ export default function Dashboard({ user }: DashboardProps) {
         <main className="flex-1 overflow-y-auto pl-8 pr-6 py-6 relative z-10" style={{ position: 'relative' }}>
           {activeSection === "home" && (
             <div className="space-y-12 max-w-[95%] relative">
+              {/* HERO CAROUSEL */}
+              <section>
+                <HeroCarousel />
+              </section>
+
               {/* SECTION 1: ACTIVITIES */}
               <section>
                 <SectionHeader
