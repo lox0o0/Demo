@@ -1,8 +1,62 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X, Trophy, Target } from "lucide-react";
 import { TIERS } from "@/lib/mockData";
+
+// Design Tokens
+const tokens = {
+  colors: {
+    base: '#0d0d0d',
+    maroon: '#73003c',
+    gold: '#ffd700',
+    white: '#ffffff',
+    glass: {
+      bg: 'rgba(13, 13, 13, 0.85)',
+      border: 'rgba(255, 255, 255, 0.06)',
+    },
+    text: {
+      primary: 'rgba(255, 255, 255, 0.95)',
+      secondary: 'rgba(255, 255, 255, 0.65)',
+      tertiary: 'rgba(255, 255, 255, 0.45)',
+    },
+  },
+  blur: {
+    backdrop: '20px',
+    glow: '18px',
+  },
+  shadows: {
+    modal: '0 24px 48px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.03)',
+    glow: {
+      gold: '0 0 18px rgba(255, 215, 0, 0.25)',
+      maroon: '0 0 18px rgba(115, 0, 60, 0.25)',
+    },
+  },
+  radii: {
+    modal: '16px',
+    pill: '9999px',
+    card: '12px',
+    button: '8px',
+  },
+  spacing: {
+    xs: '4px',
+    sm: '8px',
+    md: '16px',
+    lg: '24px',
+    xl: '32px',
+  },
+  motion: {
+    duration: {
+      fast: '200ms',
+      base: '300ms',
+      slow: '700ms',
+    },
+    easing: {
+      easeOut: 'cubic-bezier(0.16, 1, 0.3, 1)',
+      easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    },
+  },
+};
 
 interface TierProgressModalProps {
   userPoints: number;
@@ -22,15 +76,46 @@ export default function TierProgressModal({
   onCompleteProfile,
 }: TierProgressModalProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [progressWidth, setProgressWidth] = useState(0);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
 
+  // Entry animation
   useEffect(() => {
-    // Animate in
-    setTimeout(() => setIsVisible(true), 100);
+    setTimeout(() => setIsVisible(true), 50);
   }, []);
+
+  // Progress bar fill animation
+  useEffect(() => {
+    if (!nextTier) return;
+    
+    const tierRange = nextTier.minPoints - currentTier.minPoints;
+    const targetPercent = tierRange > 0 
+      ? Math.min(((userPoints - currentTier.minPoints) / tierRange) * 100, 100)
+      : 100;
+    
+    // Animate progress fill
+    const timer = setTimeout(() => {
+      setProgressWidth(targetPercent);
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, [userPoints, currentTier, nextTier]);
+
+  // Keyboard accessibility
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onDismiss();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onDismiss]);
 
   if (!nextTier) return null;
 
-  // Calculate progress percentage, handle edge cases
   const tierRange = nextTier.minPoints - currentTier.minPoints;
   const progressPercent = tierRange > 0 
     ? Math.min(((userPoints - currentTier.minPoints) / tierRange) * 100, 100)
@@ -40,150 +125,286 @@ export default function TierProgressModal({
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        backdropFilter: 'blur(4px)',
+        WebkitBackdropFilter: 'blur(4px)',
       }}
       onClick={onDismiss}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
     >
+      {/* Vignette overlay */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%)',
+        }}
+      />
+
       <div
-        className={`glass-strong rounded-3xl p-8 max-w-md w-full border border-white/20 shadow-2xl transform transition-all duration-300 ${
-          isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+        ref={modalRef}
+        className={`max-w-md w-full transform transition-all duration-300 ${
+          isVisible ? 'scale-100 opacity-100 translate-y-0' : 'scale-[0.96] opacity-0 translate-y-2'
         }`}
         style={{
-          backgroundColor: 'rgba(20, 20, 20, 0.95)',
-          boxShadow: '0 25px 70px rgba(0, 0, 0, 0.8), 0 0 60px rgba(251, 191, 36, 0.2)',
+          backgroundColor: tokens.colors.glass.bg,
+          backdropFilter: `blur(${tokens.blur.backdrop})`,
+          WebkitBackdropFilter: `blur(${tokens.blur.backdrop})`,
+          border: `1px solid ${tokens.colors.glass.border}`,
+          borderRadius: tokens.radii.modal,
+          boxShadow: tokens.shadows.modal,
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close button */}
-        <button
-          onClick={onDismiss}
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-colors"
-        >
-          <X className="w-4 h-4 text-white/70" />
-        </button>
-
-        {/* Header */}
-        <div className="text-center mb-6">
-          <div className="flex justify-center mb-3">
-            <div className="w-16 h-16 rounded-full bg-white/5 border border-white/20 flex items-center justify-center">
-              <Target className="w-8 h-8 text-white" strokeWidth={2} />
-            </div>
-          </div>
-          <h2 className="text-2xl font-black text-white mb-2">You're almost there!</h2>
-        </div>
-
-        {/* Current Tier Badge */}
-        <div className="flex justify-center mb-6">
-          <div
-            className="px-4 py-2 rounded-full font-bold text-sm uppercase tracking-wider"
+        <div className="p-6">
+          {/* Close button */}
+          <button
+            onClick={onDismiss}
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-white/20"
             style={{
-              backgroundColor: `${currentTier.color}33`,
-              borderColor: currentTier.color,
-              borderWidth: '2px',
-              borderStyle: 'solid',
-              color: currentTier.color,
-              boxShadow: `0 0 20px ${currentTier.color}40`,
+              backgroundColor: 'rgba(255, 255, 255, 0.04)',
             }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.04)';
+            }}
+            aria-label="Close modal"
           >
-            {currentTier.name} Tier
-          </div>
-        </div>
+            <X className="w-4 h-4" style={{ color: tokens.colors.text.secondary }} strokeWidth={2} />
+          </button>
 
-        {/* Progress Bar */}
-        <div className="mb-6">
-          <div className="w-full bg-white/10 rounded-full h-4 overflow-hidden relative mb-3" style={{ boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.3)' }}>
-            <div
-              className="h-4 rounded-full transition-all duration-500 relative"
-              style={{
-                width: `${Math.min(progressPercent, 100)}%`,
-                background: `linear-gradient(to right, ${currentTier.color}, ${nextTier.color || '#C0C0C0'})`,
-                boxShadow: `0 0 20px ${currentTier.color}60, inset 0 1px 0 rgba(255, 255, 255, 0.2)`,
+          {/* Header - Title */}
+          <div className="text-center mb-6">
+            <div className="flex justify-center mb-3">
+              <div 
+                className="w-12 h-12 rounded-full flex items-center justify-center"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                  border: `1px solid ${tokens.colors.glass.border}`,
+                }}
+              >
+                <Target 
+                  className="w-6 h-6" 
+                  style={{ color: tokens.colors.text.secondary }} 
+                  strokeWidth={2} 
+                />
+              </div>
+            </div>
+            <h2 
+              id="modal-title"
+              className="text-xl font-bold mb-1"
+              style={{ 
+                color: tokens.colors.text.primary,
+                letterSpacing: '-0.01em',
               }}
             >
-              <div className="absolute inset-0 shimmer" />
-            </div>
+              You're almost there
+            </h2>
           </div>
-          <div className="text-center mb-2">
-            <span className="text-white/90 font-semibold text-sm">
-              {userPoints} / {nextTier.minPoints} points
-            </span>
-          </div>
-          <p className="text-center text-white/90 font-semibold">
-            Just <span className="text-emerald-400 font-bold">{pointsToNext} points</span> away from <span className="font-bold" style={{ color: nextTier.color || '#C0C0C0' }}>{nextTier.name.toUpperCase()}</span> tier!
-          </p>
-        </div>
 
-        {/* Next Tier Reward Preview - Enhanced with gold glow */}
-        <div 
-          className="glass rounded-xl p-5 mb-6 border-2 relative overflow-hidden"
-          style={{
-            borderColor: '#FFD70080',
-            backgroundColor: 'rgba(20, 20, 20, 0.8)',
-            boxShadow: '0 0 50px rgba(255, 215, 0, 0.6), inset 0 0 40px rgba(255, 215, 0, 0.15)',
-          }}
-        >
-          {/* Animated gold glow effect */}
-          <div 
-            className="absolute inset-0 opacity-40 animate-pulse"
-            style={{
-              background: 'radial-gradient(circle at center, rgba(255, 215, 0, 0.5) 0%, transparent 70%)',
-            }}
-          />
-          
-          <div className="relative z-10">
-            <div className="text-xs font-bold text-white/80 uppercase tracking-wider mb-3 text-center flex items-center justify-center gap-2">
-              <Trophy className="w-4 h-4 text-yellow-400" />
-              <span className="text-yellow-400">{nextTier.name} Reward</span>
+          {/* Current Tier Badge */}
+          <div className="flex justify-center mb-6">
+            <div
+              className="px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider"
+              style={{
+                backgroundColor: 'rgba(115, 0, 60, 0.15)',
+                border: `1px solid ${tokens.colors.maroon}`,
+                color: tokens.colors.maroon,
+              }}
+            >
+              {currentTier.name} Tier
             </div>
-            <div className="flex items-center justify-center gap-4">
+          </div>
+
+          {/* Progress Bar */}
+          <div className="mb-6">
+            {/* Physical progress bar */}
+            <div 
+              ref={progressBarRef}
+              className="w-full rounded-full overflow-hidden relative mb-2"
+              style={{
+                height: '8px',
+                backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.3)',
+              }}
+            >
+              {/* Inner track highlight */}
               <div 
-                className="w-20 h-20 rounded-xl bg-white/10 border-2 flex items-center justify-center relative"
+                className="absolute inset-0 rounded-full"
                 style={{
-                  borderColor: '#FFD700',
-                  boxShadow: '0 0 40px rgba(255, 215, 0, 0.8), inset 0 0 30px rgba(255, 215, 0, 0.3)',
+                  background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 0%, transparent 100%)',
+                  pointerEvents: 'none',
+                }}
+              />
+              
+              {/* Animated fill */}
+              <div
+                className="h-full rounded-full relative overflow-hidden"
+                style={{
+                  width: `${progressWidth}%`,
+                  background: `linear-gradient(to right, ${tokens.colors.maroon}, ${tokens.colors.gold})`,
+                  transition: `width ${tokens.motion.duration.slow} ${tokens.motion.easing.easeOut}`,
+                  boxShadow: `inset 0 1px 0 rgba(255, 255, 255, 0.2), ${tokens.shadows.glow.gold}`,
+                }}
+              >
+                {/* Subtle highlight on fill */}
+                <div 
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, transparent 60%)',
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Points text - centered */}
+            <div className="text-center mb-2">
+              <span 
+                className="text-sm font-medium"
+                style={{ color: tokens.colors.text.secondary }}
+              >
+                {userPoints} / {nextTier.minPoints} points
+              </span>
+            </div>
+
+            {/* Progress message */}
+            <p 
+              className="text-center text-sm"
+              style={{ color: tokens.colors.text.secondary }}
+            >
+              <span style={{ color: tokens.colors.gold, fontWeight: 600 }}>{pointsToNext} points</span> to {nextTier.name}
+            </p>
+          </div>
+
+          {/* Reward Card - Gold glow only on edge */}
+          <div 
+            className="relative mb-6 rounded-lg overflow-hidden"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.03)',
+              border: `1px solid rgba(255, 215, 0, 0.2)`,
+              borderRadius: tokens.radii.card,
+              padding: tokens.spacing.md,
+              boxShadow: tokens.shadows.glow.gold,
+            }}
+          >
+            <div className="flex items-center gap-3">
+              {/* Trophy icon with subtle gold glow */}
+              <div 
+                className="w-14 h-14 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{
+                  backgroundColor: 'rgba(255, 215, 0, 0.08)',
+                  border: `1px solid rgba(255, 215, 0, 0.25)`,
                 }}
               >
                 <Trophy 
-                  className="w-10 h-10 animate-pulse text-yellow-400" 
+                  className="w-7 h-7" 
                   style={{ 
-                    filter: 'drop-shadow(0 0 12px rgba(255, 215, 0, 0.9))',
+                    color: tokens.colors.gold,
+                    filter: `drop-shadow(0 0 ${tokens.blur.glow} rgba(255, 215, 0, 0.3))`,
                   }} 
+                  strokeWidth={2}
                 />
-                {/* Sparkle effect */}
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-ping" />
               </div>
-              <div className="flex-1">
+              
+              <div className="flex-1 min-w-0">
                 <div 
-                  className="font-black text-white text-base leading-tight"
-                  style={{
-                    textShadow: '0 0 15px rgba(255, 215, 0, 0.7)',
-                  }}
+                  className="text-xs font-semibold uppercase tracking-wider mb-1"
+                  style={{ color: tokens.colors.text.tertiary }}
+                >
+                  {nextTier.name} Reward
+                </div>
+                <div 
+                  className="text-base font-semibold leading-tight"
+                  style={{ color: tokens.colors.text.primary }}
                 >
                   {nextTier.reward}
                 </div>
               </div>
             </div>
           </div>
+
+          {/* CTA Button - Primary, confident, minimal */}
+          <button
+            onClick={onCompleteProfile}
+            className="w-full rounded-lg text-sm font-semibold h-11 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent mb-2"
+            style={{
+              backgroundColor: tokens.colors.maroon,
+              color: tokens.colors.white,
+              borderRadius: tokens.radii.button,
+              boxShadow: '0 2px 8px rgba(115, 0, 60, 0.3)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#8a0048';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(115, 0, 60, 0.4)';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = tokens.colors.maroon;
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(115, 0, 60, 0.3)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.ringColor = tokens.colors.gold;
+            }}
+          >
+            Complete Profile →
+          </button>
+
+          {/* Secondary dismiss - low emphasis */}
+          <button
+            onClick={onDismiss}
+            className="w-full text-center text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-white/20 rounded"
+            style={{ 
+              color: tokens.colors.text.tertiary,
+              padding: `${tokens.spacing.sm} 0`,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = tokens.colors.text.secondary;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = tokens.colors.text.tertiary;
+            }}
+          >
+            Maybe later
+          </button>
         </div>
-
-        {/* CTA Button - Matching home page style */}
-        <button
-          onClick={onCompleteProfile}
-          className="group/cta w-full inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-bold h-11 px-6 bg-gray-900/90 hover:bg-gray-800/95 text-white border-2 border-yellow-400/50 hover:border-yellow-400/80 backdrop-blur-md shadow-[0_0_20px_rgba(251,191,36,0.6)] hover:shadow-[0_0_35px_rgba(251,191,36,0.9)] transition-all duration-300 hover:scale-110 hover:-translate-y-1 mb-3"
-        >
-          Complete Profile →
-        </button>
-
-        {/* Dismiss link */}
-        <button
-          onClick={onDismiss}
-          className="w-full text-center text-sm text-white/50 hover:text-white/70 transition-colors"
-        >
-          Maybe later
-        </button>
       </div>
     </div>
   );
 }
+
+/*
+MOTION NOTES:
+=============
+
+Entry Animation:
+- Modal: scale 0.96 → 1.0, opacity 0 → 1, translateY 2px → 0
+- Duration: 300ms, easing: ease-out
+- Backdrop: blur 4px (subtle)
+
+Progress Fill:
+- Width: 0 → target% over 700ms
+- Easing: cubic-bezier(0.16, 1, 0.3, 1) for physical feel
+- Delay: 300ms after entry
+
+Hover States:
+- CTA: translateY -1px, shadow increase, color darken
+- Close button: background opacity increase
+- Dismiss link: color lighten
+- All: 200-300ms transitions
+
+Focus States:
+- All interactive elements: ring-2 with appropriate color
+- CTA: gold ring
+- Close/Dismiss: white/20 ring
+- Ring offset: 2px
+
+Accessibility:
+- ARIA: dialog role, aria-modal, aria-labelledby
+- Keyboard: Escape closes modal
+- Focus management: first focusable element on open
+- Contrast: All text meets WCAG AA (4.5:1 minimum)
+*/
