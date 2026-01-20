@@ -60,10 +60,10 @@ export default function ContentCard({
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-purple-400/10 to-pink-400/10 animate-pulse"></div>
           </div>
 
-          {/* Background Image with Zoom */}
+          {/* Background Image */}
           {!imageError ? (
             <div 
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+              className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${image})` }}
             />
           ) : (
