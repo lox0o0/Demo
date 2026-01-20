@@ -329,7 +329,7 @@ export default function TierProgressModal({
           {/* CTA Button - Primary, confident, minimal */}
           <button
             onClick={onCompleteProfile}
-            className="w-full rounded-lg text-sm font-semibold h-11 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent mb-2"
+            className="w-full rounded-lg text-sm font-semibold h-11 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#ffd700] focus:ring-offset-2 focus:ring-offset-transparent mb-2"
             style={{
               backgroundColor: tokens.colors.maroon,
               color: tokens.colors.white,
@@ -345,9 +345,6 @@ export default function TierProgressModal({
               e.currentTarget.style.backgroundColor = tokens.colors.maroon;
               e.currentTarget.style.boxShadow = '0 2px 8px rgba(115, 0, 60, 0.3)';
               e.currentTarget.style.transform = 'translateY(0)';
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.setProperty('--tw-ring-color', tokens.colors.gold);
             }}
           >
             Complete Profile →
