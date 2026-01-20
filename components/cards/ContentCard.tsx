@@ -63,8 +63,13 @@ export default function ContentCard({
           {/* Background Image */}
           {!imageError ? (
             <div 
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${image})` }}
+              className="absolute inset-0 bg-center"
+              style={{ 
+                backgroundImage: `url(${image})`,
+                backgroundSize: '85%', // Show more of the image by using smaller background size
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+              }}
             />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1d] to-[#0a0a0b] flex items-center justify-center">
