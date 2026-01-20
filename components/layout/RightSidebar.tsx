@@ -216,7 +216,9 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                     <div
                       className="w-3 h-3 rounded-full"
                       style={{
-                        backgroundColor: isCompleted ? (tier.color || "#6b7280") : "#374151",
+                        backgroundColor: isCompleted 
+                          ? (tier.color === "gray" ? "#6b7280" : tier.color || "#6b7280") 
+                          : "#374151",
                         border: isCompleted ? "none" : "2px solid #4b5563"
                       }}
                     >
