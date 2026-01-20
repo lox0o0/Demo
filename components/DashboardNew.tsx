@@ -71,7 +71,8 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
   // Get user data
   const profileCompletion = user?.profileCompletion || 0;
   // Use actual user points (not boosted) for display in the tier card
-  const actualUserPoints = user?.points || 0;
+  // For demo: Start at 950 points (Bronze tier) so user can upgrade to Silver (1000)
+  const actualUserPoints = user?.points || 950;
   // Calculate tier based on actual points (not boosted) - this shows the user's real current tier
   const currentTier = calculateTier(actualUserPoints, profileCompletion);
   const nextTier = TIERS.find(t => t.minPoints > currentTier.minPoints) || TIERS[TIERS.length - 1];

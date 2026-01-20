@@ -301,18 +301,19 @@ export default function TierUpgradeCelebration({
               </p>
             </div>
 
-            {/* Reward Image/Icon */}
+            {/* Reward Image/Icon - Large icon for training access */}
             <div className="mb-4">
               <div
-                className="w-32 h-32 mx-auto rounded-2xl flex items-center justify-center relative"
+                className="w-40 h-40 mx-auto rounded-2xl flex items-center justify-center relative"
                 style={{
                   backgroundColor: 'rgba(255, 215, 0, 0.1)',
                   border: '2px solid rgba(255, 215, 0, 0.4)',
                   boxShadow: '0 0 40px rgba(255, 215, 0, 0.5)',
                 }}
               >
+                {/* Use Trophy icon for training access reward */}
                 <Trophy
-                  className="w-16 h-16"
+                  className="w-20 h-20"
                   style={{
                     color: '#ffd700',
                     filter: 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.8))',

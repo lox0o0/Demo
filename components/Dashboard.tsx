@@ -32,8 +32,8 @@ export default function Dashboard({ user }: DashboardProps) {
   // Demo: Override user points for different pages
   // Home page: 950 points (Bronze tier, close to Silver) for progress modal demo
   const homeUser = { ...user, points: 950, lifetimePoints: 950 };
-  // Locker Room page: 5,000 points (Diehard tier)
-  const lockerRoomUser = { ...user, points: 5000, lifetimePoints: 5000 };
+  // Locker Room page: 950 points (Bronze tier, same as home) - will upgrade to Silver when completing profile
+  const lockerRoomUser = { ...user, points: 950, lifetimePoints: 950 };
 
   // Calculate tier info for progress modal
   const userPoints = homeUser?.points || 0;
