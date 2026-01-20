@@ -98,21 +98,18 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   }
 
   return (
-    <div className="min-h-screen relative">
-      {/* Background Image */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <Image
-          src="/images/choose-team.jpg"
-          alt="Choose Team Background"
-          fill
-          className="object-cover"
-          priority
-          unoptimized
-          style={{ zIndex: 0 }}
-        />
-        {/* Lighter Overlay for Content Readability - allows background to show through */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50" style={{ zIndex: 1 }} />
-      </div>
+    <div 
+      className="min-h-screen relative"
+      style={{
+        backgroundImage: 'url(/images/choose-team.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* Lighter Overlay for Content Readability - allows background to show through */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50 z-0" />
       
       <div className="container mx-auto px-4 py-12 relative z-10">
         <div className="text-center mb-12">
