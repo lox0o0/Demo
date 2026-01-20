@@ -111,59 +111,6 @@ export default function ContentCard({
                 </p>
               )}
         
-        {/* Status Indicator */}
-        {statusIndicator && (
-          <div className="flex items-center gap-2 mb-2">
-            {statusIndicator.includes("✓") && (
-              <Check size={14} className="text-[#22c55e]" strokeWidth={2} />
-            )}
-            <span className="text-xs text-white/80">{statusIndicator.replace("✓", "").trim()}</span>
-          </div>
-        )}
-        
-        {/* Progress Ring */}
-        {progressRing && (
-          <div className="flex items-center gap-2 mb-2">
-            <div className="relative w-6 h-6">
-              <svg className="transform -rotate-90 w-6 h-6" viewBox="0 0 24 24">
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="#2a2a2d"
-                  strokeWidth="2"
-                  fill="none"
-                />
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="#22c55e"
-                  strokeWidth="2"
-                  fill="none"
-                  strokeDasharray={`${(progressRing.current / progressRing.total) * 62.83} 62.83`}
-                />
-              </svg>
-            </div>
-            <span className="text-xs text-white/80">
-              {progressRing.current}/{progressRing.total} complete
-            </span>
-          </div>
-        )}
-        
-        {/* Progress Percent */}
-        {progressPercent !== undefined && (
-          <div className="mb-2">
-            <div className="text-xs text-white/80 mb-1">{progressPercent}% complete</div>
-            <div className="w-full h-1 bg-[#2a2a2d] rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-[#22c55e] to-[#f59e0b] transition-all duration-500"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
-          </div>
-        )}
-        
               {/* Card Button with Glow */}
               {ctaButton && (
                 <button
