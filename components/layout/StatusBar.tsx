@@ -57,20 +57,39 @@ export default function StatusBar({ user }: StatusBarProps) {
             )}
           </div>
 
-          {/* Progress Bar */}
+          {/* Progress Bar - Floating Pill with Glass Effect */}
           <div className="flex-1 max-w-md">
-            <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-bold text-white">
                 {userPoints} / {nextTier?.minPoints || currentTier.minPoints}
               </span>
             </div>
-            <div className="w-full h-2 bg-[#1a1a1d] rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-[#22c55e] to-[#f59e0b] rounded-full transition-all duration-1000"
-                style={{ width: `${progressPercent}%` }}
-              />
+            {/* Floating Pill Container */}
+            <div 
+              className="w-full px-4 py-3 rounded-full backdrop-blur-md bg-white/5 border border-white/20"
+              style={{
+                filter: 'drop-shadow(rgba(0, 0, 0, 0.4) 0px 10px 25px)'
+              }}
+            >
+              {/* Progress Bar Track */}
+              <div className="w-full h-3 bg-gray-700/50 rounded-full border border-gray-600/50 overflow-hidden relative">
+                {/* Progress Fill with Gradient */}
+                <div
+                  className="h-full bg-gradient-to-r from-green-500 to-cyan-500 rounded-full transition-all duration-1000 relative overflow-hidden"
+                  style={{ width: `${progressPercent}%` }}
+                >
+                  {/* Shine Animation - Subtle shimmer */}
+                  <div 
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                    style={{
+                      animation: 'shimmer 2s ease-in-out infinite',
+                      backgroundSize: '200% 100%',
+                    }}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="text-xs text-[#a1a1aa] mt-1 text-center">
+            <div className="text-xs text-[#a1a1aa] mt-2 text-center">
               Points to {nextTier?.name || "Max"} Tier
             </div>
           </div>
