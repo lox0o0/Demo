@@ -67,12 +67,12 @@ export default function ContentCard({
           {/* Dark overlay across entire image (15-20% opacity) */}
           <div className="absolute inset-0 bg-black/18" />
           
-          {/* Strengthened Gradient Overlay - covers bottom 2/3 of card, darker at bottom */}
-          {/* Starts at 60% opacity black at bottom, fades to transparent around middle */}
+          {/* Strengthened Gradient Overlay - ensures bottom 40% is dark enough for white text */}
+          {/* Starts at 70% opacity black at bottom, maintains 50%+ opacity through bottom 40% */}
           <div 
             className="absolute inset-0"
             style={{
-              background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.5) 20%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.15) 60%, transparent 100%)'
+              background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.65) 10%, rgba(0,0,0,0.6) 20%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.1) 70%, transparent 100%)'
             }}
           />
         </div>
@@ -83,7 +83,7 @@ export default function ContentCard({
         {/* Title and Badge Row */}
         <div className="flex items-start justify-between gap-3 mb-2">
           <h3 
-            className="text-base font-bold text-white flex-1"
+            className="text-lg font-bold text-white flex-1"
             style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
           >
             {title}
@@ -119,7 +119,7 @@ export default function ContentCard({
           </div>
         ) : (
           <p 
-            className="text-sm text-[#a1a1aa] mb-2"
+            className="text-sm font-normal text-white mb-2"
             style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
           >
             {subtitle}
