@@ -100,22 +100,23 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   const backgroundImagePath = "/broncos/choose-team.png";
   
   return (
-    <div 
-      className="min-h-screen"
-      style={{
-        width: '100%',
-        position: 'relative',
-        backgroundImage: `url(${backgroundImagePath})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        backgroundColor: '#000',
-      }}
-    >
+    <div className="min-h-screen relative" style={{ backgroundColor: '#000' }}>
+      {/* Background Image as absolute positioned element */}
+      <div 
+        className="fixed inset-0"
+        style={{
+          zIndex: 0,
+          backgroundImage: `url(${backgroundImagePath})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
+        }}
+      />
+      
       {/* Light overlay for text readability */}
       <div 
-        className="absolute inset-0" 
+        className="fixed inset-0" 
         style={{
           background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.4))',
           zIndex: 1,
