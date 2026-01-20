@@ -1603,9 +1603,46 @@ function ProfileCompletionSimplified({ user, profileCompletion }: any) {
         ))}
       </div>
       
-      <button className="w-full bg-nrl-green text-white font-bold py-3 rounded-xl hover:bg-nrl-green/90 transition-colors">
-        Upgrade Profile for More Points!
-      </button>
+      {/* Social Media Icons Row */}
+      <div className="pt-4 border-t border-nrl-border-light">
+        <div className="text-xs text-nrl-text-secondary mb-3 text-center">Connect social accounts</div>
+        <div className="flex items-center justify-center gap-4">
+          {[
+            { id: "facebook", name: "Facebook" },
+            { id: "instagram", name: "Instagram" },
+            { id: "x", name: "X" },
+            { id: "tiktok", name: "TikTok" },
+          ].map((social) => {
+            const isConnected = user?.connectedSocials?.includes(social.id) || false;
+            return (
+              <button
+                key={social.id}
+                className={`relative flex items-center justify-center transition-all ${
+                  isConnected 
+                    ? "opacity-100 hover:scale-110" 
+                    : "opacity-40 hover:opacity-60"
+                }`}
+                title={isConnected ? `${social.name} connected` : `Connect ${social.name}`}
+              >
+                <div className={`relative ${isConnected ? "w-10 h-10" : "w-8 h-8"}`}>
+                  <Image
+                    src={`/social-logos/${social.id === "x" ? "x.png" : social.id === "facebook" ? "facebook.png" : social.id === "instagram" ? "instagram.png" : "tiktok.png"}`}
+                    alt={social.name}
+                    fill
+                    className={`object-contain ${isConnected ? "" : "grayscale"}`}
+                    unoptimized
+                  />
+                </div>
+                {isConnected && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-nrl-green rounded-full border-2 border-nrl-dark-card">
+                    <Check size={8} className="text-white" strokeWidth={3} />
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
@@ -1763,7 +1800,7 @@ function PrizeWheelCard({ streakData, teamData }: any) {
                 animation: "shimmer 3s infinite"
               }}
             >
-              <span className="relative z-10 flex items-center gap-2">
+              <span className="relative z-10 flex items-center justify-center gap-2">
                 <CircleDot size={18} className="text-white" strokeWidth={2} />
                 SPIN THE WHEEL
               </span>
