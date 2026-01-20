@@ -64,8 +64,14 @@ export default function ContentCard({
             </div>
           )}
           
-          {/* Gradient Overlay (bottom-heavy) */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+          {/* Dark overlay across entire image (15-20% opacity) */}
+          <div className="absolute inset-0 bg-black/20" />
+          
+          {/* Strengthened Gradient Overlay - covers bottom 2/3 of card, darker at bottom */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 via-black/10 to-transparent" 
+               style={{
+                 background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.1) 50%, transparent 100%)'
+               }} />
         </div>
       </div>
 
@@ -73,15 +79,24 @@ export default function ContentCard({
       <div className="absolute bottom-0 left-0 right-0 p-4">
         {/* Title and Badge Row */}
         <div className="flex items-start justify-between gap-3 mb-2">
-          <h3 className="text-base font-bold text-white flex-1">{title}</h3>
-          {/* Badge */}
+          <h3 
+            className="text-base font-bold text-white flex-1"
+            style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
+          >
+            {title}
+          </h3>
+          {/* Badge with dark pill background */}
           {badge && (
-            <div
-              className={`px-3 py-1 rounded-full border text-xs font-semibold whitespace-nowrap flex-shrink-0 ${
-                badgeColors[badgeColor]
-              }`}
-            >
-              {badge}
+            <div className="flex-shrink-0">
+              <div className="px-2 py-1 bg-black/70 backdrop-blur-sm rounded-full">
+                <div
+                  className={`px-3 py-1 rounded-full border text-xs font-semibold whitespace-nowrap ${
+                    badgeColors[badgeColor]
+                  }`}
+                >
+                  {badge}
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -100,7 +115,12 @@ export default function ContentCard({
             </button>
           </div>
         ) : (
-          <p className="text-sm text-[#a1a1aa] mb-2">{subtitle}</p>
+          <p 
+            className="text-sm text-[#a1a1aa] mb-2"
+            style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
+          >
+            {subtitle}
+          </p>
         )}
         
         {/* Status Indicator */}
