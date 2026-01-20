@@ -16,17 +16,29 @@ interface BackgroundVideoProps {
 
 export default function BackgroundVideo({ className = "" }: BackgroundVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [selectedVideo, setSelectedVideo] = useState<string>("");
+  const [currentVideoIndex, setCurrentVideoIndex] = useState<number>(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
 
+  const selectedVideo = VIDEO_FILES[currentVideoIndex];
+
   useEffect(() => {
-    // Randomly select a video on mount
-    const randomIndex = Math.floor(Math.random() * VIDEO_FILES.length);
-    const videoPath = VIDEO_FILES[randomIndex];
-    setSelectedVideo(videoPath);
-    console.log("Background video selected:", videoPath);
+    // Start with first video (or randomly if preferred)
+    // const randomIndex = Math.floor(Math.random() * VIDEO_FILES.length);
+    // setCurrentVideoIndex(randomIndex);
+    setCurrentVideoIndex(0);
+    console.log("Background video carousel started with:", VIDEO_FILES[0]);
   }, []);
+
+  const handleVideoEnded = () => {
+    // Move to next video in the carousel
+    setCurrentVideoIndex((prevIndex) => {
+      const nextIndex = (prevIndex + 1) % VIDEO_FILES.length;
+      console.log("Video ended, switching to:", VIDEO_FILES[nextIndex]);
+      setIsLoaded(false); // Reset loaded state for fade-in effect
+      return nextIndex;
+    });
+  };
 
   useEffect(() => {
     // Ensure video plays when it's ready
@@ -74,12 +86,13 @@ export default function BackgroundVideo({ className = "" }: BackgroundVideoProps
   const handleVideoError = (e: any) => {
     console.error("Error loading background video:", selectedVideo, e);
     setHasError(true);
-    // Try next video if current one fails
-    const currentIndex = VIDEO_FILES.indexOf(selectedVideo);
-    if (currentIndex < VIDEO_FILES.length - 1) {
-      setSelectedVideo(VIDEO_FILES[currentIndex + 1]);
+    // Skip to next video if current one fails
+    setCurrentVideoIndex((prevIndex) => {
+      const nextIndex = (prevIndex + 1) % VIDEO_FILES.length;
       setHasError(false);
-    }
+      setIsLoaded(false);
+      return nextIndex;
+    });
   };
 
   if (!selectedVideo) {
@@ -99,20 +112,21 @@ export default function BackgroundVideo({ className = "" }: BackgroundVideoProps
       {/* Video Background */}
       <video
         ref={videoRef}
+        key={currentVideoIndex}
         className={`absolute inset-0 w-full h-full object-cover ${
           isLoaded ? "opacity-100" : "opacity-0"
         } transition-opacity duration-1000`}
         src={selectedVideo}
         autoPlay
-        loop
         muted
         playsInline
         preload="auto"
         onLoadedData={handleVideoLoaded}
         onCanPlay={handleVideoLoaded}
         onError={handleVideoError}
+        onEnded={handleVideoEnded}
         onPlay={() => {
-          console.log("Video started playing");
+          console.log("Video started playing:", selectedVideo);
           setIsLoaded(true);
         }}
         style={{ 
