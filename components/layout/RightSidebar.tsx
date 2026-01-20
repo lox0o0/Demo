@@ -223,19 +223,19 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
       <div className="relative" style={{ minHeight: '600px' }}>
         {/* Vertical Progress Line - positioned on left, centered for markers */}
         <div className="absolute left-0 top-0 bottom-0" style={{ width: '32px' }}>
-          {/* Background track (gray) */}
+          {/* Background track (gray) - full height */}
           <div 
             className="absolute left-1/2 top-0 bottom-0 w-1 bg-gray-700/50" 
             style={{ transform: 'translateX(-50%)' }}
           />
           
-          {/* Filled portion - colored up to current tier */}
+          {/* Filled portion - colored from TOP down to current tier */}
           <div
-            className="absolute left-1/2 bottom-0 w-1 transition-all duration-1000 ease-out"
+            className="absolute left-1/2 top-0 w-1 transition-all duration-1000 ease-out"
             style={{
               height: `${progressPercent}%`,
               transform: 'translateX(-50%)',
-              background: `linear-gradient(to top, 
+              background: `linear-gradient(to bottom, 
                 #6b7280 0%,
                 #CD7F32 16%,
                 #C0C0C0 33%,
