@@ -98,34 +98,52 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-nrl-dark via-nrl-dark to-black">
-      <div className="container mx-auto px-4 py-12">
+    <div 
+      className="min-h-screen bg-gradient-to-b from-nrl-dark via-nrl-dark to-black relative"
+      style={{
+        backgroundImage: 'url(/images/choose-team.webp)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      {/* Overlay for better text readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60" />
+      
+      <div className="container mx-auto px-4 py-12 relative z-10">
         <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-nrl-green to-white bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-nrl-green to-white bg-clip-text text-transparent drop-shadow-2xl">
             Pick Your Club
           </h1>
-          <p className="text-xl text-gray-400">Choose your team to get started</p>
+          <p className="text-xl text-white/90 drop-shadow-lg">Choose your team to get started</p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {NRL_TEAMS.map((team) => (
             <button
               key={team.id}
               onClick={() => handleTeamSelect(team)}
-              className="group relative overflow-hidden bg-nrl-dark-card rounded-2xl p-6 hover:scale-105 transition-all duration-300 border border-nrl-border-light hover:border-nrl-border-medium"
+              className="group relative overflow-hidden glass rounded-2xl p-6 hover:scale-105 transition-all duration-300 border border-white/10 hover:border-white/30"
               style={{
-                background: `linear-gradient(135deg, ${team.primaryColor}10 0%, ${team.secondaryColor}10 100%)`,
+                background: `linear-gradient(135deg, ${team.primaryColor}15 0%, ${team.secondaryColor}15 100%)`,
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = `0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px ${team.primaryColor}40`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.3)';
               }}
             >
               <div className="relative z-10 flex flex-col items-center">
-                <div className="relative w-24 h-24 mb-4 transform group-hover:scale-110 transition-transform duration-300 bg-white/5 rounded-xl p-2 border border-nrl-border-light">
+                <div className="relative w-28 h-28 mb-5 transform group-hover:scale-110 transition-transform duration-300 bg-white/10 rounded-xl p-3 border border-white/20 backdrop-blur-sm">
                   <TeamLogoWithFallback
                     src={team.logoUrl}
                     alt={team.name}
                   />
                 </div>
-                <div className="font-bold text-lg text-nrl-text-primary">{team.name}</div>
-                <div className="text-xs text-nrl-text-secondary mt-1">
+                <div className="font-bold text-lg text-white drop-shadow-lg mb-1">{team.name}</div>
+                <div className="text-xs text-white/70 font-medium">
                   {team.fanCount.toLocaleString()} fans
                 </div>
               </div>
@@ -134,7 +152,7 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 style={{
-                  background: `linear-gradient(135deg, ${team.primaryColor}20 0%, ${team.secondaryColor}20 100%)`,
+                  background: `linear-gradient(135deg, ${team.primaryColor}25 0%, ${team.secondaryColor}25 100%)`,
                 }}
               />
             </button>
@@ -289,10 +307,10 @@ export function TeamCelebration({ team, onComplete }: { team: Team; onComplete?:
         ))}
       </div>
 
-      <div className="relative z-10 text-center space-y-8 max-w-2xl mx-auto">
+      <div className="relative z-10 text-center space-y-10 max-w-3xl mx-auto px-4">
         {/* Explosive team logo */}
         <div
-          className="relative w-48 h-48 md:w-64 md:h-64 mx-auto transform animate-bounce-in"
+          className="relative w-56 h-56 md:w-80 md:h-80 mx-auto transform animate-bounce-in"
           style={{ animation: "bounceIn 0.8s ease-out" }}
         >
           <Image
@@ -305,38 +323,54 @@ export function TeamCelebration({ team, onComplete }: { team: Team; onComplete?:
         </div>
 
         {/* Welcome message */}
-        <div className="space-y-4">
+        <div className="space-y-6">
           <h1
-            className="text-5xl md:text-7xl font-black text-white drop-shadow-2xl"
-            style={{ animation: "fadeInUp 0.8s ease-out 0.3s both" }}
+            className="text-6xl md:text-8xl font-black text-white drop-shadow-2xl leading-tight tracking-tight"
+            style={{ 
+              animation: "fadeInUp 0.8s ease-out 0.3s both",
+              textShadow: '0 4px 20px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6)',
+              letterSpacing: '-0.02em',
+            }}
           >
             {team.welcomeMessage}
           </h1>
           
           {showStats && (
             <div
-              className="space-y-2 text-white/90"
+              className="space-y-4 text-white"
               style={{ animation: "fadeInUp 0.8s ease-out 0.6s both" }}
             >
-              <p className="text-2xl md:text-3xl font-bold">
+              <p className="text-2xl md:text-4xl font-bold tracking-tight" style={{ textShadow: '0 2px 12px rgba(0, 0, 0, 0.7)' }}>
                 You're one of {team.fanCount.toLocaleString()} {team.name} fans
               </p>
-              <p className="text-xl md:text-2xl font-semibold">
+              <p className="text-xl md:text-3xl font-semibold text-white/95 tracking-wide" style={{ textShadow: '0 2px 10px rgba(0, 0, 0, 0.6)' }}>
                 {team.chant}
               </p>
             </div>
           )}
         </div>
 
-        {/* Badge unlock animation */}
+        {/* Badge unlock animation - Enhanced with premium styling */}
         {showStats && (
           <div
-            className="mt-8 glass rounded-2xl p-6 border-2 border-white/30"
-            style={{ animation: "fadeInUp 0.8s ease-out 0.9s both" }}
+            className="mt-10 glass-strong rounded-3xl p-8 border border-white/20 mx-auto max-w-md"
+            style={{ 
+              animation: "fadeInUp 0.8s ease-out 0.9s both",
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 255, 255, 0.1)',
+            }}
           >
-            <div className="text-xs font-bold text-white uppercase tracking-wider mb-2">BADGE</div>
-            <div className="text-xl font-bold text-white">Welcome Badge Unlocked!</div>
-            <div className="text-sm text-white/80 mt-1">+50 points awarded</div>
+            <div className="text-xs font-bold text-white/90 uppercase tracking-[0.15em] mb-3 letter-spacing-wider">
+              BADGE UNLOCKED
+            </div>
+            <div className="text-2xl md:text-3xl font-bold text-white mb-2 tracking-tight">
+              Welcome Badge
+            </div>
+            <div className="flex items-center justify-center gap-2 mt-4">
+              <span className="text-lg font-bold text-emerald-400" style={{ textShadow: '0 0 20px rgba(16, 185, 129, 0.5)' }}>
+                +50 points
+              </span>
+              <span className="text-sm text-white/70">awarded</span>
+            </div>
           </div>
         )}
       </div>
