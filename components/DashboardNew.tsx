@@ -880,7 +880,7 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
   });
 
   return (
-    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light h-full flex flex-col">
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
       <h3 className="text-lg font-bold text-white mb-4">This Week's Missions</h3>
       <div className="space-y-3">
         {sortedMissions.map((mission) => {
@@ -1236,7 +1236,7 @@ function YourSeasonCard({ tier, points, progressPercent, pointsToNext, nextTier,
   const unearnedBadges = allBadges.filter(b => !b.earned);
 
   return (
-    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light h-full flex flex-col">
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
       {/* Current Tier - Primary Info */}
       <div className="text-center mb-4">
         <div 
@@ -1320,7 +1320,7 @@ function YourSeasonCard({ tier, points, progressPercent, pointsToNext, nextTier,
       </div>
 
       {/* Trophy Case - Badges Showcase */}
-      <div className="mt-auto">
+      <div>
         <div className="text-sm font-bold uppercase text-nrl-text-secondary mb-4 tracking-wider">
           Trophy Case
         </div>
@@ -1421,7 +1421,7 @@ function LeaderboardsCard({ user, teamData, userPoints }: any) {
   ];
 
   return (
-    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light h-full flex flex-col">
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
       <h3 className="text-lg font-bold text-white mb-4">Leaderboards</h3>
       
       {/* User's Position with Rivalry Framing */}
@@ -1619,7 +1619,7 @@ function TiersRewardsCard({ currentTier, userPoints }: any) {
   ];
 
   return (
-    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light h-full flex flex-col">
+    <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
       <h3 className="text-lg font-bold text-white mb-4">Tier Rewards</h3>
       <div className="space-y-3">
         {tiers.map((tier, idx) => {
@@ -1720,7 +1720,7 @@ function PrizeWheelCard({ streakData, teamData }: any) {
 
   return (
     <>
-      <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light h-full flex flex-col">
+      <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
         <h3 className="text-lg font-bold text-white mb-1">Prize Wheel</h3>
         <div className="text-xs text-nrl-text-secondary mb-4">(win tickets, vouchers and points!)</div>
         {streakData.spins.available > 0 ? (
