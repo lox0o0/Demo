@@ -2262,7 +2262,7 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
     {
       id: 7,
       icon: Share2,
-      title: "Share on social media",
+      title: "Share tips on social media",
       points: "+20 pts",
       status: "Not started",
       statusType: "pending" as const,
@@ -2534,6 +2534,37 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
           })}
         </ul>
       </div>
+
+      {/* Profile Completion Section */}
+      <div className="px-4 py-4 border-t border-white/10">
+        <div className="text-sm font-semibold text-white/80 mb-3">Complete Your Profile</div>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between py-2">
+            <span className="text-xs text-white/70">Date of Birth</span>
+            <button className="text-xs text-emerald-400 hover:text-emerald-300">Add</button>
+          </div>
+          <div className="flex items-center justify-between py-2 border-t border-white/5">
+            <span className="text-xs text-white/70">Nearest Home Ground</span>
+            <button className="text-xs text-emerald-400 hover:text-emerald-300">Add</button>
+          </div>
+          <div className="flex items-center justify-between py-2 border-t border-white/5">
+            <span className="text-xs text-white/70">Connect Instagram</span>
+            <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+          </div>
+          <div className="flex items-center justify-between py-2 border-t border-white/5">
+            <span className="text-xs text-white/70">Connect Facebook</span>
+            <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+          </div>
+          <div className="flex items-center justify-between py-2 border-t border-white/5">
+            <span className="text-xs text-white/70">Connect X (Twitter)</span>
+            <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+          </div>
+          <div className="flex items-center justify-between py-2 border-t border-white/5">
+            <span className="text-xs text-white/70">Connect TikTok</span>
+            <button className="text-xs text-emerald-400 hover:text-emerald-300">Connect</button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -2616,9 +2647,9 @@ function StreakCardPrizes({ streakData }: { streakData: StreakData }) {
   const is2xActive = pointsMultiplier >= 2.0;
 
   return (
-    <div className="bg-white/5 backdrop-blur-[32px] border border-white/20 rounded-xl p-6 hover:border-white/30 transition-all relative overflow-hidden">
+    <div className="bg-white/5 backdrop-blur-[32px] border border-white/20 rounded-xl p-4 hover:border-white/30 transition-all relative overflow-hidden">
       {/* Info Icon - Top Right */}
-      <div className="absolute top-4 right-4 z-20 group">
+      <div className="absolute top-3 right-3 z-20 group">
         <Info className="w-4 h-4 text-white/60 hover:text-white cursor-help transition-colors" />
         <div className="absolute right-0 top-6 w-64 p-3 bg-gray-900/95 border border-white/20 rounded-lg text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-30">
           <div className="font-semibold mb-1">2 week streak benefits:</div>
@@ -2639,7 +2670,7 @@ function StreakCardPrizes({ streakData }: { streakData: StreakData }) {
       </div>
 
       {/* Animated Flame Icon with multiple layers for energy effect */}
-      <div className="flex justify-center mb-4 relative">
+      <div className="flex justify-center mb-3 relative">
         {/* Outer glow ring */}
         <div 
           className="absolute inset-0 flex items-center justify-center"
@@ -2681,10 +2712,10 @@ function StreakCardPrizes({ streakData }: { streakData: StreakData }) {
       {/* Big Streak Number with Enhanced Glow and Energy */}
       <div className="text-center mb-2 relative z-10">
         <div 
-          className="text-6xl font-bold text-white mb-1 relative" 
+          className="text-4xl font-bold text-white mb-1 relative" 
           style={{ 
-            textShadow: '0 0 30px rgba(251,191,36,1), 0 0 60px rgba(251,191,36,0.6), 0 0 90px rgba(251,191,36,0.3)',
-            filter: 'drop-shadow(0 0 15px rgba(251,191,36,0.8))',
+            textShadow: '0 0 20px rgba(251,191,36,1), 0 0 40px rgba(251,191,36,0.6), 0 0 60px rgba(251,191,36,0.3)',
+            filter: 'drop-shadow(0 0 10px rgba(251,191,36,0.8))',
             animation: 'pulse 2s ease-in-out infinite',
           }}
         >
@@ -2703,7 +2734,7 @@ function StreakCardPrizes({ streakData }: { streakData: StreakData }) {
 
       {/* 2x Points Active Badge */}
       {is2xActive && (
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center mb-2">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/20 border border-emerald-500/50 rounded-full">
             <Sparkles size={14} className="text-emerald-400" />
             <span className="text-xs font-bold text-emerald-400">2x POINTS ACTIVE</span>
@@ -2713,14 +2744,14 @@ function StreakCardPrizes({ streakData }: { streakData: StreakData }) {
 
       {/* Progress to Next Streak Reward */}
       {nextMilestone && (
-        <div className="mt-4 space-y-2">
+        <div className="mt-2 space-y-1.5">
           <div className="flex items-center justify-between text-xs">
             <span className="text-white/60">Progress to {nextMilestone.name}</span>
             <span className="text-white/80 font-semibold">{Math.round(progressToNext)}%</span>
           </div>
-          <div className="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-emerald-500 to-cyan-500 h-2 rounded-full transition-all duration-500"
+              className="bg-gradient-to-r from-emerald-500 to-cyan-500 h-1.5 rounded-full transition-all duration-500"
               style={{ width: `${progressToNext}%` }}
             />
           </div>
@@ -2819,29 +2850,29 @@ function PrizeWheelCardPrizes({ streakData, onSpinClick }: { streakData: StreakD
         SPIN THE WHEEL
       </button>
 
-      {/* Prize Categories - Hero Section */}
-      <div className="mt-6 space-y-3">
-        <div className="text-xs font-bold text-white/90 uppercase tracking-wider text-center mb-3">Available Rewards</div>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/40 rounded-lg hover:border-blue-400/60 transition-all">
-            <Ticket size={20} className="text-blue-400" style={{ filter: 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.8))' }} />
-            <span className="text-sm font-bold text-white">Tickets</span>
-            <span className="text-xs text-white/70">Game Access</span>
+      {/* Prize Categories - Reduced Size */}
+      <div className="mt-4 space-y-2">
+        <div className="text-xs font-bold text-white/90 uppercase tracking-wider text-center mb-2">Available Rewards</div>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex flex-col items-center gap-1 p-2 bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/40 rounded-lg hover:border-blue-400/60 transition-all">
+            <Ticket size={14} className="text-blue-400" style={{ filter: 'drop-shadow(0 0 6px rgba(59, 130, 246, 0.8))' }} />
+            <span className="text-xs font-bold text-white">Tickets</span>
+            <span className="text-[10px] text-white/70">Game Access</span>
           </div>
-          <div className="flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/40 rounded-lg hover:border-purple-400/60 transition-all">
-            <Gift size={20} className="text-purple-400" style={{ filter: 'drop-shadow(0 0 8px rgba(168, 85, 247, 0.8))' }} />
-            <span className="text-sm font-bold text-white">Vouchers</span>
-            <span className="text-xs text-white/70">Shop Credits</span>
+          <div className="flex flex-col items-center gap-1 p-2 bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/40 rounded-lg hover:border-purple-400/60 transition-all">
+            <Gift size={14} className="text-purple-400" style={{ filter: 'drop-shadow(0 0 6px rgba(168, 85, 247, 0.8))' }} />
+            <span className="text-xs font-bold text-white">Vouchers</span>
+            <span className="text-[10px] text-white/70">Shop Credits</span>
           </div>
-          <div className="flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 border border-yellow-500/40 rounded-lg hover:border-yellow-400/60 transition-all">
-            <Coins size={20} className="text-yellow-400" style={{ filter: 'drop-shadow(0 0 8px rgba(234, 179, 8, 0.8))' }} />
-            <span className="text-sm font-bold text-white">Points</span>
-            <span className="text-xs text-white/70">Boost Progress</span>
+          <div className="flex flex-col items-center gap-1 p-2 bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 border border-yellow-500/40 rounded-lg hover:border-yellow-400/60 transition-all">
+            <Coins size={14} className="text-yellow-400" style={{ filter: 'drop-shadow(0 0 6px rgba(234, 179, 8, 0.8))' }} />
+            <span className="text-xs font-bold text-white">Points</span>
+            <span className="text-[10px] text-white/70">Boost Progress</span>
           </div>
-          <div className="flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/40 rounded-lg hover:border-green-400/60 transition-all">
-            <Shirt size={20} className="text-green-400" style={{ filter: 'drop-shadow(0 0 8px rgba(34, 197, 94, 0.8))' }} />
-            <span className="text-sm font-bold text-white">Merch</span>
-            <span className="text-xs text-white/70">Team Gear</span>
+          <div className="flex flex-col items-center gap-1 p-2 bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/40 rounded-lg hover:border-green-400/60 transition-all">
+            <Shirt size={14} className="text-green-400" style={{ filter: 'drop-shadow(0 0 6px rgba(34, 197, 94, 0.8))' }} />
+            <span className="text-xs font-bold text-white">Merch</span>
+            <span className="text-[10px] text-white/70">Team Gear</span>
           </div>
         </div>
       </div>
@@ -2903,19 +2934,11 @@ function WeeklyPrizeDrawCard({ currentTier, drawCountdown, entryCount }: { curre
         <div className="text-xs text-white/60">This Week's Featured Prize</div>
       </div>
 
-      {/* Draw Countdown */}
-      <div className="bg-white/5 rounded-lg p-3 mb-3">
-        <div className="text-xs text-white/60 mb-2 text-center">Draw in</div>
-        <div className="flex items-center justify-center gap-2 text-sm font-bold text-white">
-          <div className="flex items-center gap-1">
-            <Clock size={14} className="text-emerald-400" />
-            <span>{drawCountdown.days}d</span>
-          </div>
-          <span className="text-white/40">:</span>
-          <span>{drawCountdown.hours}h</span>
-          <span className="text-white/40">:</span>
-          <span>{drawCountdown.minutes}m</span>
-        </div>
+      {/* Draw Now Button */}
+      <div className="mb-3">
+        <button className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold py-3 rounded-lg hover:from-emerald-600 hover:to-cyan-600 transition-all">
+          DRAW NOW
+        </button>
       </div>
 
       {/* Entry Count */}
@@ -3282,7 +3305,7 @@ function MissionCardHorizontal({
       {isExpanded && mission.id === 7 && (
         <div className="mt-2 pt-3 border-t border-gray-700/50 space-y-3" onClick={(e) => e.stopPropagation()}>
           <div className="text-xs font-bold text-white/80 mb-2">SHARE YOUR ACHIEVEMENTS</div>
-          <div className="text-xs text-white/60 mb-3">Share on social media to earn points</div>
+          <div className="text-xs text-white/60 mb-3">Share your tips on social media to earn points</div>
           
           <div className="grid grid-cols-2 gap-2">
             {["Facebook", "Instagram", "Twitter", "TikTok"].map((platform) => (
