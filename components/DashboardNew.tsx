@@ -1078,12 +1078,12 @@ function MissionCard({ mission, onExpand, isExpanded }: {
 
   return (
     <div
-      className={`group relative bg-nrl-dark-hover border rounded-xl p-4 transition-all duration-200 cursor-pointer ${
+      className={`group relative bg-nrl-dark-hover border-l-4 rounded-xl p-4 transition-all duration-200 cursor-pointer ${
         mission.completed 
-          ? 'border-nrl-green/30 bg-nrl-green/5 opacity-75' 
+          ? 'border-l-nrl-green bg-nrl-green/5 border-r border-t border-b border-nrl-green/20' 
           : mission.urgency
-          ? 'border-orange-500/50 hover:border-orange-500 hover:shadow-lg hover:shadow-orange-500/20 hover:-translate-y-0.5'
-          : 'border-nrl-border-light hover:border-nrl-green hover:shadow-lg hover:shadow-nrl-green/20 hover:-translate-y-0.5'
+          ? 'border-l-orange-500 border-r border-t border-b border-orange-500/50 hover:border-orange-500 hover:shadow-lg hover:shadow-orange-500/20 hover:-translate-y-0.5'
+          : 'border-l-nrl-border-light border-r border-t border-b border-nrl-border-light hover:border-l-nrl-green hover:border-nrl-green hover:shadow-lg hover:shadow-nrl-green/20 hover:-translate-y-0.5'
       }`}
       onClick={onExpand}
     >
@@ -1102,22 +1102,23 @@ function MissionCard({ mission, onExpand, isExpanded }: {
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-1">
-            <h4 className={`text-sm font-semibold ${
-              mission.completed 
-                ? 'text-nrl-text-muted line-through' 
-                : 'text-white'
-            }`}>
+            <div className="flex items-center gap-2 flex-1">
+              <h4 className="text-sm font-semibold text-white">
+                {mission.title}
+              </h4>
               {mission.completed && (
-                <Check size={16} className="text-nrl-green mr-2 inline" strokeWidth={2} />
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-nrl-green/20 border border-nrl-green/50 rounded-full">
+                  <Check size={12} className="text-nrl-green" strokeWidth={2.5} />
+                  <span className="text-xs font-bold text-nrl-green">Completed</span>
+                </span>
               )}
-              {mission.title}
-            </h4>
+            </div>
             
             {/* Points - Prominent */}
             <span className={`text-sm font-bold whitespace-nowrap ${
-              mission.completed ? 'text-nrl-text-muted' : 'text-nrl-green'
+              mission.completed ? 'text-nrl-green/80' : 'text-nrl-green'
             }`}>
-              {mission.points}
+              {mission.completed ? '✓' : ''} {mission.points}
             </span>
           </div>
 
