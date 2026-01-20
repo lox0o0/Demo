@@ -40,11 +40,13 @@ export default function Dashboard({ user }: DashboardProps) {
         {/* Background Video - only on home section, fixed to viewport */}
         {activeSection === "home" && <BackgroundVideo />}
         
-        {/* Status Bar */}
-        <StatusBar user={user} />
+        {/* Status Bar - ensure it's above video */}
+        <div className="relative z-20">
+          <StatusBar user={user} />
+        </div>
 
-        {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto pl-8 pr-6 py-6 relative z-10">
+        {/* Scrollable Content - ensure it's above video */}
+        <main className="flex-1 overflow-y-auto pl-8 pr-6 py-6 relative z-10" style={{ position: 'relative' }}>
           {activeSection === "home" && (
             <div className="space-y-12 max-w-[95%] relative">
               {/* SECTION 1: ACTIVITIES */}
