@@ -722,7 +722,7 @@ function ProfileCard({ tier, points, progressPercent, pointsToNext, nextTier, te
           className="w-12 h-12 rounded-full border-2 flex items-center justify-center"
           style={{ borderColor: tier.color }}
         >
-          <span className="text-lg">⭐</span>
+          <Star size={20} className="text-white/70" fill="currentColor" strokeWidth={2} />
         </div>
         <div>
           <div className="text-sm font-bold uppercase" style={{ color: tier.color }}>
