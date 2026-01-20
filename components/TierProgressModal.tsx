@@ -201,7 +201,7 @@ export default function TierProgressModal({
                 letterSpacing: '-0.01em',
               }}
             >
-              You're almost there
+              Your current Fan Tier:
             </h2>
           </div>
 
