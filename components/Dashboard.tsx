@@ -115,7 +115,8 @@ export default function Dashboard({ user }: DashboardProps) {
                     title="Tipping"
                     subtitle="Tips made for upcoming weekend fixtures"
                     progressRing={{ current: 6, total: 8 }}
-                    badge="Round 6"
+                    badge="+35 pts"
+                    badgeColor="gold"
                     ctaButton="Finish tips"
                   />
                   <ContentCard
@@ -123,7 +124,8 @@ export default function Dashboard({ user }: DashboardProps) {
                     title="Fantasy"
                     subtitle="Trades made and team set"
                     statusIndicator="✓ Team Ready"
-                    badge="12,847 pts"
+                    badge="+40 pts"
+                    badgeColor="gold"
                     ctaButton="Check team"
                   />
                 </div>
