@@ -254,3 +254,7 @@ body {
     transform: translateX(100%);
   }
 }
+
+.animate-shine {
+  animation: shine 2s ease-in-out infinite;
+}

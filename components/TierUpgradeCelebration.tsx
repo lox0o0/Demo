@@ -268,11 +268,9 @@ export default function TierUpgradeCelebration({
               >
                 {/* Shine animation */}
                 <div
-                  className="absolute inset-0"
+                  className="absolute inset-0 animate-shine"
                   style={{
                     background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%)',
-                    animation: 'shine 2s ease-in-out infinite',
-                    transform: 'translateX(-100%)',
                   }}
                 />
                 <span className="relative z-10">{newTier.name} Tier</span>
