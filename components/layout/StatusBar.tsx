@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
+import { Gem } from "lucide-react";
 
 interface StatusBarProps {
   user: any;
@@ -69,38 +70,38 @@ export default function StatusBar({ user }: StatusBarProps) {
 
           {/* Progress Bar - Floating Pill with Glass Effect */}
           <div className="flex-1 max-w-md">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-bold text-white">
-                {userPoints} / {nextTier?.minPoints || currentTier.minPoints}
-              </span>
-            </div>
-            {/* Floating Pill Container with Enhanced Glass Effect */}
+            {/* Floating Pill Container */}
             <div 
-              className="bg-transparent backdrop-blur-md border border-white/20 rounded-full py-[8px] px-4 shadow-xl"
+              className="bg-transparent backdrop-blur-md border border-white/20 rounded-full py-[8px] px-4 mx-auto relative w-full max-w-[250px]"
               style={{
                 filter: 'drop-shadow(rgba(0, 0, 0, 0.4) 0px 10px 25px)'
               }}
             >
-              {/* Progress Bar Track */}
-              <div className="flex-1 relative bg-gray-700/50 rounded-full h-4 overflow-hidden border border-gray-600/50 min-w-[240px]">
-                {/* Progress Fill with Gradient */}
-                <div
-                  className="bg-gradient-to-r from-green-500 to-cyan-500 h-4 rounded-full transition-all duration-1000 ease-out relative overflow-hidden"
-                  style={{ width: `${progressPercent}%` }}
-                >
-                  {/* Shine Animation Inside Progress Fill */}
-                  <div 
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                    style={{
-                      animation: 'shimmer 2s ease-in-out infinite',
-                      backgroundSize: '200% 100%',
-                    }}
-                  />
+              <div className="flex items-center gap-3">
+                {/* Current Points with Gem Icon */}
+                <div className="flex items-center gap-1 text-xs text-white font-medium whitespace-nowrap">
+                  <span>{userPoints}</span>
+                  <Gem className="w-3 h-3 text-yellow-400" />
+                </div>
+
+                {/* Progress Bar Track */}
+                <div className="flex-1 relative bg-gray-700/50 rounded-full h-4 overflow-hidden border border-gray-600/50 min-w-[120px] max-w-[160px]">
+                  {/* Progress Fill with Purple-Cyan Gradient */}
+                  <div
+                    className="bg-gradient-to-r from-purple-500 to-cyan-500 h-4 rounded-full transition-all duration-1000 ease-out relative"
+                    style={{ width: `${progressPercent}%` }}
+                  >
+                    {/* Shine Animation Inside Progress Fill */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
+                  </div>
+                </div>
+
+                {/* Target Points with Gem Icon */}
+                <div className="flex items-center gap-1 text-xs text-white font-medium whitespace-nowrap">
+                  <span>{nextTier?.minPoints || currentTier.minPoints}</span>
+                  <Gem className="w-3 h-3 text-yellow-400" />
                 </div>
               </div>
-            </div>
-            <div className="text-xs text-white/80 mt-2 text-center">
-              Points to {nextTier?.name || "Max"} Tier
             </div>
           </div>
         </div>
