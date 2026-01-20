@@ -176,7 +176,7 @@ body {
     transform: translateX(-100%) translateY(-100%) rotate(45deg);
   }
   100% {
-    transform: translateX(100%) translateY(100%) rotate(45deg);
+    transform: translateX(200%) translateY(200%) rotate(45deg);
   }
 }
 
