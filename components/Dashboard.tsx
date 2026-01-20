@@ -40,11 +40,6 @@ export default function Dashboard({ user }: DashboardProps) {
       <div className="flex-1 flex flex-col ml-[70px] mr-[280px] overflow-hidden relative">
         {/* Background Video - only on home section, fixed to viewport */}
         {activeSection === "home" && <BackgroundVideo />}
-        
-        {/* Status Bar - ensure it's above video but doesn't block scrolling */}
-        <div className="relative z-20 mb-4">
-          <StatusBar user={user} />
-        </div>
 
         {/* Scrollable Content - ensure it's above video */}
         <main className="flex-1 overflow-y-auto pl-8 pr-6 py-6 relative z-10" style={{ position: 'relative' }}>

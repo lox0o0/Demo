@@ -154,7 +154,7 @@ export default function HeroCarousel() {
                         {/* Content */}
                         <div className="flex flex-col items-start text-left text-white space-y-3 relative z-10">
                           <h3 className="text-xl font-bold">{slide.headline}</h3>
-                          <p className="text-sm text-white/80 max-w-md">{slide.subtext}</p>
+                          <p className="text-base text-white/80 max-w-md leading-relaxed">{slide.subtext}</p>
                           <button
                             onClick={slide.ctaAction}
                             className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border hover:text-accent-foreground h-10 px-4 py-2 border-white/20 text-white hover:bg-white/10 bg-white/5 backdrop-blur-sm hover:backdrop-blur-md transition-all duration-300"
