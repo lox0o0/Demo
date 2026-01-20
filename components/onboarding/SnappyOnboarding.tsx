@@ -189,6 +189,12 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         nameForCompletion = undefined;
       }
       
+      // For OAuth methods (Google/Apple), count authentication even if we only have placeholder values
+      // This ensures OAuth sign-ins get the 30% bonus they deserve, consistent with handleComplete
+      const shouldIncludeAuthSelection = (selectedAuthMethod === "google" || selectedAuthMethod === "apple") && 
+        (!nameForCompletion || isPlaceholderName(finalName)) && 
+        (!finalEmail || isPlaceholderEmail(finalEmail));
+      
       const userData = {
         name: finalName,
         email: finalEmail,
@@ -201,7 +207,12 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         memberSince: new Date().getFullYear(),
         streak: 0,
         connectedSocials: emptySocials, // Empty array matches the base points calculation
-        profileCompletion: calculateProfileCompletion(emptySocials, nameForCompletion, finalEmail || undefined), // Use finalEmail which includes buildProfileEmail if applicable
+        profileCompletion: calculateProfileCompletion(
+          emptySocials, 
+          nameForCompletion, 
+          finalEmail || undefined,
+          shouldIncludeAuthSelection
+        ), // Use finalEmail which includes buildProfileEmail if applicable, and includeAuthSelection for OAuth
         entryPoint,
         entryData,
       };
