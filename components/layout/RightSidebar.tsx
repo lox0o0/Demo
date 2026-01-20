@@ -1,14 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
-import { Trophy, Star, Ticket, Shirt, Award, Crown, Flame } from "lucide-react";
+import { Trophy, Star, Ticket, Shirt, Award, Crown, Flame, ChevronDown, Copy, Minus } from "lucide-react";
 
 interface RightSidebarProps {
   user: any;
 }
 
 export default function RightSidebar({ user }: RightSidebarProps) {
+  const [activeTab, setActiveTab] = useState<"quests" | "leaderboard" | "achievements">("quests");
+  const [openAccordions, setOpenAccordions] = useState<Set<string>>(new Set(["achievements", "my-quests"]));
+  
   const userPoints = user?.points || 0;
   const teamData = user?.teamData;
   
@@ -18,218 +22,392 @@ export default function RightSidebar({ user }: RightSidebarProps) {
     return userPoints >= t.minPoints && (!nextTier || userPoints < nextTier.minPoints);
   }) || TIERS[0];
 
-  // Get tier color and border style
-  const getTierBorderStyle = () => {
-    switch (currentTier.name) {
-      case "Rookie":
-        return "border-[#2a2a2d] border";
-      case "Bronze":
-        return "border-[#cd7f32] border-[3px]";
-      case "Silver":
-        return "border-[#c0c0c0] border-[3px]";
-      case "Gold":
-        return "border-[#ffd700] border-[3px] shadow-[0_0_10px_rgba(255,215,0,0.3)]";
-      case "Diehard":
-        return "border-[4px] animate-shimmer-border border-[#ef4444]";
-      case "Legend":
-        return "border-[4px] animate-shimmer-legend border-[#8b5cf6]";
-      default:
-        return "border-[#2a2a2d] border";
+  const toggleAccordion = (id: string) => {
+    const newOpen = new Set(openAccordions);
+    if (newOpen.has(id)) {
+      newOpen.delete(id);
+    } else {
+      newOpen.add(id);
     }
+    setOpenAccordions(newOpen);
   };
 
-  // Filter tiers for progress bar (exclude Rookie if user is above it)
-  const visibleTiers = TIERS.filter(t => t.name !== "Rookie" || userPoints < 250);
-  const reversedTiers = [...visibleTiers].reverse();
-  
-  // Calculate progress fill height based on user's position between tiers
-  const calculateFillHeight = () => {
-    if (reversedTiers.length === 0) return 0;
-    
-    // Find current tier and next tier
-    const currentIndex = reversedTiers.findIndex(t => t.name === currentTier.name);
-    if (currentIndex === -1) return 0;
-    
-    const currentTierData = reversedTiers[currentIndex];
-    const nextTierData = reversedTiers[currentIndex - 1]; // Next tier is above (lower index)
-    
-    // Calculate progress within current tier
-    let progressInTier = 0;
-    if (nextTierData) {
-      const tierRange = nextTierData.minPoints - currentTierData.minPoints;
-      const pointsInTier = userPoints - currentTierData.minPoints;
-      progressInTier = tierRange > 0 ? Math.min(pointsInTier / tierRange, 1) : 1;
-    } else {
-      // At max tier, show full
-      progressInTier = 1;
-    }
-    
-    // Calculate fill: completed tiers + progress in current tier
-    const completedTiers = currentIndex;
-    const tierSpacing = 32; // space-y-8 = 2rem = 32px
-    const baseHeight = completedTiers * tierSpacing;
-    const currentTierProgress = progressInTier * tierSpacing;
-    
-    return baseHeight + currentTierProgress;
-  };
-  
-  const filledHeight = calculateFillHeight();
+  // Mock leaderboard data
+  const leaderboardData = [
+    { rank: 1, name: "BroncosFan23", points: 12450, xp: 1250, players: 847 },
+    { rank: 2, name: "QLD4Life", points: 11890, xp: 890, players: 1203 },
+    { rank: 3, name: "MaroonArmy", points: 11200, xp: 675, players: 542 },
+    { rank: 4, name: "StormChaser", points: 10800, xp: 450, players: 892 },
+    { rank: 5, name: user?.name || "You", points: userPoints, xp: 380, players: 234, isUser: true },
+  ];
+
+  // Mock achievements
+  const achievements = [
+    { id: "first-quest", name: "First Quest", icon: "🏆", earned: true },
+    { id: "speed-runner", name: "Speed Runner", icon: "⚡", earned: true },
+    { id: "collector", name: "Collector", icon: "💎", earned: true },
+    { id: "explorer", name: "Explorer", icon: "🗺️", earned: false },
+    { id: "master", name: "Master", icon: "👑", earned: false },
+  ];
+
+  // Mock quest data
+  const questData = [
+    { game: "Broncos Fantasy", position: 3, xp: 1250, players: 847 },
+    { game: "Tipping Challenge", position: 12, xp: 890, players: 1203 },
+    { game: "MVP Predictions", position: 8, xp: 675, players: 542 },
+  ];
 
   return (
-    <aside className="fixed right-0 top-0 bottom-0 w-[280px] bg-[#0a0a0b] border-l border-[#2a2a2d] z-50 overflow-y-auto">
-      <div className="p-6">
-        {/* Profile Header */}
-        <div className="text-center mb-8">
-          <div className={`relative w-20 h-20 mx-auto rounded-full ${getTierBorderStyle()} p-1 mb-3`}>
-            {teamData ? (
-              <div className="w-full h-full rounded-full bg-[#1a1a1d] flex items-center justify-center overflow-hidden">
-                <Image
-                  src={teamData.logoUrl}
-                  alt={teamData.name}
-                  width={64}
-                  height={64}
-                  className="object-contain"
-                  unoptimized
-                />
-              </div>
-            ) : (
-              <div className="w-full h-full rounded-full bg-[#1a1a1d] flex items-center justify-center">
-                <span className="text-2xl font-bold text-white">
-                  {user?.name?.charAt(0) || "F"}
+    <aside className="fixed right-0 top-0 h-full border-l border-white/20 bg-transparent backdrop-blur-md shadow-xl z-30 transition-all duration-300 ease-in-out transform w-80 translate-x-0 overflow-auto">
+      <div className="bg-transparent overflow-auto h-full">
+        <div className="pt-6 bg-transparent">
+          {/* Close Button */}
+          <div className="absolute top-4 right-4 z-10">
+            <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors text-white/80 hover:bg-transparent hover:text-white/80 h-8 w-8 focus:outline-none">
+              <Minus className="h-4 w-4" />
+            </button>
+          </div>
+
+          {/* Profile Header */}
+          <div className="p-4 border-b border-white/10">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                <span className="relative flex shrink-0 overflow-hidden rounded-full w-16 h-16 border border-white/30 shadow-lg cursor-pointer hover:scale-105 transition-transform">
+                  {teamData ? (
+                    <Image
+                      src={teamData.logoUrl}
+                      alt={teamData.name}
+                      width={64}
+                      height={64}
+                      className="aspect-square h-full w-full object-cover"
+                      unoptimized
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                      <span className="text-xl font-bold text-white">
+                        {user?.name?.charAt(0) || "F"}
+                      </span>
+                    </div>
+                  )}
                 </span>
               </div>
-            )}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="flex-1">
+                    <h3 className="text-white font-semibold text-lg">{user?.name || "Fan"}</h3>
+                    <div className="flex items-center gap-2">
+                      <div className="inline-flex items-center rounded-full px-2.5 py-0.5 font-semibold bg-white/20 backdrop-blur-md text-white border border-white/30 text-xs">
+                        {currentTier.name} Tier
+                      </div>
+                      <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors h-6 w-6 text-white/60 hover:text-white hover:bg-white/10">
+                        <Copy className="h-3 w-3" />
+                      </button>
+                    </div>
+                    <div className="space-y-1 mt-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-white/80 text-sm">Current Points:</span>
+                        <span className="text-white font-semibold text-sm font-mono">{userPoints.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="text-white font-semibold mb-1">{user?.name || "Fan"}</div>
-          <div className="flex items-center justify-center gap-1 text-xs font-bold uppercase tracking-wider text-[#a1a1aa]">
-            <Trophy size={12} className="text-white/60" strokeWidth={2} />
-            <span>{currentTier.name.toUpperCase()}</span>
-          </div>
-        </div>
 
-        {/* Vertical Progress Bar */}
-        <div className="mb-8">
-          <div className="text-xs font-bold uppercase tracking-wider text-[#a1a1aa] mb-4">
-            YOUR FAN JOURNEY
-          </div>
-          
-          <div className="relative">
-            {/* Vertical track line (background) */}
-            <div className="absolute left-[20px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#2a2a2d] via-[#f59e0b] to-[#8b5cf6]" />
-            
-            {/* Filled progress gradient up to current position */}
-            {filledHeight > 0 && (
-              <div 
-                className="absolute left-[20px] bottom-0 w-[2px] bg-gradient-to-t from-[#22c55e] via-[#f59e0b] to-[#8b5cf6] transition-all duration-1000"
-                style={{ height: `${filledHeight}px` }}
-              />
-            )}
-            
-            {/* Tier markers */}
-            <div className="relative space-y-8">
-              {reversedTiers.map((tier, idx) => {
-                const isCurrentTier = tier.name === currentTier.name;
-                const isUnlocked = userPoints >= tier.minPoints;
-                const isLegend = tier.name === "Legend";
-                
-                return (
-                  <div key={tier.name} className="relative pl-10">
-                    {/* Diamond marker */}
-                    <div
-                      className={`absolute left-[14px] w-4 h-4 transform rotate-45 ${
-                        isUnlocked ? "bg-[#22c55e]" : "bg-[#2a2a2d]"
-                      } ${isCurrentTier ? "ring-2 ring-[#22c55e] ring-offset-2 ring-offset-[#0a0a0b]" : ""}`}
-                    />
-                    
-                    {/* Tier label */}
-                    <div className="flex items-center justify-between mb-1">
-                      <span className={`text-sm font-bold ${isUnlocked ? "text-white" : "text-[#a1a1aa]"}`}>
-                        {isUnlocked ? "◆" : "◇"} {tier.name.toUpperCase()}
-                      </span>
-                      <span className="text-xs text-[#a1a1aa]">{tier.minPoints.toLocaleString()}</span>
-                    </div>
-                    
-                    {/* Prize description - compact, one line, muted */}
-                    {tier.name === "Silver" && (
-                      <div className="text-[10px] text-[#6b7280] mb-1">NRL / Broncos Hat</div>
+          {/* Tab Navigation */}
+          <div className="px-4">
+            <div className="mt-4">
+              <div role="tablist" className="grid w-full grid-cols-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-md p-1">
+                <button
+                  type="button"
+                  role="tab"
+                  onClick={() => setActiveTab("quests")}
+                  className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium transition-all text-white/80 ${
+                    activeTab === "quests" ? "bg-white/20 text-white shadow-sm" : ""
+                  }`}
+                >
+                  Quests
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  onClick={() => setActiveTab("leaderboard")}
+                  className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium transition-all text-white/80 ${
+                    activeTab === "leaderboard" ? "bg-white/20 text-white shadow-sm" : ""
+                  }`}
+                >
+                  Leaderboard
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  onClick={() => setActiveTab("achievements")}
+                  className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium transition-all text-white/80 ${
+                    activeTab === "achievements" ? "bg-white/20 text-white shadow-sm" : ""
+                  }`}
+                >
+                  Achievements
+                </button>
+              </div>
+
+              {/* Quests Tab Content */}
+              {activeTab === "quests" && (
+                <div className="mt-4 space-y-3">
+                  {/* Weekly Leaderboard Accordion */}
+                  <div className="border-b border-white/20">
+                    <h3 className="flex">
+                      <button
+                        type="button"
+                        onClick={() => toggleAccordion("weekly-leaderboard")}
+                        className="flex flex-1 items-center justify-between font-medium transition-all text-white/80 text-xs hover:text-white hover:font-medium py-2"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Trophy className="w-4 h-4 text-yellow-400" />
+                          <span>Weekly Leaderboard</span>
+                        </div>
+                        <ChevronDown
+                          className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
+                            openAccordions.has("weekly-leaderboard") ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                    </h3>
+                    {openAccordions.has("weekly-leaderboard") && (
+                      <div className="pb-4 pt-2">
+                        <div className="text-white/80 text-xs">Coming soon...</div>
+                      </div>
                     )}
-                    {tier.name === "Gold" && (
-                      <div className="text-[10px] text-[#6b7280] mb-1">Team Jersey</div>
-                    )}
-                    {tier.name === "Platinum" && (
-                      <div className="text-[10px] text-[#6b7280] mb-1">VIP Game Ticket</div>
-                    )}
-                    {tier.name === "Diehard" && (
-                      <div className="text-[10px] text-[#6b7280] mb-1">Signed Team Jersey</div>
-                    )}
-                    
-                    {/* Reward preview icon at tier marker */}
-                    <div className="absolute left-[16px] top-[-4px] w-4 h-4 flex items-center justify-center">
-                      {tier.name === "Bronze" && <Award size={12} className="text-white/60" strokeWidth={2} />}
-                      {tier.name === "Silver" && <Award size={12} className="text-white/60" strokeWidth={2} />}
-                      {tier.name === "Gold" && <Shirt size={12} className="text-white/60" strokeWidth={2} />}
-                      {tier.name === "Platinum" && <Ticket size={12} className="text-white/60" strokeWidth={2} />}
-                      {tier.name === "Diehard" && <Star size={12} className="text-white/60" strokeWidth={2} />}
-                      {tier.name === "Legend" && <Trophy size={12} className="text-white/60" strokeWidth={2} />}
-                    </div>
-                    
-                    {/* Legend tier special callout - Enhanced */}
-                    {isLegend && (
-                      <div className="mt-2 p-3 bg-gradient-to-br from-[#f59e0b]/20 to-[#8b5cf6]/20 border-2 border-[#f59e0b]/50 rounded-lg text-xs relative overflow-hidden">
-                        {/* Golden glow effect */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#f59e0b]/10 to-transparent" />
-                        <div className="relative">
-                          <div className="flex items-center gap-2 mb-1">
-                            <Trophy size={16} className="text-[#f59e0b]" strokeWidth={2} />
-                            <span className="text-[#f59e0b] font-bold">Grand Final Pack</span>
+                  </div>
+
+                  {/* Gems Balance Accordion */}
+                  <div className="border-b border-white/20">
+                    <h3 className="flex">
+                      <button
+                        type="button"
+                        onClick={() => toggleAccordion("gems")}
+                        className="flex flex-1 items-center justify-between font-medium transition-all text-white/80 text-xs hover:text-white hover:font-medium py-2"
+                      >
+                        <div className="flex items-center justify-between w-full mr-4">
+                          <span>Points Balance</span>
+                          <div className="flex items-center gap-1">
+                            <Star className="w-3 h-3 text-white" />
+                            <span className="text-white text-xs">{userPoints.toLocaleString()}</span>
                           </div>
-                          <div className="text-[#a1a1aa] text-[10px] leading-tight">
-                            Flights + Tix + Hotel
+                        </div>
+                        <ChevronDown
+                          className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
+                            openAccordions.has("gems") ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                    </h3>
+                    {openAccordions.has("gems") && (
+                      <div className="pb-4 pt-2">
+                        <div className="text-white/80 text-xs">Total points earned this season</div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Achievements Accordion */}
+                  <div className="border-b border-white/20">
+                    <h3 className="flex">
+                      <button
+                        type="button"
+                        onClick={() => toggleAccordion("achievements")}
+                        className="flex flex-1 items-center justify-between font-medium transition-all text-white/80 text-xs hover:text-white hover:font-medium py-2"
+                      >
+                        Achievements
+                        <ChevronDown
+                          className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
+                            openAccordions.has("achievements") ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                    </h3>
+                    {openAccordions.has("achievements") && (
+                      <div className="pb-4 pt-2">
+                        <div className="flex justify-between gap-2">
+                          {achievements.map((achievement) => (
+                            <div key={achievement.id} className="flex flex-col items-center gap-1">
+                              <div
+                                className={`w-10 h-10 rounded-full flex items-center justify-center text-lg border-2 ${
+                                  achievement.earned
+                                    ? "border-yellow-400/50 bg-yellow-400/10 text-yellow-400"
+                                    : "border-white/20 bg-white/5 text-white/40"
+                                }`}
+                              >
+                                {achievement.icon}
+                              </div>
+                              <span
+                                className={`text-xs text-center leading-tight ${
+                                  achievement.earned ? "text-white/80" : "text-white/40"
+                                }`}
+                              >
+                                {achievement.name}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* My Quests Accordion */}
+                  <div className="border-b border-white/20">
+                    <h3 className="flex">
+                      <button
+                        type="button"
+                        onClick={() => toggleAccordion("my-quests")}
+                        className="flex flex-1 items-center justify-between font-medium transition-all text-white/80 text-xs hover:text-white py-2"
+                      >
+                        My Quests
+                        <ChevronDown
+                          className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
+                            openAccordions.has("my-quests") ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                    </h3>
+                    {openAccordions.has("my-quests") && (
+                      <div className="pb-4 pt-2">
+                        <div className="relative overflow-auto h-[400px] w-full">
+                          <div className="h-full w-full rounded-[inherit] overflow-hidden scroll">
+                            <div className="relative w-full overflow-auto">
+                              <table className="w-full caption-bottom text-sm">
+                                <thead className="[&_tr]:border-b">
+                                  <tr className="border-b transition-colors hover:bg-white/5 border-white/20">
+                                    <th className="h-12 px-4 text-left align-middle font-medium text-white/80 text-xs">
+                                      Game
+                                    </th>
+                                    <th className="h-12 px-4 align-middle font-medium text-white/80 text-xs text-right">
+                                      Position
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody className="[&_tr:last-child]:border-0">
+                                  {questData.map((quest, idx) => (
+                                    <tr
+                                      key={idx}
+                                      className="border-b transition-colors border-white/10 hover:bg-white/5"
+                                    >
+                                      <td className="p-4 align-middle py-3">
+                                        <div className="flex items-center gap-2">
+                                          <div className="w-9 h-9 rounded flex items-center justify-center flex-shrink-0 overflow-hidden bg-white/10">
+                                            <Trophy className="w-5 h-5 text-yellow-400" />
+                                          </div>
+                                          <div className="min-w-0">
+                                            <div className="text-xs font-medium truncate text-white">
+                                              {quest.game}
+                                            </div>
+                                            <div className="text-white/60 text-xs flex items-center gap-1">
+                                              <Star className="w-2.5 h-2.5" />
+                                              {quest.xp} XP
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </td>
+                                      <td className="p-4 align-middle text-right py-3">
+                                        <div className="text-xs font-medium text-white">#{quest.position}</div>
+                                        <div className="text-white/60 text-xs flex items-center justify-end gap-1">
+                                          <span>{quest.players} players</span>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
                         </div>
                       </div>
                     )}
-                    
-                    {/* Current position indicator */}
-                    {isCurrentTier && (
-                      <div className="mt-2 p-2 bg-[#1a1a1d] border-2 border-[#22c55e] rounded text-xs animate-pulse-glow">
-                        <div className="text-[#22c55e] font-semibold mb-1">▲ YOU ARE HERE</div>
-                        <div className="text-white font-bold">{userPoints.toLocaleString()} pts</div>
-                      </div>
-                    )}
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+                </div>
+              )}
 
-        {/* Quick Stats */}
-        <div className="space-y-4 pt-4 border-t border-[#2a2a2d]">
-          <div>
-            <div className="text-xs text-[#a1a1aa] mb-1">Overall Points</div>
-            <div className="text-2xl font-bold text-white">{userPoints.toLocaleString()}</div>
-          </div>
-          {(user?.streak && user.streak > 0) ? (
-            <div>
-              <div className="text-xs text-[#a1a1aa] mb-1">Current Streak</div>
-              <div className="flex items-center gap-1 text-lg font-semibold text-[#f59e0b]">
-                <Flame size={18} className="text-[#f59e0b]" strokeWidth={2} />
-                <span>{user.streak} {user.streak === 1 ? "week" : "weeks"}</span>
-              </div>
+              {/* Leaderboard Tab Content */}
+              {activeTab === "leaderboard" && (
+                <div className="mt-4">
+                  <div className="relative overflow-auto h-[500px] w-full">
+                    <div className="h-full w-full rounded-[inherit] overflow-hidden scroll">
+                      <div className="relative w-full overflow-auto">
+                        <table className="w-full caption-bottom text-sm">
+                          <thead className="[&_tr]:border-b">
+                            <tr className="border-b transition-colors hover:bg-white/5 border-white/20">
+                              <th className="h-12 px-4 text-left align-middle font-medium text-white/80 text-xs">
+                                Rank
+                              </th>
+                              <th className="h-12 px-4 text-left align-middle font-medium text-white/80 text-xs">
+                                Fan
+                              </th>
+                              <th className="h-12 px-4 align-middle font-medium text-white/80 text-xs text-right">
+                                Points
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="[&_tr:last-child]:border-0">
+                            {leaderboardData.map((entry) => (
+                              <tr
+                                key={entry.rank}
+                                className={`border-b transition-colors border-white/10 hover:bg-white/5 ${
+                                  entry.isUser ? "bg-white/5" : ""
+                                }`}
+                              >
+                                <td className="p-4 align-middle py-3">
+                                  <div className="text-xs font-medium text-white">#{entry.rank}</div>
+                                </td>
+                                <td className="p-4 align-middle py-3">
+                                  <div className="text-xs font-medium text-white">{entry.name}</div>
+                                  {entry.isUser && (
+                                    <div className="text-white/60 text-xs">You</div>
+                                  )}
+                                </td>
+                                <td className="p-4 align-middle text-right py-3">
+                                  <div className="text-xs font-medium text-white">
+                                    {entry.points.toLocaleString()}
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Achievements Tab Content */}
+              {activeTab === "achievements" && (
+                <div className="mt-4 space-y-3">
+                  <div className="pb-4 pt-2">
+                    <div className="flex justify-between gap-2 flex-wrap">
+                      {achievements.map((achievement) => (
+                        <div key={achievement.id} className="flex flex-col items-center gap-1">
+                          <div
+                            className={`w-10 h-10 rounded-full flex items-center justify-center text-lg border-2 ${
+                              achievement.earned
+                                ? "border-yellow-400/50 bg-yellow-400/10 text-yellow-400"
+                                : "border-white/20 bg-white/5 text-white/40"
+                            }`}
+                          >
+                            {achievement.icon}
+                          </div>
+                          <span
+                            className={`text-xs text-center leading-tight ${
+                              achievement.earned ? "text-white/80" : "text-white/40"
+                            }`}
+                          >
+                            {achievement.name}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-          ) : (
-            <div>
-              <div className="text-xs text-[#a1a1aa] mb-1">Start Your Streak</div>
-              <div className="flex items-center gap-1 text-sm font-semibold text-[#22c55e]">
-                <Flame size={16} className="text-[#22c55e]" strokeWidth={2} />
-                <span>Complete an activity this week!</span>
-              </div>
-            </div>
-          )}
-          <div>
-            <div className="text-xs text-[#a1a1aa] mb-1">Leaderboard Position</div>
-            <div className="text-lg font-semibold text-white">#847 overall</div>
           </div>
         </div>
       </div>
