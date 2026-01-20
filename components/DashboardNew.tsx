@@ -2175,7 +2175,7 @@ function FantasyCard({ teamData }: any) {
 }
 
 // Section A: Weekly Activities for Points
-function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, setHighlightProfileCompletion, onTierUpgrade }: { user: any; highlightProfileCompletion?: boolean; setHighlightProfileCompletion?: (value: boolean) => void; onTierUpgrade?: (oldTier: any, newTier: any) => void }) {
+function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, setHighlightProfileCompletion, onTierUpgrade }: { user: any; highlightProfileCompletion?: boolean; setHighlightProfileCompletion?: (value: boolean) => void; onTierUpgrade?: (oldTier: any, newTier: any, startPoints?: number) => void }) {
   const [expandedMission, setExpandedMission] = useState<number | null>(null);
   const [selectedTeam, setSelectedTeam] = useState("");
   const [selectedLastRoundPlayer, setSelectedLastRoundPlayer] = useState("");
