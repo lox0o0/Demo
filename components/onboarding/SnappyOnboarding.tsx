@@ -825,15 +825,22 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
           backgroundSize: isBroncos ? 'cover' : 'auto',
           backgroundPosition: isBroncos ? 'center' : 'auto',
           backgroundBlendMode: isBroncos ? 'overlay' : 'normal',
-          filter: 'brightness(0.92)', // Darken background images 8% for modal clarity
+          filter: 'brightness(0.85)', // Darken background more for better text readability
         }}
       >
+        {/* Darker overlay for better readability */}
+        <div className="absolute inset-0 bg-black/40 z-0" />
+        
         <div className="w-full max-w-2xl relative z-10">
-          <div className="glass-strong rounded-2xl p-6 border border-white/10 shadow-2xl">
-            <ProgressStepper currentStep={3} />
+          <div className="glass-strong rounded-2xl p-6 border border-white/10 shadow-2xl" style={{
+            backgroundColor: 'rgba(10, 10, 10, 0.95)', // Stronger background for better contrast
+          }}>
+            <div className="mb-2">
+              <ProgressStepper currentStep={3} />
+            </div>
             {/* Header */}
-            <div className="text-center mb-4">
-              <div className="relative w-20 h-20 mx-auto mb-3">
+            <div className="text-center mb-3">
+              <div className="relative w-16 h-16 mx-auto mb-2">
                 <Image
                   src={selectedTeam.logoUrl}
                   alt={selectedTeam.name}
@@ -842,21 +849,21 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                   unoptimized
                 />
               </div>
-              <h2 className="text-2xl font-black text-white mb-1">
+              <h2 className="text-xl font-black text-white mb-0.5" style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.8)' }}>
                 Welcome to {selectedTeam.name}!
               </h2>
-              <p className="text-white/70 text-sm">
+              <p className="text-white/90 text-sm" style={{ textShadow: '0 1px 4px rgba(0, 0, 0, 0.6)' }}>
                 Connect your socials for bonus points
               </p>
             </div>
 
             {/* Profile Completion & Vegas Draw - Moved to top */}
-            <div className="mb-4 glass rounded-xl p-4 border border-white/10">
+            <div className="mb-4 glass rounded-xl p-4 border border-white/10" style={{ backgroundColor: 'rgba(20, 20, 20, 0.8)' }}>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-semibold text-white/90 uppercase tracking-wider">
+                <span className="text-xs font-semibold text-white uppercase tracking-wider" style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.5)' }}>
                   Profile Completion
                 </span>
-                <span className="text-lg font-bold text-emerald-400">{profileCompletion}%</span>
+                <span className="text-lg font-bold text-emerald-300" style={{ textShadow: '0 0 8px rgba(16, 185, 129, 0.5)' }}>{profileCompletion}%</span>
               </div>
               <div className="w-full bg-white/5 rounded-full h-2 mb-3">
                 <div
@@ -896,7 +903,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
 
             {/* Profile Name */}
             <div className="mb-4">
-              <label className="block text-xs font-semibold text-white/80 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-white uppercase tracking-wider mb-1.5" style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.5)' }}>
                 Profile Name
               </label>
               <input
@@ -915,7 +922,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
 
             {/* Sign-in Options */}
             <div className="mb-4">
-              <h3 className="text-xs font-semibold text-white/80 uppercase tracking-wider mb-3">
+              <h3 className="text-xs font-semibold text-white uppercase tracking-wider mb-3" style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.5)' }}>
                 Sign In
               </h3>
               <div className="grid grid-cols-3 gap-2.5">
@@ -932,7 +939,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                     <div className="w-10 h-10 flex items-center justify-center rounded-full bg-neutral-800 hover:bg-neutral-700 transition-all duration-200">
                       <AuthIcon provider="google" size={24} />
                     </div>
-                    <div className="text-[10px] font-semibold text-white/90">Google</div>
+                    <div className="text-[10px] font-semibold text-white">Google</div>
                     {selectedAuthMethod === "google" && (
                       <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-emerald-400 flex items-center justify-center">
                         <span className="text-white text-[10px]">✓</span>
@@ -1020,7 +1027,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
 
             {/* Social Connection */}
             <div className="mb-4">
-              <h3 className="text-xs font-semibold text-white/80 uppercase tracking-wider mb-3">
+              <h3 className="text-xs font-semibold text-white uppercase tracking-wider mb-3" style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.5)' }}>
                 Connect Social Accounts
               </h3>
               <div className="grid grid-cols-2 gap-2.5">
@@ -1059,12 +1066,12 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
             </div>
 
             {/* Points Summary */}
-            <div className="glass rounded-lg p-3 mb-4 border border-white/10">
+            <div className="glass rounded-lg p-3 mb-4 border border-white/10" style={{ backgroundColor: 'rgba(20, 20, 20, 0.8)' }}>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-white/70">Total Points</span>
-                <span className="text-xl font-black text-emerald-400">{totalPoints}</span>
+                <span className="text-xs text-white/90" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)' }}>Total Points</span>
+                <span className="text-xl font-black text-emerald-300" style={{ textShadow: '0 0 10px rgba(16, 185, 129, 0.5)' }}>{totalPoints}</span>
               </div>
-              <div className="space-y-0.5 text-[10px] text-white/60">
+              <div className="space-y-0.5 text-[10px] text-white/80">
                 <div className="flex justify-between">
                   <span>Welcome bonus</span>
                   <span className="text-emerald-400">+50 pts</span>
