@@ -336,13 +336,27 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                     {tier.minPoints.toLocaleString()} pts
                   </div>
                   
-                  {/* Prize Row */}
-                  <div className={`flex items-center gap-1.5 text-[10px] ${
-                    isReached ? "text-white/80" : "text-white/50"
-                  }`}>
-                    {getRewardIcon(tier.name)}
-                    <span>{tier.reward || tier.access}</span>
-                  </div>
+                  {/* Prize Row - Enhanced for current tier */}
+                  {isCurrentTier ? (
+                    <div className="flex items-center gap-2 text-sm font-bold text-yellow-300 mt-2 px-3 py-2 bg-gradient-to-r from-yellow-400/20 via-amber-400/20 to-yellow-400/20 border border-yellow-400/50 rounded-lg"
+                      style={{
+                        boxShadow: '0 0 20px rgba(251, 191, 36, 0.6), 0 0 40px rgba(251, 191, 36, 0.3)',
+                        filter: 'drop-shadow(0 0 8px rgba(251, 191, 36, 0.8))',
+                      }}
+                    >
+                      <div style={{ filter: 'drop-shadow(0 0 6px rgba(251, 191, 36, 0.8))' }}>
+                        {getRewardIcon(tier.name)}
+                      </div>
+                      <span className="text-yellow-200">{tier.reward || tier.access}</span>
+                    </div>
+                  ) : (
+                    <div className={`flex items-center gap-1.5 text-[10px] ${
+                      isReached ? "text-white/80" : "text-white/50"
+                    }`}>
+                      {getRewardIcon(tier.name)}
+                      <span>{tier.reward || tier.access}</span>
+                    </div>
+                  )}
                   
                   {/* Legend tier special callout */}
                   {tier.name === "Legend" && (
