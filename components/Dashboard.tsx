@@ -114,7 +114,6 @@ export default function Dashboard({ user }: DashboardProps) {
                     image="/images/cards/tipping.jpeg"
                     title="Tipping"
                     subtitle="Tips made for upcoming weekend fixtures"
-                    progressRing={{ current: 6, total: 8 }}
                     badge="+35 pts"
                     badgeColor="gold"
                     ctaButton="Finish tips"
@@ -123,7 +122,6 @@ export default function Dashboard({ user }: DashboardProps) {
                     image="/images/cards/fantasy-team.jpg"
                     title="Fantasy"
                     subtitle="Trades made and team set"
-                    statusIndicator="✓ Team Ready"
                     badge="+40 pts"
                     badgeColor="gold"
                     ctaButton="Check team"
