@@ -2301,6 +2301,22 @@ function WeeklyActivitiesSection({ user }: { user: any }) {
     }
   };
 
+  // Track scroll position to update current card index
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const cardWidth = 280 + 16;
+      const scrollLeft = container.scrollLeft;
+      const newIndex = Math.round(scrollLeft / cardWidth);
+      setCurrentCardIndex(Math.max(0, Math.min(missions.length - 1, newIndex)));
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [missions.length]);
+
   return (
     <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-6">
       {/* Section Header with Completion Bar */}
