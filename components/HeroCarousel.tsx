@@ -127,7 +127,7 @@ export default function HeroCarousel() {
                   className="min-w-0 shrink-0 grow-0 opacity-100 visible h-full"
                   style={{ width: `${100 / slides.length}%` }}
                 >
-                  <div className="p-2 bg-gradient-to-br from-white/20 to-white/10 rounded-lg backdrop-blur-sm border border-white/30 group hover:scale-105 transition-transform duration-500 ease-out hover:shadow-2xl hover:shadow-cyan-500/10 cursor-pointer w-full h-full">
+                  <div className="p-2 bg-gradient-to-br from-white/10 to-white/5 rounded-lg backdrop-blur-sm border border-white/20 group hover:scale-105 transition-transform duration-500 ease-out hover:shadow-2xl hover:shadow-cyan-500/10 cursor-pointer w-full h-full">
                     <div className="rounded-lg text-card-foreground shadow-sm relative border-0 cursor-pointer h-full bg-transparent overflow-visible">
                       <div className="p-0 h-full relative overflow-hidden rounded-lg">
                         {/* Hover Shine Effect */}
