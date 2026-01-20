@@ -81,7 +81,6 @@ export default function Dashboard({ user }: DashboardProps) {
                     badgeColor="gold"
                     ctaButton="Get Started →"
                     ctaStyle="wide"
-                    backgroundSize="90%"
                   />
                   <ContentCard
                     image="/images/cards/tipping.jpg"
