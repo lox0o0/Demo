@@ -1794,7 +1794,7 @@ function PrizeWheelCard({ streakData, teamData }: any) {
             {/* Spin Button - Most Prominent CTA */}
             <button
               onClick={() => setShowWheel(true)}
-              className="w-full bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 text-white font-bold py-4 rounded-xl hover:from-orange-600 hover:via-red-600 hover:to-orange-600 transition-all transform hover:scale-[1.02] hover:shadow-lg hover:shadow-orange-500/50 text-lg mb-4 relative overflow-hidden group"
+              className="w-full bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 text-white font-bold py-4 rounded-xl hover:from-orange-600 hover:via-red-600 hover:to-orange-600 transition-all transform hover:scale-[1.02] hover:shadow-lg hover:shadow-orange-500/50 text-lg mb-4 relative overflow-hidden group flex items-center justify-center"
               style={{
                 backgroundSize: "200% 100%",
                 animation: "shimmer 3s infinite"
