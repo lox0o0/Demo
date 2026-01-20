@@ -254,6 +254,11 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
             const { isReached, isCurrentTier } = getTierStatus(tier);
             const tierColor = tierColors[tier.name] || "#6b7280";
             
+            // Find next unlockable tier (first tier after current that's not reached)
+            const currentTierIndex = TIERS.findIndex(t => t.name === currentTier.name);
+            const isNextUnlockable = !isReached && !isCurrentTier && index === currentTierIndex + 1;
+            const isLegend = tier.name === "Legend";
+            
             return (
               <div key={tier.name} className="flex items-start gap-4 relative">
                 {/* Tier Marker - centered on the progress line (at 16px from parent container left) */}
@@ -270,7 +275,7 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                   <div
                     className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                       isCurrentTier ? "animate-pulse-glow" : ""
-                    }`}
+                    } ${isLegend && !isReached ? "animate-pulse" : ""}`}
                     style={
                       isReached
                         ? {
@@ -280,6 +285,14 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                               ? `0 0 16px ${tierColor}, 0 0 24px ${tierColor}80`
                               : `0 0 4px ${tierColor}60`,
                           }
+                        : isLegend
+                        ? {
+                            borderColor: "#FFB800",
+                            backgroundColor: "transparent",
+                            boxShadow: "0 0 12px rgba(255, 184, 0, 0.6)",
+                            background: "linear-gradient(45deg, rgba(255, 184, 0, 0.2), rgba(255, 215, 0, 0.2))",
+                            backgroundClip: "padding-box",
+                          }
                         : {
                             borderColor: "#6b7280",
                             backgroundColor: "transparent",
@@ -288,7 +301,7 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                   >
                     {isReached ? (
                       <Star 
-                        className="w-3 h-3 text-white" 
+                        className="w-4 h-4 text-white" 
                         fill="white"
                         style={{ filter: 'drop-shadow(0 0 2px rgba(0,0,0,0.5))' }}
                       />
@@ -296,21 +309,28 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                       <div className="w-2 h-2 rounded-full bg-gray-500" />
                     )}
                   </div>
+                  {/* Legend tier animated gradient border */}
+                  {isLegend && !isReached && (
+                    <div 
+                      className="absolute inset-0 rounded-full border-2"
+                      style={{
+                        borderImage: "linear-gradient(45deg, #FFB800, #FFD700, #FFB800) 1",
+                        borderImageSlice: 1,
+                        animation: "spin 3s linear infinite",
+                        filter: "blur(1px)",
+                        opacity: 0.6,
+                      }}
+                    />
+                  )}
                 </div>
 
                 {/* Tier Info - properly spaced, no overlap */}
-                <div className="flex-1 min-w-0">
+                <div className={`flex-1 min-w-0 ${isNextUnlockable ? "bg-white/5 rounded-lg px-3 py-2 border border-white/20" : ""}`}>
                   {/* Tier Name Row */}
                   <div className="flex items-center gap-2 mb-2">
                     <span
                       className="text-xs font-bold uppercase"
-                      style={
-                        isCurrentTier
-                          ? { color: tierColor }
-                          : isReached
-                          ? { color: tierColor }
-                          : { color: "#9ca3af" }
-                      }
+                      style={{ color: tierColor }} // Always use tier color
                     >
                       {tier.name}
                     </span>
@@ -327,6 +347,20 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                         }}
                       >
                         YOU ARE HERE
+                      </div>
+                    )}
+                    {isNextUnlockable && (
+                      <div 
+                        className="px-2 py-0.5 rounded text-[10px] font-semibold"
+                        style={{
+                          backgroundColor: "rgba(34, 197, 94, 0.2)",
+                          borderColor: "rgba(34, 197, 94, 0.5)",
+                          borderWidth: "1px",
+                          borderStyle: "solid",
+                          color: "#22c55e",
+                        }}
+                      >
+                        UP NEXT
                       </div>
                     )}
                   </div>
@@ -358,15 +392,53 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                     </div>
                   )}
                   
-                  {/* Legend tier special callout */}
-                  {tier.name === "Legend" && (
-                    <div className="mt-3 px-2 py-1.5 bg-gradient-to-r from-yellow-400/20 via-amber-400/20 to-yellow-400/20 border border-yellow-400/40 rounded text-[10px]">
-                      <div className="flex items-center gap-1.5 mb-1">
+                  {/* Legend tier special callout with sparkle effect */}
+                  {isLegend && (
+                    <div 
+                      className="mt-3 px-3 py-2 bg-gradient-to-r from-yellow-400/20 via-amber-400/20 to-yellow-400/20 border-2 border-yellow-400/60 rounded-lg relative overflow-hidden"
+                      style={{
+                        boxShadow: isReached 
+                          ? "0 0 20px rgba(255, 184, 0, 0.6), 0 0 40px rgba(255, 184, 0, 0.3), inset 0 0 20px rgba(255, 184, 0, 0.1)"
+                          : "0 0 12px rgba(255, 184, 0, 0.4)",
+                        animation: "pulse 2s ease-in-out infinite",
+                      }}
+                    >
+                      {/* Animated gradient border effect */}
+                      <div 
+                        className="absolute inset-0 rounded-lg opacity-50"
+                        style={{
+                          background: "linear-gradient(45deg, transparent, rgba(255, 184, 0, 0.3), transparent)",
+                          backgroundSize: "200% 200%",
+                          animation: "shimmer 3s ease-in-out infinite",
+                        }}
+                      />
+                      {/* Sparkle effect overlay */}
+                      {!isReached && (
+                        <div className="absolute inset-0 opacity-40 pointer-events-none">
+                          <Sparkles 
+                            className="absolute top-1 left-2 w-2 h-2 text-yellow-300 animate-pulse" 
+                            style={{ animationDelay: '0s' }}
+                          />
+                          <Sparkles 
+                            className="absolute top-3 right-4 w-1.5 h-1.5 text-yellow-200 animate-pulse" 
+                            style={{ animationDelay: '0.5s' }}
+                          />
+                          <Sparkles 
+                            className="absolute bottom-2 left-1/2 w-2 h-2 text-amber-300 animate-pulse" 
+                            style={{ animationDelay: '1s' }}
+                          />
+                          <Sparkles 
+                            className="absolute top-1/2 right-2 w-1.5 h-1.5 text-yellow-300 animate-pulse" 
+                            style={{ animationDelay: '1.5s' }}
+                          />
+                        </div>
+                      )}
+                      <div className="flex items-center gap-1.5 mb-1 relative z-10">
                         <Plane className="w-3 h-3 text-yellow-300" />
                         <Hotel className="w-3 h-3 text-yellow-300" />
                         <Ticket className="w-3 h-3 text-yellow-300" />
                       </div>
-                      <div className="text-yellow-200 font-semibold">
+                      <div className="text-yellow-200 font-semibold text-xs relative z-10">
                         Complete VIP Experience
                       </div>
                     </div>
