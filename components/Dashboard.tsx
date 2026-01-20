@@ -50,49 +50,7 @@ export default function Dashboard({ user }: DashboardProps) {
                 <HeroCarousel />
               </section>
 
-              {/* SECTION 1: ACTIVITIES */}
-              <section>
-                <SectionHeader
-                  icon={
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                    </svg>
-                  }
-                  title="ACTIVITIES"
-                  seeAllLink="#"
-                />
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  <ContentCard
-                    image="/images/cards/predictions.jpg"
-                    title="Predictions"
-                    subtitle="Round 6 Telstra MVP prediction made"
-                    badge="+50 pts"
-                    badgeColor="gold"
-                    ctaButton="View your pick"
-                    completed={true}
-                  />
-                  <ContentCard
-                    image="/images/cards/profile-upgade.jpg"
-                    title="Upgrade your profile"
-                    subtitle="Complete profile data to earn points!"
-                    progressPercent={30}
-                    badge="+45 pts"
-                    badgeColor="gold"
-                    ctaButton="Complete profile data"
-                  />
-                  <ContentCard
-                    image="/images/cards/prize-wheel.png"
-                    title="Prize Wheel"
-                    subtitle="Spin to win exclusive rewards"
-                    badge="+60 pts"
-                    badgeColor="gold"
-                    ctaButton="Spin Now →"
-                    ctaStyle="centered"
-                  />
-                </div>
-              </section>
-
-              {/* SECTION 2: FANTASY & TIPPING */}
+              {/* SECTION 1: FANTASY & TIPPING */}
               <section>
                 <SectionHeader
                   icon={
@@ -133,6 +91,48 @@ export default function Dashboard({ user }: DashboardProps) {
                     badge="+40 pts"
                     badgeColor="gold"
                     ctaButton="Check team"
+                  />
+                </div>
+              </section>
+
+              {/* SECTION 2: ACTIVITIES */}
+              <section>
+                <SectionHeader
+                  icon={
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                    </svg>
+                  }
+                  title="ACTIVITIES"
+                  seeAllLink="#"
+                />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <ContentCard
+                    image="/images/cards/predictions.jpg"
+                    title="Predictions"
+                    subtitle="Round 6 Telstra MVP prediction made"
+                    badge="+50 pts"
+                    badgeColor="gold"
+                    ctaButton="View your pick"
+                    completed={true}
+                  />
+                  <ContentCard
+                    image="/images/cards/profile-upgade.jpg"
+                    title="Upgrade your profile"
+                    subtitle="Complete profile data to earn points!"
+                    progressPercent={30}
+                    badge="+45 pts"
+                    badgeColor="gold"
+                    ctaButton="Complete profile data"
+                  />
+                  <ContentCard
+                    image="/images/cards/prize-wheel.png"
+                    title="Prize Wheel"
+                    subtitle="Spin to win exclusive rewards"
+                    badge="+60 pts"
+                    badgeColor="gold"
+                    ctaButton="Spin Now →"
+                    ctaStyle="centered"
                   />
                 </div>
               </section>
