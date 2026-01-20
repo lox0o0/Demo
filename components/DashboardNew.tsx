@@ -804,219 +804,330 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
   // Get all teams for dropdown
   const allTeams = NRL_TEAMS.map(t => t.name);
 
+  // Mission data with status, progress, urgency
+  const missions = [
+    {
+      id: 1,
+      type: "tipping",
+      icon: "📋",
+      iconColor: "bg-blue-500/20 text-blue-400",
+      title: "Tips made for weekend fixtures",
+      points: "+50",
+      completed: false,
+      progress: { current: 6, total: 8 },
+      urgency: null,
+    },
+    {
+      id: 2,
+      type: "fantasy",
+      icon: "👕",
+      iconColor: "bg-purple-500/20 text-purple-400",
+      title: "Team set and trades made for Fantasy",
+      points: "+30",
+      completed: true,
+      progress: null,
+      urgency: null,
+    },
+    {
+      id: 3,
+      type: "mvp",
+      icon: "🏆",
+      iconColor: "bg-yellow-500/20 text-yellow-400",
+      title: "Vote for MVP of last round",
+      points: "+25",
+      completed: false,
+      progress: null,
+      urgency: null,
+    },
+    {
+      id: 4,
+      type: "prediction",
+      icon: "🔮",
+      iconColor: "bg-pink-500/20 text-pink-400",
+      title: "Telstra Tuesday MVP Predict",
+      points: "+25",
+      completed: false,
+      progress: null,
+      urgency: "4h left", // Time-sensitive
+    },
+    {
+      id: 5,
+      type: "prediction",
+      icon: "🔮",
+      iconColor: "bg-pink-500/20 text-pink-400",
+      title: "Most dominant team prediction",
+      points: "+25",
+      completed: false,
+      progress: null,
+      urgency: null,
+    },
+  ];
+
+  // Sort missions: urgent first, then incomplete, then completed, then locked
+  const sortedMissions = [...missions].sort((a, b) => {
+    if (a.urgency && !b.urgency) return -1;
+    if (!a.urgency && b.urgency) return 1;
+    if (a.completed && !b.completed) return 1;
+    if (!a.completed && b.completed) return -1;
+    return 0;
+  });
+
   return (
     <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
-      <h3 className="text-lg font-bold text-white mb-4">Weekly Activities</h3>
+      <h3 className="text-lg font-bold text-white mb-4">This Week's Missions</h3>
       <div className="space-y-3">
-        {/* Tips made for weekend fixture */}
-        <ActivityButton 
-          title="Tips made for weekend fixtures"
-          points="+50"
-          completed={false}
-        />
-
-        {/* Team set and trades made for Fantasy */}
-        <ActivityButton 
-          title="Team set and trades made for Fantasy"
-          points="+30"
-          completed={false}
-        />
-
-        {/* Vote for MVP of last round fixtures */}
-        <div className="bg-nrl-dark-hover border border-nrl-border-light rounded-xl p-4">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <div className="text-sm font-semibold text-white">Vote for MVP of last round</div>
-              <div className="text-xs text-nrl-text-secondary">Who was the best player last round?</div>
-            </div>
-            <button
-              onClick={() => setShowLastRoundMVP(!showLastRoundMVP)}
-              className="px-3 py-1 bg-nrl-green text-white text-xs font-semibold rounded-lg hover:bg-nrl-green/90"
-            >
-              {showLastRoundMVP ? "Hide" : "Vote Now"}
-            </button>
-          </div>
+        {sortedMissions.map((mission) => {
+          const isExpanded = 
+            (mission.id === 3 && showLastRoundMVP) ||
+            (mission.id === 4 && showNextWeekMVP) ||
+            (mission.id === 5 && showDominantTeam);
           
-          {showLastRoundMVP && (
-            <div className="space-y-3 mt-3">
-              <div className="text-xs font-bold text-nrl-text-secondary mb-2">ROUND 5 MVP</div>
-              <div className="text-xs text-nrl-text-secondary mb-3">Who was the best player this round?</div>
-              
-              {/* Player Search */}
-              <input
-                type="text"
-                placeholder="Search player..."
-                value={playerSearchLastRound}
-                onChange={(e) => setPlayerSearchLastRound(e.target.value)}
-                className="w-full bg-nrl-dark-card border border-nrl-border-light rounded-lg px-3 py-2 text-sm text-white placeholder-nrl-text-muted focus:outline-none focus:border-nrl-green"
+          return (
+            <div key={mission.id}>
+              <MissionCard
+                mission={mission}
+                onExpand={() => {
+                  if (mission.id === 3) setShowLastRoundMVP(!showLastRoundMVP);
+                  if (mission.id === 4) setShowNextWeekMVP(!showNextWeekMVP);
+                  if (mission.id === 5) setShowDominantTeam(!showDominantTeam);
+                }}
+                isExpanded={isExpanded}
               />
               
-              {/* Player Options */}
-              <div className="space-y-2 max-h-48 overflow-y-auto">
-                {filteredPlayersLastRound.map((player) => (
-                  <button
-                    key={player.id}
-                    onClick={() => setSelectedLastRoundPlayer(player.name)}
-                    className={`w-full bg-nrl-dark-card border rounded-lg p-3 text-left transition-colors ${
-                      selectedLastRoundPlayer === player.name 
-                        ? 'border-nrl-green bg-nrl-green/10' 
-                        : 'border-nrl-border-light hover:border-nrl-green'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-nrl-dark-hover flex items-center justify-center text-lg">
-                        {player.photo}
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-sm font-semibold text-white">{player.name}</div>
-                        <div className="text-xs text-nrl-text-secondary">{player.stats}</div>
-                      </div>
-                      {selectedLastRoundPlayer === player.name && (
-                        <span className="text-nrl-green">✓</span>
-                      )}
-                    </div>
-                  </button>
-                ))}
-              </div>
-              
-              {selectedLastRoundPlayer && (
-                <div className="mt-3 pt-3 border-t border-nrl-border-light">
-                  <div className="text-xs text-nrl-text-secondary mb-2">
-                    +10 Fuel • +25 pts
+              {/* Expandable content for MVP voting */}
+              {mission.id === 3 && isExpanded && (
+                <div className="mt-2 ml-13 pt-3 border-t border-nrl-border-light space-y-3 bg-nrl-dark-card rounded-lg p-3">
+                  <div className="text-xs font-bold text-nrl-text-secondary mb-2">ROUND 5 MVP</div>
+                  <div className="text-xs text-nrl-text-secondary mb-3">Who was the best player this round?</div>
+                  
+                  <input
+                    type="text"
+                    placeholder="Search player..."
+                    value={playerSearchLastRound}
+                    onChange={(e) => setPlayerSearchLastRound(e.target.value)}
+                    className="w-full bg-nrl-dark-hover border border-nrl-border-light rounded-lg px-3 py-2 text-sm text-white placeholder-nrl-text-muted focus:outline-none focus:border-nrl-green"
+                  />
+                  
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {filteredPlayersLastRound.map((player) => (
+                      <button
+                        key={player.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedLastRoundPlayer(player.name);
+                        }}
+                        className={`w-full bg-nrl-dark-hover border rounded-lg p-3 text-left transition-colors ${
+                          selectedLastRoundPlayer === player.name 
+                            ? 'border-nrl-green bg-nrl-green/10' 
+                            : 'border-nrl-border-light hover:border-nrl-green'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-nrl-dark-card flex items-center justify-center text-lg">
+                            {player.photo}
+                          </div>
+                          <div className="flex-1">
+                            <div className="text-sm font-semibold text-white">{player.name}</div>
+                            <div className="text-xs text-nrl-text-secondary">{player.stats}</div>
+                          </div>
+                          {selectedLastRoundPlayer === player.name && (
+                            <span className="text-nrl-green">✓</span>
+                          )}
+                        </div>
+                      </button>
+                    ))}
                   </div>
-                  <div className="text-xs text-nrl-text-muted">
-                    Winner announced: Wednesday 12pm
+                  
+                  {selectedLastRoundPlayer && (
+                    <div className="pt-3 border-t border-nrl-border-light">
+                      <div className="text-xs text-nrl-text-secondary mb-2">
+                        +10 Fuel • +25 pts
+                      </div>
+                      <div className="text-xs text-nrl-text-muted">
+                        Winner announced: Wednesday 12pm
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Expandable content for Telstra Tuesday MVP Predict */}
+              {mission.id === 4 && isExpanded && (
+                <div className="mt-2 ml-13 pt-3 border-t border-nrl-border-light space-y-3 bg-nrl-dark-card rounded-lg p-3">
+                  <div className="text-xs font-bold text-nrl-text-secondary mb-2">ROUND 6 MVP PREDICTION</div>
+                  <div className="text-xs text-nrl-text-secondary mb-3">Who will be the best player next round?</div>
+                  
+                  <input
+                    type="text"
+                    placeholder="Search player..."
+                    value={playerSearchNextWeek}
+                    onChange={(e) => setPlayerSearchNextWeek(e.target.value)}
+                    className="w-full bg-nrl-dark-hover border border-nrl-border-light rounded-lg px-3 py-2 text-sm text-white placeholder-nrl-text-muted focus:outline-none focus:border-nrl-green"
+                  />
+                  
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {filteredPlayersNextWeek.map((player) => (
+                      <button
+                        key={player.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedNextWeekPlayer(player.name);
+                        }}
+                        className={`w-full bg-nrl-dark-hover border rounded-lg p-3 text-left transition-colors ${
+                          selectedNextWeekPlayer === player.name 
+                            ? 'border-nrl-green bg-nrl-green/10' 
+                            : 'border-nrl-border-light hover:border-nrl-green'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-nrl-dark-card flex items-center justify-center text-lg">
+                            {player.photo}
+                          </div>
+                          <div className="flex-1">
+                            <div className="text-sm font-semibold text-white">{player.name}</div>
+                          </div>
+                          {selectedNextWeekPlayer === player.name && (
+                            <span className="text-nrl-green">✓</span>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                  
+                  {selectedNextWeekPlayer && (
+                    <div className="pt-3 border-t border-nrl-border-light">
+                      <div className="text-xs text-nrl-text-secondary mb-2">
+                        +10 Fuel • +25 pts
+                      </div>
+                      <div className="text-xs text-nrl-text-muted">
+                        Prediction locked until next round
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Expandable content for Most dominant team prediction */}
+              {mission.id === 5 && isExpanded && (
+                <div className="mt-2 ml-13 pt-3 border-t border-nrl-border-light space-y-3 bg-nrl-dark-card rounded-lg p-3">
+                  <select
+                    value={selectedTeam}
+                    onChange={(e) => setSelectedTeam(e.target.value)}
+                    className="w-full bg-nrl-dark-hover border border-nrl-border-light rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-nrl-green"
+                  >
+                    <option value="">Select a team...</option>
+                    {allTeams.map((teamName) => (
+                      <option key={teamName} value={teamName}>{teamName}</option>
+                    ))}
+                  </select>
+                  
+                  {selectedTeam && (
+                    <div className="pt-3 border-t border-nrl-border-light">
+                      <div className="text-xs text-nrl-text-secondary mb-2">
+                        +10 Fuel • +25 pts
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="pt-3 border-t border-nrl-border-light">
+                    <div className="text-xs font-semibold text-white mb-2">Current Voting Results:</div>
+                    <div className="space-y-2">
+                      {teamVotes.map((team) => (
+                        <div key={team.name} className="flex items-center gap-2">
+                          <div className="w-20 text-xs text-nrl-text-secondary">{team.name}</div>
+                          <div className="flex-1 bg-nrl-dark-hover rounded-full h-2">
+                            <div
+                              className="h-2 rounded-full bg-nrl-green"
+                              style={{ width: `${team.percentage}%` }}
+                            />
+                          </div>
+                          <div className="w-10 text-xs text-nrl-text-secondary text-right">{team.percentage}%</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
             </div>
-          )}
+          );
+        })}
+
+      </div>
+    </div>
+  );
+}
+
+// Mission Card Component
+function MissionCard({ mission, onExpand, isExpanded }: { 
+  mission: any; 
+  onExpand: () => void; 
+  isExpanded: boolean;
+}) {
+  const progressPercent = mission.progress 
+    ? (mission.progress.current / mission.progress.total) * 100 
+    : null;
+
+  return (
+    <div
+      className={`group relative bg-nrl-dark-hover border rounded-xl p-4 transition-all duration-200 cursor-pointer ${
+        mission.completed 
+          ? 'border-nrl-green/30 bg-nrl-green/5 opacity-75' 
+          : mission.urgency
+          ? 'border-orange-500/50 hover:border-orange-500 hover:shadow-lg hover:shadow-orange-500/20 hover:-translate-y-0.5'
+          : 'border-nrl-border-light hover:border-nrl-green hover:shadow-lg hover:shadow-nrl-green/20 hover:-translate-y-0.5'
+      }`}
+      onClick={onExpand}
+    >
+      <div className="flex items-start gap-3">
+        {/* Icon */}
+        <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-xl ${mission.iconColor}`}>
+          {mission.icon}
         </div>
 
-        {/* Telstra Tuesday MVP Predict (next week) */}
-        <div className="bg-nrl-dark-hover border border-nrl-border-light rounded-xl p-4">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <div className="text-sm font-semibold text-white">Telstra Tuesday MVP Predict</div>
-              <div className="text-xs text-nrl-text-secondary">Predict best player of next week's fixtures</div>
-            </div>
-            <button
-              onClick={() => setShowNextWeekMVP(!showNextWeekMVP)}
-              className="px-3 py-1 bg-nrl-green text-white text-xs font-semibold rounded-lg hover:bg-nrl-green/90"
-            >
-              {showNextWeekMVP ? "Hide" : "Predict"}
-            </button>
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2 mb-1">
+            <h4 className={`text-sm font-semibold ${
+              mission.completed 
+                ? 'text-nrl-text-muted line-through' 
+                : 'text-white'
+            }`}>
+              {mission.completed && <span className="text-nrl-green mr-2">✓</span>}
+              {mission.title}
+            </h4>
+            
+            {/* Points - Prominent */}
+            <span className={`text-sm font-bold whitespace-nowrap ${
+              mission.completed ? 'text-nrl-text-muted' : 'text-nrl-green'
+            }`}>
+              {mission.points}
+            </span>
           </div>
-          
-          {showNextWeekMVP && (
-            <div className="space-y-3 mt-3">
-              <div className="text-xs font-bold text-nrl-text-secondary mb-2">ROUND 6 MVP PREDICTION</div>
-              <div className="text-xs text-nrl-text-secondary mb-3">Who will be the best player next round?</div>
-              
-              {/* Player Search */}
-              <input
-                type="text"
-                placeholder="Search player..."
-                value={playerSearchNextWeek}
-                onChange={(e) => setPlayerSearchNextWeek(e.target.value)}
-                className="w-full bg-nrl-dark-card border border-nrl-border-light rounded-lg px-3 py-2 text-sm text-white placeholder-nrl-text-muted focus:outline-none focus:border-nrl-green"
-              />
-              
-              {/* Player Options */}
-              <div className="space-y-2 max-h-48 overflow-y-auto">
-                {filteredPlayersNextWeek.map((player) => (
-                  <button
-                    key={player.id}
-                    onClick={() => setSelectedNextWeekPlayer(player.name)}
-                    className={`w-full bg-nrl-dark-card border rounded-lg p-3 text-left transition-colors ${
-                      selectedNextWeekPlayer === player.name 
-                        ? 'border-nrl-green bg-nrl-green/10' 
-                        : 'border-nrl-border-light hover:border-nrl-green'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-nrl-dark-hover flex items-center justify-center text-lg">
-                        {player.photo}
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-sm font-semibold text-white">{player.name}</div>
-                      </div>
-                      {selectedNextWeekPlayer === player.name && (
-                        <span className="text-nrl-green">✓</span>
-                      )}
-                    </div>
-                  </button>
-                ))}
+
+          {/* Progress Bar */}
+          {progressPercent !== null && (
+            <div className="mt-2">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs text-nrl-text-secondary">
+                  {mission.progress.current}/{mission.progress.total} complete
+                </span>
+                <span className="text-xs text-nrl-text-secondary">
+                  {Math.round(progressPercent)}%
+                </span>
               </div>
-              
-              {selectedNextWeekPlayer && (
-                <div className="mt-3 pt-3 border-t border-nrl-border-light">
-                  <div className="text-xs text-nrl-text-secondary mb-2">
-                    +10 Fuel • +25 pts
-                  </div>
-                  <div className="text-xs text-nrl-text-muted">
-                    Prediction locked until next round
-                  </div>
-                </div>
-              )}
+              <div className="w-full bg-nrl-dark-card rounded-full h-1.5">
+                <div
+                  className="h-1.5 rounded-full bg-gradient-to-r from-nrl-green to-nrl-amber transition-all duration-500"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
             </div>
           )}
-        </div>
 
-        {/* Most dominant team prediction */}
-        <div className="bg-nrl-dark-hover border border-nrl-border-light rounded-xl p-4">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <div className="text-sm font-semibold text-white">Most dominant team prediction</div>
-              <div className="text-xs text-nrl-text-secondary">Predict most dominant team of next week's fixtures</div>
-            </div>
-            <button
-              onClick={() => setShowDominantTeam(!showDominantTeam)}
-              className="px-3 py-1 bg-nrl-green text-white text-xs font-semibold rounded-lg hover:bg-nrl-green/90"
-            >
-              {showDominantTeam ? "Hide" : "Vote"}
-            </button>
-          </div>
-          
-          {showDominantTeam && (
-            <div className="space-y-3 mt-3">
-              <select
-                value={selectedTeam}
-                onChange={(e) => setSelectedTeam(e.target.value)}
-                className="w-full bg-nrl-dark-card border border-nrl-border-light rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-nrl-green"
-              >
-                <option value="">Select a team...</option>
-                {allTeams.map((teamName) => (
-                  <option key={teamName} value={teamName}>{teamName}</option>
-                ))}
-              </select>
-              
-              {selectedTeam && (
-                <div className="mt-3 pt-3 border-t border-nrl-border-light">
-                  <div className="text-xs text-nrl-text-secondary mb-2">
-                    +10 Fuel • +25 pts
-                  </div>
-                </div>
-              )}
-              
-              {/* Voting Results */}
-              <div className="mt-3 pt-3 border-t border-nrl-border-light">
-                <div className="text-xs font-semibold text-white mb-2">Current Voting Results:</div>
-                <div className="space-y-2">
-                  {teamVotes.map((team) => (
-                    <div key={team.name} className="flex items-center gap-2">
-                      <div className="w-20 text-xs text-nrl-text-secondary">{team.name}</div>
-                      <div className="flex-1 bg-nrl-dark-card rounded-full h-2">
-                        <div
-                          className="h-2 rounded-full bg-nrl-green"
-                          style={{ width: `${team.percentage}%` }}
-                        />
-                      </div>
-                      <div className="w-10 text-xs text-nrl-text-secondary text-right">{team.percentage}%</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+          {/* Urgency Badge */}
+          {mission.urgency && (
+            <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 bg-orange-500/20 border border-orange-500/50 rounded-full animate-pulse">
+              <span className="text-xs font-bold text-orange-400">{mission.urgency}</span>
             </div>
           )}
         </div>
