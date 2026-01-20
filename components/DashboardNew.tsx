@@ -5,7 +5,12 @@ import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
 import { NRL_TEAMS } from "@/lib/data/teams";
 import Navigation, { NavSection } from "./Navigation";
-import { generateMockStreakData, getFlameEmoji, getFlameLevelName, type StreakData } from "@/lib/streakData";
+import { generateMockStreakData, getFlameLevelName, type StreakData } from "@/lib/streakData";
+import { 
+  List, Shirt, Trophy, Clock, Star, Flame, Ticket, Gift, Coins, 
+  CircleDot, Lock, Check, Circle, HelpCircle, User, Sparkles, 
+  TrendingUp, Calendar, Award, Crown
+} from "lucide-react";
 
 interface DashboardProps {
   user: any;
@@ -123,7 +128,7 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
 // Streak Celebration Hero Zone
 function StreakHeroZone({ streakData, user }: { streakData: StreakData; user: any }) {
   const streakWeeks = streakData.fanStreak.currentWeeks;
-  const flameEmoji = getFlameEmoji(streakData.currentWeek.flameLevel);
+  const flameLevel = streakData.currentWeek.flameLevel;
   
   // Calculate percentile messaging
   const getPercentileMessage = (weeks: number): string => {
@@ -140,6 +145,15 @@ function StreakHeroZone({ streakData, user }: { streakData: StreakData; user: an
     ? Math.max(0, Math.min(100, ((streakWeeks / nextMilestone.weeks) * 100)))
     : 100;
 
+  // Get flame icon size based on level
+  const getFlameIconSize = () => {
+    if (flameLevel === 'inferno') return 48;
+    if (flameLevel === 'blazing') return 40;
+    if (flameLevel === 'burning') return 32;
+    if (flameLevel === 'lit') return 24;
+    return 20;
+  };
+
   return (
     <div className="relative bg-gradient-to-r from-[#1a1a1d] via-[#2a1a1d] to-[#1a1a1d] rounded-2xl p-8 border border-[#f59e0b]/20 overflow-hidden">
       {/* Subtle glow effect */}
@@ -149,8 +163,8 @@ function StreakHeroZone({ streakData, user }: { streakData: StreakData; user: an
         {/* Left: Streak Number */}
         <div className="flex-1 text-center md:text-left">
           <div className="flex items-center justify-center md:justify-start gap-4 mb-4">
-            <div className="text-6xl md:text-7xl animate-pulse">
-              {flameEmoji}
+            <div className="animate-pulse">
+              <Flame size={getFlameIconSize()} className="text-[#f59e0b]" strokeWidth={2} />
             </div>
             <div>
               <div className="text-7xl md:text-8xl font-bold text-white mb-2 leading-none">
@@ -234,7 +248,7 @@ function StatusCard({ tier, points, progressPercent, pointsToNext, nextTier, str
             className="w-10 h-10 rounded-full border-2 flex items-center justify-center"
             style={{ borderColor: tier.color }}
           >
-            <span className="text-lg">⭐</span>
+            <Star size={20} className="text-white/70" fill="currentColor" strokeWidth={2} />
           </div>
           <span 
             className="text-sm font-bold uppercase"
@@ -247,7 +261,7 @@ function StatusCard({ tier, points, progressPercent, pointsToNext, nextTier, str
         {/* Streak in profile card */}
         {streak > 0 && (
           <div className="flex items-center gap-2">
-            <span className="text-xl">🔥</span>
+            <Flame size={20} className="text-nrl-amber" strokeWidth={2} />
             <span className="text-sm font-bold text-nrl-amber">{streak}</span>
           </div>
         )}
@@ -293,7 +307,7 @@ function StatusCard({ tier, points, progressPercent, pointsToNext, nextTier, str
 
       {/* Benefit Preview */}
       <div className="flex items-center gap-2 text-xs text-nrl-text-muted">
-        <span>🔒</span>
+        <Lock size={16} className="text-white/60" strokeWidth={2} />
         <span>{nextTier.name} unlocks: {nextTier.access || nextTier.reward}</span>
       </div>
     </div>
@@ -303,7 +317,7 @@ function StatusCard({ tier, points, progressPercent, pointsToNext, nextTier, str
 // Streak Card Component
 function StreakCard({ streakData, teamData }: { streakData: StreakData; teamData: any }) {
   const [showWheel, setShowWheel] = useState(false);
-  const flameEmoji = getFlameEmoji(streakData.currentWeek.flameLevel);
+  const flameLevel = streakData.currentWeek.flameLevel;
   const flameName = getFlameLevelName(streakData.currentWeek.flameLevel);
   const fuelPercent = Math.min((streakData.currentWeek.fuel / 300) * 100, 100); // Cap at 300 for Inferno
   const fuelToNext = streakData.currentWeek.flameLevel === 'inferno' 
@@ -316,12 +330,22 @@ function StreakCard({ streakData, teamData }: { streakData: StreakData; teamData
     ? 150 - streakData.currentWeek.fuel
     : 100 - streakData.currentWeek.fuel;
 
+  const getFlameSize = () => {
+    if (flameLevel === 'inferno') return 32;
+    if (flameLevel === 'blazing') return 28;
+    if (flameLevel === 'burning') return 24;
+    if (flameLevel === 'lit') return 20;
+    return 16;
+  };
+
   return (
     <>
       <div className="bg-nrl-dark-card rounded-2xl p-6 border border-nrl-border-light">
         {/* Flame and Streak Count */}
         <div className="text-center mb-4">
-          <div className="text-4xl mb-2">{flameEmoji}</div>
+          <div className="flex justify-center mb-2">
+            <Flame size={getFlameSize()} className="text-[#f59e0b]" strokeWidth={2} />
+          </div>
           <div className="text-3xl font-bold text-white mb-1">
             {streakData.fanStreak.currentWeeks}
           </div>
@@ -359,19 +383,31 @@ function StreakCard({ streakData, teamData }: { streakData: StreakData; teamData
           </div>
           <div className="grid grid-cols-2 gap-3 text-xs">
             <div>
-              <div className="text-nrl-text-muted mb-1">💰 Points Multiplier</div>
+              <div className="flex items-center gap-1 text-nrl-text-muted mb-1">
+                <Coins size={14} className="text-white/60" strokeWidth={2} />
+                <span>Points Multiplier</span>
+              </div>
               <div className="font-bold text-white">{streakData.benefits.pointsMultiplier}x</div>
             </div>
             <div>
-              <div className="text-nrl-text-muted mb-1">🎁 Weekly Bonus</div>
+              <div className="flex items-center gap-1 text-nrl-text-muted mb-1">
+                <Gift size={14} className="text-white/60" strokeWidth={2} />
+                <span>Weekly Bonus</span>
+              </div>
               <div className="font-bold text-white">+{streakData.benefits.weeklyBonus} pts</div>
             </div>
             <div>
-              <div className="text-nrl-text-muted mb-1">🎰 Spins Available</div>
+              <div className="flex items-center gap-1 text-nrl-text-muted mb-1">
+                <CircleDot size={14} className="text-white/60" strokeWidth={2} />
+                <span>Spins Available</span>
+              </div>
               <div className="font-bold text-white">{streakData.spins.available}</div>
             </div>
             <div>
-              <div className="text-nrl-text-muted mb-1">🛡️ Shields</div>
+              <div className="flex items-center gap-1 text-nrl-text-muted mb-1">
+                <Award size={14} className="text-white/60" strokeWidth={2} />
+                <span>Shields</span>
+              </div>
               <div className="font-bold text-white">{streakData.shields.available}/{streakData.shields.maxCapacity}</div>
             </div>
           </div>
@@ -383,7 +419,10 @@ function StreakCard({ streakData, teamData }: { streakData: StreakData; teamData
             onClick={() => setShowWheel(true)}
             className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 rounded-xl hover:from-orange-600 hover:to-red-600 transition-all transform hover:scale-[1.02] mb-3"
           >
-            🎰 SPIN THE WHEEL ({streakData.spins.available} left)
+            <span className="flex items-center gap-2 justify-center">
+              <CircleDot size={18} className="text-white" strokeWidth={2} />
+              SPIN THE WHEEL ({streakData.spins.available} left)
+            </span>
           </button>
         )}
 
@@ -491,12 +530,15 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-white">🎁 Weekly Prize Wheel</h2>
+          <div className="flex items-center gap-2">
+            <Gift size={24} className="text-white/70" strokeWidth={2} />
+            <h2 className="text-2xl font-bold text-white">Weekly Prize Wheel</h2>
+          </div>
           <button
             onClick={onClose}
-            className="text-white/60 hover:text-white transition-colors text-2xl leading-none"
+            className="text-white/60 hover:text-white transition-colors"
           >
-            ✕
+            <span className="text-2xl leading-none">×</span>
           </button>
         </div>
 
@@ -599,7 +641,7 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
 
         {/* Spins Remaining - Bottom Overlay */}
         <div className="bg-black/80 rounded-xl px-6 py-4 flex items-center justify-center gap-3 mb-6">
-          <div className="text-2xl animate-spin">🎰</div>
+          <CircleDot size={24} className="text-white/70 animate-spin" strokeWidth={2} />
           <div className="text-white font-semibold">
             Spins Remaining • <span className="text-nrl-green">{spinsRemaining}</span>
           </div>
@@ -608,9 +650,16 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
         {/* Prize Won Display */}
         {prizeWon && !isSpinning && (
           <div className="bg-gradient-to-br from-nrl-green/30 to-nrl-amber/30 border-2 border-nrl-green rounded-xl p-6 mb-4 text-center animate-pulse">
-            <div className="text-5xl mb-3">🎉</div>
+            <div className="flex justify-center mb-3">
+              <Sparkles size={48} className="text-nrl-green" strokeWidth={2} />
+            </div>
             <div className="text-2xl font-bold text-white mb-2">YOU WON!</div>
-            <div className="text-4xl mb-3">{prizeWon.icon}</div>
+            <div className="flex justify-center mb-3">
+              {prizeWon.name.includes('Points') && <Coins size={32} className="text-nrl-green" strokeWidth={2} />}
+              {prizeWon.name.includes('Ticket') && <Ticket size={32} className="text-nrl-green" strokeWidth={2} />}
+              {prizeWon.name.includes('Voucher') && <Gift size={32} className="text-nrl-green" strokeWidth={2} />}
+              {!prizeWon.name.includes('Points') && !prizeWon.name.includes('Ticket') && !prizeWon.name.includes('Voucher') && <Award size={32} className="text-nrl-green" strokeWidth={2} />}
+            </div>
             <div className="text-xl font-semibold text-nrl-green mb-2">{prizeWon.name}</div>
             {prizeWon.sponsor && (
               <div className="text-sm text-nrl-text-muted mb-4">Sponsored by {prizeWon.sponsor}</div>
@@ -647,7 +696,10 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
 
         {!prizeWon && spinsRemaining === 0 && (
           <div className="text-center text-nrl-text-secondary">
-            <div className="text-sm font-semibold mb-2">✓ All spins used this week</div>
+            <div className="flex items-center gap-2 text-sm font-semibold mb-2">
+              <Check size={16} className="text-nrl-green" strokeWidth={2} />
+              <span>All spins used this week</span>
+            </div>
             <button
               onClick={onClose}
               className="px-6 py-2 bg-nrl-dark-hover border border-nrl-border-light text-white font-bold rounded-lg hover:border-nrl-green transition-all"
@@ -776,11 +828,11 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
 
   // Mock players for MVP search
   const players = [
-    { id: 1, name: "Nathan Cleary", stats: "2 tries, 6 goals", photo: "👤" },
-    { id: 2, name: "Reece Walsh", stats: "3 try assists", photo: "👤" },
-    { id: 3, name: "Jahrome Hughes", stats: "250m, 2 linebreaks", photo: "👤" },
-    { id: 4, name: "Kalyn Ponga", stats: "1 try, 4 goals", photo: "👤" },
-    { id: 5, name: "Cameron Munster", stats: "2 tries, 1 assist", photo: "👤" },
+    { id: 1, name: "Nathan Cleary", stats: "2 tries, 6 goals" },
+    { id: 2, name: "Reece Walsh", stats: "3 try assists" },
+    { id: 3, name: "Jahrome Hughes", stats: "250m, 2 linebreaks" },
+    { id: 4, name: "Kalyn Ponga", stats: "1 try, 4 goals" },
+    { id: 5, name: "Cameron Munster", stats: "2 tries, 1 assist" },
   ];
 
   const filteredPlayersLastRound = players.filter(p => 
@@ -808,8 +860,8 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
     {
       id: 1,
       type: "tipping",
-      icon: "📋",
-      iconColor: "bg-blue-500/20 text-blue-400",
+      iconComponent: List,
+      iconColor: "bg-blue-500/20",
       title: "Tips made for weekend fixtures",
       points: "+50",
       completed: false,
@@ -819,8 +871,8 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
     {
       id: 2,
       type: "fantasy",
-      icon: "👕",
-      iconColor: "bg-purple-500/20 text-purple-400",
+      iconComponent: TrendingUp,
+      iconColor: "bg-purple-500/20",
       title: "Team set and trades made for Fantasy",
       points: "+30",
       completed: true,
@@ -830,8 +882,8 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
     {
       id: 3,
       type: "mvp",
-      icon: "🏆",
-      iconColor: "bg-yellow-500/20 text-yellow-400",
+      iconComponent: User,
+      iconColor: "bg-yellow-500/20",
       title: "Vote for MVP of last round",
       points: "+25",
       completed: false,
@@ -841,8 +893,8 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
     {
       id: 4,
       type: "prediction",
-      icon: "🔮",
-      iconColor: "bg-pink-500/20 text-pink-400",
+      iconComponent: Clock,
+      iconColor: "bg-pink-500/20",
       title: "Telstra Tuesday MVP Predict",
       points: "+25",
       completed: false,
@@ -852,8 +904,8 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
     {
       id: 5,
       type: "prediction",
-      icon: "🔮",
-      iconColor: "bg-pink-500/20 text-pink-400",
+      iconComponent: Calendar,
+      iconColor: "bg-pink-500/20",
       title: "Most dominant team prediction",
       points: "+25",
       completed: false,
@@ -930,7 +982,7 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
                             <div className="text-xs text-nrl-text-secondary">{player.stats}</div>
                           </div>
                           {selectedLastRoundPlayer === player.name && (
-                            <span className="text-nrl-green">✓</span>
+                            <Check size={16} className="text-nrl-green" strokeWidth={2} />
                           )}
                         </div>
                       </button>
@@ -979,14 +1031,14 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-nrl-dark-card flex items-center justify-center text-lg">
-                            {player.photo}
+                          <div className="w-10 h-10 rounded-full bg-nrl-dark-card flex items-center justify-center">
+                            <User size={20} className="text-white/60" strokeWidth={2} />
                           </div>
                           <div className="flex-1">
                             <div className="text-sm font-semibold text-white">{player.name}</div>
                           </div>
                           {selectedNextWeekPlayer === player.name && (
-                            <span className="text-nrl-green">✓</span>
+                            <Check size={16} className="text-nrl-green" strokeWidth={2} />
                           )}
                         </div>
                       </button>
@@ -1079,8 +1131,14 @@ function MissionCard({ mission, onExpand, isExpanded }: {
     >
       <div className="flex items-start gap-3">
         {/* Icon */}
-        <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-xl ${mission.iconColor}`}>
-          {mission.icon}
+        <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center ${mission.iconColor}`}>
+          {mission.iconComponent && (
+            <mission.iconComponent 
+              size={20} 
+              className={mission.urgency ? "text-orange-400" : mission.completed ? "text-white/40" : "text-white/70"} 
+              strokeWidth={2} 
+            />
+          )}
         </div>
 
         {/* Content */}
@@ -1091,7 +1149,9 @@ function MissionCard({ mission, onExpand, isExpanded }: {
                 ? 'text-nrl-text-muted line-through' 
                 : 'text-white'
             }`}>
-              {mission.completed && <span className="text-nrl-green mr-2">✓</span>}
+              {mission.completed && (
+                <Check size={16} className="text-nrl-green mr-2 inline" strokeWidth={2} />
+              )}
               {mission.title}
             </h4>
             
@@ -1144,7 +1204,7 @@ function ActivityButton({ title, points, completed }: { title: string; points: s
     }`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          {completed && <span className="text-nrl-green">✓</span>}
+          {completed && <Check size={16} className="text-nrl-green" strokeWidth={2} />}
           <span className="text-sm font-semibold text-white">{title}</span>
         </div>
         <span className="text-xs font-bold text-nrl-green">{points}</span>
@@ -1208,12 +1268,12 @@ function YourSeasonCard({ tier, points, progressPercent, pointsToNext, nextTier,
   
   // All possible badges
   const allBadges = [
-    { id: "i-was-there", name: "I Was There", icon: "🎟️", earned: true, description: "Attended 5+ games this season" },
-    { id: "dedicated", name: "Dedicated", icon: "🔥", earned: true, description: "Maintained a 10+ week streak" },
-    { id: "top-fan", name: "Top Fan", icon: "⭐", earned: true, description: "Reached top 15% of team fans" },
-    { id: "prediction-master", name: "Prediction Master", icon: "🔮", earned: false, description: "Made 20+ accurate predictions" },
-    { id: "tipping-champion", name: "Tipping Champion", icon: "🏆", earned: false, description: "Won 3+ tipping rounds" },
-    { id: "fantasy-legend", name: "Fantasy Legend", icon: "👑", earned: false, description: "Top 100 in Fantasy league" },
+    { id: "i-was-there", name: "I Was There", iconComponent: Ticket, earned: true, description: "Attended 5+ games this season" },
+    { id: "dedicated", name: "Dedicated", iconComponent: Flame, earned: true, description: "Maintained a 10+ week streak" },
+    { id: "top-fan", name: "Top Fan", iconComponent: Star, earned: true, description: "Reached top 15% of team fans" },
+    { id: "prediction-master", name: "Prediction Master", iconComponent: Clock, earned: false, description: "Made 20+ accurate predictions" },
+    { id: "tipping-champion", name: "Tipping Champion", iconComponent: Trophy, earned: false, description: "Won 3+ tipping rounds" },
+    { id: "fantasy-legend", name: "Fantasy Legend", iconComponent: Crown, earned: false, description: "Top 100 in Fantasy league" },
   ];
 
   const earnedBadges = allBadges.filter(b => b.earned);
@@ -1237,7 +1297,7 @@ function YourSeasonCard({ tier, points, progressPercent, pointsToNext, nextTier,
               background: `linear-gradient(135deg, ${tier.color}80 0%, transparent 50%, ${tier.color}40 100%)`
             }}
           />
-          <span className="text-4xl relative z-10">⭐</span>
+          <Star size={32} className="text-white/70 relative z-10" fill="currentColor" strokeWidth={2} />
         </div>
         <div 
           className="text-xl font-bold uppercase tracking-wider"
@@ -1332,7 +1392,11 @@ function YourSeasonCard({ tier, points, progressPercent, pointsToNext, nextTier,
                 onMouseLeave={() => setHoveredBadge(null)}
               >
                 <div className="bg-nrl-dark-hover rounded-xl p-3 text-center border-2 border-nrl-green/50 hover:border-nrl-green transition-all cursor-pointer">
-                  <div className="text-3xl mb-2">{badge.icon}</div>
+                  <div className="flex justify-center mb-2">
+                    {badge.iconComponent && (
+                      <badge.iconComponent size={24} className="text-nrl-green" strokeWidth={2} />
+                    )}
+                  </div>
                   <div className="text-xs font-semibold text-white">{badge.name}</div>
                 </div>
                 
@@ -1355,7 +1419,13 @@ function YourSeasonCard({ tier, points, progressPercent, pointsToNext, nextTier,
                 onMouseLeave={() => setHoveredBadge(null)}
               >
                 <div className="bg-nrl-dark-hover rounded-xl p-3 text-center border-2 border-nrl-border-light opacity-40">
-                  <div className="text-3xl mb-2 filter grayscale">❓</div>
+                  <div className="flex justify-center mb-2">
+                    {badge.iconComponent ? (
+                      <badge.iconComponent size={24} className="text-white/30" strokeWidth={2} />
+                    ) : (
+                      <HelpCircle size={24} className="text-white/30" strokeWidth={2} />
+                    )}
+                  </div>
                   <div className="text-xs font-semibold text-nrl-text-muted">Locked</div>
                 </div>
                 
@@ -1413,7 +1483,7 @@ function LeaderboardsCard({ user, teamData, userPoints }: any) {
           <div className={`flex items-center gap-1 px-2 py-1 rounded-full bg-nrl-green/20 ${
             userPosition?.movement === "up" ? "text-nrl-green" : "text-nrl-text-muted"
           }`}>
-            {userPosition?.movement === "up" && <span className="text-sm">🔥</span>}
+            {userPosition?.movement === "up" && <Flame size={14} className="text-nrl-green" strokeWidth={2} />}
             <span className="text-xs font-bold">{userPosition?.change}</span>
           </div>
         </div>
@@ -1514,7 +1584,7 @@ function LeaderboardsCard({ user, teamData, userPoints }: any) {
           {topClimbers.map((climber, idx) => (
             <div key={idx} className="flex items-center justify-between py-2 px-3 bg-nrl-dark-hover rounded-lg border border-nrl-border-light">
               <div className="flex items-center gap-2">
-                <span className="text-nrl-green text-lg">🔥</span>
+                <Flame size={16} className="text-nrl-green" strokeWidth={2} />
                 <span className="text-sm font-semibold text-white">{climber.name}</span>
               </div>
               <span className="text-xs font-bold text-nrl-green">{climber.change}</span>
@@ -1577,9 +1647,9 @@ function ProfileCompletionSimplified({ user, profileCompletion }: any) {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 {activity.completed ? (
-                  <span className="text-nrl-green">✓</span>
+                  <Check size={16} className="text-nrl-green" strokeWidth={2} />
                 ) : (
-                  <span className="text-nrl-text-muted">○</span>
+                  <Circle size={16} className="text-white/40" strokeWidth={2} />
                 )}
                 <span className={`text-sm font-semibold ${activity.completed ? 'text-white' : 'text-nrl-text-secondary'}`}>
                   {activity.label}
@@ -1627,7 +1697,7 @@ function TiersRewardsCard({ currentTier, userPoints }: any) {
             >
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2">
-                  {isUnlocked && <span className="text-nrl-green">✓</span>}
+                  {isUnlocked && <Check size={16} className="text-nrl-green" strokeWidth={2} />}
                   <span className={`text-sm font-semibold ${isUnlocked ? 'text-white' : 'text-nrl-text-secondary'}`}>
                     {tier.name} tier
                   </span>
@@ -1697,10 +1767,10 @@ function PrizeWheelCard({ streakData, teamData }: any) {
 
   // Prize preview icons
   const prizeIcons = [
-    { icon: "🎟️", label: "Tickets" },
-    { icon: "🎁", label: "Vouchers" },
-    { icon: "🪙", label: "Points" },
-    { icon: "👕", label: "Merch" },
+    { iconComponent: Ticket, label: "Tickets" },
+    { iconComponent: Gift, label: "Vouchers" },
+    { iconComponent: Coins, label: "Points" },
+    { iconComponent: Shirt, label: "Merch" },
   ];
 
   // Recent wins feed
@@ -1734,7 +1804,11 @@ function PrizeWheelCard({ streakData, teamData }: any) {
             <div className="grid grid-cols-4 gap-2 mb-4">
               {prizeIcons.map((prize, idx) => (
                 <div key={idx} className="bg-nrl-dark-hover rounded-lg p-2 text-center border border-nrl-border-light">
-                  <div className="text-2xl mb-1">{prize.icon}</div>
+                  <div className="flex justify-center mb-1">
+                    {prize.iconComponent && (
+                      <prize.iconComponent size={20} className="text-white/60" strokeWidth={2} />
+                    )}
+                  </div>
                   <div className="text-[10px] text-nrl-text-secondary">{prize.label}</div>
                 </div>
               ))}
@@ -1749,7 +1823,10 @@ function PrizeWheelCard({ streakData, teamData }: any) {
                 animation: "shimmer 3s infinite"
               }}
             >
-              <span className="relative z-10">🎰 SPIN THE WHEEL</span>
+              <span className="relative z-10 flex items-center gap-2">
+                <CircleDot size={18} className="text-white" strokeWidth={2} />
+                SPIN THE WHEEL
+              </span>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
             </button>
 
@@ -1760,7 +1837,7 @@ function PrizeWheelCard({ streakData, teamData }: any) {
                 {recentWins.map((win, idx) => (
                   <div key={idx} className="flex items-center justify-between py-2 px-3 bg-nrl-dark-hover rounded-lg border border-nrl-border-light">
                     <div className="flex items-center gap-2">
-                      <span className="text-nrl-green text-sm">🎉</span>
+                      <Sparkles size={16} className="text-nrl-green" strokeWidth={2} />
                       <span className="text-sm text-white">{win.name}</span>
                     </div>
                     <span className="text-xs font-semibold text-nrl-amber">won {win.prize}</span>
@@ -1771,7 +1848,9 @@ function PrizeWheelCard({ streakData, teamData }: any) {
           </div>
         ) : (
           <div className="text-center">
-            <div className="text-4xl mb-4">🔒</div>
+            <div className="flex justify-center mb-4">
+              <Lock size={32} className="text-white/60" strokeWidth={2} />
+            </div>
             <div className="text-lg font-semibold text-white mb-2">No Spins Available</div>
             <div className="text-sm text-nrl-text-secondary">
               Start a streak to earn weekly spins!
@@ -1890,9 +1969,11 @@ function ProfileCompletion({ user, profileCompletion }: any) {
             {/* DOB */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className={user?.dob ? 'text-nrl-green' : 'text-nrl-text-muted'}>
-                  {user?.dob ? '✓' : '○'}
-                </span>
+                {user?.dob ? (
+                  <Check size={16} className="text-nrl-green" strokeWidth={2} />
+                ) : (
+                  <Circle size={16} className="text-white/40" strokeWidth={2} />
+                )}
                 <span className="text-sm text-nrl-text-secondary">DOB</span>
               </div>
               {!user?.dob && (
@@ -1905,9 +1986,11 @@ function ProfileCompletion({ user, profileCompletion }: any) {
             {/* Gender */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className={user?.gender ? 'text-nrl-green' : 'text-nrl-text-muted'}>
-                  {user?.gender ? '✓' : '○'}
-                </span>
+                {user?.gender ? (
+                  <Check size={16} className="text-nrl-green" strokeWidth={2} />
+                ) : (
+                  <Circle size={16} className="text-white/40" strokeWidth={2} />
+                )}
                 <span className="text-sm text-nrl-text-secondary">Gender</span>
               </div>
               {!user?.gender ? (
@@ -1930,9 +2013,11 @@ function ProfileCompletion({ user, profileCompletion }: any) {
             {/* Home Ground Stadium */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className={user?.homeGround ? 'text-nrl-green' : 'text-nrl-text-muted'}>
-                  {user?.homeGround ? '✓' : '○'}
-                </span>
+                {user?.homeGround ? (
+                  <Check size={16} className="text-nrl-green" strokeWidth={2} />
+                ) : (
+                  <Circle size={16} className="text-white/40" strokeWidth={2} />
+                )}
                 <span className="text-sm text-nrl-text-secondary">Home Ground Stadium</span>
               </div>
               {!user?.homeGround && (
@@ -1946,7 +2031,7 @@ function ProfileCompletion({ user, profileCompletion }: any) {
             {missingSocials.length > 0 && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-nrl-text-muted">○</span>
+                  <Circle size={16} className="text-white/40" strokeWidth={2} />
                   <span className="text-sm text-nrl-text-secondary">Connect socials</span>
                 </div>
                 <button className="text-xs text-nrl-green font-semibold hover:underline">

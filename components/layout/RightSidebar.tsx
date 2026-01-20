@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
+import { Trophy, Star, Ticket, Shirt, Award, Crown, Flame } from "lucide-react";
 
 interface RightSidebarProps {
   user: any;
@@ -100,8 +101,9 @@ export default function RightSidebar({ user }: RightSidebarProps) {
             )}
           </div>
           <div className="text-white font-semibold mb-1">{user?.name || "Fan"}</div>
-          <div className="text-xs font-bold uppercase tracking-wider text-[#a1a1aa]">
-            🏆 {currentTier.name.toUpperCase()}
+          <div className="flex items-center justify-center gap-1 text-xs font-bold uppercase tracking-wider text-[#a1a1aa]">
+            <Trophy size={12} className="text-white/60" strokeWidth={2} />
+            <span>{currentTier.name.toUpperCase()}</span>
           </div>
         </div>
 
@@ -148,13 +150,13 @@ export default function RightSidebar({ user }: RightSidebarProps) {
                     </div>
                     
                     {/* Reward preview icon at tier marker */}
-                    <div className="absolute left-[18px] top-[-2px] w-3 h-3 flex items-center justify-center">
-                      {tier.name === "Bronze" && <span className="text-[10px]">🎩</span>}
-                      {tier.name === "Silver" && <span className="text-[10px]">🎩</span>}
-                      {tier.name === "Gold" && <span className="text-[10px]">👕</span>}
-                      {tier.name === "Platinum" && <span className="text-[10px]">🎟️</span>}
-                      {tier.name === "Diehard" && <span className="text-[10px]">⭐</span>}
-                      {tier.name === "Legend" && <span className="text-[10px]">🏆</span>}
+                    <div className="absolute left-[16px] top-[-4px] w-4 h-4 flex items-center justify-center">
+                      {tier.name === "Bronze" && <Award size={12} className="text-white/60" strokeWidth={2} />}
+                      {tier.name === "Silver" && <Award size={12} className="text-white/60" strokeWidth={2} />}
+                      {tier.name === "Gold" && <Shirt size={12} className="text-white/60" strokeWidth={2} />}
+                      {tier.name === "Platinum" && <Ticket size={12} className="text-white/60" strokeWidth={2} />}
+                      {tier.name === "Diehard" && <Star size={12} className="text-white/60" strokeWidth={2} />}
+                      {tier.name === "Legend" && <Trophy size={12} className="text-white/60" strokeWidth={2} />}
                     </div>
                     
                     {/* Legend tier special callout - Enhanced */}
@@ -164,7 +166,7 @@ export default function RightSidebar({ user }: RightSidebarProps) {
                         <div className="absolute inset-0 bg-gradient-to-br from-[#f59e0b]/10 to-transparent" />
                         <div className="relative">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-lg">🏆</span>
+                            <Trophy size={16} className="text-[#f59e0b]" strokeWidth={2} />
                             <span className="text-[#f59e0b] font-bold">Grand Final Pack</span>
                           </div>
                           <div className="text-[#a1a1aa] text-[10px] leading-tight">
@@ -196,8 +198,9 @@ export default function RightSidebar({ user }: RightSidebarProps) {
           </div>
           <div>
             <div className="text-xs text-[#a1a1aa] mb-1">Current Streak</div>
-            <div className="text-lg font-semibold text-[#f59e0b]">
-              🔥 {user?.streak || 0} {user?.streak === 1 ? "week" : "weeks"}
+            <div className="flex items-center gap-1 text-lg font-semibold text-[#f59e0b]">
+              <Flame size={18} className="text-[#f59e0b]" strokeWidth={2} />
+              <span>{user?.streak || 0} {user?.streak === 1 ? "week" : "weeks"}</span>
             </div>
           </div>
           <div>

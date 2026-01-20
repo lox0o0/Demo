@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { Check, CircleDot, Video } from "lucide-react";
 
 interface ContentCardProps {
   image: string;
@@ -59,7 +60,7 @@ export default function ContentCard({
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-[#1a1a1d] to-[#0a0a0b] flex items-center justify-center">
-              <span className="text-4xl">📺</span>
+              <Video size={32} className="text-white/40" strokeWidth={2} />
             </div>
           )}
           
@@ -78,7 +79,7 @@ export default function ContentCard({
             <div
               className={`px-3 py-1 rounded-full border text-xs font-semibold whitespace-nowrap flex-shrink-0 ${
                 badgeColors[badgeColor]
-              } ${badge.includes("🎰") ? "animate-pulse" : ""}`}
+              }`}
             >
               {badge}
             </div>
@@ -106,9 +107,9 @@ export default function ContentCard({
         {statusIndicator && (
           <div className="flex items-center gap-2 mb-2">
             {statusIndicator.includes("✓") && (
-              <span className="text-[#22c55e] text-sm">✓</span>
+              <Check size={14} className="text-[#22c55e]" strokeWidth={2} />
             )}
-            <span className="text-xs text-white/80">{statusIndicator}</span>
+            <span className="text-xs text-white/80">{statusIndicator.replace("✓", "").trim()}</span>
           </div>
         )}
         
