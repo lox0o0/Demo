@@ -57,6 +57,7 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
   const [showCelebration, setShowCelebration] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [teamSearchQuery, setTeamSearchQuery] = useState("");
 
   // For direct entry, use SnappyOnboarding which handles the full flow
   // For other entry points that already collected data, we could show celebration first
@@ -97,6 +98,38 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
     return <TeamCelebration team={selectedTeam} />;
   }
 
+  // Progress stepper component
+  const ProgressStepper = ({ currentStep }: { currentStep: 1 | 2 | 3 }) => (
+    <div className="flex items-center justify-center gap-2 mb-6">
+      <div className="flex items-center gap-2">
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-all ${
+          currentStep >= 1 ? 'bg-nrl-amber text-nrl-dark shadow-lg shadow-nrl-amber/50' : 'bg-white/10 text-white/40'
+        }`}>
+          1
+        </div>
+        <div className={`h-1 w-12 transition-all ${currentStep >= 2 ? 'bg-nrl-amber' : 'bg-white/10'}`}></div>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-all ${
+          currentStep >= 2 ? 'bg-nrl-amber text-nrl-dark shadow-lg shadow-nrl-amber/50' : 'bg-white/10 text-white/40'
+        }`}>
+          2
+        </div>
+        <div className={`h-1 w-12 transition-all ${currentStep >= 3 ? 'bg-nrl-amber' : 'bg-white/10'}`}></div>
+      </div>
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-all ${
+        currentStep >= 3 ? 'bg-nrl-amber text-nrl-dark shadow-lg shadow-nrl-amber/50' : 'bg-white/10 text-white/40'
+      }`}>
+        3
+      </div>
+    </div>
+  );
+
+  // Filter teams based on search query
+  const filteredTeams = NRL_TEAMS.filter(team =>
+    team.name.toLowerCase().includes(teamSearchQuery.toLowerCase())
+  );
+
   const backgroundImagePath = "/broncos/choose-team.png";
   
   return (
@@ -118,58 +151,108 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
       <div 
         className="fixed inset-0" 
         style={{
-          background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.4))',
+          background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5))',
           zIndex: 1,
         }}
       />
       
-      <div className="container mx-auto px-4 py-12 relative" style={{ zIndex: 2, position: 'relative' }}>
-        <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-nrl-green to-white bg-clip-text text-transparent drop-shadow-2xl">
-            Pick Your Club
-          </h1>
-          <p className="text-xl text-white/90 drop-shadow-lg">Choose your team to get started</p>
-        </div>
+      <div className="container mx-auto px-4 py-8 relative" style={{ zIndex: 2, position: 'relative' }}>
+        <div className="w-full max-w-5xl mx-auto">
+          {/* Progress Stepper */}
+          <ProgressStepper currentStep={1} />
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-          {NRL_TEAMS.map((team) => (
-            <button
-              key={team.id}
-              onClick={() => handleTeamSelect(team)}
-              className="group relative overflow-hidden glass rounded-2xl p-6 hover:scale-105 transition-all duration-300 border border-white/10 hover:border-white/30"
-              style={{
-                background: `linear-gradient(135deg, ${team.primaryColor}15 0%, ${team.secondaryColor}15 100%)`,
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = `0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px ${team.primaryColor}40`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.3)';
-              }}
-            >
-              <div className="relative z-10 flex flex-col items-center">
-                <div className="relative w-28 h-28 mb-5 transform group-hover:scale-110 transition-transform duration-300 bg-white/10 rounded-xl p-3 border border-white/20 backdrop-blur-sm">
-                  <TeamLogoWithFallback
-                    src={team.logoUrl}
-                    alt={team.name}
-                  />
-                </div>
-                <div className="font-bold text-lg text-white drop-shadow-lg mb-1">{team.name}</div>
-                <div className="text-xs text-white/70 font-medium">
-                  {team.fanCount.toLocaleString()} fans
-                </div>
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-5xl md:text-6xl font-black mb-3 bg-gradient-to-r from-nrl-amber via-white to-nrl-amber bg-clip-text text-transparent drop-shadow-2xl">
+              Pick Your Club
+            </h1>
+            <p className="text-white/80 text-lg font-medium">Choose your team to get started</p>
+          </div>
+
+          {/* Search Bar */}
+          <div className="mb-8 max-w-md mx-auto">
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10">
+                <svg className="w-5 h-5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
               </div>
-              
-              {/* Hover effect overlay */}
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              <input
+                type="text"
+                value={teamSearchQuery}
+                onChange={(e) => setTeamSearchQuery(e.target.value)}
+                placeholder="Search for your team..."
+                className="w-full glass rounded-xl pl-12 pr-4 py-3.5 text-white placeholder:text-white/40 border border-white/10 focus:outline-none focus:border-nrl-amber/50 focus:ring-2 focus:ring-nrl-amber/20 transition-all backdrop-blur-sm"
                 style={{
-                  background: `linear-gradient(135deg, ${team.primaryColor}25 0%, ${team.secondaryColor}25 100%)`,
+                  backgroundColor: 'rgba(20, 20, 20, 0.6)',
                 }}
               />
-            </button>
-          ))}
+            </div>
+          </div>
+
+          {/* Team Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
+            {filteredTeams.length > 0 ? (
+              filteredTeams.map((team) => (
+                <button
+                  key={team.id}
+                  onClick={() => handleTeamSelect(team)}
+                  className="group relative overflow-hidden glass rounded-xl p-5 hover:scale-105 transition-all duration-300 border border-white/10 hover:border-white/30"
+                  style={{
+                    background: `linear-gradient(135deg, ${team.primaryColor}15 0%, ${team.secondaryColor}15 100%)`,
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+                    backgroundColor: 'rgba(20, 20, 20, 0.7)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = `0 12px 40px rgba(0, 0, 0, 0.5), 0 0 30px ${team.primaryColor}50`;
+                    e.currentTarget.style.borderColor = `${team.primaryColor}60`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.4)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                  }}
+                >
+                  {/* Hover glow effect in team colors */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"
+                    style={{
+                      background: `radial-gradient(circle, ${team.primaryColor}40 0%, transparent 70%)`,
+                    }}
+                  />
+                  
+                  <div className="relative z-10 flex flex-col items-center">
+                    <div className="relative w-20 h-20 mb-3 transform group-hover:scale-110 transition-transform duration-300 bg-white/10 rounded-xl p-2.5 border border-white/20 backdrop-blur-sm">
+                      <TeamLogoWithFallback
+                        src={team.logoUrl}
+                        alt={team.name}
+                      />
+                    </div>
+                    <div className="font-bold text-sm text-white mb-1 drop-shadow-lg">{team.name}</div>
+                    <div className="text-xs text-white/60 font-medium">
+                      {team.fanCount.toLocaleString()} fans
+                    </div>
+                  </div>
+                  
+                  {/* Hover effect overlay */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{
+                      background: `linear-gradient(135deg, ${team.primaryColor}20 0%, ${team.secondaryColor}20 100%)`,
+                    }}
+                  />
+                </button>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-white/60 text-lg">No teams found matching "{teamSearchQuery}"</p>
+              </div>
+            )}
+          </div>
+          
+          {/* Change later message */}
+          <div className="text-center">
+            <p className="text-sm text-white/50">You can change this later.</p>
+          </div>
         </div>
       </div>
     </div>
