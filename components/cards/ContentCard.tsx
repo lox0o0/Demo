@@ -16,6 +16,7 @@ interface ContentCardProps {
   ctaButton?: string;
   ctaStyle?: "default" | "wide" | "centered" | "subtitle";
   completed?: boolean;
+  backgroundSize?: string; // Optional custom background size
   onCardClick?: () => void;
   onCtaClick?: () => void;
 }
@@ -32,6 +33,7 @@ export default function ContentCard({
   ctaButton,
   ctaStyle = "default",
   completed = false,
+  backgroundSize,
   onCardClick,
   onCtaClick,
 }: ContentCardProps) {
@@ -66,8 +68,7 @@ export default function ContentCard({
               className="absolute inset-0 bg-center"
               style={{ 
                 backgroundImage: `url(${image})`,
-                backgroundSize: '85%', // Show more of the image by using smaller background size
-                backgroundPosition: 'center',
+                backgroundSize: backgroundSize || 'cover',
                 backgroundRepeat: 'no-repeat',
               }}
             />

@@ -170,6 +170,7 @@ export default function Dashboard({ user }: DashboardProps) {
                     badge="+30 pts"
                     badgeColor="gold"
                     ctaStyle="subtitle"
+                    backgroundSize="85%"
                   />
                   <ContentCard
                     image="/images/cards/top-performers.avif"
