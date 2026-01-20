@@ -27,6 +27,12 @@ export default function Dashboard({ user }: DashboardProps) {
     ? { primary: teamData.primaryColor, secondary: teamData.secondaryColor }
     : { primary: "#00A651", secondary: "#FFB800" };
 
+  // Demo: Override user points for different pages
+  // Home page: 1,000 points (Silver tier)
+  const homeUser = { ...user, points: 1000, lifetimePoints: 1000 };
+  // Locker Room page: 5,000 points (Diehard tier)
+  const lockerRoomUser = { ...user, points: 5000, lifetimePoints: 5000 };
+
 
   return (
     <div className="h-screen overflow-hidden bg-[#0a0a0b] flex">
@@ -180,7 +186,7 @@ export default function Dashboard({ user }: DashboardProps) {
           
           {activeSection === "dashboard" && (
             <DashboardNew 
-              user={user} 
+              user={lockerRoomUser} 
               hideNavigation={true}
               onNavigate={(section) => setActiveSection(section)}
             />
@@ -196,13 +202,15 @@ export default function Dashboard({ user }: DashboardProps) {
       </div>
 
       {/* Right Sidebar */}
-      <RightSidebar user={user} />
+      <RightSidebar user={activeSection === "home" ? homeUser : activeSection === "dashboard" ? lockerRoomUser : user} />
     </div>
   );
 }
 
 function ProfileView({ user, teamData }: { user: any; teamData: any }) {
-  const userPoints = user?.points || 0;
+  // Demo: Override points for Home page to show Silver tier (1,000 points)
+  const demoUser = { ...user, points: 1000, lifetimePoints: 1000 };
+  const userPoints = demoUser?.points || 0;
   const maxTier = TIERS[TIERS.length - 1];
   
   const currentTier = TIERS.find((t, i) => {
@@ -246,7 +254,7 @@ function ProfileView({ user, teamData }: { user: any; teamData: any }) {
         <h3 className="text-lg font-semibold mb-4 text-nrl-text-primary">Your Stats</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <div className="text-2xl font-bold text-nrl-green">{user?.lifetimePoints || 0}</div>
+            <div className="text-2xl font-bold text-nrl-green">{demoUser?.lifetimePoints || 0}</div>
             <div className="text-sm text-nrl-text-secondary">Lifetime Points</div>
           </div>
           <div>
