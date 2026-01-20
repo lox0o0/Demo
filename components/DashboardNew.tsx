@@ -67,7 +67,12 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
       {/* Main Content - 3 Column Layout */}
       <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 ${hideNavigation ? 'pt-6' : 'pt-24'}`}>
         {activeSection === "dashboard" && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="space-y-8">
+            {/* Streak Celebration Hero Zone */}
+            <StreakHeroZone streakData={streakData} user={user} />
+            
+            {/* Main Content Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column - Activities, Profile Completion, Connect Socials */}
             <div className="space-y-6">
               <WeeklyActivitiesSimplified user={user} teamData={teamData} />
@@ -101,6 +106,7 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
               
               <PrizeWheelCard streakData={streakData} teamData={teamData} />
             </div>
+            </div>
           </div>
         )}
 
@@ -111,6 +117,109 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
           </div>
         )}
       </main>
+    </div>
+  );
+}
+
+// Streak Celebration Hero Zone
+function StreakHeroZone({ streakData, user }: { streakData: StreakData; user: any }) {
+  const streakWeeks = streakData.fanStreak.currentWeeks;
+  const flameEmoji = getFlameEmoji(streakData.currentWeek.flameLevel);
+  
+  // Calculate percentile messaging
+  const getPercentileMessage = (weeks: number): string => {
+    if (weeks >= 52) return "You're in the top 1% of dedicated fans";
+    if (weeks >= 26) return "You're in the top 3% of dedicated fans";
+    if (weeks >= 11) return "You're in the top 8% of dedicated fans";
+    if (weeks >= 5) return "You're in the top 15% of dedicated fans";
+    return "Keep it up! Your consistency is building";
+  };
+
+  // Calculate next milestone
+  const nextMilestone = streakData.nextMilestone;
+  const milestoneProgress = nextMilestone 
+    ? Math.max(0, Math.min(100, ((streakWeeks / nextMilestone.weeks) * 100)))
+    : 100;
+
+  return (
+    <div className="relative bg-gradient-to-r from-[#1a1a1d] via-[#2a1a1d] to-[#1a1a1d] rounded-2xl p-8 border border-[#f59e0b]/20 overflow-hidden">
+      {/* Subtle glow effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#f59e0b]/5 via-transparent to-transparent pointer-events-none" />
+      
+      <div className="relative flex flex-col md:flex-row items-center justify-between gap-8">
+        {/* Left: Streak Number */}
+        <div className="flex-1 text-center md:text-left">
+          <div className="flex items-center justify-center md:justify-start gap-4 mb-4">
+            <div className="text-6xl md:text-7xl animate-pulse">
+              {flameEmoji}
+            </div>
+            <div>
+              <div className="text-7xl md:text-8xl font-bold text-white mb-2 leading-none">
+                {streakWeeks}
+              </div>
+              <div className="text-lg md:text-xl text-[#a1a1aa] font-semibold">
+                week streak
+              </div>
+            </div>
+          </div>
+          
+          {/* Contextual praise */}
+          <div className="text-sm md:text-base text-[#f59e0b] font-semibold">
+            {getPercentileMessage(streakWeeks)}
+          </div>
+        </div>
+
+        {/* Right: Next Milestone Progress */}
+        {nextMilestone && (
+          <div className="flex-shrink-0 w-full md:w-auto">
+            <div className="bg-[#0a0a0b]/60 backdrop-blur-sm rounded-xl p-6 border border-[#2a2a2d] min-w-[280px]">
+              <div className="text-xs font-bold uppercase text-[#a1a1aa] mb-3 tracking-wider">
+                Next Milestone
+              </div>
+              
+              {/* Circular Progress Ring */}
+              <div className="relative w-32 h-32 mx-auto mb-4">
+                <svg className="transform -rotate-90 w-32 h-32" viewBox="0 0 120 120">
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r="50"
+                    stroke="#2a2a2d"
+                    strokeWidth="8"
+                    fill="none"
+                  />
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r="50"
+                    stroke="#f59e0b"
+                    strokeWidth="8"
+                    fill="none"
+                    strokeDasharray={`${(milestoneProgress / 100) * 314} 314`}
+                    strokeLinecap="round"
+                    className="transition-all duration-1000"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className="text-2xl font-bold text-white">
+                    {nextMilestone.weeksRemaining}
+                  </div>
+                  <div className="text-xs text-[#a1a1aa]">weeks</div>
+                </div>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-sm font-bold text-white mb-1">
+                  {nextMilestone.weeks} weeks: {nextMilestone.name}
+                </div>
+                <div className="text-xs text-[#a1a1aa]">
+                  {nextMilestone.reward}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
