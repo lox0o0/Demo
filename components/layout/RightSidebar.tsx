@@ -177,177 +177,208 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
   const maxTier = TIERS[TIERS.length - 1];
   const maxPoints = maxTier.minPoints;
   
-  // Calculate progress fill height - FILL FROM TOP TO BOTTOM (Rookie → Legend)
-  // Progress starts at top (0%) and fills down to current tier
-  const progressPercent = Math.min((userPoints / maxPoints) * 100, 100);
+  // Calculate the position of current tier (where the fill should stop)
+  const currentTierIndex = TIERS.findIndex(t => t.name === currentTier.name);
+  const currentTierPosition = currentTierIndex >= 0 
+    ? ((currentTier.minPoints / maxPoints) * 100) 
+    : 0;
   
-  // Get reward icons for each tier with enhanced styling
+  // Tier colors for gradient
+  const tierColors = {
+    Rookie: "#6b7280",      // gray
+    Bronze: "#CD7F32",      // bronze
+    Silver: "#C0C0C0",       // silver
+    Gold: "#FFD700",         // gold
+    Platinum: "#E5E4E2",     // platinum
+    Diehard: "#8B0000",      // maroon
+    Legend: "#FFB800",       // gold/yellow
+  };
+  
+  // Create smooth gradient that transitions through tier colors
+  // Gradient goes from bottom (Rookie/gray) to top (current tier)
+  // Using key color stops for smooth transitions
+  const gradientColors = [
+    tierColors.Rookie,      // 0% - gray
+    tierColors.Bronze,     // ~2.5% - bronze
+    tierColors.Silver,     // ~10% - silver
+    tierColors.Gold,       // ~20% - gold
+    tierColors.Platinum,   // ~35% - platinum
+    tierColors.Diehard,    // ~50% - maroon
+  ];
+  
+  const gradientStops = [
+    `${gradientColors[0]} 0%`,
+    `${gradientColors[1]} 5%`,
+    `${gradientColors[2]} 12%`,
+    `${gradientColors[3]} 22%`,
+    `${gradientColors[4]} 37%`,
+    `${gradientColors[5]} 52%`,
+  ].join(", ");
+  
+  // Get tier position percentage
+  const getTierPosition = (tier: any) => {
+    return (tier.minPoints / maxPoints) * 100;
+  };
+  
+  // Get reward icons for each tier
   const getRewardIcon = (tierName: string) => {
-    if (tierName === "Silver") return <Shirt className="w-4 h-4 text-silver-400" style={{ filter: 'drop-shadow(0 0 4px rgba(192, 192, 192, 0.6))' }} />;
-    if (tierName === "Gold") return <Shirt className="w-4 h-4 text-yellow-400" style={{ filter: 'drop-shadow(0 0 6px rgba(255, 215, 0, 0.8))' }} />;
-    if (tierName === "Platinum") return <Ticket className="w-4 h-4 text-cyan-300" style={{ filter: 'drop-shadow(0 0 4px rgba(103, 232, 249, 0.6))' }} />;
-    if (tierName === "Diehard") return <Award className="w-4 h-4 text-red-400" style={{ filter: 'drop-shadow(0 0 6px rgba(248, 113, 113, 0.8))' }} />;
-    if (tierName === "Legend") return <Crown className="w-5 h-5 text-yellow-300" style={{ filter: 'drop-shadow(0 0 10px rgba(253, 224, 71, 1)) drop-shadow(0 0 20px rgba(253, 224, 71, 0.6))' }} />;
-    return <Gift className="w-3 h-3 text-gray-400" />;
+    if (tierName === "Silver") return <Shirt className="w-3 h-3" />;
+    if (tierName === "Gold") return <Shirt className="w-3 h-3" />;
+    if (tierName === "Platinum") return <Ticket className="w-3 h-3" />;
+    if (tierName === "Diehard") return <Award className="w-3 h-3" />;
+    if (tierName === "Legend") return <Crown className="w-4 h-4" />;
+    return <Gift className="w-3 h-3" />;
   };
 
   return (
     <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-4">
       <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Fan Journey</h3>
       
-      {/* Vertical Progress Bar Container */}
-      <div className="relative">
-        {/* Progress Fill Line - FILL FROM TOP TO BOTTOM */}
-        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-700/50">
+      {/* Container for progress bar and tier markers */}
+      <div className="relative" style={{ minHeight: '500px', paddingBottom: '20px' }}>
+        {/* Single Continuous Vertical Progress Bar */}
+        <div className="absolute left-4 top-0 bottom-0 w-1">
+          {/* Empty/Gray portion above current tier */}
+          <div 
+            className="absolute top-0 left-0 right-0 bg-gray-700/50 transition-all duration-1000"
+            style={{ 
+              height: `${100 - currentTierPosition}%`,
+              top: `${currentTierPosition}%`
+            }}
+          />
+          
+          {/* Filled portion - gradient through tier colors */}
           <div
-            className="absolute top-0 left-0 right-0 bg-gradient-to-b from-green-500 via-emerald-400 to-cyan-500 transition-all duration-1000 ease-out"
-            style={{ height: `${progressPercent}%` }}
+            className="absolute bottom-0 left-0 right-0 transition-all duration-1000 ease-out"
+            style={{ 
+              height: `${currentTierPosition}%`,
+              background: `linear-gradient(to top, ${gradientStops})`,
+            }}
           >
             {/* Shine animation on progress fill */}
             <div 
-              className="absolute inset-0 bg-gradient-to-b from-transparent via-white/30 to-transparent"
+              className="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-transparent"
               style={{
                 animation: 'shimmer 2s ease-in-out infinite',
-                backgroundSize: '100% 200%',
-              }}
-            />
-            {/* Pulsing glow effect */}
-            <div 
-              className="absolute inset-0 bg-gradient-to-b from-green-400/20 to-cyan-400/20"
-              style={{
-                animation: 'pulse 2s ease-in-out infinite',
               }}
             />
           </div>
         </div>
 
-        {/* Tier Markers */}
-        <div className="space-y-6 relative">
-          {TIERS.map((tier, index) => {
-            const isCurrentTier = tier.name === currentTier.name;
-            const isReached = userPoints >= tier.minPoints;
-            const isLegend = tier.name === "Legend";
-            const tierColor = tier.color === "gray" ? "#6b7280" : tier.color;
-            
-            return (
-              <div 
-                key={tier.name} 
-                className={`relative flex items-start gap-3 transition-all duration-300 ${
-                  isLegend ? "mb-2" : ""
-                }`}
-              >
-                {/* Tier Circle Marker */}
-                <div className="relative z-10 flex-shrink-0">
-                  <div
-                    className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${
-                      isCurrentTier
-                        ? "shadow-[0_0_12px_rgba(34,197,94,0.6)] animate-pulse-glow"
-                        : isReached
-                        ? ""
-                        : "border-white/20 bg-white/5"
-                    } ${isLegend ? "w-10 h-10 border-3" : ""}`}
-                    style={
-                      isCurrentTier
-                        ? { 
-                            borderColor: "#22c55e", 
-                            backgroundColor: "rgba(34, 197, 94, 0.2)",
-                            boxShadow: "0 0 12px rgba(34, 197, 94, 0.6)"
-                          }
-                        : isReached
-                        ? { 
-                            borderColor: tierColor, 
-                            backgroundColor: `${tierColor}33`,
-                            boxShadow: isLegend ? `0 0 16px ${tierColor}80` : `0 0 4px ${tierColor}40`
-                          }
-                        : {}
-                    }
-                  >
-                    {isReached ? (
-                      <Star 
-                        className={`${isLegend ? "w-5 h-5" : "w-4 h-4"} text-white`} 
-                        fill="currentColor"
-                        style={isLegend ? { filter: 'drop-shadow(0 0 4px rgba(255, 255, 255, 0.8))' } : {}}
-                      />
-                    ) : (
-                      <div className="w-2 h-2 rounded-full bg-white/40" />
-                    )}
-                  </div>
-                  {/* Legend tier special glow ring */}
-                  {isLegend && !isReached && (
-                    <div 
-                      className="absolute inset-0 rounded-full border-2 border-yellow-400/30 animate-pulse"
-                      style={{ transform: 'scale(1.3)' }}
+        {/* Tier Markers - Positioned ON the progress bar */}
+        {TIERS.map((tier) => {
+          const isCurrentTier = tier.name === currentTier.name;
+          const isReached = userPoints >= tier.minPoints;
+          const tierPosition = getTierPosition(tier);
+          const tierColor = tierColors[tier.name as keyof typeof tierColors] || "#6b7280";
+          
+          return (
+            <div
+              key={tier.name}
+              className="absolute left-0 right-0 flex items-center gap-3"
+              style={{
+                top: `${tierPosition}%`,
+                transform: 'translateY(-50%)',
+              }}
+            >
+              {/* Tier Circle/Star Marker - Sits ON the progress bar */}
+              <div className="relative z-10 flex-shrink-0" style={{ left: '16px', marginLeft: '-8px' }}>
+                {/* Marker circle/star */}
+                <div
+                  className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                    isCurrentTier
+                      ? "animate-pulse-glow"
+                      : ""
+                  }`}
+                  style={
+                    isReached
+                      ? {
+                          borderColor: tierColor,
+                          backgroundColor: tierColor,
+                          boxShadow: isCurrentTier 
+                            ? `0 0 16px ${tierColor}, 0 0 24px ${tierColor}80`
+                            : `0 0 4px ${tierColor}60`,
+                        }
+                      : {
+                          borderColor: "#6b7280",
+                          backgroundColor: "transparent",
+                        }
+                  }
+                >
+                  {isReached ? (
+                    <Star 
+                      className="w-3 h-3 text-white" 
+                      fill="white"
+                      style={{ filter: 'drop-shadow(0 0 2px rgba(0,0,0,0.5))' }}
                     />
-                  )}
-                </div>
-
-                {/* Tier Info */}
-                <div className={`flex-1 min-w-0 pt-0.5 ${isLegend ? "pt-1" : ""}`}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span
-                      className={`${isLegend ? "text-sm" : "text-xs"} font-bold uppercase ${
-                        isCurrentTier ? "" : isReached ? "" : "text-white/60"
-                      }`}
-                      style={
-                        isCurrentTier 
-                          ? { color: "#22c55e" } 
-                          : isReached 
-                          ? { 
-                              color: tierColor,
-                              textShadow: isLegend ? `0 0 8px ${tierColor}80` : 'none'
-                            } 
-                          : {}
-                      }
-                    >
-                      {tier.name}
-                    </span>
-                    {isCurrentTier && (
-                      <div 
-                        className="px-2 py-0.5 rounded text-[10px] font-semibold animate-pulse-glow"
-                        style={{
-                          backgroundColor: "rgba(34, 197, 94, 0.2)",
-                          borderColor: "rgba(34, 197, 94, 0.5)",
-                          borderWidth: "1px",
-                          borderStyle: "solid",
-                          color: "#22c55e"
-                        }}
-                      >
-                        YOU ARE HERE
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Points threshold */}
-                  <div className={`${isLegend ? "text-xs" : "text-[10px]"} text-white/60 mb-1`}>
-                    {tier.minPoints.toLocaleString()} pts
-                  </div>
-                  
-                  {/* Reward description - Enhanced for value */}
-                  <div className={`flex items-center gap-2 ${isLegend ? "text-xs" : "text-[10px]"} ${
-                    isLegend ? "text-yellow-300 font-semibold" : isReached ? "text-white/80" : "text-white/60"
-                  }`}>
-                    {getRewardIcon(tier.name)}
-                    <span className={isLegend ? "font-bold" : ""}>{tier.reward || tier.access}</span>
-                  </div>
-                  
-                  {/* Legend tier special callout */}
-                  {isLegend && (
-                    <div className="mt-2 px-3 py-2 bg-gradient-to-r from-yellow-400/20 via-amber-400/20 to-yellow-400/20 border border-yellow-400/40 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <Plane className="w-4 h-4 text-yellow-300" />
-                        <Hotel className="w-4 h-4 text-yellow-300" />
-                        <Ticket className="w-4 h-4 text-yellow-300" />
-                      </div>
-                      <div className="text-[10px] text-yellow-200 mt-1 font-semibold">
-                        Complete VIP Experience
-                      </div>
-                    </div>
+                  ) : (
+                    <div className="w-2 h-2 rounded-full bg-gray-500" />
                   )}
                 </div>
               </div>
-            );
-          })}
-        </div>
+
+              {/* Tier Info */}
+              <div className="flex-1 min-w-0 pl-8">
+                <div className="flex items-center gap-2 mb-1">
+                  <span
+                    className="text-xs font-bold uppercase"
+                    style={
+                      isCurrentTier
+                        ? { color: tierColor }
+                        : isReached
+                        ? { color: tierColor }
+                        : { color: "#9ca3af" }
+                    }
+                  >
+                    {tier.name}
+                  </span>
+                  {isCurrentTier && (
+                    <div 
+                      className="px-2 py-0.5 rounded text-[10px] font-semibold animate-pulse-glow"
+                      style={{
+                        backgroundColor: `${tierColor}33`,
+                        borderColor: `${tierColor}80`,
+                        borderWidth: "1px",
+                        borderStyle: "solid",
+                        color: tierColor,
+                        boxShadow: `0 0 8px ${tierColor}40`,
+                      }}
+                    >
+                      YOU ARE HERE
+                    </div>
+                  )}
+                </div>
+                
+                {/* Points threshold */}
+                <div className="text-[10px] text-white/60 mb-1">
+                  {tier.minPoints.toLocaleString()} pts
+                </div>
+                
+                {/* Reward description */}
+                <div className={`flex items-center gap-1.5 text-[10px] ${
+                  isReached ? "text-white/80" : "text-white/50"
+                }`}>
+                  {getRewardIcon(tier.name)}
+                  <span>{tier.reward || tier.access}</span>
+                </div>
+                
+                {/* Legend tier special callout */}
+                {tier.name === "Legend" && (
+                  <div className="mt-2 px-2 py-1.5 bg-gradient-to-r from-yellow-400/20 via-amber-400/20 to-yellow-400/20 border border-yellow-400/40 rounded text-[10px]">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <Plane className="w-3 h-3 text-yellow-300" />
+                      <Hotel className="w-3 h-3 text-yellow-300" />
+                      <Ticket className="w-3 h-3 text-yellow-300" />
+                    </div>
+                    <div className="text-yellow-200 font-semibold">
+                      Complete VIP Experience
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
