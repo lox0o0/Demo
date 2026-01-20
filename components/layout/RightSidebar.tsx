@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
-import { Trophy, Star, Ticket, Shirt, Award, Crown, Check, Heart, Building2, Plane, Hotel } from "lucide-react";
+import { Trophy, Star, Ticket, Shirt, Award, Crown, Check, Heart, Building2, Plane, Hotel, Gift } from "lucide-react";
 
 interface RightSidebarProps {
   user: any;
