@@ -98,21 +98,18 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   }
 
   return (
-    <div className="min-h-screen relative">
-      {/* Background Image using Next.js Image component */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <Image
-          src="/images/choose-team.png"
-          alt="Choose Team Background"
-          fill
-          className="object-cover"
-          priority
-          unoptimized
-          quality={90}
-        />
-        {/* Very light overlay - just enough for text readability */}
-        <div className="absolute inset-0 bg-black/10" />
-      </div>
+    <div 
+      className="min-h-screen relative"
+      style={{
+        backgroundImage: 'url(/images/choose-team.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* Minimal overlay - just for text readability */}
+      <div className="absolute inset-0 bg-black/5 z-0" />
       
       <div className="container mx-auto px-4 py-12 relative z-10">
         <div className="text-center mb-12">
