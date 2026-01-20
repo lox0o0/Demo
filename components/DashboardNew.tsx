@@ -45,7 +45,7 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
   const [activeSection, setActiveSection] = useState<NavSection>("dashboard");
   const [highlightProfileCompletion, setHighlightProfileCompletion] = useState(false);
   const [showTierCelebration, setShowTierCelebration] = useState(false);
-  const [celebrationData, setCelebrationData] = useState<{ oldTier: any; newTier: any } | null>(null);
+  const [celebrationData, setCelebrationData] = useState<{ oldTier: any; newTier: any; startPoints: number } | null>(null);
   
   // Check if we should highlight profile completion (from modal CTA)
   useEffect(() => {
