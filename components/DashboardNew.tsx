@@ -2512,23 +2512,77 @@ function StreakCardPrizes({ streakData }: { streakData: StreakData }) {
   const is2xActive = pointsMultiplier >= 2.0;
 
   return (
-    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-6 hover:border-white/30 transition-all">
-      {/* Animated Flame Icon */}
-      <div className="flex justify-center mb-4">
-        <Flame 
-          size={flameProps.size} 
-          className={`${flameProps.color} animate-pulse`}
-          style={{ filter: flameProps.glow ? `drop-shadow(0 0 20px ${flameProps.color.includes('red') ? 'rgba(239,68,68,0.8)' : flameProps.color.includes('orange') ? 'rgba(249,115,22,0.7)' : 'rgba(245,158,11,0.5)'})` : 'none' }}
+    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-6 hover:border-white/30 transition-all relative overflow-hidden">
+      {/* Animated background fire effect */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div 
+          className="absolute inset-0 bg-gradient-radial from-orange-500/30 via-red-500/20 to-transparent"
+          style={{
+            animation: 'pulse 3s ease-in-out infinite',
+            background: `radial-gradient(circle at center, ${flameProps.color.includes('red') ? 'rgba(239,68,68,0.3)' : flameProps.color.includes('orange') ? 'rgba(249,115,22,0.3)' : 'rgba(245,158,11,0.2)'} 0%, transparent 70%)`
+          }}
         />
       </div>
 
-      {/* Big Streak Number with Glow */}
-      <div className="text-center mb-2">
-        <div className="text-6xl font-bold text-white mb-1" style={{ 
-          textShadow: '0 0 20px rgba(251,191,36,0.8), 0 0 40px rgba(251,191,36,0.4)',
-          filter: 'drop-shadow(0 0 10px rgba(251,191,36,0.6))'
-        }}>
+      {/* Animated Flame Icon with multiple layers for energy effect */}
+      <div className="flex justify-center mb-4 relative">
+        {/* Outer glow ring */}
+        <div 
+          className="absolute inset-0 flex items-center justify-center"
+          style={{
+            animation: 'pulse 2s ease-in-out infinite',
+          }}
+        >
+          <div 
+            className="rounded-full"
+            style={{
+              width: `${flameProps.size + 20}px`,
+              height: `${flameProps.size + 20}px`,
+              background: `radial-gradient(circle, ${flameProps.color.includes('red') ? 'rgba(239,68,68,0.4)' : flameProps.color.includes('orange') ? 'rgba(249,115,22,0.4)' : 'rgba(245,158,11,0.3)'} 0%, transparent 70%)`,
+              filter: 'blur(8px)',
+            }}
+          />
+        </div>
+        {/* Main flame */}
+        <Flame 
+          size={flameProps.size} 
+          className={`${flameProps.color} relative z-10`}
+          style={{ 
+            filter: flameProps.glow || `drop-shadow(0 0 ${flameProps.size / 2}px ${flameProps.color.includes('red') ? 'rgba(239,68,68,0.9)' : flameProps.color.includes('orange') ? 'rgba(249,115,22,0.8)' : 'rgba(245,158,11,0.7)'})`,
+            animation: 'pulse 1.5s ease-in-out infinite',
+          }}
+        />
+        {/* Particle effect overlay */}
+        <div 
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          style={{
+            background: `radial-gradient(circle at 30% 30%, transparent 0%, ${flameProps.color.includes('red') ? 'rgba(239,68,68,0.2)' : 'rgba(249,115,22,0.2)'} 50%, transparent 100%)`,
+            animation: 'spin 4s linear infinite',
+            width: `${flameProps.size * 1.5}px`,
+            height: `${flameProps.size * 1.5}px`,
+          }}
+        />
+      </div>
+
+      {/* Big Streak Number with Enhanced Glow and Energy */}
+      <div className="text-center mb-2 relative z-10">
+        <div 
+          className="text-6xl font-bold text-white mb-1 relative" 
+          style={{ 
+            textShadow: '0 0 30px rgba(251,191,36,1), 0 0 60px rgba(251,191,36,0.6), 0 0 90px rgba(251,191,36,0.3)',
+            filter: 'drop-shadow(0 0 15px rgba(251,191,36,0.8))',
+            animation: 'pulse 2s ease-in-out infinite',
+          }}
+        >
           {streakWeeks}
+          {/* Shimmer effect */}
+          <div 
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+            style={{
+              animation: 'shimmer 3s ease-in-out infinite',
+              transform: 'skewX(-20deg)',
+            }}
+          />
         </div>
         <div className="text-xs font-semibold text-white/80 uppercase tracking-wider">WEEK STREAK</div>
       </div>
@@ -2572,12 +2626,26 @@ function PrizeWheelCardPrizes({ streakData, onSpinClick }: { streakData: StreakD
   const bonusSpins = streakData.spins.bonusSpins;
 
   return (
-    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-6 hover:border-white/30 transition-all">
-      {/* Animated Spinning Wheel Preview */}
+    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-6 hover:border-white/30 transition-all relative overflow-hidden">
+      {/* Animated Spinning Wheel Preview with smooth rotation */}
       <div className="flex justify-center mb-4">
         <div className="relative w-32 h-32">
-          {/* Wheel segments with colors */}
-          <div className="absolute inset-0 rounded-full overflow-hidden">
+          {/* Outer glow effect */}
+          <div 
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: 'radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%)',
+              animation: 'pulse 3s ease-in-out infinite',
+              transform: 'scale(1.2)',
+            }}
+          />
+          {/* Wheel segments with colors - smooth rotation */}
+          <div 
+            className="absolute inset-0 rounded-full overflow-hidden"
+            style={{
+              animation: 'spin 8s linear infinite',
+            }}
+          >
             {[...Array(8)].map((_, i) => (
               <div
                 key={i}
@@ -2585,16 +2653,34 @@ function PrizeWheelCardPrizes({ streakData, onSpinClick }: { streakData: StreakD
                 style={{
                   transform: `rotate(${i * 45}deg)`,
                   clipPath: `polygon(50% 50%, 50% 0%, ${50 + 25 * Math.cos(Math.PI / 4)}% ${50 - 25 * Math.sin(Math.PI / 4)}%)`,
-                  backgroundColor: i % 4 === 0 ? 'rgba(139, 92, 246, 0.3)' : i % 4 === 1 ? 'rgba(249, 115, 22, 0.3)' : i % 4 === 2 ? 'rgba(34, 197, 94, 0.3)' : 'rgba(59, 130, 246, 0.3)',
+                  backgroundColor: i % 4 === 0 ? 'rgba(139, 92, 246, 0.4)' : i % 4 === 1 ? 'rgba(249, 115, 22, 0.4)' : i % 4 === 2 ? 'rgba(34, 197, 94, 0.4)' : 'rgba(59, 130, 246, 0.4)',
                 }}
               />
             ))}
           </div>
-          {/* Spinning border */}
-          <div className="absolute inset-0 rounded-full border-4 border-white/30 animate-spin" style={{ animationDuration: '4s' }} />
-          {/* Center circle */}
-          <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center border-2 border-white/20">
-            <CircleDot size={24} className="text-white/60" />
+          {/* Spinning border with glow */}
+          <div 
+            className="absolute inset-0 rounded-full border-4 border-white/40" 
+            style={{ 
+              animation: 'spin 6s linear infinite',
+              boxShadow: '0 0 20px rgba(139, 92, 246, 0.5), inset 0 0 20px rgba(139, 92, 246, 0.3)',
+            }} 
+          />
+          {/* Center circle with pulse */}
+          <div 
+            className="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center border-2 border-white/30"
+            style={{
+              boxShadow: '0 0 15px rgba(255, 255, 255, 0.2), inset 0 0 15px rgba(139, 92, 246, 0.3)',
+            }}
+          >
+            <CircleDot 
+              size={24} 
+              className="text-white/70"
+              style={{
+                filter: 'drop-shadow(0 0 4px rgba(139, 92, 246, 0.6))',
+                animation: 'pulse 2s ease-in-out infinite',
+              }}
+            />
           </div>
         </div>
       </div>

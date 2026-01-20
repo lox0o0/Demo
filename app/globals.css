@@ -183,3 +183,23 @@ body {
 .animate-shine-sweep {
   animation: shineSweep 1.5s ease-in-out;
 }
+
+/* Spin animation for prize wheel */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Enhanced shimmer animation for streak numbers */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-20deg);
+  }
+}

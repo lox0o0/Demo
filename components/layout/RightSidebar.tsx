@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
-import { Trophy, Star, Ticket, Shirt, Award, Crown, Check, Heart, Building2, Plane, Hotel, Gift } from "lucide-react";
+import { Trophy, Star, Ticket, Shirt, Award, Crown, Check, Heart, Building2, Plane, Hotel, Gift, Sparkles } from "lucide-react";
 
 interface RightSidebarProps {
   user: any;
@@ -177,17 +177,18 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
   const maxTier = TIERS[TIERS.length - 1];
   const maxPoints = maxTier.minPoints;
   
-  // Calculate progress fill height
+  // Calculate progress fill height - FILL FROM TOP TO BOTTOM (Rookie → Legend)
+  // Progress starts at top (0%) and fills down to current tier
   const progressPercent = Math.min((userPoints / maxPoints) * 100, 100);
   
-  // Get reward icons for each tier
+  // Get reward icons for each tier with enhanced styling
   const getRewardIcon = (tierName: string) => {
-    if (tierName === "Silver") return <Shirt className="w-3 h-3" />;
-    if (tierName === "Gold") return <Shirt className="w-3 h-3" />;
-    if (tierName === "Platinum") return <Ticket className="w-3 h-3" />;
-    if (tierName === "Diehard") return <Award className="w-3 h-3" />;
-    if (tierName === "Legend") return <Crown className="w-3 h-3" />;
-    return <Gift className="w-3 h-3" />;
+    if (tierName === "Silver") return <Shirt className="w-4 h-4 text-silver-400" style={{ filter: 'drop-shadow(0 0 4px rgba(192, 192, 192, 0.6))' }} />;
+    if (tierName === "Gold") return <Shirt className="w-4 h-4 text-yellow-400" style={{ filter: 'drop-shadow(0 0 6px rgba(255, 215, 0, 0.8))' }} />;
+    if (tierName === "Platinum") return <Ticket className="w-4 h-4 text-cyan-300" style={{ filter: 'drop-shadow(0 0 4px rgba(103, 232, 249, 0.6))' }} />;
+    if (tierName === "Diehard") return <Award className="w-4 h-4 text-red-400" style={{ filter: 'drop-shadow(0 0 6px rgba(248, 113, 113, 0.8))' }} />;
+    if (tierName === "Legend") return <Crown className="w-5 h-5 text-yellow-300" style={{ filter: 'drop-shadow(0 0 10px rgba(253, 224, 71, 1)) drop-shadow(0 0 20px rgba(253, 224, 71, 0.6))' }} />;
+    return <Gift className="w-3 h-3 text-gray-400" />;
   };
 
   return (
@@ -196,18 +197,25 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
       
       {/* Vertical Progress Bar Container */}
       <div className="relative">
-        {/* Progress Fill Line */}
+        {/* Progress Fill Line - FILL FROM TOP TO BOTTOM */}
         <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-700/50">
           <div
-            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-green-500 to-cyan-500 transition-all duration-1000 ease-out"
+            className="absolute top-0 left-0 right-0 bg-gradient-to-b from-green-500 via-emerald-400 to-cyan-500 transition-all duration-1000 ease-out"
             style={{ height: `${progressPercent}%` }}
           >
             {/* Shine animation on progress fill */}
             <div 
-              className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-transparent"
+              className="absolute inset-0 bg-gradient-to-b from-transparent via-white/30 to-transparent"
               style={{
                 animation: 'shimmer 2s ease-in-out infinite',
                 backgroundSize: '100% 200%',
+              }}
+            />
+            {/* Pulsing glow effect */}
+            <div 
+              className="absolute inset-0 bg-gradient-to-b from-green-400/20 to-cyan-400/20"
+              style={{
+                animation: 'pulse 2s ease-in-out infinite',
               }}
             />
           </div>
@@ -215,12 +223,19 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
 
         {/* Tier Markers */}
         <div className="space-y-6 relative">
-          {TIERS.map((tier) => {
+          {TIERS.map((tier, index) => {
             const isCurrentTier = tier.name === currentTier.name;
             const isReached = userPoints >= tier.minPoints;
+            const isLegend = tier.name === "Legend";
+            const tierColor = tier.color === "gray" ? "#6b7280" : tier.color;
             
             return (
-              <div key={tier.name} className="relative flex items-start gap-3">
+              <div 
+                key={tier.name} 
+                className={`relative flex items-start gap-3 transition-all duration-300 ${
+                  isLegend ? "mb-2" : ""
+                }`}
+              >
                 {/* Tier Circle Marker */}
                 <div className="relative z-10 flex-shrink-0">
                   <div
@@ -230,7 +245,7 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                         : isReached
                         ? ""
                         : "border-white/20 bg-white/5"
-                    }`}
+                    } ${isLegend ? "w-10 h-10 border-3" : ""}`}
                     style={
                       isCurrentTier
                         ? { 
@@ -240,32 +255,47 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                           }
                         : isReached
                         ? { 
-                            borderColor: tier.color === "gray" ? "#6b7280" : tier.color, 
-                            backgroundColor: `${tier.color === "gray" ? "#6b7280" : tier.color}33`
+                            borderColor: tierColor, 
+                            backgroundColor: `${tierColor}33`,
+                            boxShadow: isLegend ? `0 0 16px ${tierColor}80` : `0 0 4px ${tierColor}40`
                           }
                         : {}
                     }
                   >
                     {isReached ? (
-                      <Star className="w-4 h-4 text-white" fill="currentColor" />
+                      <Star 
+                        className={`${isLegend ? "w-5 h-5" : "w-4 h-4"} text-white`} 
+                        fill="currentColor"
+                        style={isLegend ? { filter: 'drop-shadow(0 0 4px rgba(255, 255, 255, 0.8))' } : {}}
+                      />
                     ) : (
                       <div className="w-2 h-2 rounded-full bg-white/40" />
                     )}
                   </div>
+                  {/* Legend tier special glow ring */}
+                  {isLegend && !isReached && (
+                    <div 
+                      className="absolute inset-0 rounded-full border-2 border-yellow-400/30 animate-pulse"
+                      style={{ transform: 'scale(1.3)' }}
+                    />
+                  )}
                 </div>
 
                 {/* Tier Info */}
-                <div className="flex-1 min-w-0 pt-0.5">
+                <div className={`flex-1 min-w-0 pt-0.5 ${isLegend ? "pt-1" : ""}`}>
                   <div className="flex items-center gap-2 mb-1">
                     <span
-                      className={`text-xs font-bold uppercase ${
+                      className={`${isLegend ? "text-sm" : "text-xs"} font-bold uppercase ${
                         isCurrentTier ? "" : isReached ? "" : "text-white/60"
                       }`}
                       style={
                         isCurrentTier 
                           ? { color: "#22c55e" } 
                           : isReached 
-                          ? { color: tier.color === "gray" ? "#6b7280" : tier.color } 
+                          ? { 
+                              color: tierColor,
+                              textShadow: isLegend ? `0 0 8px ${tierColor}80` : 'none'
+                            } 
                           : {}
                       }
                     >
@@ -288,15 +318,31 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
                   </div>
                   
                   {/* Points threshold */}
-                  <div className="text-[10px] text-white/60 mb-1">
+                  <div className={`${isLegend ? "text-xs" : "text-[10px]"} text-white/60 mb-1`}>
                     {tier.minPoints.toLocaleString()} pts
                   </div>
                   
-                  {/* Reward description */}
-                  <div className="flex items-center gap-1.5 text-[10px] text-white/70">
+                  {/* Reward description - Enhanced for value */}
+                  <div className={`flex items-center gap-2 ${isLegend ? "text-xs" : "text-[10px]"} ${
+                    isLegend ? "text-yellow-300 font-semibold" : isReached ? "text-white/80" : "text-white/60"
+                  }`}>
                     {getRewardIcon(tier.name)}
-                    <span>{tier.reward || tier.access}</span>
+                    <span className={isLegend ? "font-bold" : ""}>{tier.reward || tier.access}</span>
                   </div>
+                  
+                  {/* Legend tier special callout */}
+                  {isLegend && (
+                    <div className="mt-2 px-3 py-2 bg-gradient-to-r from-yellow-400/20 via-amber-400/20 to-yellow-400/20 border border-yellow-400/40 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <Plane className="w-4 h-4 text-yellow-300" />
+                        <Hotel className="w-4 h-4 text-yellow-300" />
+                        <Ticket className="w-4 h-4 text-yellow-300" />
+                      </div>
+                      <div className="text-[10px] text-yellow-200 mt-1 font-semibold">
+                        Complete VIP Experience
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             );
