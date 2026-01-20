@@ -9,7 +9,7 @@ import { generateMockStreakData, getFlameLevelName, type StreakData } from "@/li
 import { 
   List, Shirt, Trophy, Clock, Star, Flame, Ticket, Gift, Coins, 
   CircleDot, Lock, Check, Circle, HelpCircle, User, Sparkles, 
-  TrendingUp, Calendar, Award, Crown
+  TrendingUp, Calendar, Award, Crown, Target, Share2, Video
 } from "lucide-react";
 
 interface DashboardProps {
@@ -91,43 +91,33 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
         </div>
       )}
 
-      {/* Main Content - 3 Column Layout */}
-      <main className={`relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 ${hideNavigation ? 'pt-6' : 'pt-24'}`}>
+      {/* Main Content - 2 Column Layout */}
+      <main className={`relative z-10 max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 ${hideNavigation ? 'pt-6' : 'pt-24'}`}>
         {activeSection === "dashboard" && (
-          <div className="space-y-8">
-            {/* Streak Celebration Hero Zone */}
-            <StreakHeroZone streakData={streakData} user={user} />
-            
-            {/* Main Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left Column - Activities, Profile Completion, Connect Socials */}
-            <div className="space-y-6">
-              <WeeklyActivitiesSimplified user={user} teamData={teamData} />
+          <div className="grid grid-cols-10 gap-6">
+            {/* Left Column - 70% (7 columns) */}
+            <div className="col-span-10 lg:col-span-7 space-y-6">
+              {/* Section A: Weekly Activities for Points */}
+              <WeeklyActivitiesSection user={user} />
               
-              <ProfileCompletionSimplified user={user} profileCompletion={profileCompletion} />
+              {/* Section B: (Placeholder for next section) */}
               
-              <ConnectSocialsCard user={user} />
+              {/* Section C: (Placeholder for next section) */}
             </div>
 
-            {/* Middle Column - Your Season */}
-            <div className="space-y-6">
-              <YourSeasonCard
-                tier={currentTier}
-                points={actualUserPoints}
+            {/* Right Column - 30% (3 columns) - Fan Journey Sidebar */}
+            <div className="col-span-10 lg:col-span-3">
+              <FanJourneySidebar 
+                user={user} 
+                currentTier={currentTier}
+                actualUserPoints={actualUserPoints}
                 progressPercent={progressPercent}
                 pointsToNext={pointsToNext}
                 nextTier={nextTier}
+                streakData={streakData}
                 teamData={teamData}
-                user={user}
+                userPoints={userPoints}
               />
-            </div>
-
-            {/* Right Column - Prize Wheel, Leaderboards */}
-            <div className="space-y-6">
-              <PrizeWheelCard streakData={streakData} teamData={teamData} />
-              
-              <LeaderboardsCard user={user} teamData={teamData} userPoints={userPoints} />
-            </div>
             </div>
           </div>
         )}
@@ -2162,6 +2152,354 @@ function FantasyCard({ teamData }: any) {
       >
         View Team →
       </a>
+    </div>
+  );
+}
+
+// Section A: Weekly Activities for Points
+function WeeklyActivitiesSection({ user }: { user: any }) {
+  const weeklyCompleted = 5;
+  const weeklyTotal = 7;
+  const seasonCompleted = 34;
+  const seasonTotal = 49;
+
+  const missions = [
+    {
+      id: 1,
+      icon: Clock,
+      title: "Telstra Tuesday MVP Predict",
+      points: "+25 pts",
+      status: "4h left",
+      statusType: "urgent" as const,
+      progress: null,
+    },
+    {
+      id: 2,
+      icon: List,
+      title: "Tips made for weekend fixtures",
+      points: "+50 pts",
+      status: null,
+      statusType: "progress" as const,
+      progress: { current: 6, total: 8, percent: 75 },
+    },
+    {
+      id: 3,
+      icon: User,
+      title: "Vote for MVP of last round",
+      points: "+25 pts",
+      status: "Not started",
+      statusType: "pending" as const,
+      progress: null,
+    },
+    {
+      id: 4,
+      icon: Calendar,
+      title: "Most dominant team prediction",
+      points: "+25 pts",
+      status: "Not started",
+      statusType: "pending" as const,
+      progress: null,
+    },
+    {
+      id: 5,
+      icon: TrendingUp,
+      title: "Team set and trades made for Fantasy",
+      points: "+30 pts",
+      status: "✓ Completed",
+      statusType: "completed" as const,
+      progress: null,
+    },
+    {
+      id: 6,
+      icon: Video,
+      title: "Watch match highlights",
+      points: "+15 pts",
+      status: null,
+      statusType: "progress" as const,
+      progress: { current: 2, total: 3, percent: 67 },
+    },
+    {
+      id: 7,
+      icon: Share2,
+      title: "Share on social media",
+      points: "+20 pts",
+      status: "Not started",
+      statusType: "pending" as const,
+      progress: null,
+    },
+  ];
+
+  return (
+    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-6">
+      {/* Section Header with Completion Bar */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <Target className="w-5 h-5 text-emerald-400" />
+          <h2 className="text-lg font-bold text-white">Weekly Activities</h2>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="text-sm text-white/80">
+            <span className="font-semibold text-white">{weeklyCompleted}/{weeklyTotal}</span> this week
+          </div>
+          <div className="text-sm text-white/80">
+            <span className="font-semibold text-white">{seasonCompleted}/{seasonTotal}</span> this season
+          </div>
+        </div>
+      </div>
+
+      {/* Progress Bar */}
+      <div className="mb-6">
+        <div className="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+          <div
+            className="bg-emerald-500 h-2 rounded-full transition-all duration-500"
+            style={{ width: `${(weeklyCompleted / weeklyTotal) * 100}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Horizontal Scrollable Card Row */}
+      <div className="overflow-x-auto snap-x snap-mandatory scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="flex gap-4 pb-2" style={{ width: 'max-content' }}>
+          {missions.map((mission) => (
+            <MissionCardHorizontal key={mission.id} mission={mission} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Horizontal Mission Card Component
+function MissionCardHorizontal({ mission }: { mission: any }) {
+  const Icon = mission.icon;
+
+  return (
+    <div className="min-w-[280px] bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4 flex flex-col gap-3 snap-start">
+      {/* Icon and Points */}
+      <div className="flex items-start justify-between">
+        <div className="w-10 h-10 rounded-lg bg-gray-800/50 flex items-center justify-center">
+          <Icon className="w-5 h-5 text-white/70" />
+        </div>
+        <span className="text-sm font-bold text-emerald-400">{mission.points}</span>
+      </div>
+
+      {/* Title */}
+      <h3 className="text-sm font-semibold text-white leading-tight">{mission.title}</h3>
+
+      {/* Status or Progress */}
+      {mission.statusType === "completed" && (
+        <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-emerald-500/20 border border-emerald-500/50 rounded-full w-fit">
+          <Check className="w-3 h-3 text-emerald-400" />
+          <span className="text-xs font-semibold text-emerald-400">Completed</span>
+        </div>
+      )}
+
+      {mission.statusType === "urgent" && (
+        <div className="text-xs font-semibold text-orange-400">{mission.status}</div>
+      )}
+
+      {mission.statusType === "pending" && (
+        <div className="text-xs text-white/60">{mission.status}</div>
+      )}
+
+      {mission.statusType === "progress" && mission.progress && (
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-white/80">
+              {mission.progress.current}/{mission.progress.total} complete
+            </span>
+            <span className="text-white/60">{mission.progress.percent}%</span>
+          </div>
+          <div className="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+            <div
+              className="bg-emerald-500 h-1.5 rounded-full transition-all duration-300"
+              style={{ width: `${mission.progress.percent}%` }}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Fan Journey Sidebar with Stats
+function FanJourneySidebar({ 
+  user, 
+  currentTier, 
+  actualUserPoints, 
+  progressPercent, 
+  pointsToNext, 
+  nextTier,
+  streakData,
+  teamData,
+  userPoints
+}: any) {
+  const streakWeeks = streakData?.fanStreak?.currentWeeks || 0;
+
+  return (
+    <div className="space-y-6">
+      {/* Quick Stats */}
+      <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-4">
+        <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Quick Stats</h3>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-white/60">Current Tier</span>
+            <span className="text-sm font-bold text-white">{currentTier.name}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-white/60">Total Points</span>
+            <span className="text-sm font-bold text-white">{actualUserPoints.toLocaleString()}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-white/60">Current Streak</span>
+            <span className="text-sm font-bold text-white">{streakWeeks} weeks</span>
+          </div>
+          {pointsToNext > 0 && (
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-white/60">To {nextTier.name}</span>
+              <span className="text-sm font-bold text-white">{pointsToNext} pts</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Fan Journey Tier Progress */}
+      <FanJourneyTierProgress userPoints={actualUserPoints} currentTier={currentTier} />
+    </div>
+  );
+}
+
+// Fan Journey Tier Progress Component (inline version)
+function FanJourneyTierProgress({ userPoints, currentTier }: { userPoints: number; currentTier: any }) {
+  const maxTier = TIERS[TIERS.length - 1];
+  const maxPoints = maxTier.minPoints;
+  
+  // Calculate progress fill height
+  const progressPercent = Math.min((userPoints / maxPoints) * 100, 100);
+  
+  // Get reward icons for each tier
+  const getRewardIcon = (tierName: string) => {
+    if (tierName === "Silver") return <Shirt className="w-3 h-3" />;
+    if (tierName === "Gold") return <Shirt className="w-3 h-3" />;
+    if (tierName === "Platinum") return <Ticket className="w-3 h-3" />;
+    if (tierName === "Diehard") return <Award className="w-3 h-3" />;
+    if (tierName === "Legend") return <Crown className="w-3 h-3" />;
+    return <Gift className="w-3 h-3" />;
+  };
+
+  return (
+    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-4">
+      <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Fan Journey</h3>
+      
+      {/* Vertical Progress Bar Container */}
+      <div className="relative">
+        {/* Progress Fill Line */}
+        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-700/50">
+          <div
+            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-green-500 to-cyan-500 transition-all duration-1000 ease-out"
+            style={{ height: `${progressPercent}%` }}
+          >
+            {/* Shine animation on progress fill */}
+            <div 
+              className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-transparent"
+              style={{
+                animation: 'shimmer 2s ease-in-out infinite',
+                backgroundSize: '100% 200%',
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Tier Markers */}
+        <div className="space-y-6 relative">
+          {TIERS.map((tier) => {
+            const isCurrentTier = tier.name === currentTier.name;
+            const isReached = userPoints >= tier.minPoints;
+            
+            return (
+              <div key={tier.name} className="relative flex items-start gap-3">
+                {/* Tier Circle Marker */}
+                <div className="relative z-10 flex-shrink-0">
+                  <div
+                    className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${
+                      isCurrentTier
+                        ? "shadow-[0_0_12px_rgba(34,197,94,0.6)] animate-pulse-glow"
+                        : isReached
+                        ? ""
+                        : "border-white/20 bg-white/5"
+                    }`}
+                    style={
+                      isCurrentTier
+                        ? { 
+                            borderColor: "#22c55e", 
+                            backgroundColor: "rgba(34, 197, 94, 0.2)",
+                            boxShadow: "0 0 12px rgba(34, 197, 94, 0.6)"
+                          }
+                        : isReached
+                        ? { 
+                            borderColor: tier.color, 
+                            backgroundColor: `${tier.color}33`
+                          }
+                        : {}
+                    }
+                  >
+                    {isReached ? (
+                      <Star className="w-4 h-4 text-white" fill="currentColor" />
+                    ) : (
+                      <div className="w-2 h-2 rounded-full bg-white/40" />
+                    )}
+                  </div>
+                </div>
+
+                {/* Tier Info */}
+                <div className="flex-1 min-w-0 pt-0.5">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span
+                      className={`text-xs font-bold uppercase ${
+                        isCurrentTier ? "" : isReached ? "" : "text-white/60"
+                      }`}
+                      style={
+                        isCurrentTier 
+                          ? { color: "#22c55e" } 
+                          : isReached 
+                          ? { color: tier.color } 
+                          : {}
+                      }
+                    >
+                      {tier.name}
+                    </span>
+                    {isCurrentTier && (
+                      <div 
+                        className="px-2 py-0.5 rounded text-[10px] font-semibold animate-pulse-glow"
+                        style={{
+                          backgroundColor: "rgba(34, 197, 94, 0.2)",
+                          borderColor: "rgba(34, 197, 94, 0.5)",
+                          borderWidth: "1px",
+                          borderStyle: "solid",
+                          color: "#22c55e"
+                        }}
+                      >
+                        YOU ARE HERE
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Points threshold */}
+                  <div className="text-[10px] text-white/60 mb-1">
+                    {tier.minPoints.toLocaleString()} pts
+                  </div>
+                  
+                  {/* Reward description */}
+                  <div className="flex items-center gap-1.5 text-[10px] text-white/70">
+                    {getRewardIcon(tier.name)}
+                    <span>{tier.reward || tier.access}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
