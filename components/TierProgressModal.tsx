@@ -210,9 +210,9 @@ export default function TierProgressModal({
             <div
               className="px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider"
               style={{
-                backgroundColor: 'rgba(115, 0, 60, 0.15)',
-                border: `1px solid ${tokens.colors.maroon}`,
-                color: tokens.colors.maroon,
+                backgroundColor: `${currentTier.color}20`,
+                border: `1px solid ${currentTier.color}`,
+                color: currentTier.color,
               }}
             >
               {currentTier.name} Tier
@@ -245,7 +245,7 @@ export default function TierProgressModal({
                 className="h-full rounded-full relative overflow-hidden"
                 style={{
                   width: `${progressWidth}%`,
-                  background: `linear-gradient(to right, ${tokens.colors.maroon}, ${tokens.colors.gold})`,
+                  background: `linear-gradient(to right, ${currentTier.color}, ${tokens.colors.gold})`,
                   transition: `width ${tokens.motion.duration.slow} ${tokens.motion.easing.easeOut}`,
                   boxShadow: `inset 0 1px 0 rgba(255, 255, 255, 0.2), ${tokens.shadows.glow.gold}`,
                 }}
@@ -326,26 +326,10 @@ export default function TierProgressModal({
             </div>
           </div>
 
-          {/* CTA Button - Primary, confident, minimal */}
+          {/* CTA Button - Matching home page design */}
           <button
             onClick={onCompleteProfile}
-            className="w-full rounded-lg text-sm font-semibold h-11 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#ffd700] focus:ring-offset-2 focus:ring-offset-transparent mb-2"
-            style={{
-              backgroundColor: tokens.colors.maroon,
-              color: tokens.colors.white,
-              borderRadius: tokens.radii.button,
-              boxShadow: '0 2px 8px rgba(115, 0, 60, 0.3)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#8a0048';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(115, 0, 60, 0.4)';
-              e.currentTarget.style.transform = 'translateY(-1px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = tokens.colors.maroon;
-              e.currentTarget.style.boxShadow = '0 2px 8px rgba(115, 0, 60, 0.3)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
+            className="group/cta w-full inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-bold h-11 px-6 bg-gray-900/90 hover:bg-gray-800/95 text-white border-2 border-yellow-400/50 hover:border-yellow-400/80 backdrop-blur-md shadow-[0_0_20px_rgba(251,191,36,0.6)] hover:shadow-[0_0_35px_rgba(251,191,36,0.9)] transition-all duration-300 hover:scale-110 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:ring-offset-2 focus:ring-offset-transparent mb-2"
           >
             Complete Profile →
           </button>
