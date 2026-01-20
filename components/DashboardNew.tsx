@@ -896,7 +896,7 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
               
               {/* Expandable content for MVP voting */}
               {mission.id === 3 && isExpanded && (
-                <div className="mt-2 ml-13 pt-3 border-t border-nrl-border-light space-y-3 bg-nrl-dark-card rounded-lg p-3">
+                <div className="mt-2 ml-[52px] pt-3 border-t border-nrl-border-light space-y-3 bg-nrl-dark-card rounded-lg p-3">
                   <div className="text-xs font-bold text-nrl-text-secondary mb-2">ROUND 5 MVP</div>
                   <div className="text-xs text-nrl-text-secondary mb-3">Who was the best player this round?</div>
                   
@@ -953,7 +953,7 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
 
               {/* Expandable content for Telstra Tuesday MVP Predict */}
               {mission.id === 4 && isExpanded && (
-                <div className="mt-2 ml-13 pt-3 border-t border-nrl-border-light space-y-3 bg-nrl-dark-card rounded-lg p-3">
+                <div className="mt-2 ml-[52px] pt-3 border-t border-nrl-border-light space-y-3 bg-nrl-dark-card rounded-lg p-3">
                   <div className="text-xs font-bold text-nrl-text-secondary mb-2">ROUND 6 MVP PREDICTION</div>
                   <div className="text-xs text-nrl-text-secondary mb-3">Who will be the best player next round?</div>
                   
@@ -1009,7 +1009,7 @@ function WeeklyActivitiesSimplified({ user, teamData }: any) {
 
               {/* Expandable content for Most dominant team prediction */}
               {mission.id === 5 && isExpanded && (
-                <div className="mt-2 ml-13 pt-3 border-t border-nrl-border-light space-y-3 bg-nrl-dark-card rounded-lg p-3">
+                <div className="mt-2 ml-[52px] pt-3 border-t border-nrl-border-light space-y-3 bg-nrl-dark-card rounded-lg p-3">
                   <select
                     value={selectedTeam}
                     onChange={(e) => setSelectedTeam(e.target.value)}
