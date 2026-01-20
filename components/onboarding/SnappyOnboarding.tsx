@@ -829,11 +829,11 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         }}
       >
         <div className="w-full max-w-2xl relative z-10">
-          <div className="bg-nrl-dark-card/95 backdrop-blur-sm rounded-2xl p-8 border border-nrl-border-light">
+          <div className="glass-strong rounded-2xl p-6 border border-white/10 shadow-2xl">
             <ProgressStepper currentStep={3} />
             {/* Header */}
-            <div className="text-center mb-8">
-              <div className="relative w-24 h-24 mx-auto mb-4">
+            <div className="text-center mb-4">
+              <div className="relative w-20 h-20 mx-auto mb-3">
                 <Image
                   src={selectedTeam.logoUrl}
                   alt={selectedTeam.name}
@@ -842,17 +842,61 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                   unoptimized
                 />
               </div>
-              <h2 className="text-2xl font-black text-nrl-text-primary mb-2">
+              <h2 className="text-2xl font-black text-white mb-1">
                 Welcome to {selectedTeam.name}!
               </h2>
-              <p className="text-nrl-text-secondary/70">
+              <p className="text-white/70 text-sm">
                 Connect your socials for bonus points
               </p>
             </div>
 
+            {/* Profile Completion & Vegas Draw - Moved to top */}
+            <div className="mb-4 glass rounded-xl p-4 border border-white/10">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-semibold text-white/90 uppercase tracking-wider">
+                  Profile Completion
+                </span>
+                <span className="text-lg font-bold text-emerald-400">{profileCompletion}%</span>
+              </div>
+              <div className="w-full bg-white/5 rounded-full h-2 mb-3">
+                <div
+                  className="bg-gradient-to-r from-emerald-400 via-amber-400 to-yellow-400 h-2 rounded-full transition-all duration-500"
+                  style={{ width: `${profileCompletion}%` }}
+                />
+              </div>
+              {/* Vegas 2027 Highlight */}
+              <div className={`mt-3 p-3 rounded-lg border-2 ${
+                profileCompletion >= 80 
+                  ? "bg-gradient-to-r from-emerald-500/20 via-amber-500/20 to-yellow-500/20 border-emerald-400/50" 
+                  : "bg-gradient-to-r from-amber-500/15 via-yellow-500/15 to-amber-500/15 border-amber-400/40"
+              }`}
+              style={{
+                boxShadow: profileCompletion >= 80 
+                  ? "0 0 20px rgba(16, 185, 129, 0.3), 0 0 40px rgba(251, 191, 36, 0.2)"
+                  : "0 0 15px rgba(251, 191, 36, 0.2)",
+              }}>
+                {profileCompletion >= 80 ? (
+                  <div className="text-center">
+                    <div className="text-sm font-bold text-emerald-300 mb-1">🎉 Congratulations!</div>
+                    <div className="text-xs text-white/90">You're entered in the</div>
+                    <div className="text-base font-black text-amber-300 mt-1" style={{ textShadow: '0 0 10px rgba(251, 191, 36, 0.5)' }}>
+                      VEGAS 2027 TICKETS DRAW
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center">
+                    <div className="text-xs text-white/80 mb-1">Reach <span className="font-bold text-emerald-400">80%</span> to enter the</div>
+                    <div className="text-sm font-bold text-amber-300" style={{ textShadow: '0 0 8px rgba(251, 191, 36, 0.4)' }}>
+                      VEGAS 2027 TICKETS DRAW
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* Profile Name */}
-            <div className="mb-6">
-              <label className="block text-sm font-semibold text-nrl-text-secondary uppercase tracking-wider mb-2">
+            <div className="mb-4">
+              <label className="block text-xs font-semibold text-white/80 uppercase tracking-wider mb-1.5">
                 Profile Name
               </label>
               <input
@@ -860,42 +904,38 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Choose a username"
-                className="w-full bg-white/10 border border-nrl-border-light rounded-xl px-4 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted/60 focus:outline-none focus:border-nrl-green focus:bg-white/15 transition-all"
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-emerald-400/50 focus:bg-white/10 transition-all"
               />
               {username.trim() !== "" && (
-                <p className="mt-2 text-sm text-nrl-green font-medium">
+                <p className="mt-1.5 text-xs text-emerald-400 font-medium">
                   Username available
                 </p>
               )}
             </div>
 
             {/* Sign-in Options */}
-            <div className="mb-6">
-              <h3 className="text-sm font-semibold text-nrl-text-secondary uppercase tracking-wider mb-4">
+            <div className="mb-4">
+              <h3 className="text-xs font-semibold text-white/80 uppercase tracking-wider mb-3">
                 Sign In
               </h3>
-              <div className="grid grid-cols-3 gap-3 mb-3">
+              <div className="grid grid-cols-3 gap-2.5">
                 {/* Google */}
                 <button
                   onClick={() => setSelectedAuthMethod(selectedAuthMethod === "google" ? null : "google")}
-                  className={`relative p-4 rounded-xl border-2 transition-all ${
+                  className={`relative p-3 rounded-lg border transition-all ${
                     selectedAuthMethod === "google"
-                      ? "bg-nrl-green/10 border-nrl-green"
-                      : "bg-nrl-dark-hover border-nrl-border-light hover:border-opacity-50"
+                      ? "bg-emerald-500/10 border-emerald-400/50"
+                      : "bg-white/5 border-white/10 hover:border-white/20"
                   }`}
-                  style={{
-                    borderColor: selectedAuthMethod === "google" ? undefined : "#4285F4",
-                    borderWidth: selectedAuthMethod === "google" ? '2px' : '1px',
-                  }}
                 >
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-neutral-800 hover:bg-neutral-700 transition-all duration-200">
-                      <AuthIcon provider="google" size={28} />
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div className="w-10 h-10 flex items-center justify-center rounded-full bg-neutral-800 hover:bg-neutral-700 transition-all duration-200">
+                      <AuthIcon provider="google" size={24} />
                     </div>
-                    <div className="text-xs font-semibold text-nrl-text-primary">Google</div>
+                    <div className="text-[10px] font-semibold text-white/90">Google</div>
                     {selectedAuthMethod === "google" && (
-                      <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-nrl-green flex items-center justify-center">
-                        <span className="text-white text-xs">✓</span>
+                      <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-emerald-400 flex items-center justify-center">
+                        <span className="text-white text-[10px]">✓</span>
                       </div>
                     )}
                   </div>
@@ -904,24 +944,20 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                 {/* Apple */}
                 <button
                   onClick={() => setSelectedAuthMethod(selectedAuthMethod === "apple" ? null : "apple")}
-                  className={`relative p-4 rounded-xl border-2 transition-all ${
+                  className={`relative p-3 rounded-lg border transition-all ${
                     selectedAuthMethod === "apple"
-                      ? "bg-nrl-green/10 border-nrl-green"
-                      : "bg-nrl-dark-hover border-nrl-border-light hover:border-opacity-50"
+                      ? "bg-emerald-500/10 border-emerald-400/50"
+                      : "bg-white/5 border-white/10 hover:border-white/20"
                   }`}
-                  style={{
-                    borderColor: selectedAuthMethod === "apple" ? undefined : "#000000",
-                    borderWidth: selectedAuthMethod === "apple" ? '2px' : '1px',
-                  }}
                 >
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-neutral-800 hover:bg-neutral-700 transition-all duration-200">
-                      <AuthIcon provider="apple" size={28} />
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div className="w-10 h-10 flex items-center justify-center rounded-full bg-neutral-800 hover:bg-neutral-700 transition-all duration-200">
+                      <AuthIcon provider="apple" size={24} />
                     </div>
-                    <div className="text-xs font-semibold text-nrl-text-primary">Apple</div>
+                    <div className="text-[10px] font-semibold text-white/90">Apple</div>
                     {selectedAuthMethod === "apple" && (
-                      <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-nrl-green flex items-center justify-center">
-                        <span className="text-white text-xs">✓</span>
+                      <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-emerald-400 flex items-center justify-center">
+                        <span className="text-white text-[10px]">✓</span>
                       </div>
                     )}
                   </div>
@@ -930,26 +966,22 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                 {/* Email */}
                 <button
                   onClick={() => setSelectedAuthMethod(selectedAuthMethod === "email" ? null : "email")}
-                  className={`relative p-4 rounded-xl border-2 transition-all ${
+                  className={`relative p-3 rounded-lg border transition-all ${
                     selectedAuthMethod === "email"
-                      ? "bg-nrl-green/10 border-nrl-green"
-                      : "bg-nrl-dark-hover border-nrl-border-light hover:border-opacity-50"
+                      ? "bg-emerald-500/10 border-emerald-400/50"
+                      : "bg-white/5 border-white/10 hover:border-white/20"
                   }`}
-                  style={{
-                    borderColor: selectedAuthMethod === "email" ? undefined : "#808080",
-                    borderWidth: selectedAuthMethod === "email" ? '2px' : '1px',
-                  }}
                 >
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-neutral-800 hover:bg-neutral-700 transition-all duration-200">
-                      <svg className="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div className="w-10 h-10 flex items-center justify-center rounded-full bg-neutral-800 hover:bg-neutral-700 transition-all duration-200">
+                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
                     </div>
-                    <div className="text-xs font-semibold text-nrl-text-primary">Email</div>
+                    <div className="text-[10px] font-semibold text-white/90">Email</div>
                     {selectedAuthMethod === "email" && (
-                      <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-nrl-green flex items-center justify-center">
-                        <span className="text-white text-xs">✓</span>
+                      <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-emerald-400 flex items-center justify-center">
+                        <span className="text-white text-[10px]">✓</span>
                       </div>
                     )}
                   </div>
@@ -958,10 +990,10 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
 
               {/* Email input (shown when email is selected) */}
               {selectedAuthMethod === "email" && (
-                <div className="mt-3">
+                <div className="mt-2.5">
                   <div className="relative">
-                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                      <svg className="w-5 h-5 text-nrl-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                      <svg className="w-4 h-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
                     </div>
@@ -970,15 +1002,15 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                       value={buildProfileEmail}
                       onChange={(e) => setBuildProfileEmail(e.target.value)}
                       placeholder="Enter your email"
-                      className={`w-full bg-white/10 border rounded-xl pl-12 pr-4 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted/60 focus:outline-none focus:bg-white/15 transition-all ${
+                      className={`w-full bg-white/5 border rounded-lg pl-10 pr-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:bg-white/10 transition-all ${
                         buildProfileEmail.trim() === "" 
                           ? "border-red-500/50 focus:border-red-500" 
-                          : "border-nrl-border-light focus:border-nrl-green"
+                          : "border-white/10 focus:border-emerald-400/50"
                       }`}
                     />
                   </div>
                   {buildProfileEmail.trim() === "" && (
-                    <p className="mt-2 text-xs text-red-400">
+                    <p className="mt-1.5 text-xs text-red-400">
                       Please enter your email to continue
                     </p>
                   )}
@@ -987,40 +1019,36 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
             </div>
 
             {/* Social Connection */}
-            <div className="mb-6">
-              <h3 className="text-sm font-semibold text-nrl-text-secondary uppercase tracking-wider mb-4">
+            <div className="mb-4">
+              <h3 className="text-xs font-semibold text-white/80 uppercase tracking-wider mb-3">
                 Connect Social Accounts
               </h3>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2.5">
                 {SOCIAL_PLATFORMS.map((platform) => {
                   const isConnected = connectedSocials.includes(platform.id);
                   return (
                     <button
                       key={platform.id}
                       onClick={() => handleSocialToggle(platform.id)}
-                      className={`relative p-5 rounded-xl border-2 transition-all ${
+                      className={`relative p-3 rounded-lg border transition-all ${
                         isConnected
-                          ? "bg-nrl-green/10 border-nrl-green"
-                          : "bg-nrl-dark-hover hover:border-opacity-50"
+                          ? "bg-emerald-500/10 border-emerald-400/50"
+                          : "bg-white/5 border-white/10 hover:border-white/20"
                       }`}
-                      style={{
-                        borderColor: isConnected ? undefined : platform.color,
-                        borderWidth: isConnected ? '2px' : '1px',
-                      }}
                     >
-                      <div className="flex flex-col items-center gap-3">
-                        <SocialIcon platform={platform.id} size={56} className="md:w-14 md:h-14" />
+                      <div className="flex flex-col items-center gap-2">
+                        <SocialIcon platform={platform.id} size={40} />
                         <div className="text-center">
-                          <div className="font-semibold text-nrl-text-primary text-sm mb-1">
+                          <div className="font-semibold text-white text-xs mb-0.5">
                             {platform.name}
                           </div>
-                          <div className="text-xs text-nrl-green font-bold">
+                          <div className="text-[10px] text-emerald-400 font-bold">
                             +{platform.points} pts
                           </div>
                         </div>
                         {isConnected && (
-                          <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-nrl-green flex items-center justify-center">
-                            <span className="text-white text-xs">✓</span>
+                          <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-emerald-400 flex items-center justify-center">
+                            <span className="text-white text-[10px]">✓</span>
                           </div>
                         )}
                       </div>
@@ -1031,82 +1059,49 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
             </div>
 
             {/* Points Summary */}
-            <div className="bg-nrl-dark-hover rounded-xl p-4 mb-6 border border-nrl-border-light">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-sm text-nrl-text-secondary">Total Points</span>
-                <span className="text-2xl font-black text-nrl-green">{totalPoints}</span>
+            <div className="glass rounded-lg p-3 mb-4 border border-white/10">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs text-white/70">Total Points</span>
+                <span className="text-xl font-black text-emerald-400">{totalPoints}</span>
               </div>
-              <div className="space-y-1 text-xs text-nrl-text-muted">
+              <div className="space-y-0.5 text-[10px] text-white/60">
                 <div className="flex justify-between">
                   <span>Welcome bonus</span>
-                  <span className="text-nrl-green">+50 pts</span>
+                  <span className="text-emerald-400">+50 pts</span>
                 </div>
                 {pointsFromSocials > 0 && (
                   <div className="flex justify-between">
                     <span>Social connections</span>
-                    <span className="text-nrl-green">+{pointsFromSocials} pts</span>
+                    <span className="text-emerald-400">+{pointsFromSocials} pts</span>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Profile Completion & Vegas Draw */}
-            <div className="bg-gradient-to-r from-nrl-green/20 to-nrl-amber/20 rounded-xl p-4 mb-6 border border-nrl-green/30">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-semibold text-nrl-text-primary">
-                  Profile Completion
-                </span>
-                <span className="text-lg font-bold text-nrl-green">{profileCompletion}%</span>
-              </div>
-              <div className="w-full bg-nrl-dark-hover rounded-full h-2 mb-3">
-                <div
-                  className="bg-gradient-to-r from-nrl-green to-nrl-amber h-2 rounded-full transition-all duration-500"
-                  style={{ width: `${profileCompletion}%` }}
-                />
-              </div>
-              <p className="text-xs text-nrl-text-secondary">
-                {profileCompletion >= 80 ? (
-                  <span className="text-nrl-green font-semibold">
-                    Congratulations! You are in the draw for Vegas 2027 tickets!
-                  </span>
-                ) : (
-                  <span>
-                    Reach <span className="font-semibold text-nrl-green">80%</span> to enter the
-                    <span className="font-bold text-nrl-amber"> Vegas 2027 tickets draw</span>
-                  </span>
-                )}
-              </p>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex gap-3">
-              <button
-                onClick={handleSkip}
-                className="flex-1 bg-nrl-dark-hover border border-nrl-border-light text-nrl-text-secondary font-semibold py-3 rounded-xl hover:bg-nrl-dark-hover/80 transition-colors"
-              >
-                Skip for Now
-              </button>
-              <button
-                onClick={() => handleComplete()}
-                disabled={selectedAuthMethod === "email" && buildProfileEmail.trim() === ""}
-                className="flex-1 text-white font-bold py-3 rounded-xl transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                style={{
-                  backgroundColor: selectedTeam.primaryColor,
-                }}
-                onMouseEnter={(e) => {
-                  if (!e.currentTarget.disabled) {
-                    e.currentTarget.style.opacity = '0.9';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!e.currentTarget.disabled) {
-                    e.currentTarget.style.opacity = '1';
-                  }
-                }}
-              >
-                Continue
-              </button>
-            </div>
+            {/* Action Button */}
+            <button
+              onClick={() => handleComplete()}
+              disabled={selectedAuthMethod === "email" && buildProfileEmail.trim() === ""}
+              className="w-full text-white font-bold py-2.5 rounded-lg transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg"
+              style={{
+                backgroundColor: selectedTeam.primaryColor,
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+              }}
+              onMouseEnter={(e) => {
+                if (!e.currentTarget.disabled) {
+                  e.currentTarget.style.opacity = '0.9';
+                  e.currentTarget.style.boxShadow = '0 6px 25px rgba(0, 0, 0, 0.4)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!e.currentTarget.disabled) {
+                  e.currentTarget.style.opacity = '1';
+                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+                }
+              }}
+            >
+              Continue
+            </button>
           </div>
         </div>
       </div>
