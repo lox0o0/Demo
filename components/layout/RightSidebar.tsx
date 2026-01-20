@@ -123,7 +123,7 @@ export default function RightSidebar({ user }: RightSidebarProps) {
                   type="button"
                   role="tab"
                   onClick={() => setActiveTab("quests")}
-                  className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-4 py-2 text-sm font-medium transition-all text-white/80 ${
+                  className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-4 py-2 text-xs font-medium transition-all text-white/80 ${
                     activeTab === "quests" ? "bg-white/20 text-white shadow-sm" : ""
                   }`}
                 >
@@ -133,7 +133,7 @@ export default function RightSidebar({ user }: RightSidebarProps) {
                   type="button"
                   role="tab"
                   onClick={() => setActiveTab("leaderboard")}
-                  className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-4 py-2 text-sm font-medium transition-all text-white/80 ${
+                  className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-4 py-2 text-xs font-medium transition-all text-white/80 ${
                     activeTab === "leaderboard" ? "bg-white/20 text-white shadow-sm" : ""
                   }`}
                 >
@@ -143,7 +143,7 @@ export default function RightSidebar({ user }: RightSidebarProps) {
                   type="button"
                   role="tab"
                   onClick={() => setActiveTab("achievements")}
-                  className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-4 py-2 text-sm font-medium transition-all text-white/80 ${
+                  className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-4 py-2 text-xs font-medium transition-all text-white/80 ${
                     activeTab === "achievements" ? "bg-white/20 text-white shadow-sm" : ""
                   }`}
                 >
