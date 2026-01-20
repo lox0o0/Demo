@@ -127,44 +127,47 @@ export default function HeroCarousel() {
                   className="min-w-0 shrink-0 grow-0 opacity-100 visible h-full"
                   style={{ width: `${100 / slides.length}%` }}
                 >
-                  <div className="rounded-lg text-card-foreground shadow-sm hover:border-gray-700 transition-all duration-500 ease-out hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/10 group cursor-pointer bg-transparent border-0 w-full h-full">
-                    <div className="p-0 relative bg-transparent h-full">
-                      <div className="relative h-full w-full bg-transparent overflow-hidden p-6 flex flex-col items-start justify-end space-y-4">
-                        {/* Background gradient */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0b] via-[#1a1a1d] to-[#0a0a0b]" />
-                        
-                        {/* Icon or Logo */}
-                        {slide.icon ? (
-                          <div className="relative z-10 transition-transform duration-300 group-hover:scale-105">
-                            {slide.icon}
-                          </div>
-                        ) : slide.logo ? (
-                          <div className="relative z-10 w-1/4 max-h-32 transition-transform duration-300 group-hover:scale-105">
-                            <Image
-                              src={slide.logo}
-                              alt={slide.headline}
-                              width={128}
-                              height={128}
-                              className="object-contain"
-                              unoptimized
-                            />
-                          </div>
-                        ) : null}
-
-                        {/* Content */}
-                        <div className="flex flex-col items-start text-left text-white space-y-3 relative z-10">
-                          <h3 className="text-xl font-bold">{slide.headline}</h3>
-                          <p className="text-base text-white/80 max-w-md leading-relaxed">{slide.subtext}</p>
-                          <button
-                            onClick={slide.ctaAction}
-                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border hover:text-accent-foreground h-10 px-4 py-2 border-white/20 text-white hover:bg-white/10 bg-white/5 backdrop-blur-sm hover:backdrop-blur-md transition-all duration-300"
-                          >
-                            {slide.ctaText}
-                          </button>
+                  <div className="p-2 bg-gradient-to-br from-white/20 to-white/10 rounded-lg backdrop-blur-sm border border-white/30 group hover:scale-105 transition-transform duration-500 ease-out hover:shadow-2xl hover:shadow-cyan-500/10 cursor-pointer w-full h-full">
+                    <div className="rounded-lg text-card-foreground shadow-sm relative border-0 cursor-pointer h-full bg-transparent overflow-visible">
+                      <div className="p-0 h-full relative overflow-hidden rounded-lg">
+                        {/* Hover Shine Effect */}
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-20">
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
+                          <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-purple-400/10 to-pink-400/10 animate-pulse"></div>
                         </div>
+                        
+                        {/* Content Container */}
+                        <div className="relative h-full w-full overflow-hidden p-6 flex flex-col items-start justify-end space-y-4">
+                          {/* Icon or Logo */}
+                          {slide.icon ? (
+                            <div className="relative z-10 transition-transform duration-300 group-hover:scale-105">
+                              {slide.icon}
+                            </div>
+                          ) : slide.logo ? (
+                            <div className="relative z-10 w-1/4 max-h-32 transition-transform duration-300 group-hover:scale-105">
+                              <Image
+                                src={slide.logo}
+                                alt={slide.headline}
+                                width={128}
+                                height={128}
+                                className="object-contain"
+                                unoptimized
+                              />
+                            </div>
+                          ) : null}
 
-                        {/* Hover gradient overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                          {/* Content */}
+                          <div className="flex flex-col items-start text-left text-white space-y-3 relative z-10">
+                            <h3 className="text-xl font-bold">{slide.headline}</h3>
+                            <p className="text-2xl text-white/80 max-w-md leading-relaxed">{slide.subtext}</p>
+                            <button
+                              onClick={slide.ctaAction}
+                              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border hover:text-accent-foreground h-10 px-4 py-2 border-white/20 text-white hover:bg-white/10 bg-white/5 backdrop-blur-sm hover:backdrop-blur-md transition-all duration-300"
+                            >
+                              {slide.ctaText}
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
