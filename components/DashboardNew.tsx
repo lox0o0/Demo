@@ -1080,7 +1080,7 @@ function MissionCard({ mission, onExpand, isExpanded }: {
     <div
       className={`group relative bg-nrl-dark-hover border-l-4 rounded-xl p-4 transition-all duration-200 cursor-pointer ${
         mission.completed 
-          ? 'border-l-nrl-green bg-nrl-green/5 border-r border-t border-b border-nrl-green/20' 
+          ? 'border-l-nrl-green bg-nrl-green/8 border-r border-t border-b border-nrl-green/30' 
           : mission.urgency
           ? 'border-l-orange-500 border-r border-t border-b border-orange-500/50 hover:border-orange-500 hover:shadow-lg hover:shadow-orange-500/20 hover:-translate-y-0.5'
           : 'border-l-nrl-border-light border-r border-t border-b border-nrl-border-light hover:border-l-nrl-green hover:border-nrl-green hover:shadow-lg hover:shadow-nrl-green/20 hover:-translate-y-0.5'
@@ -1093,7 +1093,7 @@ function MissionCard({ mission, onExpand, isExpanded }: {
           {mission.iconComponent && (
             <mission.iconComponent 
               size={20} 
-              className={mission.urgency ? "text-orange-400" : mission.completed ? "text-white/40" : "text-white/70"} 
+              className={mission.urgency ? "text-orange-400" : mission.completed ? "text-nrl-green/70" : "text-white/70"} 
               strokeWidth={2} 
             />
           )}
