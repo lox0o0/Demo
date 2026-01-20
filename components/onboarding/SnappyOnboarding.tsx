@@ -694,7 +694,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
             <ProgressStepper currentStep={2} />
             
             {/* Profile Completion Bar - Show after team selection */}
-            <div className="bg-nrl-dark-hover rounded-xl p-4 border border-nrl-border-light mb-6">
+            <div className="bg-nrl-dark-hover rounded-xl p-4 border border-nrl-border-light mb-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-semibold text-nrl-text-primary">
                   Profile Completion
@@ -712,16 +712,40 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
               </div>
             </div>
 
-            {/* Connect with Gmail or Apple */}
+            {/* Build fan profile button - full width under profile completion */}
+            <button
+              onClick={handleBuildFanProfile}
+              className="w-full text-white font-bold py-3 rounded-xl transition-all transform hover:scale-[1.02] mb-2"
+              style={{
+                backgroundColor: teamPrimaryColor,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = '0.9';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = '1';
+              }}
+            >
+              Build fan profile
+            </button>
+            
+            {/* Value prop under Build fan profile */}
             <div className="text-center mb-6">
-              <h3 className="text-lg font-semibold text-nrl-text-primary mb-4">
-                Connect with Gmail or Apple
+              <p className="text-sm text-nrl-amber font-medium">
+                Start earning points
+              </p>
+            </div>
+
+            {/* Quick sign in section */}
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-nrl-text-secondary uppercase tracking-wider mb-4">
+                Quick sign in:
               </h3>
-              <div className="flex justify-center gap-4 mb-4">
+              <div className="grid grid-cols-3 gap-3 mb-3">
                 {/* Google Button */}
                 <button
                   onClick={handleGoogleSignIn}
-                  className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-neutral-800 hover:bg-neutral-700 flex items-center justify-center transition-all duration-200 shadow-lg"
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-neutral-800 hover:bg-neutral-700 flex items-center justify-center transition-all duration-200 shadow-lg mx-auto"
                   aria-label="Sign in with Google"
                 >
                   <AuthIcon provider="google" size={28} />
@@ -729,72 +753,49 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
                 {/* Apple Button */}
                 <button
                   onClick={handleAppleSignIn}
-                  className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-neutral-800 hover:bg-neutral-700 flex items-center justify-center transition-all duration-200 shadow-lg"
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-neutral-800 hover:bg-neutral-700 flex items-center justify-center transition-all duration-200 shadow-lg mx-auto"
                   aria-label="Sign in with Apple"
                 >
                   <AuthIcon provider="apple" size={28} />
                 </button>
-              </div>
-            </div>
-
-            {/* Or: enter email */}
-            <div className="mb-6">
-              <div className="text-center mb-4">
-                <span className="text-nrl-text-secondary/70 text-sm">or: enter email</span>
-              </div>
-              <div className="relative">
-                <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                  <svg className="w-5 h-5 text-nrl-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {/* Email Button */}
+                <button
+                  onClick={() => setSelectedAuthMethod(selectedAuthMethod === "email" ? null : "email")}
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-neutral-800 hover:bg-neutral-700 flex items-center justify-center transition-all duration-200 shadow-lg mx-auto"
+                  aria-label="Sign in with Email"
+                >
+                  <svg className="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
-                </div>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    // hasAuth will be false by default, email.trim() check handles the 20% completion
-                  }}
-                  placeholder="Loxley.davies@gmail.com"
-                  className="w-full bg-white/10 border border-nrl-border-light rounded-xl pl-12 pr-12 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted/60 focus:outline-none focus:border-nrl-green focus:bg-white/15 transition-all"
-                />
-                <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                  <svg className="w-5 h-5 text-nrl-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
+                </button>
               </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex gap-3 mb-4">
-              <button
-                onClick={handleSkip}
-                className="flex-1 bg-nrl-dark-hover border border-nrl-border-light text-nrl-text-secondary/80 font-semibold py-3 rounded-xl hover:bg-nrl-dark-hover/80 transition-colors"
-              >
-                Skip for Now
-              </button>
-              <button
-                onClick={handleBuildFanProfile}
-                className="flex-1 text-white font-bold py-3 rounded-xl transition-all transform hover:scale-[1.02]"
-                style={{
-                  backgroundColor: teamPrimaryColor,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = '0.9';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = '1';
-                }}
-              >
-                Build fan profile
-              </button>
-            </div>
-            {/* Value prop under Build fan profile */}
-            <div className="text-center">
-              <p className="text-sm text-nrl-amber font-medium">
-                Start earning points
-              </p>
+              
+              {/* Email input (shown when email is selected) */}
+              {selectedAuthMethod === "email" && (
+                <div className="mt-3">
+                  <div className="relative">
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                      <svg className="w-5 h-5 text-nrl-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                      }}
+                      placeholder="Loxley.davies@gmail.com"
+                      className="w-full bg-white/10 border border-nrl-border-light rounded-xl pl-12 pr-12 py-3 text-nrl-text-primary placeholder:text-nrl-text-muted/60 focus:outline-none focus:border-nrl-green focus:bg-white/15 transition-all"
+                    />
+                    <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                      <svg className="w-5 h-5 text-nrl-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

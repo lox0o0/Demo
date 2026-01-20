@@ -40,7 +40,16 @@ export const AuthIcon = ({ provider, size = 24 }: { provider: "google" | "apple"
   }
   
   return (
-    <div className="relative flex items-center justify-center" style={{ width: size, height: size, minWidth: size, minHeight: size }}>
+    <div 
+      className="relative flex items-center justify-center" 
+      style={{ 
+        width: size, 
+        height: size, 
+        minWidth: size, 
+        minHeight: size,
+        backgroundColor: provider === "apple" ? "#262626" : undefined, // Match neutral-800 (#262626)
+      }}
+    >
       <Image
         src={imgSrc}
         alt={`${provider} logo`}
