@@ -129,7 +129,7 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
       {/* Background Image - Leaderboards specific */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <Image
-          src="/leaderboards/background.webp"
+          src="/leaderboards/leaderboards.webp"
           alt="Leaderboards Background"
           fill
           className="object-cover"
