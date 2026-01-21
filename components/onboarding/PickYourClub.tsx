@@ -134,7 +134,7 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
     team.name.toLowerCase().includes(teamSearchQuery.toLowerCase())
   );
 
-  const backgroundImagePath = "/broncos/choose-team.png";
+  const backgroundImagePath = "/broncos/nrlimage1.jpeg";
   
   return (
     <div className="min-h-screen relative" style={{ backgroundColor: '#000' }}>
@@ -407,7 +407,7 @@ export function TeamCelebration({ team, onComplete }: { team: Team; onComplete?:
         ))}
       </div>
 
-      <div className="relative z-10 text-center space-y-10 max-w-3xl mx-auto px-4">
+      <div className="relative z-10 text-center space-y-16 max-w-3xl mx-auto px-4">
         {/* Explosive team logo */}
         <div
           className="relative w-56 h-56 md:w-80 md:h-80 mx-auto transform animate-bounce-in"
@@ -422,33 +422,20 @@ export function TeamCelebration({ team, onComplete }: { team: Team; onComplete?:
           />
         </div>
 
-        {/* Welcome message */}
-        <div className="space-y-6">
-          <h1
-            className="text-6xl md:text-8xl font-black text-white drop-shadow-2xl leading-tight tracking-tight"
-            style={{ 
-              animation: "fadeInUp 0.8s ease-out 0.3s both",
-              textShadow: '0 4px 20px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6)',
-              letterSpacing: '-0.02em',
-            }}
+        {/* Stats section */}
+        {showStats && (
+          <div
+            className="space-y-6 text-white"
+            style={{ animation: "fadeInUp 0.8s ease-out 0.6s both" }}
           >
-            {team.welcomeMessage}
-          </h1>
-          
-          {showStats && (
-            <div
-              className="space-y-4 text-white"
-              style={{ animation: "fadeInUp 0.8s ease-out 0.6s both" }}
-            >
-              <p className="text-2xl md:text-4xl font-bold tracking-tight" style={{ textShadow: '0 2px 12px rgba(0, 0, 0, 0.7)' }}>
-                You're one of {team.fanCount.toLocaleString()} {team.name} fans
-              </p>
-              <p className="text-xl md:text-3xl font-semibold text-white/95 tracking-wide" style={{ textShadow: '0 2px 10px rgba(0, 0, 0, 0.6)' }}>
-                {team.chant}
-              </p>
-            </div>
-          )}
-        </div>
+            <p className="text-2xl md:text-4xl font-bold tracking-tight" style={{ textShadow: '0 2px 12px rgba(0, 0, 0, 0.7)' }}>
+              You're one of {team.fanCount.toLocaleString()} {team.name} fans
+            </p>
+            <p className="text-xl md:text-3xl font-semibold text-white/95 tracking-wide" style={{ textShadow: '0 2px 10px rgba(0, 0, 0, 0.6)' }}>
+              {team.chant}
+            </p>
+          </div>
+        )}
 
         {/* Badge unlock animation - Enhanced with premium styling */}
         {showStats && (

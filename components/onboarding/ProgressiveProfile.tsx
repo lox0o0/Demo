@@ -118,6 +118,9 @@ export default function ProgressiveProfile({
                 style={{ width: `${(step / 3) * 100}%` }}
               />
             </div>
+            <p className="text-center text-sm text-white/80 mt-4 font-medium">
+              Sign-in for a new way to play
+            </p>
           </div>
 
           {step === 1 && (
