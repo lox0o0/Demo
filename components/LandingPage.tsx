@@ -237,13 +237,13 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
         </section>
 
         {/* Prize Carousel Section */}
-        <section className="px-4 sm:px-6 lg:px-8 py-2 flex-1 flex flex-col min-h-0">
+        <section className="px-4 sm:px-6 lg:px-8 py-1 flex-1 flex flex-col min-h-0">
           <div className="max-w-7xl mx-auto flex-1 flex flex-col">
-            <div className="flex items-center gap-2 mb-2 justify-center flex-shrink-0">
-              <Trophy className="w-4 h-4 text-white" />
-              <h2 className="text-lg font-bold text-white">Compete for Glory and Prizes</h2>
+            <div className="flex items-center gap-1.5 mb-1 justify-center flex-shrink-0">
+              <Trophy className="w-3.5 h-3.5 text-white" />
+              <h2 className="text-base font-bold text-white">Compete for Glory and Prizes</h2>
             </div>
-            <p className="text-center text-white/70 mb-2 text-xs flex-shrink-0">
+            <p className="text-center text-white/70 mb-1 text-xs flex-shrink-0">
               Top fans win incredible rewards every week
             </p>
 
@@ -279,20 +279,20 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
                   return (
                     <div
                       key={prize.id}
-                      className="flex-shrink-0 w-[200px] bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-2 hover:scale-105 hover:shadow-xl transition-all duration-300 snap-center"
+                      className="flex-shrink-0 w-[200px] bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-1.5 hover:scale-105 hover:shadow-xl transition-all duration-300 snap-center"
                     >
-                      <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/50 flex items-center justify-center mb-1.5 mx-auto">
-                        <Icon className="w-4 h-4 text-amber-400" />
+                      <div className="w-6 h-6 rounded-md bg-amber-500/20 border border-amber-500/50 flex items-center justify-center mb-1 mx-auto">
+                        <Icon className="w-3 h-3 text-amber-400" />
                       </div>
-                      <h3 className="text-xs font-bold text-white mb-0.5 text-center leading-tight">{prize.title}</h3>
-                      <p className="text-xs text-white/70 text-center leading-tight">{prize.description}</p>
+                      <h3 className="text-xs font-bold text-white mb-0 text-center leading-tight">{prize.title}</h3>
+                      <p className="text-xs text-white/70 text-center leading-tight mt-0.5">{prize.description}</p>
                     </div>
                   );
                 })}
               </div>
 
               {/* Dot Indicators */}
-              <div className="flex justify-center gap-1.5 mt-2 flex-shrink-0">
+              <div className="flex justify-center gap-1.5 mt-1 flex-shrink-0">
                 {prizes.map((_, index) => (
                   <button
                     key={index}
