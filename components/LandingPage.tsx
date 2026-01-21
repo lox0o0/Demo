@@ -276,16 +276,16 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
 
   return (
     <div className="min-h-screen relative overflow-y-auto flex flex-col">
-      {/* Play Video Button - Top right corner */}
+      {/* Begin Demo Button - Top right corner */}
       <button
         onClick={handlePlayVideo}
         className="fixed top-4 right-4 z-50 px-4 py-2 bg-nrl-green/90 hover:bg-nrl-green text-white font-semibold text-sm rounded-lg transition-all duration-300 shadow-[0_0_20px_rgba(34,197,94,0.5)] hover:shadow-[0_0_30px_rgba(34,197,94,0.7)] hover:scale-105 flex items-center gap-2 border-2 border-nrl-green/50 hover:border-nrl-green/80"
-        title="Play intro video"
+        title="Begin Demo"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <polygon points="5 3 19 12 5 21 5 3" />
         </svg>
-        Play Video
+        Begin Demo
       </button>
 
       {/* Background */}
