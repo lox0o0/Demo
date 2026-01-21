@@ -2855,7 +2855,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                           <div className="pt-3 border-t border-gray-700/50 space-y-3">
                             <div className="text-xs text-white/60 mb-2">+10 Fuel • {mission.points}</div>
                             
-                            {/* Voting Results */}
+                            {/* Voting Results - Show what other fans picked */}
                             <div className="pt-3 border-t border-gray-700/50">
                               <div className="text-xs font-semibold text-white/80 mb-2">Fan Voting Results:</div>
                               <div className="space-y-2">
