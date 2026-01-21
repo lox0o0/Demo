@@ -269,8 +269,8 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
           priority
           unoptimized
         />
-        <div className="absolute inset-0 bg-black/40"></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50"></div>
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/60"></div>
       </div>
 
       {/* Hero Section */}
@@ -303,7 +303,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
                   <Star className="w-5 h-5 text-white" />
                 </div>
                 <h3 className="text-sm font-bold text-white mb-1 text-center">Complete Activities, Earn Points</h3>
-                <p className="text-xs text-white/70 text-center leading-tight">
+                <p className="text-sm text-white/85 text-center leading-normal">
                   Predict matches, play fantasy, engage with content and watch your points grow
                 </p>
                 {/* Vertical divider on right */}
@@ -316,7 +316,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
                   <Trophy className="w-5 h-5 text-white" />
                 </div>
                 <h3 className="text-sm font-bold text-white mb-1 text-center">Climb the Leaderboards</h3>
-                <p className="text-xs text-white/70 text-center leading-tight">
+                <p className="text-sm text-white/85 text-center leading-normal">
                   Compete against fans across Australia for weekly glory and bragging rights
                 </p>
                 {/* Vertical divider on right */}
@@ -329,7 +329,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
                   <TrendingUp className="w-5 h-5 text-white" />
                 </div>
                 <h3 className="text-sm font-bold text-white mb-1 text-center">Rise Through Fan Tiers</h3>
-                <p className="text-xs text-white/70 text-center leading-tight">
+                <p className="text-sm text-white/85 text-center leading-normal">
                   From Rookie to Legend - unlock exclusive rewards at every level
                 </p>
               </div>
@@ -344,7 +344,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
               <Trophy className="w-4 h-4 text-white" />
               <h2 className="text-base font-bold text-white">Compete for Glory and Prizes</h2>
             </div>
-            <p className="text-center text-white/70 mb-2 text-xs flex-shrink-0">
+            <p className="text-center text-white/85 mb-2 text-sm flex-shrink-0">
               Top fans win incredible rewards every week
             </p>
 
@@ -385,12 +385,12 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
                     >
                       {/* Gradient border wrapper */}
                       <div className={`relative p-[2px] rounded-lg bg-gradient-to-r ${prize.borderGradient} opacity-60 group-hover:opacity-100 transition-opacity duration-300`}>
-                        <div className="px-4 py-3 rounded-lg bg-black/30 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02]">
+                        <div className="px-4 py-3 rounded-lg bg-black/50 backdrop-blur-md transition-all duration-300 hover:scale-[1.02]">
                           <div className="flex items-center justify-center mb-2">
                             <Icon className={`w-5 h-5 ${prize.iconColor} drop-shadow-lg`} />
                           </div>
                           <h3 className="text-sm font-bold text-white mb-1 text-center">{prize.title}</h3>
-                          <p className="text-xs text-white/70 text-center leading-tight">{prize.description}</p>
+                          <p className="text-sm text-white/85 text-center leading-normal">{prize.description}</p>
                           
                           {/* Shimmer effect on hover */}
                           <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-20 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none"></div>
@@ -429,12 +429,12 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
             <p className="text-sm font-bold text-white mb-1">
               Join 50,000+ NRL fans already playing
             </p>
-            <div className="flex flex-wrap justify-center gap-2 text-white/70 mb-4">
-              <span className="text-xs">2.5M points earned</span>
-              <span className="text-xs">·</span>
-              <span className="text-xs">100K predictions made</span>
-              <span className="text-xs">·</span>
-              <span className="text-xs">$50K in prizes won</span>
+            <div className="flex flex-wrap justify-center gap-2 text-white/85 mb-4">
+              <span className="text-sm">2.5M points earned</span>
+              <span className="text-sm">·</span>
+              <span className="text-sm">100K predictions made</span>
+              <span className="text-sm">·</span>
+              <span className="text-sm">$50K in prizes won</span>
             </div>
             <h2 className="text-lg sm:text-xl font-bold text-white mb-2">
               Ready to become the ultimate fan?
@@ -446,7 +446,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
               Join Now
               <ArrowRight className="w-5 h-5" />
             </button>
-            <p className="text-white/60 mt-1 text-xs">
+            <p className="text-white/75 mt-1 text-sm">
               Free to play · Win real prizes
             </p>
           </div>
