@@ -40,7 +40,7 @@ export default function TierUpgradeCelebration({
     const timer2 = setTimeout(() => {
       setShowFireworks(true);
       setShowLevelUp(true);
-      animatePoints();
+      // Points counter removed - no animation needed
     }, 300);
     const timer3 = setTimeout(() => setShowTierReveal(true), 1500);
     const timer4 = setTimeout(() => setShowReward(true), 2500);
