@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import { Trophy, Target, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -19,7 +19,7 @@ interface HeroCarouselProps {
 }
 
 export default function HeroCarousel({ onNavigate }: HeroCarouselProps = {}) {
-  const slides: Slide[] = [
+  const slides: Slide[] = useMemo(() => [
     {
       id: 1,
       icon: <Trophy className="w-12 h-12 text-yellow-400" />,
@@ -53,7 +53,7 @@ export default function HeroCarousel({ onNavigate }: HeroCarouselProps = {}) {
       subtext: "There are multiple games this round, ensure your tips are made for this weekend!",
       ctaText: "Finish Tips",
     },
-  ];
+  ], [onNavigate]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const carouselRef = useRef<HTMLDivElement>(null);
