@@ -108,10 +108,10 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
   };
 
   const getMedalIcon = (rank: number) => {
-    if (rank === 1) return <Medal className="w-5 h-5 text-yellow-400" />;
-    if (rank === 2) return <Medal className="w-5 h-5 text-gray-300" />;
-    if (rank === 3) return <Medal className="w-5 h-5 text-amber-600" />;
-    return <Trophy className="w-4 h-4 text-amber-500/70" />;
+    if (rank === 1) return <Medal className="w-4 h-4 text-yellow-400" />;
+    if (rank === 2) return <Medal className="w-4 h-4 text-gray-300" />;
+    if (rank === 3) return <Medal className="w-4 h-4 text-amber-600" />;
+    return <Trophy className="w-3.5 h-3.5 text-amber-500/70" />;
   };
 
   const renderMovement = (movement: number | null) => {
@@ -143,20 +143,20 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
       </div>
 
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-4 relative z-10">
-        <div className="flex items-center gap-2 mb-1">
-          <Trophy className="w-6 h-6 text-white" />
-          <h1 className="text-2xl font-bold text-white">Leaderboards</h1>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-2 relative z-10">
+        <div className="flex items-center gap-2 mb-0.5">
+          <Trophy className="w-5 h-5 text-white" />
+          <h1 className="text-xl font-bold text-white">Leaderboards</h1>
         </div>
-        <p className="text-nrl-text-secondary text-sm">See how you stack up against other fans</p>
+        <p className="text-nrl-text-secondary text-xs">See how you stack up against other fans</p>
       </div>
 
       {/* Tab Navigation */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2 relative z-10">
         <div className="flex gap-2 border-b-2 border-white/20">
           <button
             onClick={() => setActiveTab("fan-tier")}
-            className={`px-5 py-2.5 text-base font-bold transition-all ${
+            className={`px-4 py-1.5 text-sm font-bold transition-all ${
               activeTab === "fan-tier"
                 ? "text-nrl-green border-b-3 border-nrl-green"
                 : "text-nrl-text-secondary hover:text-nrl-text-primary"
@@ -166,7 +166,7 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
           </button>
           <button
             onClick={() => setActiveTab("tipping")}
-            className={`px-5 py-2.5 text-base font-bold transition-all ${
+            className={`px-4 py-1.5 text-sm font-bold transition-all ${
               activeTab === "tipping"
                 ? "text-nrl-green border-b-3 border-nrl-green"
                 : "text-nrl-text-secondary hover:text-nrl-text-primary"
@@ -176,7 +176,7 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
           </button>
           <button
             onClick={() => setActiveTab("fantasy")}
-            className={`px-5 py-2.5 text-base font-bold transition-all ${
+            className={`px-4 py-1.5 text-sm font-bold transition-all ${
               activeTab === "fantasy"
                 ? "text-nrl-green border-b-3 border-nrl-green"
                 : "text-nrl-text-secondary hover:text-nrl-text-primary"
@@ -188,8 +188,8 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
       </div>
 
       {/* Selected Tab Title */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 relative z-10">
-        <h2 className="text-2xl font-bold text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2 relative z-10">
+        <h2 className="text-xl font-bold text-white">
           {activeTab === "fan-tier" && "Fan Tier Rankings"}
           {activeTab === "tipping" && "Tipping Competition"}
           {activeTab === "fantasy" && "Fantasy League"}
@@ -197,7 +197,7 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4 relative z-10">
         {activeTab === "fan-tier" && (
           <FanTierLeaderboard
             data={fanTierData}
@@ -252,42 +252,42 @@ function PrizeBanner({ title, prize, countdown, countdownLabel }: { title: strin
   const getPrizeIcon = () => {
     const prizeLower = prize.toLowerCase();
     if (prizeLower.includes("jersey") || prizeLower.includes("jersey")) {
-      return <Shirt className="w-5 h-5 text-amber-300" />;
+      return <Shirt className="w-4 h-4 text-amber-300" />;
     }
     if (prizeLower.includes("voucher") || prizeLower.includes("shop")) {
-      return <Ticket className="w-5 h-5 text-amber-300" />;
+      return <Ticket className="w-4 h-4 text-amber-300" />;
     }
     if (prizeLower.includes("vip") || prizeLower.includes("experience") || prizeLower.includes("game day")) {
-      return <Star className="w-5 h-5 text-amber-300" />;
+      return <Star className="w-4 h-4 text-amber-300" />;
     }
-    return <Gift className="w-5 h-5 text-amber-300" />;
+    return <Gift className="w-4 h-4 text-amber-300" />;
   };
 
   return (
-    <div className="mb-4 p-4 rounded-xl backdrop-blur-md bg-gradient-to-br from-amber-500/20 via-amber-600/15 to-amber-500/20 border-2 border-amber-400/50 shadow-xl relative overflow-hidden">
+    <div className="mb-3 p-3 rounded-lg backdrop-blur-md bg-gradient-to-br from-amber-500/20 via-amber-600/15 to-amber-500/20 border-2 border-amber-400/50 shadow-xl relative overflow-hidden">
       {/* Animated background glow */}
       <div className="absolute inset-0 bg-gradient-to-r from-amber-400/10 via-transparent to-amber-400/10 animate-pulse"></div>
       
-      <div className="flex items-start gap-4 relative z-10">
+      <div className="flex items-start gap-3 relative z-10">
         <div className="flex-shrink-0">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400/30 to-amber-600/30 border-2 border-amber-400/50 flex items-center justify-center shadow-lg">
-            <Trophy className="w-7 h-7 text-amber-300" />
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400/30 to-amber-600/30 border-2 border-amber-400/50 flex items-center justify-center shadow-lg">
+            <Trophy className="w-5 h-5 text-amber-300" />
           </div>
         </div>
         <div className="flex-1">
-          <h3 className="text-lg font-bold text-white mb-2 tracking-wide">{title}</h3>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 rounded-lg bg-amber-400/20 border-2 border-amber-400/40 shadow-lg">
+          <h3 className="text-sm font-bold text-white mb-1 tracking-wide">{title}</h3>
+          <div className="flex items-center gap-2 mb-1.5">
+            <div className="p-1.5 rounded-lg bg-amber-400/20 border border-amber-400/40 shadow-lg">
               {getPrizeIcon()}
             </div>
-            <span className="text-lg font-bold text-amber-200">{prize}</span>
+            <span className="text-sm font-bold text-amber-200">{prize}</span>
           </div>
-          <div className="flex items-center justify-between pt-2 border-t border-amber-400/30">
-            <span className="text-nrl-text-secondary text-sm">
-              {countdownLabel || "Resets in"}: <span className="text-white font-bold text-base">{countdown}</span>
+          <div className="flex items-center justify-between pt-1.5 border-t border-amber-400/30">
+            <span className="text-nrl-text-secondary text-xs">
+              {countdownLabel || "Resets in"}: <span className="text-white font-bold text-sm">{countdown}</span>
             </span>
-            <button className="px-3 py-1.5 bg-amber-400/20 hover:bg-amber-400/30 border border-amber-400/50 rounded-lg text-amber-200 hover:text-white font-semibold text-sm flex items-center gap-1.5 transition-all">
-              Learn More <Info className="w-3.5 h-3.5" />
+            <button className="px-2.5 py-1 bg-amber-400/20 hover:bg-amber-400/30 border border-amber-400/50 rounded-lg text-amber-200 hover:text-white font-semibold text-xs flex items-center gap-1 transition-all">
+              Learn More <Info className="w-3 h-3" />
             </button>
           </div>
         </div>
@@ -319,21 +319,21 @@ function UserPositionCard({
   customContent?: React.ReactNode;
 }) {
   return (
-    <div className="mb-4 p-4 rounded-xl backdrop-blur-md bg-background/45 border-2 border-nrl-green/50 shadow-lg">
-      <div className="flex items-center justify-between mb-3">
+    <div className="mb-3 p-3 rounded-lg backdrop-blur-md bg-background/45 border-2 border-nrl-green/50 shadow-lg">
+      <div className="flex items-center justify-between mb-2">
         <div>
-          <h3 className="text-base font-bold text-white mb-1">Your Position</h3>
+          <h3 className="text-sm font-bold text-white mb-0.5">Your Position</h3>
           <div className="flex items-center gap-2">
-            <span className="text-xl font-bold text-nrl-green">#{rank}</span>
+            <span className="text-lg font-bold text-nrl-green">#{rank}</span>
             {renderMovement(movement)}
           </div>
         </div>
         {customContent || (
           <div className="text-right">
-            <div className="text-2xl font-bold text-white">{points > 0 ? `${points.toLocaleString()} pts` : ""}</div>
+            <div className="text-lg font-bold text-white">{points > 0 ? `${points.toLocaleString()} pts` : ""}</div>
             {tier && (
               <div 
-                className="text-sm font-semibold mt-1"
+                className="text-xs font-semibold mt-0.5"
                 style={{ color: getTierColor(tier) }}
               >
                 {tier}
@@ -343,7 +343,7 @@ function UserPositionCard({
         )}
       </div>
       {pointsBehind && playerAhead && (
-        <div className="pt-4 border-t border-white/10 text-sm text-nrl-text-secondary">
+        <div className="pt-2 border-t border-white/10 text-xs text-nrl-text-secondary">
           {pointsBehind.toLocaleString()} points behind #{rank - 1} - {playerAhead}
         </div>
       )}
@@ -405,11 +405,11 @@ function FanTierLeaderboard({
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/10 bg-white/5">
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Rank</th>
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Player</th>
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Tier</th>
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Points</th>
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Movement</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Rank</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Player</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Tier</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Points</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Movement</th>
               </tr>
             </thead>
             <tbody>
@@ -423,14 +423,14 @@ function FanTierLeaderboard({
                       isTop5 ? "bg-amber-500/5 border-l-2 border-l-amber-500" : ""
                     }`}
                   >
-                    <td className="py-2 px-4 text-center">
+                    <td className="py-1.5 px-3 text-center">
                       <div className="flex items-center justify-center gap-1.5">
                         {isTop5 && getMedalIcon(entry.rank)}
                         <span className="font-semibold text-sm text-white">#{entry.rank}</span>
                       </div>
                     </td>
-                    <td className="py-2 px-4 text-center font-medium text-sm text-white">{entry.player}</td>
-                    <td className="py-2 px-4 text-center">
+                    <td className="py-1.5 px-3 text-center font-medium text-sm text-white">{entry.player}</td>
+                    <td className="py-1.5 px-3 text-center">
                       <span 
                         className="font-semibold text-xs"
                         style={{ color: getTierColor(entry.tier) }}
@@ -438,10 +438,10 @@ function FanTierLeaderboard({
                         {entry.tier}
                       </span>
                     </td>
-                    <td className="py-2 px-4 text-center font-semibold text-sm text-white">
+                    <td className="py-1.5 px-3 text-center font-semibold text-sm text-white">
                       {entry.points.toLocaleString()} pts
                     </td>
-                    <td className="py-2 px-4 text-center">
+                    <td className="py-1.5 px-3 text-center">
                       {renderMovement(entry.movement)}
                     </td>
                   </tr>
@@ -451,8 +451,8 @@ function FanTierLeaderboard({
               {/* Ellipsis row */}
               {showEllipsis && (
                 <tr className="border-b border-white/5">
-                  <td colSpan={5} className="py-2 px-4 text-center">
-                    <span className="text-nrl-text-secondary text-base">...</span>
+                  <td colSpan={5} className="py-1.5 px-3 text-center">
+                    <span className="text-nrl-text-secondary text-sm">...</span>
                   </td>
                 </tr>
               )}
@@ -460,11 +460,11 @@ function FanTierLeaderboard({
               {/* User's position row */}
               {showEllipsis && user && (
                 <tr className="bg-nrl-green/10 border-l-2 border-l-nrl-green border-b border-white/5">
-                  <td className="py-2 px-4 text-center">
+                  <td className="py-1.5 px-3 text-center">
                     <span className="font-semibold text-sm text-nrl-green">#{userRank}</span>
                   </td>
-                  <td className="py-2 px-4 text-center font-medium text-sm text-nrl-green">{user.name || "You"}</td>
-                  <td className="py-2 px-4 text-center">
+                  <td className="py-1.5 px-3 text-center font-medium text-sm text-nrl-green">{user.name || "You"}</td>
+                  <td className="py-1.5 px-3 text-center">
                     <span 
                       className="font-semibold text-xs"
                       style={{ color: getTierColor(userTier) }}
@@ -472,10 +472,10 @@ function FanTierLeaderboard({
                       {userTier}
                     </span>
                   </td>
-                  <td className="py-2 px-4 text-center font-semibold text-sm text-nrl-green">
+                  <td className="py-1.5 px-3 text-center font-semibold text-sm text-nrl-green">
                     {userPoints.toLocaleString()} pts
                   </td>
-                  <td className="py-2 px-4 text-center">
+                  <td className="py-1.5 px-3 text-center">
                     {renderMovement(userMovement)}
                   </td>
                 </tr>
@@ -541,12 +541,12 @@ function TippingLeaderboard({
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/10 bg-white/5">
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Rank</th>
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Player</th>
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Correct</th>
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Accuracy</th>
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Streak</th>
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Movement</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Rank</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Player</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Correct</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Accuracy</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Streak</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Movement</th>
               </tr>
             </thead>
             <tbody>
@@ -569,17 +569,17 @@ function TippingLeaderboard({
                             isTop5 ? "bg-amber-500/5 border-l-2 border-l-amber-500" : ""
                           }`}
                         >
-                          <td className="py-2 px-4 text-center">
+                          <td className="py-1.5 px-3 text-center">
                             <div className="flex items-center justify-center gap-1.5">
                               {isTop5 && getMedalIcon(entry.rank)}
                               <span className="font-semibold text-sm text-white">#{entry.rank}</span>
                             </div>
                           </td>
-                          <td className="py-2 px-4 text-center font-medium text-sm text-white">{entry.player}</td>
-                          <td className="py-2 px-4 text-center font-semibold text-sm text-white">{entry.correct}</td>
-                          <td className="py-2 px-4 text-center font-semibold text-sm text-white">{entry.accuracy}%</td>
-                          <td className="py-2 px-4 text-center font-semibold text-sm text-white">{entry.streak}</td>
-                          <td className="py-2 px-4 text-center">
+                          <td className="py-1.5 px-3 text-center font-medium text-sm text-white">{entry.player}</td>
+                          <td className="py-1.5 px-3 text-center font-semibold text-sm text-white">{entry.correct}</td>
+                          <td className="py-1.5 px-3 text-center font-semibold text-sm text-white">{entry.accuracy}%</td>
+                          <td className="py-1.5 px-3 text-center font-semibold text-sm text-white">{entry.streak}</td>
+                          <td className="py-1.5 px-3 text-center">
                             {renderMovement(entry.movement)}
                           </td>
                         </tr>
@@ -589,8 +589,8 @@ function TippingLeaderboard({
                     {/* Ellipsis row */}
                     {showEllipsis && (
                       <tr className="border-b border-white/5">
-                        <td colSpan={6} className="py-2 px-4 text-center">
-                          <span className="text-nrl-text-secondary text-base">...</span>
+                        <td colSpan={6} className="py-1.5 px-3 text-center">
+                          <span className="text-nrl-text-secondary text-sm">...</span>
                         </td>
                       </tr>
                     )}
@@ -598,14 +598,14 @@ function TippingLeaderboard({
                     {/* User's position row */}
                     {showEllipsis && user && (
                       <tr className="bg-nrl-green/10 border-l-2 border-l-nrl-green border-b border-white/5">
-                        <td className="py-2 px-4 text-center">
+                        <td className="py-1.5 px-3 text-center">
                           <span className="font-semibold text-sm text-nrl-green">#{userRank}</span>
                         </td>
-                        <td className="py-2 px-4 text-center font-medium text-sm text-nrl-green">{user.name || "You"}</td>
-                        <td className="py-2 px-4 text-center font-semibold text-sm text-nrl-green">{userCorrect}</td>
-                        <td className="py-2 px-4 text-center font-semibold text-sm text-nrl-green">{userAccuracy}%</td>
-                        <td className="py-2 px-4 text-center font-semibold text-sm text-nrl-green">{userStreak}</td>
-                        <td className="py-2 px-4 text-center">
+                        <td className="py-1.5 px-3 text-center font-medium text-sm text-nrl-green">{user.name || "You"}</td>
+                        <td className="py-1.5 px-3 text-center font-semibold text-sm text-nrl-green">{userCorrect}</td>
+                        <td className="py-1.5 px-3 text-center font-semibold text-sm text-nrl-green">{userAccuracy}%</td>
+                        <td className="py-1.5 px-3 text-center font-semibold text-sm text-nrl-green">{userStreak}</td>
+                        <td className="py-1.5 px-3 text-center">
                           {renderMovement(userMovement)}
                         </td>
                       </tr>
@@ -678,12 +678,12 @@ function FantasyLeaderboard({
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/10 bg-white/5">
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Rank</th>
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Player</th>
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Total Pts</th>
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Week Pts</th>
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Captain</th>
-                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Movement</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Rank</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Player</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Total Pts</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Week Pts</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Captain</th>
+                <th className="text-center py-1.5 px-3 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Movement</th>
               </tr>
             </thead>
             <tbody>
@@ -697,17 +697,17 @@ function FantasyLeaderboard({
                       isTop5 ? "bg-amber-500/5 border-l-2 border-l-amber-500" : ""
                     }`}
                   >
-                    <td className="py-2 px-4 text-center">
+                    <td className="py-1.5 px-3 text-center">
                       <div className="flex items-center justify-center gap-1.5">
                         {isTop5 && getMedalIcon(entry.rank)}
                         <span className="font-semibold text-sm text-white">#{entry.rank}</span>
                       </div>
                     </td>
-                    <td className="py-2 px-4 text-center font-medium text-sm text-white">{entry.player}</td>
-                    <td className="py-2 px-4 text-center font-semibold text-sm text-white">{entry.totalPts.toLocaleString()}</td>
-                    <td className="py-2 px-4 text-center font-semibold text-sm text-white">{entry.weekPts}</td>
-                    <td className="py-2 px-4 text-center font-medium text-sm text-white">{entry.captain}</td>
-                    <td className="py-2 px-4 text-center">
+                    <td className="py-1.5 px-3 text-center font-medium text-sm text-white">{entry.player}</td>
+                    <td className="py-1.5 px-3 text-center font-semibold text-sm text-white">{entry.totalPts.toLocaleString()}</td>
+                    <td className="py-1.5 px-3 text-center font-semibold text-sm text-white">{entry.weekPts}</td>
+                    <td className="py-1.5 px-3 text-center font-medium text-sm text-white">{entry.captain}</td>
+                    <td className="py-1.5 px-3 text-center">
                       {renderMovement(entry.movement)}
                     </td>
                   </tr>
@@ -717,8 +717,8 @@ function FantasyLeaderboard({
               {/* Ellipsis row */}
               {showEllipsis && (
                 <tr className="border-b border-white/5">
-                  <td colSpan={6} className="py-2 px-4 text-center">
-                    <span className="text-nrl-text-secondary text-base">...</span>
+                  <td colSpan={6} className="py-1.5 px-3 text-center">
+                    <span className="text-nrl-text-secondary text-sm">...</span>
                   </td>
                 </tr>
               )}
@@ -726,14 +726,14 @@ function FantasyLeaderboard({
               {/* User's position row */}
               {showEllipsis && user && (
                 <tr className="bg-nrl-green/10 border-l-2 border-l-nrl-green border-b border-white/5">
-                  <td className="py-2 px-4 text-center">
+                  <td className="py-1.5 px-3 text-center">
                     <span className="font-semibold text-sm text-nrl-green">#{userRank}</span>
                   </td>
-                  <td className="py-2 px-4 text-center font-medium text-sm text-nrl-green">{user.name || "You"}</td>
-                  <td className="py-2 px-4 text-center font-semibold text-sm text-nrl-green">{userTotalPts.toLocaleString()}</td>
-                  <td className="py-2 px-4 text-center font-semibold text-sm text-nrl-green">{userWeekPts}</td>
-                  <td className="py-2 px-4 text-center font-medium text-sm text-nrl-green">{userCaptain}</td>
-                  <td className="py-2 px-4 text-center">
+                  <td className="py-1.5 px-3 text-center font-medium text-sm text-nrl-green">{user.name || "You"}</td>
+                  <td className="py-1.5 px-3 text-center font-semibold text-sm text-nrl-green">{userTotalPts.toLocaleString()}</td>
+                  <td className="py-1.5 px-3 text-center font-semibold text-sm text-nrl-green">{userWeekPts}</td>
+                  <td className="py-1.5 px-3 text-center font-medium text-sm text-nrl-green">{userCaptain}</td>
+                  <td className="py-1.5 px-3 text-center">
                     {renderMovement(userMovement)}
                   </td>
                 </tr>
