@@ -34,22 +34,18 @@ export default function TierUpgradeCelebration({
   const targetPoints = newTier.minPoints;
   const confettiRef = useRef<HTMLCanvasElement>(null);
 
-  // Entry animation sequence
+  // Entry animation sequence - show everything at once
   useEffect(() => {
-    const timer1 = setTimeout(() => setShowCelebration(true), 100);
-    const timer2 = setTimeout(() => {
+    const timer1 = setTimeout(() => {
+      setShowCelebration(true);
       setShowFireworks(true);
       setShowLevelUp(true);
-      // Points counter removed - no animation needed
-    }, 300);
-    const timer3 = setTimeout(() => setShowTierReveal(true), 1500);
-    const timer4 = setTimeout(() => setShowReward(true), 2500);
+      setShowTierReveal(true);
+      setShowReward(true);
+    }, 100);
 
     return () => {
       clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-      clearTimeout(timer4);
     };
   }, []);
 
