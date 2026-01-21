@@ -126,10 +126,10 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
 
   return (
     <div className="min-h-screen relative">
-      {/* Background Image - using same pattern as Locker Room */}
+      {/* Background Image - Leaderboards specific */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <Image
-          src="/locker-room/background.webp"
+          src="/leaderboards/background.webp"
           alt="Leaderboards Background"
           fill
           className="object-cover"
