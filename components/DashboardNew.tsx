@@ -2197,6 +2197,10 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
   
   // Track current user points for tier progress bar
   const [currentUserPoints, setCurrentUserPoints] = useState(user?.points || 950);
+  const [displayPoints, setDisplayPoints] = useState(user?.points || 950); // For animated display
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [showFireworks, setShowFireworks] = useState(false);
+  const progressBarRef = useRef<HTMLDivElement>(null);
   
   // Update parent component when points change
   useEffect(() => {
@@ -2204,6 +2208,44 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       onUserPointsUpdate(currentUserPoints);
     }
   }, [currentUserPoints, onUserPointsUpdate]);
+  
+  // Animate points when they increase
+  useEffect(() => {
+    if (currentUserPoints > displayPoints) {
+      setIsAnimating(true);
+      const startPoints = displayPoints;
+      const endPoints = currentUserPoints;
+      const duration = 1500; // 1.5 seconds
+      const steps = 50;
+      const increment = (endPoints - startPoints) / steps;
+      const stepDuration = duration / steps;
+      
+      let currentStep = 0;
+      const interval = setInterval(() => {
+        currentStep++;
+        const newDisplayPoints = Math.min(
+          Math.floor(startPoints + increment * currentStep),
+          endPoints
+        );
+        setDisplayPoints(newDisplayPoints);
+        
+        // Check if we hit 1000
+        if (newDisplayPoints >= 1000 && endPoints >= 1000) {
+          setShowFireworks(true);
+          // Hide fireworks after 2 seconds
+          setTimeout(() => setShowFireworks(false), 2000);
+        }
+        
+        if (currentStep >= steps) {
+          clearInterval(interval);
+          setDisplayPoints(endPoints);
+          setIsAnimating(false);
+        }
+      }, stepDuration);
+      
+      return () => clearInterval(interval);
+    }
+  }, [currentUserPoints, displayPoints]);
   
   // Check if we should highlight MVP Predict (from carousel navigation)
   useEffect(() => {
