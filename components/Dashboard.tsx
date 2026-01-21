@@ -53,10 +53,27 @@ export default function Dashboard({ user }: DashboardProps) {
   const nextTier = TIERS.find((t) => t.minPoints > userPoints);
   const pointsToNext = nextTier ? nextTier.minPoints - userPoints : 0;
 
-  // Disable TierProgressModal - points animation now happens in WeeklyActivitiesSection
+  // Show modal if user is close to next tier (within 100 points) and hasn't dismissed it
   useEffect(() => {
-    setShowProgressModal(false);
-  }, []);
+    // Don't show modal if user just completed a tier upgrade
+    const tierUpgradeJustCompleted = sessionStorage.getItem('tierUpgradeJustCompleted');
+    if (tierUpgradeJustCompleted === 'true') {
+      sessionStorage.removeItem('tierUpgradeJustCompleted');
+      setShowProgressModal(false);
+      return;
+    }
+    
+    if (activeSection === "home" && pointsToNext > 0 && pointsToNext <= 100 && nextTier) {
+      // Check if modal was dismissed for this specific tier
+      const dismissedKey = `tierProgressModalDismissed_${nextTier.name}`;
+      const dismissed = localStorage.getItem(dismissedKey);
+      if (!dismissed) {
+        setShowProgressModal(true);
+      }
+    } else {
+      setShowProgressModal(false);
+    }
+  }, [activeSection, pointsToNext, nextTier]);
 
   const handleDismissModal = () => {
     setShowProgressModal(false);
