@@ -3736,7 +3736,7 @@ function StreakCardPrizes({ streakData }: { streakData: StreakData }) {
             }}
           />
         </div>
-        <div className="text-xs font-semibold text-white/80 uppercase tracking-wider">FAN ENGAGEMENT STREAK</div>
+        <div className="text-xs font-semibold text-white/80 uppercase tracking-wider">2 week fan engagement streak</div>
       </div>
 
       {/* 2x Points Active Badge */}
