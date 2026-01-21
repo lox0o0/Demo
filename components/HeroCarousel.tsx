@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Trophy, UserCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { Trophy, Target, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Slide {
   id: number;
@@ -24,10 +24,10 @@ const slides: Slide[] = [
   },
   {
     id: 2,
-    icon: <UserCircle className="w-12 h-12 text-emerald-400" />,
-    headline: "BUILD FAN PROFILE",
-    subtext: "Build your profile and increase your fan tier.",
-    ctaText: "Complete Profile",
+    icon: <Target className="w-12 h-12 text-white/80" strokeWidth={2} />,
+    headline: "PREDICTIONS",
+    subtext: "Test your knowledge against other fans and predict the MVP for the upcoming round!",
+    ctaText: "Make Prediction",
   },
   {
     id: 3,
