@@ -2257,14 +2257,15 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
   const seasonTotal = 49;
   
   // Calculate tier progress for the progress bar
+  // Use displayPoints for the calculation to match what's shown
   const currentTier = TIERS.find((t, i) => {
     const nextTier = TIERS[i + 1];
-    return currentUserPoints >= t.minPoints && (!nextTier || currentUserPoints < nextTier.minPoints);
+    return displayPoints >= t.minPoints && (!nextTier || displayPoints < nextTier.minPoints);
   }) || TIERS[0];
   const nextTier = TIERS.find(t => t.minPoints > currentTier.minPoints);
-  const pointsToNext = nextTier ? nextTier.minPoints - currentUserPoints : 0;
+  const pointsToNext = nextTier ? nextTier.minPoints - displayPoints : 0;
   const tierRange = nextTier && currentTier ? nextTier.minPoints - currentTier.minPoints : 0;
-  const progressToNext = tierRange > 0 ? ((currentUserPoints - currentTier.minPoints) / tierRange) * 100 : 0;
+  const progressToNext = tierRange > 0 ? ((displayPoints - currentTier.minPoints) / tierRange) * 100 : 0;
 
   // Mock players for MVP search
   const players = [
