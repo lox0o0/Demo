@@ -133,7 +133,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
   // Scroll carousel to current index
   useEffect(() => {
     if (carouselRef.current) {
-      const cardWidth = 192; // Approximate card width (180px) + gap (12px)
+      const cardWidth = 172; // Approximate card width (160px) + gap (12px)
       carouselRef.current.scrollTo({
         left: currentPrizeIndex * cardWidth,
         behavior: 'smooth',
@@ -313,13 +313,13 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
         </section>
 
         {/* Prize Carousel Section */}
-        <section className="px-4 sm:px-6 lg:px-8 py-1 flex-1 flex flex-col min-h-0">
+        <section className="px-4 sm:px-6 lg:px-8 py-0.5 flex-1 flex flex-col min-h-0">
           <div className="max-w-7xl mx-auto flex-1 flex flex-col">
-            <div className="flex items-center gap-1.5 mb-1 justify-center flex-shrink-0">
-              <Trophy className="w-3.5 h-3.5 text-white" />
-              <h2 className="text-base font-bold text-white">Compete for Glory and Prizes</h2>
+            <div className="flex items-center gap-1.5 mb-0.5 justify-center flex-shrink-0">
+              <Trophy className="w-3 h-3 text-white" />
+              <h2 className="text-sm font-bold text-white">Compete for Glory and Prizes</h2>
             </div>
-            <p className="text-center text-white/70 mb-1 text-xs flex-shrink-0">
+            <p className="text-center text-white/70 mb-0.5 text-[10px] flex-shrink-0">
               Top fans win incredible rewards every week
             </p>
 
@@ -355,13 +355,15 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
                   return (
                     <div
                       key={prize.id}
-                      className="flex-shrink-0 w-[180px] bg-white/5 backdrop-blur-md border border-white/20 rounded-md p-1 hover:scale-105 hover:shadow-xl transition-all duration-300 snap-center"
+                      className="flex-shrink-0 w-[160px] bg-white/5 backdrop-blur-md border border-white/20 rounded px-1.5 py-1 hover:scale-105 hover:shadow-xl transition-all duration-300 snap-center"
                     >
-                      <div className="w-5 h-5 rounded bg-amber-500/20 border border-amber-500/50 flex items-center justify-center mb-0.5 mx-auto">
-                        <Icon className="w-2.5 h-2.5 text-amber-400" />
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <div className="w-4 h-4 rounded bg-amber-500/20 border border-amber-500/50 flex items-center justify-center flex-shrink-0">
+                          <Icon className="w-2 h-2 text-amber-400" />
+                        </div>
+                        <h3 className="text-[9px] font-bold text-white leading-tight flex-1">{prize.title}</h3>
                       </div>
-                      <h3 className="text-[10px] font-bold text-white mb-0 text-center leading-tight">{prize.title}</h3>
-                      <p className="text-[10px] text-white/70 text-center leading-tight mt-0.5">{prize.description}</p>
+                      <p className="text-[9px] text-white/70 leading-tight truncate">{prize.description}</p>
                     </div>
                   );
                 })}
