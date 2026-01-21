@@ -3844,7 +3844,7 @@ function WeeklyPrizeDrawCard({ currentTier, drawCountdown, entryCount, isEntered
       </div>
 
       {/* Entry Count and Countdown */}
-      <div className="text-center space-y-1">
+      <div className="text-center space-y-1 mb-3">
         <div className="text-xs text-white/60">{entryCount.toLocaleString()} entries</div>
         {isEntered && (
           <div className="text-xs text-emerald-400 font-semibold">
@@ -3852,6 +3852,15 @@ function WeeklyPrizeDrawCard({ currentTier, drawCountdown, entryCount, isEntered
           </div>
         )}
       </div>
+
+      {/* CTA: See All Rewards */}
+      <button
+        onClick={() => onNavigate?.("rewards")}
+        className="w-full py-2 px-4 bg-white/5 border border-white/20 rounded-lg text-xs font-semibold text-white/80 hover:text-white hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+      >
+        <Gift className="w-3.5 h-3.5" strokeWidth={2} />
+        <span>see all rewards here..</span>
+      </button>
     </div>
   );
 }
