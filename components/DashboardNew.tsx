@@ -462,7 +462,7 @@ function StreakCard({ streakData, teamData }: { streakData: StreakData; teamData
 }
 
 // Prize Wheel Component
-function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData; teamData: any; onClose: (prize?: string) => void }) {
+function PrizeWheel({ streakData, teamData, onClose, spinsTaken }: { streakData: StreakData; teamData: any; onClose: (prize?: string) => void; spinsTaken: number }) {
   const [isSpinning, setIsSpinning] = useState(false);
   const [prizeWon, setPrizeWon] = useState<any>(null);
   const [spinsRemaining, setSpinsRemaining] = useState(streakData.spins.available);
@@ -513,39 +513,35 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
     setIsSpinning(true);
     setPrizeWon(null);
     
-    // Calculate random final rotation (3-5 full spins + random angle)
-    const fullSpins = 3 + Math.random() * 2; // 3-5 full rotations
-    const randomAngle = Math.random() * 360; // Random final angle
-    const finalRotation = fullSpins * 360 + randomAngle;
+    // Determine which prize to land on based on spin number
+    // Spin 1 (spinsTaken = 0): "$10 KFC" (id: 6, index: 5)
+    // Spin 2 (spinsTaken = 1): "50 Points" (id: 3, index: 2)
+    // Spin 3 (spinsTaken = 2): "100 Points" (id: 4, index: 3)
+    const targetPrizes = [5, 2, 3]; // Indices for $10 KFC, 50 Points, 100 Points
+    const targetIndex = targetPrizes[spinsTaken] || Math.floor(Math.random() * 20);
     
-    // Simulate spin duration (4-7 seconds)
-    const spinDuration = 4000 + Math.random() * 3000;
+    // Calculate rotation to land on target prize
+    // Pointer is at 3 o'clock (0°), segments start at top (-90°)
+    // To land on segment at index targetIndex:
+    // Segment center angle = -90° + (targetIndex + 0.5) * 18°
+    // We need this segment center to be at 0° (pointer position)
+    // So rotation = 90° - (targetIndex + 0.5) * 18°
+    const segmentAngle = 360 / 20; // 18 degrees per segment
+    const targetSegmentCenter = -90 + (targetIndex + 0.5) * segmentAngle;
+    const targetRotation = 90 - targetSegmentCenter;
+    
+    // Add multiple full spins for visual effect (2-3 full spins, faster)
+    const fullSpins = 2 + Math.random() * 1; // 2-3 full rotations (faster)
+    const finalRotation = fullSpins * 360 + targetRotation;
+    
+    // Simulate spin duration (2-3 seconds - faster)
+    const spinDuration = 2000 + Math.random() * 1000;
     
     // Animate rotation
     setRotation(finalRotation);
     
     setTimeout(() => {
-      // Calculate which prize the pointer lands on based on final rotation
-      // Pointer is at 3 o'clock (0° in standard coordinates)
-      // Segments start at top (-90° in SVG coordinates, which is index 0)
-      // Each segment is 18° wide (360° / 20 segments)
-      // When wheel rotates clockwise by R degrees, segment 0 moves from -90° to (-90° + R)
-      // We need to find which segment is at 0° (pointer position)
-      // Formula: segment index = floor((0° - (-90° + R)) / 18°) mod 20
-      // Simplified: segment index = floor((90° - R) / 18°) mod 20
-      const normalizedRotation = finalRotation % 360;
-      const segmentAngle = 360 / 20; // 18 degrees per segment
-      // Account for -90° offset (segments start at top, pointer is at right)
-      // When wheel rotates clockwise, we subtract the rotation
-      let prizeIndex = Math.floor((90 - normalizedRotation) / segmentAngle);
-      // Handle negative indices (wrap around)
-      if (prizeIndex < 0) {
-        prizeIndex = 20 + (prizeIndex % 20);
-      }
-      // Ensure index is within bounds
-      prizeIndex = prizeIndex % 20;
-      
-      const actualPrize = prizes[prizeIndex];
+      const actualPrize = prizes[targetIndex];
       
       setIsSpinning(false);
       setPrizeWon(actualPrize);
@@ -3439,6 +3435,7 @@ function PrizesAndStreakSection({ user, streakData, currentTier }: { user: any; 
           spinsTaken={spinsTaken}
           lastPrizeWon={lastPrizeWon}
           onSpinClick={handleSpin}
+          onNavigate={onNavigate}
         />
 
         {/* Card 3: Weekly Prize Draw */}
@@ -3448,6 +3445,7 @@ function PrizesAndStreakSection({ user, streakData, currentTier }: { user: any; 
           entryCount={entryCount}
           isEntered={drawEntered}
           onEnterDraw={handleDrawEntry}
+          onNavigate={onNavigate}
         />
 
         {/* Recent Winners Row */}
@@ -3603,7 +3601,7 @@ function StreakCardPrizes({ streakData }: { streakData: StreakData }) {
 }
 
 // Card 2: Prize Wheel Card
-function PrizeWheelCardPrizes({ streakData, onSpinClick, spinsTaken, lastPrizeWon }: { streakData: StreakData; onSpinClick: () => void; spinsTaken: number; lastPrizeWon: string | null }) {
+function PrizeWheelCardPrizes({ streakData, onSpinClick, spinsTaken, lastPrizeWon, onNavigate }: { streakData: StreakData; onSpinClick: () => void; spinsTaken: number; lastPrizeWon: string | null; onNavigate?: (section: NavSection) => void }) {
   const maxSpins = 3;
   const spinsRemaining = maxSpins - spinsTaken;
   const isComplete = spinsTaken >= maxSpins;
@@ -3749,7 +3747,7 @@ function PrizeWheelCardPrizes({ streakData, onSpinClick, spinsTaken, lastPrizeWo
 }
 
 // Card 3: Weekly Prize Draw Card
-function WeeklyPrizeDrawCard({ currentTier, drawCountdown, entryCount, isEntered, onEnterDraw }: { currentTier: any; drawCountdown: { days: number; hours: number; minutes: number }; entryCount: number; isEntered: boolean; onEnterDraw: () => void }) {
+function WeeklyPrizeDrawCard({ currentTier, drawCountdown, entryCount, isEntered, onEnterDraw, onNavigate }: { currentTier: any; drawCountdown: { days: number; hours: number; minutes: number }; entryCount: number; isEntered: boolean; onEnterDraw: () => void; onNavigate?: (section: NavSection) => void }) {
   // Featured prize based on tier
   const getFeaturedPrize = () => {
     if (currentTier.name === "Legend") return { name: "SIGNED TEAM JERSEY", icon: Shirt, color: "text-yellow-400" };
