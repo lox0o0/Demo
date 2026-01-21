@@ -14,7 +14,7 @@ import {
   Users, 
   ShoppingBag, 
   Calendar, 
-  Whistle,
+  Activity,
   ChevronLeft,
   ChevronRight,
   ArrowRight,
@@ -80,7 +80,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
       id: 8,
       title: "TRAINING SESSION ACCESS",
       description: "Watch your team prepare behind closed doors",
-      icon: Whistle,
+      icon: Activity,
     },
   ];
 
