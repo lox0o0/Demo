@@ -165,6 +165,9 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
           onViewRewards={() => {
             setShowTierCelebration(false);
             setCelebrationData(null);
+            if (onNavigate) {
+              onNavigate("rewards");
+            }
           }}
           onNavigateHome={() => {
             if (onNavigate) {
