@@ -536,8 +536,8 @@ function PrizeWheel({ streakData, teamData, onClose, spinsTaken = 0 }: { streakD
     const fullSpins = 2 + Math.random() * 1; // 2-3 full rotations (faster)
     const finalRotation = fullSpins * 360 + targetRotation;
     
-    // Simulate spin duration (2-3 seconds - faster)
-    const spinDuration = 2000 + Math.random() * 1000;
+    // Simulate spin duration (1.5-2 seconds - fast for all spins)
+    const spinDuration = 1500 + Math.random() * 500;
     
     // Animate rotation
     setRotation(finalRotation);
