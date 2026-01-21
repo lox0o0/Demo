@@ -2532,21 +2532,22 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                 <div className="absolute inset-0 pointer-events-none z-10" style={{ overflow: 'visible' }}>
                   {[...Array(12)].map((_, i) => {
                     const angle = (i * Math.PI * 2) / 12;
-                    const distance = 40;
+                    const distance = 50;
+                    const colors = ['#FFD700', '#FFA500', '#FF6B6B', '#4ECDC4'];
+                    const color = colors[i % 4];
                     return (
                       <div
                         key={i}
-                        className="absolute w-2 h-2 rounded-full"
+                        className="absolute w-3 h-3 rounded-full"
                         style={{
-                          left: `${50 + Math.cos(angle) * distance}%`,
-                          top: `${50 + Math.sin(angle) * distance}%`,
-                          background: ['#FFD700', '#FFA500', '#FF6B6B', '#4ECDC4'][i % 4],
-                          boxShadow: `0 0 10px ${['#FFD700', '#FFA500', '#FF6B6B', '#4ECDC4'][i % 4]}`,
-                          animation: `fireworks 1s ease-out forwards`,
-                          animationDelay: `${i * 0.1}s`,
-                          '--tx': `${Math.cos(angle) * 30}px`,
-                          '--ty': `${Math.sin(angle) * 30}px`,
-                        } as React.CSSProperties}
+                          left: '50%',
+                          top: '50%',
+                          transform: `translate(-50%, -50%) translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`,
+                          background: color,
+                          boxShadow: `0 0 15px ${color}, 0 0 30px ${color}80`,
+                          animation: `fireworks 1.2s ease-out forwards`,
+                          animationDelay: `${i * 0.08}s`,
+                        }}
                       />
                     );
                   })}
