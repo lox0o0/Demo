@@ -74,24 +74,24 @@ function CurrentTierStatsCard({
   const firstName = user?.name?.split(' ')[0] || "Fan";
 
   return (
-    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-4">
-      {/* Profile Header - Old Design */}
-      <div className="p-4 border-b border-white/10 mb-4">
-        <div className="flex items-start gap-4">
+    <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-3">
+      {/* Profile Header - Compact Design */}
+      <div className="pb-2 border-b border-white/10 mb-2">
+        <div className="flex items-center gap-2.5">
           <div className="flex-shrink-0">
-            <span className="relative flex shrink-0 overflow-hidden rounded-full w-16 h-16 border border-white/30 shadow-lg cursor-pointer hover:scale-105 transition-transform">
+            <span className="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border border-white/30 shadow-lg cursor-pointer hover:scale-105 transition-transform">
               {teamData ? (
                 <Image
                   src={teamData.logoUrl}
                   alt={teamData.name}
-                  width={64}
-                  height={64}
+                  width={40}
+                  height={40}
                   className="aspect-square h-full w-full object-cover"
                   unoptimized
                 />
               ) : (
                 <div className="w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                  <span className="text-xl font-bold text-white">
+                  <span className="text-sm font-bold text-white">
                     {user?.name?.charAt(0) || "F"}
                   </span>
                 </div>
@@ -99,80 +99,73 @@ function CurrentTierStatsCard({
             </span>
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-4 mb-2">
-              <div className="flex-1">
-                <h3 className="text-white font-semibold text-lg mb-2">{user?.name || "Fan"}</h3>
-                <div className="flex items-center gap-2 mb-3">
-                  <div 
-                    className="inline-flex items-center rounded-full px-2.5 py-0.5 font-semibold backdrop-blur-md text-white border text-xs"
-                    style={{
-                      backgroundColor: `${currentTier.color || '#C0C0C0'}33`,
-                      borderColor: `${currentTier.color || '#C0C0C0'}80`,
-                    }}
-                  >
-                    {currentTier.name} Tier
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <div className="text-white/60 text-xs mb-0.5">Current Points</div>
-                  <div className="text-white font-bold text-xl">{userPoints.toLocaleString()}</div>
-                </div>
+            <h3 className="text-white font-semibold text-sm mb-0.5 leading-tight">{user?.name || "Fan"}</h3>
+            <div className="flex items-center gap-1.5 mb-1">
+              <div 
+                className="inline-flex items-center rounded-full px-2 py-0.5 font-semibold backdrop-blur-md text-white border text-xs"
+                style={{
+                  backgroundColor: `${currentTier.color || '#C0C0C0'}33`,
+                  borderColor: `${currentTier.color || '#C0C0C0'}80`,
+                }}
+              >
+                {currentTier.name} Tier
               </div>
+            </div>
+            <div>
+              <div className="text-white/60 text-[10px] mb-0 leading-tight">Current Points</div>
+              <div className="text-white font-bold text-base leading-tight">{userPoints.toLocaleString()}</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Recent Prizes row (3 columns) */}
-      <div className="grid grid-cols-1 gap-2 mb-3">
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 border border-white/10 flex items-center gap-3">
+      <div className="grid grid-cols-1 gap-1.5 mb-2">
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2 border border-white/10 flex items-center gap-2">
           <div className="flex-shrink-0">
-            <div className="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/50 flex items-center justify-center">
-              <Shirt className="w-5 h-5 text-amber-400" />
+            <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/50 flex items-center justify-center">
+              <Shirt className="w-4 h-4 text-amber-400" />
             </div>
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-xs text-white/60 mb-0.5">Recent prize earned</div>
-            <div className="text-sm font-semibold text-white">Signed Broncos Jersey</div>
+            <div className="text-[10px] text-white/60 mb-0 leading-tight">Recent prize earned</div>
+            <div className="text-xs font-semibold text-white leading-tight">Signed Broncos Jersey</div>
           </div>
         </div>
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 border border-white/10 flex items-center gap-3">
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2 border border-white/10 flex items-center gap-2">
           <div className="flex-shrink-0">
-            <div className="w-10 h-10 rounded-lg bg-blue-500/20 border border-blue-500/50 flex items-center justify-center">
-              <Ticket className="w-5 h-5 text-blue-400" />
+            <div className="w-8 h-8 rounded-lg bg-blue-500/20 border border-blue-500/50 flex items-center justify-center">
+              <Ticket className="w-4 h-4 text-blue-400" />
             </div>
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-xs text-white/60 mb-0.5">Recent prize earned</div>
-            <div className="text-sm font-semibold text-white">Home Ground Tickets</div>
+            <div className="text-[10px] text-white/60 mb-0 leading-tight">Recent prize earned</div>
+            <div className="text-xs font-semibold text-white leading-tight">Home Ground Tickets</div>
           </div>
         </div>
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 border border-white/10 flex items-center gap-3">
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2 border border-white/10 flex items-center gap-2">
           <div className="flex-shrink-0">
-            <div className="w-10 h-10 rounded-lg bg-red-500/20 border border-red-500/50 flex items-center justify-center">
-              <Gift className="w-5 h-5 text-red-400" />
+            <div className="w-8 h-8 rounded-lg bg-red-500/20 border border-red-500/50 flex items-center justify-center">
+              <Gift className="w-4 h-4 text-red-400" />
             </div>
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-xs text-white/60 mb-0.5">Recent prize earned</div>
-            <div className="text-sm font-semibold text-white">$10 KFC Voucher</div>
+            <div className="text-[10px] text-white/60 mb-0 leading-tight">Recent prize earned</div>
+            <div className="text-xs font-semibold text-white leading-tight">$10 KFC Voucher</div>
           </div>
         </div>
       </div>
 
       {/* Claim More Rewards CTA */}
-      <div className="pt-3 border-t border-white/10">
-        <button className="w-full bg-gradient-to-r from-nrl-green/20 to-nrl-green/10 hover:from-nrl-green/30 hover:to-nrl-green/20 border-2 border-nrl-green/50 rounded-lg p-4 flex items-center justify-between group transition-all duration-300 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-nrl-green/20 border border-nrl-green/50 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Gift className="w-5 h-5 text-nrl-green" />
+      <div className="pt-2 border-t border-white/10">
+        <button className="w-full bg-gradient-to-r from-nrl-green/20 to-nrl-green/10 hover:from-nrl-green/30 hover:to-nrl-green/20 border-2 border-nrl-green/50 rounded-lg p-2 flex items-center justify-between group transition-all duration-300 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)]">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-nrl-green/20 border border-nrl-green/50 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <Gift className="w-4 h-4 text-nrl-green" />
             </div>
-            <div className="text-left">
-              <div className="text-sm font-bold text-white">Claim More Rewards</div>
-              <div className="text-xs text-white/60">View all available prizes</div>
-            </div>
+            <div className="text-sm font-bold text-white">Claim More Rewards</div>
           </div>
-          <ArrowRight className="w-5 h-5 text-nrl-green group-hover:translate-x-1 transition-transform" />
+          <ArrowRight className="w-4 h-4 text-nrl-green group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
     </div>
