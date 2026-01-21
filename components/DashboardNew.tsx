@@ -3003,14 +3003,48 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
 
 // Profile Completion Flow Component with Animations
 function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightProfileCompletion, onTierUpgrade, onPointsUpdate }: { user: any; highlightProfileCompletion: boolean; setHighlightProfileCompletion?: (value: boolean) => void; onTierUpgrade?: (oldTier: any, newTier: any, startPoints?: number) => void; onPointsUpdate?: (points: number) => void }) {
-  const [completedItems, setCompletedItems] = useState<string[]>(user?.completedProfileItems || []);
+  // Initialize completedItems from localStorage
+  const [completedItems, setCompletedItems] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('completedProfileItems');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    }
+    return user?.completedProfileItems || [];
+  });
+  
+  // Initialize homeGroundSearch from localStorage
+  const [homeGroundSearch, setHomeGroundSearch] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('selectedHomeGround');
+      if (saved) {
+        return saved;
+      }
+    }
+    return "";
+  });
+  
   const [totalPoints, setTotalPoints] = useState(0);
   const [pointsAnimation, setPointsAnimation] = useState<{ item: string; points: number } | null>(null);
-  const [homeGroundSearch, setHomeGroundSearch] = useState("");
   const [showHomeGroundDropdown, setShowHomeGroundDropdown] = useState(false);
   
   // Track user's current points and tier - start from user's actual points
   const [currentUserPoints, setCurrentUserPoints] = useState(user?.points || 0);
+  
+  // Save completedItems to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('completedProfileItems', JSON.stringify(completedItems));
+    }
+  }, [completedItems]);
+  
+  // Save homeGroundSearch to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined' && homeGroundSearch) {
+      localStorage.setItem('selectedHomeGround', homeGroundSearch);
+    }
+  }, [homeGroundSearch]);
   
   // Update running total display in real-time
   useEffect(() => {
