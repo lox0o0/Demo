@@ -2759,7 +2759,6 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                                 </div>
                                 <div className="flex-1">
                                   <div className="text-sm font-semibold text-white">{player.name}</div>
-                                  {player.stats && <div className="text-xs text-white/60">{player.stats}</div>}
                                 </div>
                                 {selectedNextWeekPlayer === player.name && (
                                   <Check size={16} className="text-emerald-500" />
