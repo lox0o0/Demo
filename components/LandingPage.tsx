@@ -70,48 +70,80 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
       title: "SIGNED TEAM JERSEY",
       description: "Authenticated signatures from your favourite squad",
       icon: Shirt,
+      color: "emerald",
+      iconColor: "text-emerald-400",
+      borderGradient: "from-emerald-500/50 to-emerald-400/30",
+      bgGradient: "from-emerald-500/10 to-transparent",
     },
     {
       id: 2,
       title: "GRAND FINAL PACKAGE",
       description: "Flights, accommodation, and tickets to the biggest game of the year",
       icon: Plane,
+      color: "gold",
+      iconColor: "text-amber-400",
+      borderGradient: "from-amber-500/60 to-yellow-400/40",
+      bgGradient: "from-amber-500/15 to-transparent",
     },
     {
       id: 3,
       title: "VIP TEAM ACCESS",
       description: "Behind-the-scenes access to your favourite club",
       icon: StarIcon,
+      color: "purple",
+      iconColor: "text-purple-400",
+      borderGradient: "from-purple-500/50 to-pink-400/30",
+      bgGradient: "from-purple-500/10 to-transparent",
     },
     {
       id: 4,
       title: "MATCH DAY HOSPITALITY",
       description: "Premium box experience with food and drinks",
       icon: Utensils,
+      color: "amber",
+      iconColor: "text-amber-300",
+      borderGradient: "from-amber-500/50 to-orange-400/30",
+      bgGradient: "from-amber-500/10 to-transparent",
     },
     {
       id: 5,
       title: "PLAYER MEET & GREET",
       description: "Get up close with NRL stars",
       icon: Users,
+      color: "emerald",
+      iconColor: "text-emerald-300",
+      borderGradient: "from-emerald-400/50 to-teal-400/30",
+      bgGradient: "from-emerald-500/10 to-transparent",
     },
     {
       id: 6,
       title: "$500 NRL SHOP SPREE",
       description: "Deck yourself out in official gear",
       icon: ShoppingBag,
+      color: "blue",
+      iconColor: "text-blue-400",
+      borderGradient: "from-blue-500/50 to-cyan-400/30",
+      bgGradient: "from-blue-500/10 to-transparent",
     },
     {
       id: 7,
       title: "SEASON PASS",
       description: "Every home game for the entire season",
       icon: Calendar,
+      color: "red",
+      iconColor: "text-red-400",
+      borderGradient: "from-red-500/50 to-orange-400/30",
+      bgGradient: "from-red-500/10 to-transparent",
     },
     {
       id: 8,
       title: "TRAINING SESSION ACCESS",
       description: "Watch your team prepare behind closed doors",
       icon: Activity,
+      color: "indigo",
+      iconColor: "text-indigo-400",
+      borderGradient: "from-indigo-500/50 to-purple-400/30",
+      bgGradient: "from-indigo-500/10 to-transparent",
     },
   ];
 
@@ -237,8 +269,8 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
           priority
           unoptimized
         />
-        <div className="absolute inset-0 bg-black/60"></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/60 to-black/70"></div>
+        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50"></div>
       </div>
 
       {/* Hero Section */}
@@ -302,30 +334,14 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
           </div>
         </section>
 
-        {/* Social Proof Section */}
-        <section className="px-4 sm:px-6 lg:px-8 py-1 flex-shrink-0">
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="text-sm font-bold text-white mb-1">
-              Join 50,000+ NRL fans already playing
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 text-white/70">
-              <span className="text-xs">2.5M points earned</span>
-              <span className="text-xs">·</span>
-              <span className="text-xs">100K predictions made</span>
-              <span className="text-xs">·</span>
-              <span className="text-xs">$50K in prizes won</span>
-            </div>
-          </div>
-        </section>
-
         {/* Prize Carousel Section */}
-        <section className="px-4 sm:px-6 lg:px-8 py-0.5 flex flex-col">
+        <section className="px-4 sm:px-6 lg:px-8 py-2 flex flex-col">
           <div className="max-w-7xl mx-auto flex flex-col">
-            <div className="flex items-center gap-1.5 mb-0.5 justify-center flex-shrink-0">
-              <Trophy className="w-3 h-3 text-white" />
-              <h2 className="text-sm font-bold text-white">Compete for Glory and Prizes</h2>
+            <div className="flex items-center gap-1.5 mb-1 justify-center flex-shrink-0">
+              <Trophy className="w-4 h-4 text-white" />
+              <h2 className="text-base font-bold text-white">Compete for Glory and Prizes</h2>
             </div>
-            <p className="text-center text-white/70 mb-0.5 text-[10px] flex-shrink-0">
+            <p className="text-center text-white/70 mb-2 text-xs flex-shrink-0">
               Top fans win incredible rewards every week
             </p>
 
@@ -361,14 +377,22 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
                   return (
                     <div
                       key={prize.id}
-                      className="flex-shrink-0 px-4 py-3 snap-center w-full md:w-1/3"
+                      className="flex-shrink-0 px-4 py-3 snap-center w-full md:w-1/3 relative group"
                       style={{ minWidth: 'calc(100% / 3)' }}
                     >
-                      <div className="flex items-center justify-center mb-2">
-                        <Icon className="w-5 h-5 text-white" />
+                      {/* Gradient border wrapper */}
+                      <div className={`relative p-[2px] rounded-lg bg-gradient-to-r ${prize.borderGradient} opacity-60 group-hover:opacity-100 transition-opacity duration-300`}>
+                        <div className="px-4 py-3 rounded-lg bg-black/30 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02]">
+                          <div className="flex items-center justify-center mb-2">
+                            <Icon className={`w-5 h-5 ${prize.iconColor} drop-shadow-lg`} />
+                          </div>
+                          <h3 className="text-sm font-bold text-white mb-1 text-center">{prize.title}</h3>
+                          <p className="text-xs text-white/70 text-center leading-tight">{prize.description}</p>
+                          
+                          {/* Shimmer effect on hover */}
+                          <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-20 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none"></div>
+                        </div>
                       </div>
-                      <h3 className="text-sm font-bold text-white mb-1 text-center">{prize.title}</h3>
-                      <p className="text-xs text-white/70 text-center leading-tight">{prize.description}</p>
                     </div>
                   );
                 })}
@@ -392,6 +416,22 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
                   />
                 ))}
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Social Proof Section */}
+        <section className="px-4 sm:px-6 lg:px-8 py-2 flex-shrink-0">
+          <div className="max-w-4xl mx-auto text-center">
+            <p className="text-sm font-bold text-white mb-1">
+              Join 50,000+ NRL fans already playing
+            </p>
+            <div className="flex flex-wrap justify-center gap-2 text-white/70">
+              <span className="text-xs">2.5M points earned</span>
+              <span className="text-xs">·</span>
+              <span className="text-xs">100K predictions made</span>
+              <span className="text-xs">·</span>
+              <span className="text-xs">$50K in prizes won</span>
             </div>
           </div>
         </section>
