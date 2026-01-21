@@ -337,8 +337,8 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
           </div>
         </section>
 
-        {/* Prize Carousel Section */}
-        <section className="px-4 sm:px-6 lg:px-8 py-6 flex flex-col">
+        {/* Prize Carousel Section - Middle of page with generous spacing */}
+        <section className="px-4 sm:px-6 lg:px-8 py-12 md:py-16 flex flex-col">
           <div className="max-w-7xl mx-auto flex flex-col">
             <div className="flex items-center gap-1.5 mb-1 justify-center flex-shrink-0">
               <Trophy className="w-4 h-4 text-white" />
@@ -423,41 +423,35 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
           </div>
         </section>
 
-        {/* Social Proof Section */}
+        {/* Social Proof + CTA Section - Combined at bottom */}
         <section className="px-4 sm:px-6 lg:px-8 py-6 flex-shrink-0">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-sm font-bold text-white mb-1">
               Join 50,000+ NRL fans already playing
             </p>
-            <div className="flex flex-wrap justify-center gap-2 text-white/70">
+            <div className="flex flex-wrap justify-center gap-2 text-white/70 mb-4">
               <span className="text-xs">2.5M points earned</span>
               <span className="text-xs">·</span>
               <span className="text-xs">100K predictions made</span>
               <span className="text-xs">·</span>
               <span className="text-xs">$50K in prizes won</span>
             </div>
+            <h2 className="text-lg sm:text-xl font-bold text-white mb-2">
+              Ready to become the ultimate fan?
+            </h2>
+            <button
+              onClick={onGetStarted}
+              className="px-6 py-2 bg-nrl-green hover:bg-nrl-green/90 text-white font-bold text-sm rounded-lg transition-all duration-300 shadow-[0_0_30px_rgba(34,197,94,0.5)] hover:shadow-[0_0_40px_rgba(34,197,94,0.7)] hover:scale-105 flex items-center gap-2 mx-auto"
+            >
+              Join Now
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <p className="text-white/60 mt-1 text-xs">
+              Free to play · Win real prizes
+            </p>
           </div>
         </section>
       </div>
-
-      {/* Bottom CTA Section */}
-      <section className="relative z-10 flex-shrink-0 px-4 sm:px-6 lg:px-8 py-2">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-lg sm:text-xl font-bold text-white mb-2">
-            Ready to become the ultimate fan?
-          </h2>
-          <button
-            onClick={onGetStarted}
-            className="px-6 py-2 bg-nrl-green hover:bg-nrl-green/90 text-white font-bold text-sm rounded-lg transition-all duration-300 shadow-[0_0_30px_rgba(34,197,94,0.5)] hover:shadow-[0_0_40px_rgba(34,197,94,0.7)] hover:scale-105 flex items-center gap-2 mx-auto"
-          >
-            Join Now
-            <ArrowRight className="w-4 h-4" />
-          </button>
-          <p className="text-white/60 mt-1 text-xs">
-            Free to play · Win real prizes
-          </p>
-        </div>
-      </section>
     </div>
   );
 }
