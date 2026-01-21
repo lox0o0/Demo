@@ -5,7 +5,6 @@ import Image from "next/image";
 import { NRL_TEAMS, Team } from "@/lib/data/teams";
 import { EntryPoint } from "@/lib/onboardingTypes";
 import SnappyOnboarding from "./SnappyOnboarding";
-import ProgressiveProfile from "./ProgressiveProfile";
 
 // Team logo component with error handling
 function TeamLogoWithFallback({ src, alt }: { src: string; alt: string }) {
@@ -62,32 +61,16 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
 
   const handleTeamSelect = (team: Team) => {
     setSelectedTeam(team);
-    // For direct entry (from landing page), skip celebration and go straight to profile
-    if (entryPoint === "direct") {
+    // Show celebration first (video + splashback picture for Broncos)
+    setShowCelebration(true);
+    setTimeout(() => {
+      setShowCelebration(false);
       setShowProfile(true);
-    } else {
-      // For other entry points, show celebration first
-      setShowCelebration(true);
-      setTimeout(() => {
-        setShowCelebration(false);
-        setShowProfile(true);
-      }, 2000);
-    }
+    }, 2000);
   };
 
   if (showProfile && selectedTeam) {
-    // For direct entry, go to ProgressiveProfile (build profile with auth)
-    if (entryPoint === "direct") {
-      return (
-        <ProgressiveProfile
-          team={selectedTeam}
-          entryPoint={entryPoint}
-          entryData={entryData}
-          onComplete={onComplete}
-        />
-      );
-    }
-    // For other entry points, use SnappyOnboarding
+    // Use SnappyOnboarding for all entry points (revert to old flow)
     return (
       <SnappyOnboarding
         entryPoint={entryPoint}
@@ -384,11 +367,11 @@ export function TeamCelebration({ team, onComplete }: { team: Team; onComplete?:
       className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden transition-all duration-1000"
       style={{
         background: hasBackground && isBroncos
-          ? `linear-gradient(135deg, ${team.primaryColor}CC 0%, ${team.secondaryColor}CC 100%), url(${broncosBackgroundPath})`
+          ? `linear-gradient(135deg, ${team.primaryColor}BB 0%, ${team.secondaryColor}BB 100%), url(${broncosBackgroundPath})`
           : `linear-gradient(135deg, ${team.primaryColor} 0%, ${team.secondaryColor} 100%)`,
         backgroundSize: hasBackground ? 'cover' : 'auto',
         backgroundPosition: hasBackground ? 'center' : 'auto',
-        backgroundBlendMode: hasBackground ? 'overlay' : 'normal',
+        backgroundBlendMode: hasBackground ? 'multiply' : 'normal',
       }}
     >
       {/* Confetti/particles effect */}
