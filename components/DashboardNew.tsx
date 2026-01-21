@@ -517,8 +517,9 @@ function PrizeWheel({ streakData, teamData, onClose, spinsTaken = 0 }: { streakD
     // Spin 1 (spinsTaken = 0): "$10 KFC" (id: 6, index: 5)
     // Spin 2 (spinsTaken = 1): "50 Points" (id: 3, index: 2)
     // Spin 3 (spinsTaken = 2): "100 Points" (id: 4, index: 3)
+    // After 3 spins, use random
     const targetPrizes = [5, 2, 3]; // Indices for $10 KFC, 50 Points, 100 Points
-    const targetIndex = targetPrizes[spinsTaken] || Math.floor(Math.random() * 20);
+    const targetIndex = spinsTaken < 3 ? targetPrizes[spinsTaken] : Math.floor(Math.random() * 20);
     
     // Calculate rotation to land on target prize
     // Pointer is at 3 o'clock (0°), segments start at top (-90°)
@@ -545,7 +546,8 @@ function PrizeWheel({ streakData, teamData, onClose, spinsTaken = 0 }: { streakD
       
       setIsSpinning(false);
       setPrizeWon(actualPrize);
-      setSpinsRemaining(spinsRemaining - 1);
+      // Pass the prize name to onClose so parent can update spinsTaken
+      onClose(actualPrize.name);
     }, spinDuration);
   };
 
