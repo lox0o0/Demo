@@ -363,6 +363,7 @@ function FanTierLeaderboard({
   getTierColor,
   getMedalIcon,
   renderMovement,
+  user,
 }: {
   data: FanTierEntry[];
   userRank: number;
@@ -527,6 +528,7 @@ function TippingLeaderboard({
   userMovement,
   getMedalIcon,
   renderMovement,
+  user,
 }: {
   data: TippingEntry[];
   userRank: number;
@@ -694,6 +696,7 @@ function FantasyLeaderboard({
   userMovement,
   getMedalIcon,
   renderMovement,
+  user,
 }: {
   data: FantasyEntry[];
   userRank: number;
