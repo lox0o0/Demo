@@ -232,8 +232,8 @@ export default function Dashboard({ user }: DashboardProps) {
               user={lockerRoomUser} 
               hideNavigation={true}
               onNavigate={(section) => setActiveSection(section)}
-              onUserPointsUpdate={(newPoints) => {
-                setLockerRoomUser(prev => ({ ...prev, points: newPoints, lifetimePoints: newPoints }));
+              onUserPointsUpdate={(newPoints: number) => {
+                setLockerRoomUser((prev: any) => ({ ...prev, points: newPoints, lifetimePoints: newPoints }));
               }}
             />
           )}
