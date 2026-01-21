@@ -313,8 +313,8 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
         </section>
 
         {/* Prize Carousel Section */}
-        <section className="px-4 sm:px-6 lg:px-8 py-0.5 flex-1 flex flex-col min-h-0">
-          <div className="max-w-7xl mx-auto flex-1 flex flex-col">
+        <section className="px-4 sm:px-6 lg:px-8 py-0.5 flex flex-col">
+          <div className="max-w-7xl mx-auto flex flex-col">
             <div className="flex items-center gap-1.5 mb-0.5 justify-center flex-shrink-0">
               <Trophy className="w-3 h-3 text-white" />
               <h2 className="text-sm font-bold text-white">Compete for Glory and Prizes</h2>
@@ -324,7 +324,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
             </p>
 
             {/* Carousel Container */}
-            <div className="relative flex-1 flex flex-col">
+            <div className="relative flex flex-col">
               {/* Navigation Arrows */}
               <button
                 onClick={handlePrevPrize}
@@ -342,7 +342,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
               {/* Carousel */}
               <div
                 ref={carouselRef}
-                className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth w-full flex-1"
+                className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth w-full items-start"
                 onMouseEnter={() => setIsAutoScrolling(false)}
                 onMouseLeave={() => setIsAutoScrolling(true)}
                 onTouchStart={handleTouchStart}
@@ -355,7 +355,8 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
                   return (
                     <div
                       key={prize.id}
-                      className="flex-shrink-0 w-[160px] bg-white/5 backdrop-blur-md border border-white/20 rounded px-1.5 py-1 hover:scale-105 hover:shadow-xl transition-all duration-300 snap-center"
+                      className="flex-shrink-0 w-[160px] bg-white/5 backdrop-blur-md border border-white/20 rounded px-1.5 py-1 hover:scale-105 hover:shadow-xl transition-all duration-300 snap-center self-start"
+                      style={{ height: 'fit-content' }}
                     >
                       <div className="flex items-center gap-1.5 mb-0.5">
                         <div className="w-4 h-4 rounded bg-amber-500/20 border border-amber-500/50 flex items-center justify-center flex-shrink-0">
