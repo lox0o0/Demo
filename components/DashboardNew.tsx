@@ -2405,9 +2405,10 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       }) || TIERS[0];
       
       if (oldTier.name !== newTier.name) {
+        // Slow down transition - wait 1.5 seconds so user can see the glow effect
         setTimeout(() => {
           onTierUpgrade(oldTier, newTier, currentUserPoints);
-        }, 750);
+        }, 1500);
       }
     }
     
@@ -2457,7 +2458,9 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-50/20">
               <div 
-                className="h-full transition-all duration-500 ease-out rounded-full" 
+                className={`h-full transition-all duration-500 ease-out rounded-full ${
+                  currentUserPoints >= 1000 && currentUserPoints < 1001 ? 'animate-pulse' : ''
+                }`}
                 style={{ 
                   width: `${Math.min(progressToNext, 100)}%`,
                   background: nextTier 
@@ -2477,7 +2480,11 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                         return `linear-gradient(to right, ${currentColor}, ${nextColor})`;
                       })()
                     : currentTier.color,
-                  boxShadow: nextTier ? `0 0 8px ${nextTier.color}60` : `0 0 8px ${currentTier.color}60`,
+                  boxShadow: currentUserPoints >= 1000 && currentUserPoints < 1001
+                    ? `0 0 20px ${nextTier?.color || '#C0C0C0'}80, 0 0 40px ${nextTier?.color || '#C0C0C0'}60, 0 0 60px ${nextTier?.color || '#C0C0C0'}40`
+                    : nextTier 
+                      ? `0 0 8px ${nextTier.color}60` 
+                      : `0 0 8px ${currentTier.color}60`,
                 }}
               />
             </div>
