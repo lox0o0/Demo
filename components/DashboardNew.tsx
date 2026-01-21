@@ -534,7 +534,7 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
   };
 
   return (
-    <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4" onClick={() => onClose()}>
       <div 
         className="bg-black rounded-2xl p-8 max-w-2xl w-full"
         onClick={(e) => e.stopPropagation()}
@@ -684,7 +684,7 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
                 </button>
               )}
               <button
-                onClick={onClose}
+                onClick={() => onClose(prizeWon?.name)}
                 className="px-6 py-2 bg-nrl-dark-hover border border-nrl-border-light text-white font-bold rounded-lg hover:border-nrl-green transition-all"
               >
                 Close
@@ -711,7 +711,7 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
               <span>All spins used this week</span>
             </div>
             <button
-              onClick={onClose}
+              onClick={() => onClose()}
               className="px-6 py-2 bg-nrl-dark-hover border border-nrl-border-light text-white font-bold rounded-lg hover:border-nrl-green transition-all"
             >
               Close
