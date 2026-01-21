@@ -221,20 +221,6 @@ export default function TierUpgradeCelebration({
           <X className="w-4 h-4 text-white/70" strokeWidth={2} />
         </button>
 
-        {/* Points Counter - Minimal */}
-        <div className="text-center mb-4">
-          <div
-            className="text-3xl font-black mb-1"
-            style={{
-              color: '#ffd700',
-              textShadow: '0 0 20px rgba(255, 215, 0, 0.5)',
-            }}
-          >
-            {points.toLocaleString()}
-          </div>
-          <div className="text-xs text-white/60">points</div>
-        </div>
-
         {/* Congratulations Message - Minimal */}
         {showLevelUp && (
           <div
