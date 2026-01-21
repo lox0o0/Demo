@@ -3328,7 +3328,7 @@ function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightP
 }
 
 // Section B: Prizes & Streak
-function PrizesAndStreakSection({ user, streakData, currentTier }: { user: any; streakData: StreakData; currentTier: any }) {
+function PrizesAndStreakSection({ user, streakData, currentTier, onNavigate }: { user: any; streakData: StreakData; currentTier: any; onNavigate?: (section: NavSection) => void }) {
   const [showWheel, setShowWheel] = useState(false);
   const [spinsTaken, setSpinsTaken] = useState(0);
   const [drawEntered, setDrawEntered] = useState(false);
