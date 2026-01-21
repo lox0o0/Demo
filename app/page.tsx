@@ -25,12 +25,12 @@ export default function Home() {
       return;
     }
     
-    // Check if user has seen landing page
-    const landingPageSeen = localStorage.getItem("landing_page_seen");
-    if (landingPageSeen === "true") {
-      setShowLandingPage(false);
-    }
+    // For demo: Always start from landing page when opened from Vercel
+    // Clear landing_page_seen flag on every page load to ensure landing page always shows
+    localStorage.removeItem("landing_page_seen");
+    setShowLandingPage(true);
     
+    // Still check if user is onboarded (for session continuity)
     const onboarded = localStorage.getItem("nrl_onboarded");
     const userData = localStorage.getItem("nrl_user");
     
@@ -42,7 +42,7 @@ export default function Home() {
         if (parsed && (parsed.name || parsed.email)) {
           setIsOnboarded(true);
           setUser(parsed);
-          setShowLandingPage(false);
+          // Don't skip landing page - always show it first
         }
       } catch (e) {
         // Invalid data, clear it
