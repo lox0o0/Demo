@@ -3742,6 +3742,15 @@ function PrizeWheelCardPrizes({ streakData, onSpinClick, spinsTaken, lastPrizeWo
           </div>
         </div>
       </div>
+
+      {/* CTA: See All Rewards */}
+      <button
+        onClick={() => onNavigate?.("rewards")}
+        className="w-full mt-3 py-2 px-4 bg-white/5 border border-white/20 rounded-lg text-xs font-semibold text-white/80 hover:text-white hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+      >
+        <Gift className="w-3.5 h-3.5" strokeWidth={2} />
+        <span>see all rewards here..</span>
+      </button>
     </div>
   );
 }
