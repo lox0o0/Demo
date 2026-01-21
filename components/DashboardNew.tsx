@@ -2272,16 +2272,16 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
     { name: "Roosters", percentage: 9 },
   ];
 
-  // Mock fixtures for tips
+  // Mock fixtures for tips - all completed by default
   const fixtures = [
     { id: 1, home: "Broncos", away: "Storm", date: "Fri 8:00pm", userTip: "Broncos" },
-    { id: 2, home: "Panthers", away: "Roosters", date: "Sat 3:00pm", userTip: null },
+    { id: 2, home: "Panthers", away: "Roosters", date: "Sat 3:00pm", userTip: "Panthers" },
     { id: 3, home: "Sharks", away: "Eels", date: "Sat 5:30pm", userTip: "Sharks" },
-    { id: 4, home: "Cowboys", away: "Titans", date: "Sat 7:30pm", userTip: null },
+    { id: 4, home: "Cowboys", away: "Titans", date: "Sat 7:30pm", userTip: "Cowboys" },
     { id: 5, home: "Warriors", away: "Dragons", date: "Sun 2:00pm", userTip: "Warriors" },
-    { id: 6, home: "Sea Eagles", away: "Bulldogs", date: "Sun 4:00pm", userTip: null },
+    { id: 6, home: "Sea Eagles", away: "Bulldogs", date: "Sun 4:00pm", userTip: "Sea Eagles" },
     { id: 7, home: "Raiders", away: "Knights", date: "Sun 6:00pm", userTip: "Raiders" },
-    { id: 8, home: "Rabbitohs", away: "Tigers", date: "Mon 7:00pm", userTip: null },
+    { id: 8, home: "Rabbitohs", away: "Tigers", date: "Mon 7:00pm", userTip: "Rabbitohs" },
   ];
 
   // Mock highlights
