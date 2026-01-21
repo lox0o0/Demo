@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
-import { Trophy, Star, Ticket, Shirt, Award, Crown, Check, Heart, Building2, Plane, Hotel, Gift, Sparkles } from "lucide-react";
+import { Trophy, Star, Ticket, Shirt, Award, Crown, Check, Heart, Building2, Plane, Hotel, Gift, Sparkles, ArrowRight } from "lucide-react";
 
 interface RightSidebarProps {
   user: any;
@@ -101,17 +101,21 @@ function CurrentTierStatsCard({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-4 mb-2">
               <div className="flex-1">
-                <h3 className="text-white font-semibold text-lg">{user?.name || "Fan"}</h3>
-                <div className="flex items-center gap-2 mt-1">
-                  <div className="inline-flex items-center rounded-full px-2.5 py-0.5 font-semibold bg-white/20 backdrop-blur-md text-white border border-white/30 text-xs">
+                <h3 className="text-white font-semibold text-lg mb-2">{user?.name || "Fan"}</h3>
+                <div className="flex items-center gap-2 mb-3">
+                  <div 
+                    className="inline-flex items-center rounded-full px-2.5 py-0.5 font-semibold backdrop-blur-md text-white border text-xs"
+                    style={{
+                      backgroundColor: `${currentTier.color || '#C0C0C0'}33`,
+                      borderColor: `${currentTier.color || '#C0C0C0'}80`,
+                    }}
+                  >
                     {currentTier.name} Tier
                   </div>
                 </div>
-                <div className="space-y-1 mt-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/80 text-sm">Current Points:</span>
-                    <span className="text-white font-semibold text-sm font-mono">{userPoints.toLocaleString()}</span>
-                  </div>
+                <div className="mt-2">
+                  <div className="text-white/60 text-xs mb-0.5">Current Points</div>
+                  <div className="text-white font-bold text-xl">{userPoints.toLocaleString()}</div>
                 </div>
               </div>
             </div>
@@ -119,71 +123,57 @@ function CurrentTierStatsCard({
         </div>
       </div>
 
-      {/* Stats row (3 columns) */}
-      <div className="grid grid-cols-3 gap-3 mb-3">
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/10 flex flex-col items-center justify-center min-h-[60px]">
-          <div className="text-lg font-bold text-white leading-tight break-words">{gamesAttended}</div>
-          <div className="text-xs text-white/60 uppercase mt-0.5 leading-tight">Games Attended</div>
+      {/* Recent Prizes row (3 columns) */}
+      <div className="grid grid-cols-1 gap-2 mb-3">
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 border border-white/10 flex items-center gap-3">
+          <div className="flex-shrink-0">
+            <div className="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/50 flex items-center justify-center">
+              <Shirt className="w-5 h-5 text-amber-400" />
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-xs text-white/60 mb-0.5">Recent prize earned</div>
+            <div className="text-sm font-semibold text-white">Signed Broncos Jersey</div>
+          </div>
         </div>
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/10 flex flex-col items-center justify-center min-h-[60px]">
-          <div className="text-lg font-bold text-white leading-tight break-words">{tippingRank}</div>
-          <div className="text-xs text-white/60 uppercase mt-0.5 leading-tight">Tipping Rank</div>
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 border border-white/10 flex items-center gap-3">
+          <div className="flex-shrink-0">
+            <div className="w-10 h-10 rounded-lg bg-blue-500/20 border border-blue-500/50 flex items-center justify-center">
+              <Ticket className="w-5 h-5 text-blue-400" />
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-xs text-white/60 mb-0.5">Recent prize earned</div>
+            <div className="text-sm font-semibold text-white">Home Ground Tickets</div>
+          </div>
         </div>
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2.5 text-center border border-white/10 flex flex-col items-center justify-center min-h-[60px]">
-          <div className="text-lg font-bold text-white leading-tight break-words">{badgesEarned}</div>
-          <div className="text-xs text-white/60 uppercase mt-0.5 leading-tight">Badges Earned</div>
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-3 border border-white/10 flex items-center gap-3">
+          <div className="flex-shrink-0">
+            <div className="w-10 h-10 rounded-lg bg-red-500/20 border border-red-500/50 flex items-center justify-center">
+              <Gift className="w-5 h-5 text-red-400" />
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-xs text-white/60 mb-0.5">Recent prize earned</div>
+            <div className="text-sm font-semibold text-white">$10 KFC Voucher</div>
+          </div>
         </div>
       </div>
 
-      {/* Trophy Case section - Celebratory */}
+      {/* Claim More Rewards CTA */}
       <div className="pt-3 border-t border-white/10">
-        <div className="text-sm font-semibold text-white/80 mb-2">Trophy Case</div>
-        <div className="flex justify-between gap-2">
-          {trophies.map((trophy: { id: string; name: string; icon: any; earned: boolean }) => {
-            const Icon = trophy.icon;
-            return (
-              <div 
-                key={trophy.id} 
-                className="flex flex-col items-center gap-1.5 flex-1 group relative"
-              >
-                <div
-                  className={`w-14 h-14 rounded-lg flex items-center justify-center border-2 relative overflow-hidden transition-all duration-300 ${
-                    trophy.earned
-                      ? "border-amber-400/60 bg-gradient-to-br from-amber-500/20 via-yellow-500/15 to-amber-500/20 text-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.3)] group-hover:shadow-[0_0_20px_rgba(251,191,36,0.5)] group-hover:scale-110"
-                      : "border-white/20 bg-white/5 text-white/40"
-                  }`}
-                >
-                  {/* Shimmer effect on hover */}
-                  {trophy.earned && (
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden">
-                      <div 
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-300/40 to-transparent"
-                        style={{
-                          transform: 'translateX(-100%)',
-                          animation: 'shimmerSweep 1.5s ease-in-out infinite',
-                        }}
-                      />
-                    </div>
-                  )}
-                  <Icon className="w-7 h-7 relative z-10" />
-                  {/* Checkmark indicator */}
-                  {trophy.earned && (
-                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center border-2 border-white/90 shadow-lg z-20">
-                      <Check className="w-3 h-3 text-white" strokeWidth={3} />
-                    </div>
-                  )}
-                </div>
-                <span
-                  className={`text-xs text-center leading-tight font-medium ${
-                    trophy.earned ? "text-amber-300" : "text-white/40"
-                  }`}
-                >
-                  {trophy.name}
-                </span>
-              </div>
-            );
-          })}
-        </div>
+        <button className="w-full bg-gradient-to-r from-nrl-green/20 to-nrl-green/10 hover:from-nrl-green/30 hover:to-nrl-green/20 border-2 border-nrl-green/50 rounded-lg p-4 flex items-center justify-between group transition-all duration-300 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-nrl-green/20 border border-nrl-green/50 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <Gift className="w-5 h-5 text-nrl-green" />
+            </div>
+            <div className="text-left">
+              <div className="text-sm font-bold text-white">Claim More Rewards</div>
+              <div className="text-xs text-white/60">View all available prizes</div>
+            </div>
+          </div>
+          <ArrowRight className="w-5 h-5 text-nrl-green group-hover:translate-x-1 transition-transform" />
+        </button>
       </div>
     </div>
   );
