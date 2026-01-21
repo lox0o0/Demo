@@ -233,7 +233,7 @@ export default function TierUpgradeCelebration({
           <div className="text-xs text-white/60">points</div>
         </div>
 
-        {/* LEVEL UP! Text - Minimal */}
+        {/* Congratulations Message - Minimal */}
         {showLevelUp && (
           <div
             className={`text-center mb-4 transform transition-all duration-500 ${
@@ -242,13 +242,12 @@ export default function TierUpgradeCelebration({
           >
             <h1
               id="celebration-title"
-              className="text-2xl font-black uppercase tracking-wider"
+              className="text-xl font-bold"
               style={{
                 color: '#ffffff',
-                textShadow: '0 0 20px rgba(255, 215, 0, 0.6)',
               }}
             >
-              LEVEL UP!
+              Congratulations you've hit Fan Tier: {newTier.name}
             </h1>
           </div>
         )}

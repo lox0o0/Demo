@@ -243,8 +243,8 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
     <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-4">
       <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Fan Journey</h3>
       
-      {/* Progress Bar - Show when close to next tier (90%+) */}
-      {isCloseToNextTier && nextTier && (
+      {/* Progress Bar - Show when progressing to next tier */}
+      {showProgressBar && nextTier && (
         <div className="mb-4 p-3 bg-white/5 rounded-lg border border-white/10">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-semibold text-white/80">
@@ -259,8 +259,8 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
               className="h-full rounded-full transition-all duration-500"
               style={{
                 width: `${Math.min(progressToNext, 100)}%`,
-                background: `linear-gradient(to right, ${currentTier.color}, ${nextTier.color})`,
-                boxShadow: `0 0 8px ${nextTier.color}60`,
+                background: `linear-gradient(to right, ${tierColors[currentTier.name] || currentTier.color}, ${tierColors[nextTier.name] || nextTier.color})`,
+                boxShadow: `0 0 8px ${tierColors[nextTier.name] || nextTier.color}60`,
               }}
             />
           </div>
