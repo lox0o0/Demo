@@ -2285,8 +2285,23 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
   // Get all teams for dropdown
   const allTeams = NRL_TEAMS.map(t => t.name);
 
-  // Track completed mission IDs
-  const [completedMissionIds, setCompletedMissionIds] = useState<number[]>([5, 6]); // Start with 2 completed
+  // Track completed mission IDs - persist in localStorage
+  const [completedMissionIds, setCompletedMissionIds] = useState<number[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('completedMissionIds');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    }
+    return [2, 5, 6]; // Start with 3 completed (including fixtures)
+  });
+  
+  // Save to localStorage whenever completedMissionIds changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('completedMissionIds', JSON.stringify(completedMissionIds));
+    }
+  }, [completedMissionIds]);
   
   const missions = [
     {
@@ -2328,8 +2343,9 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       points: "+50 pts",
       status: null,
       statusType: "progress" as const,
-      progress: { current: 6, total: 8, percent: 75 },
+      progress: { current: 8, total: 8, percent: 100 },
       pointsValue: 50,
+      pointsEarned: "+50 pts earned",
     },
     {
       id: 3,
@@ -2380,7 +2396,8 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
     if (completedMissionIds.includes(missionId)) return;
     
     // Mark mission as completed
-    setCompletedMissionIds([...completedMissionIds, missionId]);
+    const updatedCompleted = [...completedMissionIds, missionId];
+    setCompletedMissionIds(updatedCompleted);
     
     // Update weekly completion count
     setWeeklyCompleted(prev => prev + 1);
@@ -2390,6 +2407,8 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
     setCurrentUserPoints(newPoints);
     if (onUserPointsUpdate) {
       onUserPointsUpdate(newPoints);
+      // Store upgraded points in sessionStorage for home page
+      sessionStorage.setItem('userUpgradedPoints', newPoints.toString());
     }
     
     // Check for tier upgrade
@@ -2712,7 +2731,6 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                                 </div>
                                 <div className="flex-1">
                                   <div className="text-sm font-semibold text-white">{player.name}</div>
-                                  {player.stats && <div className="text-xs text-white/60">{player.stats}</div>}
                                 </div>
                                 {selectedLastRoundPlayer === player.name && (
                                   <Check size={16} className="text-emerald-500" />
@@ -2721,10 +2739,53 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                             </button>
                           ))}
                         </div>
-                        {selectedLastRoundPlayer && (
-                          <div className="pt-3 border-t border-gray-700/50">
+                        {selectedLastRoundPlayer && !isCompleted && (
+                          <div className="pt-3 border-t border-gray-700/50 space-y-3">
                             <div className="text-xs text-white/60 mb-2">+10 Fuel • {mission.points}</div>
-                            <div className="text-xs text-white/40">Winner announced: Wednesday 12pm</div>
+                            
+                            {/* Voting Results */}
+                            <div className="pt-3 border-t border-gray-700/50">
+                              <div className="text-xs font-semibold text-white/80 mb-2">Fan Voting Results:</div>
+                              <div className="space-y-2">
+                                {[
+                                  { name: "Nathan Cleary", percentage: 42 },
+                                  { name: "Reece Walsh", percentage: 28 },
+                                  { name: selectedLastRoundPlayer, percentage: 15 },
+                                  { name: "Jahrome Hughes", percentage: 10 },
+                                  { name: "Kalyn Ponga", percentage: 5 },
+                                ].map((result) => (
+                                  <div key={result.name} className="flex items-center gap-2">
+                                    <div className="w-24 text-xs text-white/60 truncate">{result.name}</div>
+                                    <div className="flex-1 bg-gray-800/50 rounded-full h-2">
+                                      <div
+                                        className={`h-2 rounded-full ${
+                                          result.name === selectedLastRoundPlayer ? 'bg-emerald-500' : 'bg-gray-600'
+                                        }`}
+                                        style={{ width: `${result.percentage}%` }}
+                                      />
+                                    </div>
+                                    <div className="w-10 text-xs text-white/60 text-right">{result.percentage}%</div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                            
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCompleteMission(mission.id, mission.pointsValue || 25);
+                              }}
+                              className="w-full mt-2 py-2 px-4 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold rounded-lg transition-colors"
+                            >
+                              Complete Vote
+                            </button>
+                            <div className="text-xs text-white/40 mt-2">Winner announced: Wednesday 12pm</div>
+                          </div>
+                        )}
+                        {isCompleted && mission.id === 3 && (
+                          <div className="pt-3 border-t border-gray-700/50">
+                            <div className="text-xs text-emerald-400 font-semibold mb-1">✓ Vote Complete</div>
+                            <div className="text-xs text-white/60">{mission.pointsEarned || mission.points}</div>
                           </div>
                         )}
                       </div>

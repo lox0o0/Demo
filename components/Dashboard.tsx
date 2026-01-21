@@ -30,10 +30,18 @@ export default function Dashboard({ user }: DashboardProps) {
     : { primary: "#00A651", secondary: "#FFB800" };
 
   // Demo: Override user points for different pages
-  // Home page: 950 points (Bronze tier, close to Silver) for progress modal demo
-  const homeUser = { ...user, points: 950, lifetimePoints: 950 };
-  // Locker Room page: 950 points (Bronze tier, 50 points from Silver at 1000)
-  const [lockerRoomUser, setLockerRoomUser] = useState({ ...user, points: 950, lifetimePoints: 950 });
+  // Check if user has upgraded to Silver tier (from sessionStorage or state)
+  const [lockerRoomUser, setLockerRoomUser] = useState(() => {
+    // Check if user has upgraded tier
+    const upgradedPoints = sessionStorage.getItem('userUpgradedPoints');
+    if (upgradedPoints) {
+      return { ...user, points: parseInt(upgradedPoints), lifetimePoints: parseInt(upgradedPoints) };
+    }
+    return { ...user, points: 950, lifetimePoints: 950 };
+  });
+  
+  // Home page: Use updated points if user has upgraded, otherwise 950
+  const homeUser = { ...user, points: lockerRoomUser.points, lifetimePoints: lockerRoomUser.points };
 
   // Calculate tier info for progress modal
   const userPoints = homeUser?.points || 0;
