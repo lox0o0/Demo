@@ -552,7 +552,15 @@ function PrizeWheel({ streakData, teamData, onClose, spinsTaken = 0 }: { streakD
   };
 
   return (
-    <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4" onClick={() => onClose()}>
+    <div 
+      className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4" 
+      onClick={(e) => {
+        // Only close on backdrop click if not spinning and prize is shown
+        if (!isSpinning && prizeWon && e.target === e.currentTarget) {
+          onClose(prizeWon.name);
+        }
+      }}
+    >
       <div 
         className="bg-black rounded-2xl p-8 max-w-2xl w-full"
         onClick={(e) => e.stopPropagation()}
