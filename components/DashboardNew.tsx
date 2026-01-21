@@ -2221,8 +2221,17 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
     }
   }, []);
   
-  // Track weekly completion count
-  const [weeklyCompleted, setWeeklyCompleted] = useState(2);
+  // Track weekly completion count - initialize from localStorage
+  const [weeklyCompleted, setWeeklyCompleted] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('completedMissionIds');
+      if (saved) {
+        const completed = JSON.parse(saved);
+        return completed.length; // Count completed missions
+      }
+    }
+    return 3; // Start with 3 completed (missions 2, 5, 6)
+  });
   const weeklyTotal = 7;
   const seasonCompleted = 34;
   const seasonTotal = 49;
