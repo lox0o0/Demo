@@ -11,6 +11,7 @@ import RightSidebar from "./layout/RightSidebar";
 import StatusBar from "./layout/StatusBar";
 import SectionHeader from "./cards/SectionHeader";
 import ContentCard from "./cards/ContentCard";
+import SponsorActivityCard from "./cards/SponsorActivityCard";
 import BackgroundVideo from "./BackgroundVideo";
 import HeroCarousel from "./HeroCarousel";
 import TierProgressModal from "./TierProgressModal";
@@ -253,101 +254,34 @@ export default function Dashboard({ user }: DashboardProps) {
                   title="SPONSOR ACTIVITIES"
                   seeAllLink="#"
                 />
-                <div className="space-y-0 bg-white/5 rounded-lg border border-white/20 backdrop-blur-sm overflow-hidden">
-                  {/* KFC Sponsor Activity */}
-                  <div className="flex items-center w-full px-4 py-3 transition-all duration-300 cursor-pointer relative border-l-2 border-yellow-500/30 hover:bg-white/5">
-                    <div className="flex items-center w-full gap-4">
-                      <div className="flex flex-col min-w-0 flex-1 gap-1">
-                        <p className="font-medium text-base text-white uppercase">Game Day Meal Deal</p>
-                        <div className="text-sm text-white/70">Order any meal via KFC app using code NRLPLAYER at checkout</div>
-                        <div className="text-sm text-white/80 mt-1">
-                          <span className="font-semibold">You get:</span> Free upgrade to Large + 50 pts
-                        </div>
-                        <div className="text-sm text-white/70">
-                          <span className="font-semibold">Ends:</span> Sunday 9pm
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-end gap-2">
-                        <div className="w-14 h-14 rounded border border-yellow-500/30 bg-white/5 backdrop-blur-md flex items-center justify-center overflow-hidden flex-shrink-0">
-                          <Image
-                            src="/images/cards/KFC.png"
-                            alt="KFC"
-                            width={56}
-                            height={56}
-                            className="object-cover w-full h-full"
-                            unoptimized
-                          />
-                        </div>
-                        <div className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-semibold border border-white/10 text-neutral-50 bg-neutral-950/40">
-                          +50 pts
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <hr className="h-px bg-white/10" />
-                  
-                  {/* Telstra Sponsor Activity */}
-                  <div className="flex items-center w-full px-4 py-3 transition-all duration-300 cursor-pointer relative border-l-2 border-yellow-500/30 hover:bg-white/5">
-                    <div className="flex items-center w-full gap-4">
-                      <div className="flex flex-col min-w-0 flex-1 gap-1">
-                        <p className="font-medium text-base text-white uppercase">Stay Connected</p>
-                        <div className="text-sm text-white/70">Complete a 2-min plan comparison quiz and see exclusive NRL member offers</div>
-                        <div className="text-sm text-white/80 mt-1">
-                          <span className="font-semibold">You get:</span> 10GB Bonus Data + 30 pts
-                        </div>
-                        <div className="text-sm text-white/70">
-                          <span className="font-semibold">Available:</span> Ongoing
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-end gap-2">
-                        <div className="w-14 h-14 rounded border border-yellow-500/30 bg-white/5 backdrop-blur-md flex items-center justify-center overflow-hidden flex-shrink-0">
-                          <Image
-                            src="/images/cards/telstra.png"
-                            alt="Telstra"
-                            width={56}
-                            height={56}
-                            className="object-cover w-full h-full"
-                            unoptimized
-                          />
-                        </div>
-                        <div className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-semibold border border-white/10 text-neutral-50 bg-neutral-950/40">
-                          +30 pts
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <hr className="h-px bg-white/10" />
-                  
-                  {/* Ampol Sponsor Activity */}
-                  <div className="flex items-center w-full px-4 py-3 transition-all duration-300 cursor-pointer relative border-l-2 border-yellow-500/30 hover:bg-white/5">
-                    <div className="flex items-center w-full gap-4">
-                      <div className="flex flex-col min-w-0 flex-1 gap-1">
-                        <p className="font-medium text-base text-white uppercase">Fuel Up Friday</p>
-                        <div className="text-sm text-white/70">Visit any Ampol station and scan the QR code at the pump using the Ampol app</div>
-                        <div className="text-sm text-white/80 mt-1">
-                          <span className="font-semibold">You get:</span> 10c/L off (max 60L) + 40 pts
-                        </div>
-                        <div className="text-sm text-white/70">
-                          <span className="font-semibold">Available:</span> Fridays only
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-end gap-2">
-                        <div className="w-14 h-14 rounded border border-yellow-500/30 bg-white/5 backdrop-blur-md flex items-center justify-center overflow-hidden flex-shrink-0">
-                          <Image
-                            src="/images/cards/Ampol.webp"
-                            alt="Ampol"
-                            width={56}
-                            height={56}
-                            className="object-cover w-full h-full"
-                            unoptimized
-                          />
-                        </div>
-                        <div className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-semibold border border-white/10 text-neutral-50 bg-neutral-950/40">
-                          +40 pts
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <SponsorActivityCard
+                    image="/images/cards/KFC.png"
+                    title="Game Day Meal Deal"
+                    description="Order any meal via KFC app using code NRLPLAYER at checkout"
+                    benefit="Free upgrade to Large + 50 pts"
+                    availability="Ends: Sunday 9pm"
+                    ctaText="Open KFC App"
+                    points="+50 pts"
+                  />
+                  <SponsorActivityCard
+                    image="/images/cards/telstra.png"
+                    title="Stay Connected"
+                    description="Complete a 2-min plan comparison quiz and see exclusive NRL member offers"
+                    benefit="10GB Bonus Data + 30 pts"
+                    availability="Available: Ongoing"
+                    ctaText="Start Quiz"
+                    points="+30 pts"
+                  />
+                  <SponsorActivityCard
+                    image="/images/cards/Ampol.webp"
+                    title="Fuel Up Friday"
+                    description="Visit any Ampol station and scan the QR code at the pump using the Ampol app"
+                    benefit="10c/L off (max 60L) + 40 pts"
+                    availability="Available: Fridays only"
+                    ctaText="Get QR Code"
+                    points="+40 pts"
+                  />
                 </div>
               </section>
             </div>
