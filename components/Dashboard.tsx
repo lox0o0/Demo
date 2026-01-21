@@ -72,18 +72,8 @@ export default function Dashboard({ user }: DashboardProps) {
       return;
     }
     
-    // Check if onboarding was just completed (set in app/page.tsx)
-    const onboardingJustCompleted = sessionStorage.getItem('onboardingJustCompleted');
-    const hasShownAfterOnboarding = localStorage.getItem('tierProgressModalShownAfterOnboarding');
-    
-    // Show modal once after onboarding completes
-    if (activeSection === "home" && onboardingJustCompleted === 'true' && !hasShownAfterOnboarding) {
-      setShowProgressModal(true);
-      localStorage.setItem('tierProgressModalShownAfterOnboarding', 'true');
-      sessionStorage.removeItem('onboardingJustCompleted');
-    } else {
-      setShowProgressModal(false);
-    }
+    // Removed: Bronze Tier pop-up after onboarding - moved to carousel instead
+    setShowProgressModal(false);
   }, [activeSection]);
 
   const handleDismissModal = () => {
@@ -122,7 +112,7 @@ export default function Dashboard({ user }: DashboardProps) {
             <div className="space-y-12 max-w-[95%] relative">
               {/* HERO CAROUSEL */}
               <section>
-                <HeroCarousel onNavigate={(section) => setActiveSection(section as NavSection)} />
+                <HeroCarousel onNavigate={(section) => setActiveSection(section as NavSection)} user={homeUser} />
               </section>
 
               {/* SECTION 1: FANTASY & TIPPING */}

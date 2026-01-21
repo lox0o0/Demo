@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import { Trophy, Target, ChevronLeft, ChevronRight } from "lucide-react";
+import { TIERS } from "@/lib/mockData";
 
 interface Slide {
   id: number;
@@ -12,48 +13,72 @@ interface Slide {
   subtext: string;
   ctaText: string;
   ctaAction?: () => void;
+  isOnboarding?: boolean;
 }
 
 interface HeroCarouselProps {
   onNavigate?: (section: string) => void;
+  user?: any;
 }
 
-export default function HeroCarousel({ onNavigate }: HeroCarouselProps = {}) {
-  const slides: Slide[] = useMemo(() => [
-    {
-      id: 1,
-      icon: <Trophy className="w-12 h-12 text-yellow-400" />,
-      headline: "WIN WEEKLY PRIZES",
-      subtext: "Win a share of $10,000 in weekly prizes — the higher your fan tier, the better the prize!",
-      ctaText: "Enter Prize Draw",
-    },
-    {
-      id: 2,
-      icon: <Target className="w-12 h-12 text-white/80" strokeWidth={2} />,
-      headline: "PREDICTIONS",
-      subtext: "Test your knowledge against other fans and predict the MVP for the upcoming round!",
-      ctaText: "Make Prediction",
-      ctaAction: () => {
-        if (onNavigate) {
-          onNavigate("dashboard");
-        }
+export default function HeroCarousel({ onNavigate, user }: HeroCarouselProps = {}) {
+  // Calculate points to Silver for onboarding slide
+  const userPoints = user?.points || 950;
+  const silverTier = TIERS.find(t => t.name === "Silver");
+  const pointsToSilver = silverTier ? Math.max(0, silverTier.minPoints - userPoints) : 50;
+
+  const slides: Slide[] = useMemo(() => {
+    const baseSlides: Slide[] = [
+      {
+        id: 0,
+        headline: "ONBOARDING",
+        subtext: `${pointsToSilver} points to Silver Fan Tier. Complete profile information to earn points`,
+        ctaText: "Complete Profile",
+        isOnboarding: true,
+        ctaAction: () => {
+          if (onNavigate) {
+            onNavigate("dashboard");
+            // Set flag to highlight profile completion
+            sessionStorage.setItem('highlightProfileCompletion', 'true');
+          }
+        },
       },
-    },
-    {
-      id: 3,
-      logo: "/locker-room/nrl-fantasy-logo.png",
-      headline: "NRL FANTASY",
-      subtext: "It's round 6. Make sure your trades are made and team is set for the weekend!",
-      ctaText: "Manage Team",
-    },
-    {
-      id: 4,
-      logo: "/locker-room/nrl-tipping-logo.png",
-      headline: "NRL TIPPING",
-      subtext: "There are multiple games this round, ensure your tips are made for this weekend!",
-      ctaText: "Finish Tips",
-    },
-  ], [onNavigate]);
+      {
+        id: 1,
+        icon: <Trophy className="w-12 h-12 text-yellow-400" />,
+        headline: "WIN WEEKLY PRIZES",
+        subtext: "Win a share of $10,000 in weekly prizes — the higher your fan tier, the better the prize!",
+        ctaText: "Enter Prize Draw",
+      },
+      {
+        id: 2,
+        icon: <Target className="w-12 h-12 text-white/80" strokeWidth={2} />,
+        headline: "PREDICTIONS",
+        subtext: "Test your knowledge against other fans and predict the MVP for the upcoming round!",
+        ctaText: "Make Prediction",
+        ctaAction: () => {
+          if (onNavigate) {
+            onNavigate("dashboard");
+          }
+        },
+      },
+      {
+        id: 3,
+        logo: "/locker-room/nrl-fantasy-logo.png",
+        headline: "NRL FANTASY",
+        subtext: "It's round 6. Make sure your trades are made and team is set for the weekend!",
+        ctaText: "Manage Team",
+      },
+      {
+        id: 4,
+        logo: "/locker-room/nrl-tipping-logo.png",
+        headline: "NRL TIPPING",
+        subtext: "There are multiple games this round, ensure your tips are made for this weekend!",
+        ctaText: "Finish Tips",
+      },
+    ];
+    return baseSlides;
+  }, [onNavigate, pointsToSilver]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -145,37 +170,84 @@ export default function HeroCarousel({ onNavigate }: HeroCarouselProps = {}) {
                         </div>
                         
                         {/* Content Container */}
-                        <div className="relative h-full w-full overflow-hidden p-6 flex flex-col items-start justify-end space-y-4">
-                          {/* Icon or Logo */}
-                          {slide.icon ? (
-                            <div className="relative z-10 transition-transform duration-300 group-hover:scale-105">
-                              {slide.icon}
+                        {slide.isOnboarding ? (
+                          <div className="relative h-full w-full overflow-hidden p-6 flex items-center justify-between">
+                            {/* Left side - Text content */}
+                            <div className="flex flex-col items-start text-left text-white space-y-4 relative z-10 flex-1 pr-4">
+                              <h3 className="text-base font-bold uppercase">{slide.headline}</h3>
+                              <p className="text-lg text-white/80 max-w-xl leading-relaxed">{slide.subtext}</p>
+                              <button
+                                onClick={slide.ctaAction}
+                                className="group/cta inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-bold h-11 px-6 bg-gray-900/90 hover:bg-gray-800/95 text-white border-2 border-yellow-400/50 hover:border-yellow-400/80 backdrop-blur-md shadow-[0_0_20px_rgba(251,191,36,0.6)] hover:shadow-[0_0_35px_rgba(251,191,36,0.9)] transition-all duration-300 hover:scale-110 hover:-translate-y-1"
+                              >
+                                {slide.ctaText}
+                              </button>
                             </div>
-                          ) : slide.logo ? (
-                            <div className="relative z-10 w-1/4 max-h-24 transition-transform duration-300 group-hover:scale-105">
-                              <Image
-                                src={slide.logo}
-                                alt={slide.headline}
-                                width={102}
-                                height={102}
-                                className="object-contain"
-                                unoptimized
-                              />
+                            {/* Right side - Silver reward card */}
+                            <div className="relative z-10 flex-shrink-0 w-64">
+                              <div 
+                                className="rounded-lg p-4 border"
+                                style={{
+                                  backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                                  borderColor: 'rgba(192, 192, 192, 0.3)',
+                                  boxShadow: '0 0 18px rgba(192, 192, 192, 0.25)',
+                                }}
+                              >
+                                <div className="flex items-center gap-3 mb-3">
+                                  <div 
+                                    className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
+                                    style={{
+                                      backgroundColor: 'rgba(192, 192, 192, 0.15)',
+                                      border: '1px solid rgba(192, 192, 192, 0.3)',
+                                    }}
+                                  >
+                                    <Trophy className="w-6 h-6" style={{ color: '#C0C0C0' }} />
+                                  </div>
+                                  <div>
+                                    <div className="text-xs font-semibold uppercase tracking-wider text-white/60 mb-1">
+                                      SILVER REWARD
+                                    </div>
+                                  </div>
+                                </div>
+                                <p className="text-sm text-white/90 leading-relaxed">
+                                  Meet the team - Broncos training access with one mate
+                                </p>
+                              </div>
                             </div>
-                          ) : null}
-
-                          {/* Content */}
-                          <div className="flex flex-col items-start text-left text-white space-y-4 relative z-10">
-                            <h3 className="text-base font-bold">{slide.headline}</h3>
-                            <p className="text-lg text-white/80 max-w-2xl leading-relaxed">{slide.subtext}</p>
-                            <button
-                              onClick={slide.ctaAction}
-                              className="group/cta inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-bold h-11 px-6 bg-gray-900/90 hover:bg-gray-800/95 text-white border-2 border-yellow-400/50 hover:border-yellow-400/80 backdrop-blur-md shadow-[0_0_20px_rgba(251,191,36,0.6)] hover:shadow-[0_0_35px_rgba(251,191,36,0.9)] transition-all duration-300 hover:scale-110 hover:-translate-y-1"
-                            >
-                              {slide.ctaText}
-                            </button>
                           </div>
-                        </div>
+                        ) : (
+                          <div className="relative h-full w-full overflow-hidden p-6 flex flex-col items-start justify-end space-y-4">
+                            {/* Icon or Logo */}
+                            {slide.icon ? (
+                              <div className="relative z-10 transition-transform duration-300 group-hover:scale-105">
+                                {slide.icon}
+                              </div>
+                            ) : slide.logo ? (
+                              <div className="relative z-10 w-1/4 max-h-24 transition-transform duration-300 group-hover:scale-105">
+                                <Image
+                                  src={slide.logo}
+                                  alt={slide.headline}
+                                  width={102}
+                                  height={102}
+                                  className="object-contain"
+                                  unoptimized
+                                />
+                              </div>
+                            ) : null}
+
+                            {/* Content */}
+                            <div className="flex flex-col items-start text-left text-white space-y-4 relative z-10">
+                              <h3 className="text-base font-bold">{slide.headline}</h3>
+                              <p className="text-lg text-white/80 max-w-2xl leading-relaxed">{slide.subtext}</p>
+                              <button
+                                onClick={slide.ctaAction}
+                                className="group/cta inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-bold h-11 px-6 bg-gray-900/90 hover:bg-gray-800/95 text-white border-2 border-yellow-400/50 hover:border-yellow-400/80 backdrop-blur-md shadow-[0_0_20px_rgba(251,191,36,0.6)] hover:shadow-[0_0_35px_rgba(251,191,36,0.9)] transition-all duration-300 hover:scale-110 hover:-translate-y-1"
+                              >
+                                {slide.ctaText}
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
