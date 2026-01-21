@@ -465,8 +465,9 @@ function StreakCard({ streakData, teamData }: { streakData: StreakData; teamData
 function PrizeWheel({ streakData, teamData, onClose, spinsTaken = 0 }: { streakData: StreakData; teamData: any; onClose: (prize?: string) => void; spinsTaken?: number }) {
   const [isSpinning, setIsSpinning] = useState(false);
   const [prizeWon, setPrizeWon] = useState<any>(null);
-  const [spinsRemaining, setSpinsRemaining] = useState(streakData.spins.available);
   const [rotation, setRotation] = useState(0);
+  const maxSpins = 3;
+  const spinsRemaining = maxSpins - spinsTaken;
 
   // 20 prizes with alternating color scheme: purple, orange, green, blue, gray
   const colorScheme = ['#8B5CF6', '#F97316', '#10B981', '#3B82F6', '#6B7280']; // purple, orange, green, blue, gray
@@ -546,8 +547,8 @@ function PrizeWheel({ streakData, teamData, onClose, spinsTaken = 0 }: { streakD
       
       setIsSpinning(false);
       setPrizeWon(actualPrize);
-      // Pass the prize name to onClose so parent can update spinsTaken
-      onClose(actualPrize.name);
+      // Don't close automatically - let user see the prize and close manually
+      // The prize will be passed when user closes the modal
     }, spinDuration);
   };
 
