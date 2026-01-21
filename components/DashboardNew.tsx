@@ -700,7 +700,13 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
                 </button>
               )}
               <button
-                onClick={() => onClose(prizeWon?.name)}
+                onClick={() => {
+                  if (prizeWon) {
+                    onClose(prizeWon.name);
+                  } else {
+                    onClose();
+                  }
+                }}
                 className="px-6 py-2 bg-nrl-dark-hover border border-nrl-border-light text-white font-bold rounded-lg hover:border-nrl-green transition-all"
               >
                 Close
