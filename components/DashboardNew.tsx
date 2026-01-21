@@ -526,12 +526,22 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
     
     setTimeout(() => {
       // Calculate which prize the pointer lands on based on final rotation
-      // Pointer is at 3 o'clock (0 degrees in standard math, but we need to account for wheel rotation)
-      // The wheel rotates clockwise, so we need to reverse the calculation
-      const normalizedAngle = (360 - (finalRotation % 360)) % 360;
+      // Pointer is at 3 o'clock (0° in standard coordinates)
+      // Segments start at top (-90° in SVG coordinates, which is index 0)
+      // Each segment is 18° wide (360° / 20 segments)
+      // When wheel rotates clockwise by R degrees, segment 0 moves from -90° to (-90° + R)
+      // We need to find which segment is at 0° (pointer position)
+      // Formula: segment index = floor((0° - (-90° + R)) / 18°) mod 20
+      // Simplified: segment index = floor((90° - R) / 18°) mod 20
+      const normalizedRotation = finalRotation % 360;
       const segmentAngle = 360 / 20; // 18 degrees per segment
-      // Find which segment index the pointer is pointing at
-      let prizeIndex = Math.floor(normalizedAngle / segmentAngle);
+      // Account for -90° offset (segments start at top, pointer is at right)
+      // When wheel rotates clockwise, we subtract the rotation
+      let prizeIndex = Math.floor((90 - normalizedRotation) / segmentAngle);
+      // Handle negative indices (wrap around)
+      if (prizeIndex < 0) {
+        prizeIndex = 20 + (prizeIndex % 20);
+      }
       // Ensure index is within bounds
       prizeIndex = prizeIndex % 20;
       
@@ -563,8 +573,8 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
         </div>
 
         {/* Wheel Visual */}
-        <div className="relative w-full mb-8 flex items-center justify-center">
-          <div className="relative" style={{ width: '500px', height: '500px' }}>
+        <div className="relative w-full mb-8 flex items-center justify-center px-4">
+          <div className="relative w-full max-w-[500px] aspect-square">
             {/* Pointer at 3 o'clock (right side) */}
             <div className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-2 z-20">
               <div className="w-0 h-0 border-t-[20px] border-b-[20px] border-l-[30px] border-transparent border-l-white drop-shadow-lg"></div>
@@ -572,13 +582,13 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
             
             {/* Wheel Container */}
             <div 
-              className="relative w-[500px] h-[500px] rounded-full overflow-hidden shadow-2xl"
+              className="relative w-full h-full rounded-full overflow-hidden shadow-2xl"
               style={{
                 transform: `rotate(${rotation}deg)`,
                 transition: isSpinning ? 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)' : 'transform 0s',
               }}
             >
-              <svg width="500" height="500" viewBox="0 0 500 500" className="absolute inset-0">
+              <svg width="100%" height="100%" viewBox="0 0 500 500" className="absolute inset-0" preserveAspectRatio="xMidYMid meet">
                 <defs>
                   <clipPath id="wheel-clip">
                     <circle cx="250" cy="250" r="250" />
@@ -3562,7 +3572,7 @@ function StreakCardPrizes({ streakData }: { streakData: StreakData }) {
             }}
           />
         </div>
-        <div className="text-xs font-semibold text-white/80 uppercase tracking-wider">WEEK STREAK</div>
+        <div className="text-xs font-semibold text-white/80 uppercase tracking-wider">FAN ENGAGEMENT STREAK</div>
       </div>
 
       {/* 2x Points Active Badge */}
