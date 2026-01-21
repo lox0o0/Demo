@@ -14,6 +14,10 @@ interface Slide {
   ctaAction?: () => void;
 }
 
+interface HeroCarouselProps {
+  onNavigate?: (section: string) => void;
+}
+
 const slides: Slide[] = [
   {
     id: 1,
@@ -28,6 +32,11 @@ const slides: Slide[] = [
     headline: "PREDICTIONS",
     subtext: "Test your knowledge against other fans and predict the MVP for the upcoming round!",
     ctaText: "Make Prediction",
+    ctaAction: () => {
+      if (onNavigate) {
+        onNavigate("dashboard");
+      }
+    },
   },
   {
     id: 3,
@@ -45,7 +54,7 @@ const slides: Slide[] = [
   },
 ];
 
-export default function HeroCarousel() {
+export default function HeroCarousel({ onNavigate }: HeroCarouselProps = {}) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const carouselRef = useRef<HTMLDivElement>(null);

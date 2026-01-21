@@ -2195,7 +2195,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
   const [playerSearchNextWeek, setPlayerSearchNextWeek] = useState("");
   
   // Track current user points for tier progress bar
-  const [currentUserPoints, setCurrentUserPoints] = useState(user?.points || 950);
+  const [currentUserPoints, setCurrentUserPoints] = useState(user?.points || 1900);
   
   // Update parent component when points change
   useEffect(() => {
@@ -2204,7 +2204,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
     }
   }, [currentUserPoints, onUserPointsUpdate]);
   
-  const weeklyCompleted = 5;
+  const weeklyCompleted = 2;
   const weeklyTotal = 7;
   const seasonCompleted = 34;
   const seasonTotal = 49;
@@ -2269,6 +2269,26 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
 
   const missions = [
     {
+      id: 5,
+      icon: TrendingUp,
+      title: "Team set and trades made for Fantasy",
+      points: "+30 pts",
+      status: "✓ Completed",
+      statusType: "completed" as const,
+      progress: null,
+      pointsEarned: "+30 pts earned",
+    },
+    {
+      id: 6,
+      icon: Video,
+      title: "Watch match highlights",
+      points: "+15 pts",
+      status: "✓ Completed",
+      statusType: "completed" as const,
+      progress: null,
+      pointsEarned: "+15 pts earned",
+    },
+    {
       id: 1,
       icon: Clock,
       title: "Telstra Tuesday MVP Predict",
@@ -2304,24 +2324,6 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       statusType: "pending" as const,
       progress: null,
       hasDropdown: true,
-    },
-    {
-      id: 5,
-      icon: TrendingUp,
-      title: "Team set and trades made for Fantasy",
-      points: "+30 pts",
-      status: "✓ Completed",
-      statusType: "completed" as const,
-      progress: null,
-    },
-    {
-      id: 6,
-      icon: Video,
-      title: "Watch match highlights",
-      points: "+15 pts",
-      status: null,
-      statusType: "progress" as const,
-      progress: { current: 2, total: 3, percent: 67 },
     },
     {
       id: 7,
@@ -2368,6 +2370,9 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
         <div className="mt-4 px-4">
           {/* Fan Tier Points Progress Bar */}
           <div className="mb-2">
+            <div className="text-xs font-semibold text-white/70 mb-2 uppercase tracking-wider">
+              Fan Tier Progress
+            </div>
             <div className="flex items-center justify-between text-xs mb-1.5">
               <span className="text-white/80 font-medium">
                 {nextTier ? `${pointsToNext} pts to ${nextTier.name}` : 'Max tier reached'}
@@ -2434,20 +2439,49 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
             return (
               <li key={mission.id}>
                 <div 
-                  className="flex items-center w-full px-3 py-2.5 hover:bg-white/5 transition-all duration-300 cursor-pointer"
+                  className={`flex items-center w-full px-3 py-2.5 transition-all duration-300 cursor-pointer relative ${
+                    mission.statusType === "completed"
+                      ? "border-l-2 border-emerald-500/50 bg-emerald-500/5 hover:bg-emerald-500/10"
+                      : mission.statusType === "urgent"
+                      ? "border-l-2 border-yellow-500/30 hover:bg-white/5"
+                      : "border-l-2 border-yellow-500/30 hover:bg-white/5"
+                  }`}
                   onClick={() => handleMissionClick(mission.id)}
                 >
+                  {/* Checkmark for completed missions */}
+                  {mission.statusType === "completed" && (
+                    <div className="absolute top-2 right-2">
+                      <Check className="w-4 h-4 text-emerald-400" strokeWidth={3} />
+                    </div>
+                  )}
+                  
                   <div className="flex items-center w-full gap-3">
-                    <div className="w-12 h-12 rounded border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center">
-                      <Icon className="w-5 h-5 text-white/70" />
+                    <div className={`w-12 h-12 rounded border backdrop-blur-md flex items-center justify-center ${
+                      mission.statusType === "completed"
+                        ? "border-emerald-500/50 bg-emerald-500/10"
+                        : "border-yellow-500/30 bg-white/5"
+                    }`}>
+                      <Icon className={`w-5 h-5 ${
+                        mission.statusType === "completed" ? "text-emerald-400" : "text-white/70"
+                      }`} />
                     </div>
                     <div className="flex flex-col min-w-0 flex-1 gap-1">
-                      <p className="font-medium text-sm text-white">{mission.title}</p>
-                      <div className="text-xs text-white/60">{getStatusText(mission)}</div>
+                      <p className={`font-medium text-sm ${
+                        mission.statusType === "completed" ? "text-white/90" : "text-white"
+                      }`}>{mission.title}</p>
+                      <div className={`text-xs ${
+                        mission.statusType === "completed" ? "text-white/70" : "text-white/60"
+                      }`}>{getStatusText(mission)}</div>
                     </div>
                     <div className="flex flex-col items-end gap-1">
-                      <div className="inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-semibold border border-white/10 text-neutral-50 bg-neutral-950/40">
-                        {mission.points}
+                      <div className={`inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-semibold border ${
+                        mission.statusType === "completed"
+                          ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-400"
+                          : "border-white/10 text-neutral-50 bg-neutral-950/40"
+                      }`}>
+                        {mission.statusType === "completed" && mission.pointsEarned
+                          ? mission.pointsEarned
+                          : mission.points}
                       </div>
                     </div>
                   </div>
