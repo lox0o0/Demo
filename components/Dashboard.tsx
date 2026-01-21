@@ -33,7 +33,7 @@ export default function Dashboard({ user }: DashboardProps) {
   // Home page: 950 points (Bronze tier, close to Silver) for progress modal demo
   const homeUser = { ...user, points: 950, lifetimePoints: 950 };
   // Locker Room page: 950 points (Bronze tier, same as home) - will upgrade to Silver when completing profile
-  const lockerRoomUser = { ...user, points: 950, lifetimePoints: 950 };
+  const [lockerRoomUser, setLockerRoomUser] = useState({ ...user, points: 950, lifetimePoints: 950 });
 
   // Calculate tier info for progress modal
   const userPoints = homeUser?.points || 0;
@@ -232,6 +232,9 @@ export default function Dashboard({ user }: DashboardProps) {
               user={lockerRoomUser} 
               hideNavigation={true}
               onNavigate={(section) => setActiveSection(section)}
+              onUserPointsUpdate={(newPoints) => {
+                setLockerRoomUser(prev => ({ ...prev, points: newPoints, lifetimePoints: newPoints }));
+              }}
             />
           )}
 

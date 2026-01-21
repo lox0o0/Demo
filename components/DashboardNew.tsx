@@ -18,6 +18,7 @@ interface DashboardProps {
   user: any;
   hideNavigation?: boolean;
   onNavigate?: (section: NavSection) => void;
+  onUserPointsUpdate?: (points: number) => void;
 }
 
 // Calculate tier based on points and profile completion
@@ -41,7 +42,7 @@ const calculateTier = (points: number, profileCompletion: number) => {
   return currentTier;
 };
 
-export default function DashboardNew({ user, hideNavigation = false, onNavigate }: DashboardProps) {
+export default function DashboardNew({ user, hideNavigation = false, onNavigate, onUserPointsUpdate }: DashboardProps) {
   const [activeSection, setActiveSection] = useState<NavSection>("dashboard");
   const [highlightProfileCompletion, setHighlightProfileCompletion] = useState(false);
   const [showTierCelebration, setShowTierCelebration] = useState(false);
@@ -2182,7 +2183,7 @@ function FantasyCard({ teamData }: any) {
 }
 
 // Section A: Weekly Activities for Points
-function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, setHighlightProfileCompletion, onTierUpgrade }: { user: any; highlightProfileCompletion?: boolean; setHighlightProfileCompletion?: (value: boolean) => void; onTierUpgrade?: (oldTier: any, newTier: any, startPoints?: number) => void }) {
+function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, setHighlightProfileCompletion, onTierUpgrade, onUserPointsUpdate }: { user: any; highlightProfileCompletion?: boolean; setHighlightProfileCompletion?: (value: boolean) => void; onTierUpgrade?: (oldTier: any, newTier: any, startPoints?: number) => void; onUserPointsUpdate?: (points: number) => void }) {
   const [expandedMission, setExpandedMission] = useState<number | null>(null);
   const [selectedTeam, setSelectedTeam] = useState("");
   const [selectedLastRoundPlayer, setSelectedLastRoundPlayer] = useState("");
@@ -2192,6 +2193,13 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
   
   // Track current user points for tier progress bar
   const [currentUserPoints, setCurrentUserPoints] = useState(user?.points || 950);
+  
+  // Update parent component when points change
+  useEffect(() => {
+    if (onUserPointsUpdate) {
+      onUserPointsUpdate(currentUserPoints);
+    }
+  }, [currentUserPoints, onUserPointsUpdate]);
   
   const weeklyCompleted = 5;
   const weeklyTotal = 7;
