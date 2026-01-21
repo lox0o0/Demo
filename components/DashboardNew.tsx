@@ -2867,13 +2867,9 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                                   { name: "Kalyn Ponga", percentage: 5 },
                                 ]
                                 .filter((result, index, self) => {
-                                  // Remove duplicate: if selected player matches a hardcoded entry, keep only the selected one (15%)
+                                  // If this is the selected player, only keep the entry with 15% (the selected one)
                                   if (selectedLastRoundPlayer && result.name === selectedLastRoundPlayer) {
                                     return result.percentage === 15;
-                                  }
-                                  // Remove hardcoded entry if it matches selected player
-                                  if (selectedLastRoundPlayer && result.name === selectedLastRoundPlayer && result.percentage !== 15) {
-                                    return false;
                                   }
                                   // Remove any other duplicates by name
                                   return index === self.findIndex((r) => r.name === result.name);
