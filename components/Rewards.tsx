@@ -167,7 +167,7 @@ export default function Rewards({ user, onNavigate }: RewardsProps) {
       {/* Background Image */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <Image
-          src="/rewards/background.webp"
+          src="/rewards/rewards-background.webp"
           alt="Rewards Background"
           fill
           className="object-cover"
