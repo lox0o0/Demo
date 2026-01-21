@@ -690,14 +690,14 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         }}
       >
         <div className="w-full max-w-md relative z-10">
-          <div className="bg-nrl-dark-card/95 backdrop-blur-sm rounded-2xl p-8 border border-nrl-border-light">
+          <div className="bg-nrl-dark-card/95 backdrop-blur-sm rounded-2xl p-8 pt-16 pb-10 border border-nrl-border-light flex flex-col justify-end min-h-[600px]">
             <ProgressStepper currentStep={2} />
-            <p className="text-center text-sm text-nrl-text-primary mt-2 mb-4 font-medium">
+            <p className="text-center text-xl font-bold text-white mt-6 mb-8 leading-relaxed drop-shadow-lg">
               Start your fan journey now - a new way to Play
             </p>
             
             {/* Profile Completion Bar - Show after team selection */}
-            <div className="bg-nrl-dark-hover rounded-xl p-4 border border-nrl-border-light mb-4">
+            <div className="bg-nrl-dark-hover rounded-xl p-4 border border-nrl-border-light mb-6">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-semibold text-nrl-text-primary">
                   Profile Completion
@@ -718,7 +718,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
             {/* Build fan profile button - full width under profile completion */}
             <button
               onClick={handleBuildFanProfile}
-              className="w-full text-white font-bold py-3 rounded-xl transition-all transform hover:scale-[1.02] mb-2"
+              className="w-full text-white font-bold py-4 rounded-xl transition-all transform hover:scale-[1.02] mb-3 text-base"
               style={{
                 backgroundColor: teamPrimaryColor,
               }}
@@ -733,14 +733,14 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
             </button>
             
             {/* Value prop under Build fan profile */}
-            <div className="text-center mb-6">
-              <p className="text-sm text-nrl-amber font-medium">
+            <div className="text-center mb-8">
+              <p className="text-base text-nrl-amber font-semibold">
                 Start earning points
               </p>
             </div>
 
             {/* Quick sign in section */}
-            <div className="mb-6">
+            <div className="mb-4">
               <h3 className="text-sm font-semibold text-nrl-text-secondary uppercase tracking-wider mb-4">
                 Quick sign in:
               </h3>
