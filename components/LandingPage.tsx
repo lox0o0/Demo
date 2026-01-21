@@ -26,10 +26,43 @@ interface LandingPageProps {
 export default function LandingPage({ onGetStarted }: LandingPageProps) {
   const [currentPrizeIndex, setCurrentPrizeIndex] = useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
+  const [videoEnded, setVideoEnded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const [videoLoading, setVideoLoading] = useState(true);
+  const [videoCanPlay, setVideoCanPlay] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const autoScrollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
+
+  const landingVideoPath = "/landing/landing vidoe.mp4";
+
+  useEffect(() => {
+    // Preload video when component mounts
+    if (videoRef.current) {
+      videoRef.current.load();
+    }
+  }, []);
+
+  const handleVideoEnd = () => {
+    setVideoEnded(true);
+    setVideoLoading(false);
+  };
+
+  const handleVideoError = () => {
+    setVideoError(true);
+    setVideoLoading(false);
+  };
+
+  const handleCanPlay = () => {
+    setVideoCanPlay(true);
+    setVideoLoading(false);
+  };
+
+  const handleLoadStart = () => {
+    setVideoLoading(true);
+  };
 
   const prizes = [
     {
@@ -146,6 +179,49 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
     touchEndX.current = null;
   };
 
+
+  // Show video first (if available and not ended/errored)
+  if (!videoEnded && !videoError) {
+    return (
+      <div 
+        className="h-screen flex items-center justify-center relative overflow-hidden bg-black cursor-pointer"
+        onClick={handleVideoEnd}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleVideoEnd();
+          }
+        }}
+        tabIndex={0}
+        role="button"
+        aria-label="Click to skip video"
+      >
+        {/* Keep background black during loading - no flash */}
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+          onEnded={handleVideoEnd}
+          onError={handleVideoError}
+          onCanPlay={handleCanPlay}
+          onLoadStart={handleLoadStart}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+            videoCanPlay ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <source src={landingVideoPath} type="video/mp4" />
+        </video>
+        {/* Skip hint */}
+        <div className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/60 text-sm transition-opacity duration-300 ${
+          videoCanPlay ? 'opacity-100' : 'opacity-0'
+        }`}>
+          Click anywhere to skip
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen relative overflow-hidden flex flex-col">
