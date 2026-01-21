@@ -18,43 +18,42 @@ interface HeroCarouselProps {
   onNavigate?: (section: string) => void;
 }
 
-const slides: Slide[] = [
-  {
-    id: 1,
-    icon: <Trophy className="w-12 h-12 text-yellow-400" />,
-    headline: "WIN WEEKLY PRIZES",
-    subtext: "Win a share of $10,000 in weekly prizes — the higher your fan tier, the better the prize!",
-    ctaText: "Enter Prize Draw",
-  },
-  {
-    id: 2,
-    icon: <Target className="w-12 h-12 text-white/80" strokeWidth={2} />,
-    headline: "PREDICTIONS",
-    subtext: "Test your knowledge against other fans and predict the MVP for the upcoming round!",
-    ctaText: "Make Prediction",
-    ctaAction: () => {
-      if (onNavigate) {
-        onNavigate("dashboard");
-      }
-    },
-  },
-  {
-    id: 3,
-    logo: "/locker-room/nrl-fantasy-logo.png",
-    headline: "NRL FANTASY",
-    subtext: "It's round 6. Make sure your trades are made and team is set for the weekend!",
-    ctaText: "Manage Team",
-  },
-  {
-    id: 4,
-    logo: "/locker-room/nrl-tipping-logo.png",
-    headline: "NRL TIPPING",
-    subtext: "There are multiple games this round, ensure your tips are made for this weekend!",
-    ctaText: "Finish Tips",
-  },
-];
-
 export default function HeroCarousel({ onNavigate }: HeroCarouselProps = {}) {
+  const slides: Slide[] = [
+    {
+      id: 1,
+      icon: <Trophy className="w-12 h-12 text-yellow-400" />,
+      headline: "WIN WEEKLY PRIZES",
+      subtext: "Win a share of $10,000 in weekly prizes — the higher your fan tier, the better the prize!",
+      ctaText: "Enter Prize Draw",
+    },
+    {
+      id: 2,
+      icon: <Target className="w-12 h-12 text-white/80" strokeWidth={2} />,
+      headline: "PREDICTIONS",
+      subtext: "Test your knowledge against other fans and predict the MVP for the upcoming round!",
+      ctaText: "Make Prediction",
+      ctaAction: () => {
+        if (onNavigate) {
+          onNavigate("dashboard");
+        }
+      },
+    },
+    {
+      id: 3,
+      logo: "/locker-room/nrl-fantasy-logo.png",
+      headline: "NRL FANTASY",
+      subtext: "It's round 6. Make sure your trades are made and team is set for the weekend!",
+      ctaText: "Manage Team",
+    },
+    {
+      id: 4,
+      logo: "/locker-room/nrl-tipping-logo.png",
+      headline: "NRL TIPPING",
+      subtext: "There are multiple games this round, ensure your tips are made for this weekend!",
+      ctaText: "Finish Tips",
+    },
+  ];
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const carouselRef = useRef<HTMLDivElement>(null);
