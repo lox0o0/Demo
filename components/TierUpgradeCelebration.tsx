@@ -283,9 +283,12 @@ export default function TierUpgradeCelebration({
               showReward ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-2'
             }`}
           >
-            <p className="text-sm font-semibold text-white/80 mb-3">
-              🎉 You WON:
-            </p>
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <Sparkles className="w-4 h-4 text-white/60" strokeWidth={2} />
+              <p className="text-sm font-semibold text-white/80">
+                You WON:
+              </p>
+            </div>
 
             {/* Reward Icon - Smaller */}
             <div className="mb-3">
