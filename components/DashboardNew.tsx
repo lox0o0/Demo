@@ -2690,17 +2690,19 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                             <div key={fixture.id} className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-3">
                               <div className="flex items-center justify-between text-sm font-semibold text-white mb-1">
                                 <span>{fixture.home} vs {fixture.away}</span>
-                                {fixture.userTip && <Check size={16} className="text-emerald-500" />}
+                                <Check size={16} className="text-emerald-500" />
                               </div>
                               <div className="text-xs text-white/60 mb-2">{fixture.date}</div>
-                              {fixture.userTip ? (
-                                <div className="text-xs text-white/80">Your tip: <span className="font-semibold">{fixture.userTip}</span></div>
-                              ) : (
-                                <button className="text-xs text-emerald-500 hover:underline">Make Tip</button>
-                              )}
+                              <div className="text-xs text-white/80">Your tip: <span className="font-semibold">{fixture.userTip || fixture.home}</span></div>
                             </div>
                           ))}
                         </div>
+                        {isCompleted && (
+                          <div className="pt-3 border-t border-gray-700/50">
+                            <div className="text-xs text-emerald-400 font-semibold mb-1">✓ All Tips Complete (8/8)</div>
+                            <div className="text-xs text-white/60">{mission.pointsEarned || mission.points}</div>
+                          </div>
+                        )}
                       </div>
                     )}
                     {mission.id === 3 && (
