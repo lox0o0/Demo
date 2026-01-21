@@ -15,6 +15,7 @@ import BackgroundVideo from "./BackgroundVideo";
 import HeroCarousel from "./HeroCarousel";
 import TierProgressModal from "./TierProgressModal";
 import Leaderboards from "./Leaderboards";
+import Rewards from "./Rewards";
 
 interface DashboardProps {
   user: any;
@@ -267,8 +268,12 @@ export default function Dashboard({ user }: DashboardProps) {
             <Leaderboards user={user} />
           )}
 
+          {activeSection === "rewards" && (
+            <Rewards user={user} onNavigate={(section) => setActiveSection(section as NavSection)} />
+          )}
+
           {/* Default fallback for any unrecognized sections */}
-          {!["home", "dashboard", "leaderboards"].includes(activeSection) && (
+          {!["home", "dashboard", "leaderboards", "rewards"].includes(activeSection) && (
             <div className="text-center py-20">
               <p className="text-nrl-text-secondary">Section not found: {activeSection}</p>
             </div>
@@ -277,12 +282,16 @@ export default function Dashboard({ user }: DashboardProps) {
       </div>
 
       {/* Right Sidebar - consistent across all pages */}
-      <RightSidebar user={
-        activeSection === "home" ? homeUser : 
-        activeSection === "dashboard" ? lockerRoomUser : 
-        activeSection === "leaderboards" ? homeUser : // Use homeUser for leaderboards to match other pages
-        user
-      } />
+      <RightSidebar 
+        user={
+          activeSection === "home" ? homeUser : 
+          activeSection === "dashboard" ? lockerRoomUser : 
+          activeSection === "leaderboards" ? homeUser :
+          activeSection === "rewards" ? homeUser :
+          user
+        }
+        onNavigate={(section) => setActiveSection(section as NavSection)}
+      />
 
       {/* Tier Progress Modal */}
       {showProgressModal && activeSection === "home" && nextTier && (

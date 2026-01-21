@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import { TIERS } from "@/lib/mockData";
-import { Trophy, Star, Ticket, Shirt, Award, Crown, Check, Heart, Building2, Plane, Hotel, Gift, Sparkles, ArrowRight } from "lucide-react";
+import { Trophy, Star, Ticket, Shirt, Award, Crown, Check, Heart, Building2, Plane, Hotel, Gift, Sparkles, ArrowRight, Utensils } from "lucide-react";
 
 interface RightSidebarProps {
   user: any;
+  onNavigate?: (section: string) => void;
 }
 
-export default function RightSidebar({ user }: RightSidebarProps) {
+export default function RightSidebar({ user, onNavigate }: RightSidebarProps) {
   const userPoints = user?.points || 0;
   const teamData = user?.teamData;
   
@@ -46,6 +47,7 @@ export default function RightSidebar({ user }: RightSidebarProps) {
             tippingRank={tippingRank}
             badgesEarned={badgesEarned}
             trophies={trophies}
+            onNavigate={onNavigate}
           />
 
           {/* Bottom Section: Fan Journey Progression */}
@@ -69,7 +71,8 @@ function CurrentTierStatsCard({
   gamesAttended, 
   tippingRank, 
   badgesEarned,
-  trophies 
+  trophies,
+  onNavigate
 }: any) {
   const firstName = user?.name?.split(' ')[0] || "Fan";
 
@@ -146,7 +149,7 @@ function CurrentTierStatsCard({
         <div className="bg-white/5 backdrop-blur-sm rounded-lg p-2 border border-white/10 flex items-center gap-2">
           <div className="flex-shrink-0">
             <div className="w-8 h-8 rounded-lg bg-red-500/20 border border-red-500/50 flex items-center justify-center">
-              <Gift className="w-4 h-4 text-red-400" />
+              <Utensils className="w-4 h-4 text-red-400" />
             </div>
           </div>
           <div className="flex-1 min-w-0">
@@ -158,7 +161,10 @@ function CurrentTierStatsCard({
 
       {/* Claim More Rewards CTA */}
       <div className="pt-2 border-t border-white/10">
-        <button className="w-full bg-gradient-to-r from-nrl-green/20 to-nrl-green/10 hover:from-nrl-green/30 hover:to-nrl-green/20 border-2 border-nrl-green/50 rounded-lg p-2 flex items-center justify-between group transition-all duration-300 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)]">
+        <button 
+          onClick={() => onNavigate?.("rewards")}
+          className="w-full bg-gradient-to-r from-nrl-green/20 to-nrl-green/10 hover:from-nrl-green/30 hover:to-nrl-green/20 border-2 border-nrl-green/50 rounded-lg p-2 flex items-center justify-between group transition-all duration-300 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)]"
+        >
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-nrl-green/20 border border-nrl-green/50 flex items-center justify-center group-hover:scale-110 transition-transform">
               <Gift className="w-4 h-4 text-nrl-green" />
