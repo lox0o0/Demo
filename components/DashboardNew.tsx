@@ -138,7 +138,7 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
             
             {/* Right Column: Prizes & Streak (40% = 2/5) */}
             <div className="col-span-2">
-              <PrizesAndStreakSection user={user} streakData={streakData} currentTier={currentTier} />
+              <PrizesAndStreakSection user={user} streakData={streakData} currentTier={currentTier} onNavigate={onNavigate} />
             </div>
           </div>
         )}
