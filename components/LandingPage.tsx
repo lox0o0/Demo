@@ -133,7 +133,9 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
   // Scroll carousel to current index
   useEffect(() => {
     if (carouselRef.current) {
-      const cardWidth = 172; // Approximate card width (160px) + gap (12px)
+      // Each card is 1/3 of container width (matching grid columns)
+      const containerWidth = carouselRef.current.offsetWidth;
+      const cardWidth = containerWidth / 3;
       carouselRef.current.scrollTo({
         left: currentPrizeIndex * cardWidth,
         behavior: 'smooth',
@@ -259,33 +261,37 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
         {/* Value Propositions Section */}
         <section className="px-4 sm:px-6 lg:px-8 py-2 flex-shrink-0">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-3">
               {/* Card 1: Earn */}
-              <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-3 hover:scale-105 hover:shadow-xl transition-all duration-300">
-                <div className="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/50 flex items-center justify-center mb-2 mx-auto">
-                  <Star className="w-5 h-5 text-amber-400" />
+              <div className="px-4 py-3 relative">
+                <div className="flex items-center justify-center mb-2">
+                  <Star className="w-5 h-5 text-white" />
                 </div>
                 <h3 className="text-sm font-bold text-white mb-1 text-center">Complete Activities, Earn Points</h3>
                 <p className="text-xs text-white/70 text-center leading-tight">
                   Predict matches, play fantasy, engage with content and watch your points grow
                 </p>
+                {/* Vertical divider on right */}
+                <div className="hidden md:block absolute top-0 right-0 bottom-0 w-px bg-white/25"></div>
               </div>
 
               {/* Card 2: Compete */}
-              <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-3 hover:scale-105 hover:shadow-xl transition-all duration-300">
-                <div className="w-10 h-10 rounded-lg bg-yellow-500/20 border border-yellow-500/50 flex items-center justify-center mb-2 mx-auto">
-                  <Trophy className="w-5 h-5 text-yellow-400" />
+              <div className="px-4 py-3 relative">
+                <div className="flex items-center justify-center mb-2">
+                  <Trophy className="w-5 h-5 text-white" />
                 </div>
                 <h3 className="text-sm font-bold text-white mb-1 text-center">Climb the Leaderboards</h3>
                 <p className="text-xs text-white/70 text-center leading-tight">
                   Compete against fans across Australia for weekly glory and bragging rights
                 </p>
+                {/* Vertical divider on right */}
+                <div className="hidden md:block absolute top-0 right-0 bottom-0 w-px bg-white/25"></div>
               </div>
 
               {/* Card 3: Level Up */}
-              <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-3 hover:scale-105 hover:shadow-xl transition-all duration-300">
-                <div className="w-10 h-10 rounded-lg bg-nrl-green/20 border border-nrl-green/50 flex items-center justify-center mb-2 mx-auto">
-                  <TrendingUp className="w-5 h-5 text-nrl-green" />
+              <div className="px-4 py-3 relative">
+                <div className="flex items-center justify-center mb-2">
+                  <TrendingUp className="w-5 h-5 text-white" />
                 </div>
                 <h3 className="text-sm font-bold text-white mb-1 text-center">Rise Through Fan Tiers</h3>
                 <p className="text-xs text-white/70 text-center leading-tight">
@@ -342,7 +348,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
               {/* Carousel */}
               <div
                 ref={carouselRef}
-                className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth w-full items-start"
+                className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth w-full"
                 onMouseEnter={() => setIsAutoScrolling(false)}
                 onMouseLeave={() => setIsAutoScrolling(true)}
                 onTouchStart={handleTouchStart}
@@ -355,16 +361,14 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
                   return (
                     <div
                       key={prize.id}
-                      className="flex-shrink-0 w-[160px] bg-white/5 backdrop-blur-md border border-white/20 rounded px-1.5 py-1 hover:scale-105 hover:shadow-xl transition-all duration-300 snap-center self-start"
-                      style={{ height: 'fit-content' }}
+                      className="flex-shrink-0 px-4 py-3 snap-center w-full md:w-1/3"
+                      style={{ minWidth: 'calc(100% / 3)' }}
                     >
-                      <div className="flex items-center gap-1.5 mb-0.5">
-                        <div className="w-4 h-4 rounded bg-amber-500/20 border border-amber-500/50 flex items-center justify-center flex-shrink-0">
-                          <Icon className="w-2 h-2 text-amber-400" />
-                        </div>
-                        <h3 className="text-[9px] font-bold text-white leading-tight flex-1">{prize.title}</h3>
+                      <div className="flex items-center justify-center mb-2">
+                        <Icon className="w-5 h-5 text-white" />
                       </div>
-                      <p className="text-[9px] text-white/70 leading-tight truncate">{prize.description}</p>
+                      <h3 className="text-sm font-bold text-white mb-1 text-center">{prize.title}</h3>
+                      <p className="text-xs text-white/70 text-center leading-tight">{prize.description}</p>
                     </div>
                   );
                 })}
