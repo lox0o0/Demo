@@ -462,7 +462,7 @@ function StreakCard({ streakData, teamData }: { streakData: StreakData; teamData
 }
 
 // Prize Wheel Component
-function PrizeWheel({ streakData, teamData, onClose, spinsTaken }: { streakData: StreakData; teamData: any; onClose: (prize?: string) => void; spinsTaken: number }) {
+function PrizeWheel({ streakData, teamData, onClose, spinsTaken = 0 }: { streakData: StreakData; teamData: any; onClose: (prize?: string) => void; spinsTaken?: number }) {
   const [isSpinning, setIsSpinning] = useState(false);
   const [prizeWon, setPrizeWon] = useState<any>(null);
   const [spinsRemaining, setSpinsRemaining] = useState(streakData.spins.available);
