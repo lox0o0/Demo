@@ -441,10 +441,10 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
             </h2>
             <button
               onClick={onGetStarted}
-              className="px-6 py-2 bg-nrl-green hover:bg-nrl-green/90 text-white font-bold text-sm rounded-lg transition-all duration-300 shadow-[0_0_30px_rgba(34,197,94,0.5)] hover:shadow-[0_0_40px_rgba(34,197,94,0.7)] hover:scale-105 flex items-center gap-2 mx-auto"
+              className="px-10 py-4 bg-nrl-green hover:bg-nrl-green/90 text-white font-bold text-lg rounded-xl transition-all duration-300 shadow-[0_0_40px_rgba(34,197,94,0.6),0_0_80px_rgba(34,197,94,0.4),0_0_120px_rgba(34,197,94,0.2)] hover:shadow-[0_0_50px_rgba(34,197,94,0.8),0_0_100px_rgba(34,197,94,0.5),0_0_150px_rgba(34,197,94,0.3)] hover:scale-105 flex items-center gap-3 mx-auto border-2 border-nrl-green/50 hover:border-nrl-green/80"
             >
               Join Now
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-5 h-5" />
             </button>
             <p className="text-white/60 mt-1 text-xs">
               Free to play · Win real prizes
