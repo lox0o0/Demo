@@ -150,7 +150,7 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
                   <ul className="w-full">
                     {/* KFC Sponsor Activity */}
                     <li>
-                      <div className="flex items-center w-full px-3 py-2.5 transition-all duration-300 cursor-pointer relative border-l-2 border-yellow-500/30 hover:bg-white/5">
+                      <div className="flex items-center w-full px-3 py-2.5 transition-all duration-300 relative border-l-2 border-yellow-500/30 hover:bg-white/5">
                         <div className="flex items-center w-full gap-3">
                           <div className="flex flex-col min-w-0 flex-1 gap-1">
                             <p className="font-medium text-sm text-white uppercase">Game Day Meal Deal</p>
@@ -161,6 +161,15 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
                             <div className="text-xs text-white/60">
                               <span className="font-semibold">Ends:</span> Sunday 9pm
                             </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // Handle KFC app action
+                              }}
+                              className="mt-2 inline-flex items-center justify-center gap-2 whitespace-nowrap text-xs font-semibold h-7 rounded-md px-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md w-fit shadow-[0_0_15px_rgba(251,191,36,0.5)] hover:shadow-[0_0_25px_rgba(251,191,36,0.7)] transition-all duration-300"
+                            >
+                              Open KFC App
+                            </button>
                           </div>
                           <div className="flex flex-col items-end gap-1">
                             <div className="w-12 h-12 rounded border border-yellow-500/30 bg-white/5 backdrop-blur-md flex items-center justify-center overflow-hidden">
@@ -184,7 +193,7 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
 
                     {/* Telstra Sponsor Activity */}
                     <li>
-                      <div className="flex items-center w-full px-3 py-2.5 transition-all duration-300 cursor-pointer relative border-l-2 border-yellow-500/30 hover:bg-white/5">
+                      <div className="flex items-center w-full px-3 py-2.5 transition-all duration-300 relative border-l-2 border-yellow-500/30 hover:bg-white/5">
                         <div className="flex items-center w-full gap-3">
                           <div className="flex flex-col min-w-0 flex-1 gap-1">
                             <p className="font-medium text-sm text-white uppercase">Stay Connected</p>
@@ -195,6 +204,15 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
                             <div className="text-xs text-white/60">
                               <span className="font-semibold">Available:</span> Ongoing
                             </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // Handle Telstra quiz action
+                              }}
+                              className="mt-2 inline-flex items-center justify-center gap-2 whitespace-nowrap text-xs font-semibold h-7 rounded-md px-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md w-fit shadow-[0_0_15px_rgba(251,191,36,0.5)] hover:shadow-[0_0_25px_rgba(251,191,36,0.7)] transition-all duration-300"
+                            >
+                              Start Quiz
+                            </button>
                           </div>
                           <div className="flex flex-col items-end gap-1">
                             <div className="w-12 h-12 rounded border border-yellow-500/30 bg-white/5 backdrop-blur-md flex items-center justify-center overflow-hidden">
@@ -218,7 +236,7 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
 
                     {/* Ampol Sponsor Activity */}
                     <li>
-                      <div className="flex items-center w-full px-3 py-2.5 transition-all duration-300 cursor-pointer relative border-l-2 border-yellow-500/30 hover:bg-white/5">
+                      <div className="flex items-center w-full px-3 py-2.5 transition-all duration-300 relative border-l-2 border-yellow-500/30 hover:bg-white/5">
                         <div className="flex items-center w-full gap-3">
                           <div className="flex flex-col min-w-0 flex-1 gap-1">
                             <p className="font-medium text-sm text-white uppercase">Fuel Up Friday</p>
@@ -229,6 +247,15 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
                             <div className="text-xs text-white/60">
                               <span className="font-semibold">Available:</span> Fridays only
                             </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // Handle Ampol QR code action
+                              }}
+                              className="mt-2 inline-flex items-center justify-center gap-2 whitespace-nowrap text-xs font-semibold h-7 rounded-md px-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md w-fit shadow-[0_0_15px_rgba(251,191,36,0.5)] hover:shadow-[0_0_25px_rgba(251,191,36,0.7)] transition-all duration-300"
+                            >
+                              Get QR Code
+                            </button>
                           </div>
                           <div className="flex flex-col items-end gap-1">
                             <div className="w-12 h-12 rounded border border-yellow-500/30 bg-white/5 backdrop-blur-md flex items-center justify-center overflow-hidden">
