@@ -207,7 +207,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
           onError={handleVideoError}
           onCanPlay={handleCanPlay}
           onLoadStart={handleLoadStart}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+          className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ${
             videoCanPlay ? 'opacity-100' : 'opacity-0'
           }`}
         >
