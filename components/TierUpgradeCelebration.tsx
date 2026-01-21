@@ -11,6 +11,7 @@ interface TierUpgradeCelebrationProps {
   startPoints?: number; // User's actual current points (e.g., 950)
   onDismiss: () => void;
   onViewRewards?: () => void;
+  onNavigateHome?: () => void;
 }
 
 export default function TierUpgradeCelebration({
@@ -20,6 +21,7 @@ export default function TierUpgradeCelebration({
   startPoints: userStartPoints,
   onDismiss,
   onViewRewards,
+  onNavigateHome,
 }: TierUpgradeCelebrationProps) {
   const [showCelebration, setShowCelebration] = useState(false);
   const [showFireworks, setShowFireworks] = useState(false);
@@ -159,9 +161,9 @@ export default function TierUpgradeCelebration({
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center"
       style={{
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        backdropFilter: 'blur(4px)',
+        WebkitBackdropFilter: 'blur(4px)',
       }}
       role="dialog"
       aria-modal="true"
@@ -272,7 +274,6 @@ export default function TierUpgradeCelebration({
                 {newTier.name} Tier
               </div>
             </div>
-            <p className="text-base font-semibold text-white/90">Welcome to {newTier.name} Tier!</p>
           </div>
         )}
 
@@ -329,15 +330,20 @@ export default function TierUpgradeCelebration({
                   View in Locker Room
                 </button>
               )}
-              <button
-                onClick={onDismiss}
-                className="w-full py-2.5 rounded-lg text-sm font-medium text-white/70 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/20 rounded"
-                style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                }}
-              >
-                Continue
-              </button>
+              {onNavigateHome && (
+                <button
+                  onClick={() => {
+                    onNavigateHome();
+                    onDismiss();
+                  }}
+                  className="w-full py-2.5 rounded-lg text-sm font-medium text-white/70 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/20 rounded"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  }}
+                >
+                  Home Page
+                </button>
+              )}
             </div>
           </div>
         )}

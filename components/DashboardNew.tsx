@@ -162,6 +162,12 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate 
             setShowTierCelebration(false);
             setCelebrationData(null);
           }}
+          onNavigateHome={() => {
+            setActiveSection("home");
+            if (onNavigate) {
+              onNavigate("home");
+            }
+          }}
         />
       )}
     </div>
@@ -2681,9 +2687,10 @@ function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightP
     
     // Trigger celebration if tier changed
     if (oldTier.name !== newTier.name) {
+      // Delay 0.75 seconds (750ms) so user can see they've hit 1000 points before popup appears
       setTimeout(() => {
         onTierUpgrade(oldTier, newTier, oldPoints); // Pass oldPoints as startPoints
-      }, 500); // Small delay after points animation
+      }, 750);
     }
   };
 
