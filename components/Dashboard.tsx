@@ -276,8 +276,13 @@ export default function Dashboard({ user }: DashboardProps) {
         </main>
       </div>
 
-      {/* Right Sidebar */}
-      <RightSidebar user={activeSection === "home" ? homeUser : activeSection === "dashboard" ? lockerRoomUser : user} />
+      {/* Right Sidebar - consistent across all pages */}
+      <RightSidebar user={
+        activeSection === "home" ? homeUser : 
+        activeSection === "dashboard" ? lockerRoomUser : 
+        activeSection === "leaderboards" ? user :
+        user
+      } />
 
       {/* Tier Progress Modal */}
       {showProgressModal && activeSection === "home" && nextTier && (

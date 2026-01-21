@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Trophy, Medal, Award, TrendingUp, TrendingDown, Minus, Info, Gift } from "lucide-react";
 import { TIERS } from "@/lib/mockData";
 
@@ -124,9 +125,25 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0d0d0d] text-white">
+    <div className="min-h-screen relative">
+      {/* Background Image - using same pattern as Locker Room */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <Image
+          src="/locker-room/background.webp"
+          alt="Leaderboards Background"
+          fill
+          className="object-cover"
+          priority
+          unoptimized
+        />
+        {/* Dark Overlay for Content Readability */}
+        <div className="absolute inset-0 bg-black/40"></div>
+        {/* Additional gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50"></div>
+      </div>
+
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 relative z-10">
         <div className="flex items-center gap-3 mb-2">
           <Trophy className="w-8 h-8 text-white" />
           <h1 className="text-4xl font-bold text-white">Leaderboards</h1>
@@ -135,7 +152,7 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
       </div>
 
       {/* Tab Navigation */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 relative z-10">
         <div className="flex gap-2 border-b border-white/10">
           <button
             onClick={() => setActiveTab("fan-tier")}
@@ -171,7 +188,7 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 relative z-10">
         {activeTab === "fan-tier" && (
           <FanTierLeaderboard
             data={fanTierData}
