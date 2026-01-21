@@ -335,7 +335,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
         </section>
 
         {/* Prize Carousel Section */}
-        <section className="px-4 sm:px-6 lg:px-8 py-2 flex flex-col">
+        <section className="px-4 sm:px-6 lg:px-8 py-6 flex flex-col">
           <div className="max-w-7xl mx-auto flex flex-col">
             <div className="flex items-center gap-1.5 mb-1 justify-center flex-shrink-0">
               <Trophy className="w-4 h-4 text-white" />
@@ -421,7 +421,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
         </section>
 
         {/* Social Proof Section */}
-        <section className="px-4 sm:px-6 lg:px-8 py-2 flex-shrink-0">
+        <section className="px-4 sm:px-6 lg:px-8 py-6 flex-shrink-0">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-sm font-bold text-white mb-1">
               Join 50,000+ NRL fans already playing
