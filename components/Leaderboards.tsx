@@ -152,13 +152,13 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
       </div>
 
       {/* Tab Navigation */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 relative z-10">
-        <div className="flex gap-2 border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 relative z-10">
+        <div className="flex gap-3 border-b-2 border-white/20">
           <button
             onClick={() => setActiveTab("fan-tier")}
-            className={`px-6 py-3 font-semibold transition-all ${
+            className={`px-8 py-4 text-xl font-bold transition-all ${
               activeTab === "fan-tier"
-                ? "text-nrl-green border-b-2 border-nrl-green"
+                ? "text-nrl-green border-b-4 border-nrl-green"
                 : "text-nrl-text-secondary hover:text-nrl-text-primary"
             }`}
           >
@@ -166,9 +166,9 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
           </button>
           <button
             onClick={() => setActiveTab("tipping")}
-            className={`px-6 py-3 font-semibold transition-all ${
+            className={`px-8 py-4 text-xl font-bold transition-all ${
               activeTab === "tipping"
-                ? "text-nrl-green border-b-2 border-nrl-green"
+                ? "text-nrl-green border-b-4 border-nrl-green"
                 : "text-nrl-text-secondary hover:text-nrl-text-primary"
             }`}
           >
@@ -176,15 +176,24 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
           </button>
           <button
             onClick={() => setActiveTab("fantasy")}
-            className={`px-6 py-3 font-semibold transition-all ${
+            className={`px-8 py-4 text-xl font-bold transition-all ${
               activeTab === "fantasy"
-                ? "text-nrl-green border-b-2 border-nrl-green"
+                ? "text-nrl-green border-b-4 border-nrl-green"
                 : "text-nrl-text-secondary hover:text-nrl-text-primary"
             }`}
           >
             Fantasy
           </button>
         </div>
+      </div>
+
+      {/* Selected Tab Title */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 relative z-10">
+        <h2 className="text-5xl font-bold text-white">
+          {activeTab === "fan-tier" && "Fan Tier Rankings"}
+          {activeTab === "tipping" && "Tipping Competition"}
+          {activeTab === "fantasy" && "Fantasy League"}
+        </h2>
       </div>
 
       {/* Content */}
@@ -237,20 +246,29 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
 // Prize Banner Component
 function PrizeBanner({ title, prize, countdown, countdownLabel }: { title: string; prize: string; countdown: string; countdownLabel?: string }) {
   return (
-    <div className="mb-6 p-6 rounded-xl backdrop-blur-md bg-background/45 border border-amber-500/30 shadow-lg">
-      <div className="flex items-start gap-4">
-        <Trophy className="w-6 h-6 text-amber-400 flex-shrink-0 mt-1" />
-        <div className="flex-1">
-          <h3 className="text-lg font-bold text-white mb-2">{title}</h3>
-          <div className="flex items-center gap-2 mb-3">
-            <Gift className="w-5 h-5 text-amber-400" />
-            <span className="text-white font-semibold">{prize}</span>
+    <div className="mb-8 p-8 rounded-2xl backdrop-blur-md bg-gradient-to-br from-amber-500/20 via-amber-600/15 to-amber-500/20 border-2 border-amber-400/50 shadow-2xl relative overflow-hidden">
+      {/* Animated background glow */}
+      <div className="absolute inset-0 bg-gradient-to-r from-amber-400/10 via-transparent to-amber-400/10 animate-pulse"></div>
+      
+      <div className="flex items-start gap-6 relative z-10">
+        <div className="flex-shrink-0">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400/30 to-amber-600/30 border-2 border-amber-400/50 flex items-center justify-center shadow-lg">
+            <Trophy className="w-10 h-10 text-amber-300" />
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-nrl-text-secondary text-sm">
-              {countdownLabel || "Resets in"}: <span className="text-white font-semibold">{countdown}</span>
+        </div>
+        <div className="flex-1">
+          <h3 className="text-2xl font-bold text-white mb-4 tracking-wide">{title}</h3>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 rounded-lg bg-amber-400/20 border border-amber-400/40">
+              <Gift className="w-6 h-6 text-amber-300" />
+            </div>
+            <span className="text-2xl font-bold text-amber-200">{prize}</span>
+          </div>
+          <div className="flex items-center justify-between pt-4 border-t border-amber-400/30">
+            <span className="text-nrl-text-secondary text-base">
+              {countdownLabel || "Resets in"}: <span className="text-white font-bold text-lg">{countdown}</span>
             </span>
-            <button className="text-nrl-green hover:text-nrl-green/80 text-sm font-semibold flex items-center gap-1">
+            <button className="px-4 py-2 bg-amber-400/20 hover:bg-amber-400/30 border border-amber-400/50 rounded-lg text-amber-200 hover:text-white font-semibold flex items-center gap-2 transition-all">
               Learn More <Info className="w-4 h-4" />
             </button>
           </div>
@@ -339,6 +357,13 @@ function FanTierLeaderboard({
   getMedalIcon: (rank: number) => JSX.Element;
   renderMovement: (movement: number | null) => JSX.Element;
 }) {
+  // Filter data: show top 5, then skip to user's position area
+  const top5 = data.filter(entry => entry.rank <= 5);
+  const showEllipsis = userRank > 6; // Show ellipsis if user is not in top 5
+  const userArea = showEllipsis 
+    ? data.filter(entry => entry.rank >= userRank - 2 && entry.rank <= userRank + 2)
+    : [];
+
   return (
     <>
       <PrizeBanner 
@@ -371,7 +396,8 @@ function FanTierLeaderboard({
               </tr>
             </thead>
             <tbody>
-              {data.map((entry) => {
+              {/* Top 5 */}
+              {top5.map((entry) => {
                 const isTop5 = entry.rank <= 5;
                 return (
                   <tr
@@ -396,6 +422,55 @@ function FanTierLeaderboard({
                       </span>
                     </td>
                     <td className="py-4 px-6 text-right font-semibold text-white">
+                      {entry.points.toLocaleString()} pts
+                    </td>
+                    <td className="py-4 px-6 text-center">
+                      {renderMovement(entry.movement)}
+                    </td>
+                  </tr>
+                );
+              })}
+              
+              {/* Ellipsis row */}
+              {showEllipsis && (
+                <tr className="border-b border-white/5">
+                  <td colSpan={5} className="py-4 px-6 text-center">
+                    <span className="text-nrl-text-secondary text-lg">...</span>
+                  </td>
+                </tr>
+              )}
+              
+              {/* User area (entries around user's position) */}
+              {userArea.map((entry) => {
+                const isUser = entry.rank === userRank;
+                const isTop5 = entry.rank <= 5;
+                return (
+                  <tr
+                    key={entry.rank}
+                    className={`border-b border-white/5 hover:bg-white/5 transition-colors ${
+                      isUser ? "bg-nrl-green/10 border-l-2 border-l-nrl-green" : ""
+                    } ${isTop5 ? "bg-amber-500/5 border-l-2 border-l-amber-500" : ""}`}
+                  >
+                    <td className="py-4 px-6">
+                      <div className="flex items-center gap-2">
+                        {isTop5 && getMedalIcon(entry.rank)}
+                        <span className={`font-semibold ${isUser ? "text-nrl-green" : "text-white"}`}>
+                          #{entry.rank}
+                        </span>
+                      </div>
+                    </td>
+                    <td className={`py-4 px-6 font-medium ${isUser ? "text-nrl-green" : "text-white"}`}>
+                      {entry.player}
+                    </td>
+                    <td className="py-4 px-6">
+                      <span 
+                        className="font-semibold text-sm"
+                        style={{ color: getTierColor(entry.tier) }}
+                      >
+                        {entry.tier}
+                      </span>
+                    </td>
+                    <td className={`py-4 px-6 text-right font-semibold ${isUser ? "text-nrl-green" : "text-white"}`}>
                       {entry.points.toLocaleString()} pts
                     </td>
                     <td className="py-4 px-6 text-center">
@@ -471,31 +546,91 @@ function TippingLeaderboard({
               </tr>
             </thead>
             <tbody>
-              {data.map((entry) => {
-                const isTop5 = entry.rank <= 5;
+              {/* Top 5 */}
+              {(() => {
+                const top5 = data.filter(entry => entry.rank <= 5);
+                const showEllipsis = userRank > 6;
+                const userArea = showEllipsis 
+                  ? data.filter(entry => entry.rank >= userRank - 2 && entry.rank <= userRank + 2)
+                  : [];
+                
                 return (
-                  <tr
-                    key={entry.rank}
-                    className={`border-b border-white/5 hover:bg-white/5 transition-colors ${
-                      isTop5 ? "bg-amber-500/5 border-l-2 border-l-amber-500" : ""
-                    }`}
-                  >
-                    <td className="py-4 px-6">
-                      <div className="flex items-center gap-2">
-                        {isTop5 && getMedalIcon(entry.rank)}
-                        <span className="font-semibold text-white">#{entry.rank}</span>
-                      </div>
-                    </td>
-                    <td className="py-4 px-6 font-medium text-white">{entry.player}</td>
-                    <td className="py-4 px-6 text-right font-semibold text-white">{entry.correct}</td>
-                    <td className="py-4 px-6 text-right font-semibold text-white">{entry.accuracy}%</td>
-                    <td className="py-4 px-6 text-right font-semibold text-white">{entry.streak}</td>
-                    <td className="py-4 px-6 text-center">
-                      {renderMovement(entry.movement)}
-                    </td>
-                  </tr>
+                  <>
+                    {top5.map((entry) => {
+                      const isTop5 = entry.rank <= 5;
+                      return (
+                        <tr
+                          key={entry.rank}
+                          className={`border-b border-white/5 hover:bg-white/5 transition-colors ${
+                            isTop5 ? "bg-amber-500/5 border-l-2 border-l-amber-500" : ""
+                          }`}
+                        >
+                          <td className="py-4 px-6">
+                            <div className="flex items-center gap-2">
+                              {isTop5 && getMedalIcon(entry.rank)}
+                              <span className="font-semibold text-white">#{entry.rank}</span>
+                            </div>
+                          </td>
+                          <td className="py-4 px-6 font-medium text-white">{entry.player}</td>
+                          <td className="py-4 px-6 text-right font-semibold text-white">{entry.correct}</td>
+                          <td className="py-4 px-6 text-right font-semibold text-white">{entry.accuracy}%</td>
+                          <td className="py-4 px-6 text-right font-semibold text-white">{entry.streak}</td>
+                          <td className="py-4 px-6 text-center">
+                            {renderMovement(entry.movement)}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    
+                    {/* Ellipsis row */}
+                    {showEllipsis && (
+                      <tr className="border-b border-white/5">
+                        <td colSpan={6} className="py-4 px-6 text-center">
+                          <span className="text-nrl-text-secondary text-lg">...</span>
+                        </td>
+                      </tr>
+                    )}
+                    
+                    {/* User area */}
+                    {userArea.map((entry) => {
+                      const isUser = entry.rank === userRank;
+                      const isTop5 = entry.rank <= 5;
+                      return (
+                        <tr
+                          key={entry.rank}
+                          className={`border-b border-white/5 hover:bg-white/5 transition-colors ${
+                            isUser ? "bg-nrl-green/10 border-l-2 border-l-nrl-green" : ""
+                          } ${isTop5 ? "bg-amber-500/5 border-l-2 border-l-amber-500" : ""}`}
+                        >
+                          <td className="py-4 px-6">
+                            <div className="flex items-center gap-2">
+                              {isTop5 && getMedalIcon(entry.rank)}
+                              <span className={`font-semibold ${isUser ? "text-nrl-green" : "text-white"}`}>
+                                #{entry.rank}
+                              </span>
+                            </div>
+                          </td>
+                          <td className={`py-4 px-6 font-medium ${isUser ? "text-nrl-green" : "text-white"}`}>
+                            {entry.player}
+                          </td>
+                          <td className={`py-4 px-6 text-right font-semibold ${isUser ? "text-nrl-green" : "text-white"}`}>
+                            {entry.correct}
+                          </td>
+                          <td className={`py-4 px-6 text-right font-semibold ${isUser ? "text-nrl-green" : "text-white"}`}>
+                            {entry.accuracy}%
+                          </td>
+                          <td className={`py-4 px-6 text-right font-semibold ${isUser ? "text-nrl-green" : "text-white"}`}>
+                            {entry.streak}
+                          </td>
+                          <td className="py-4 px-6 text-center">
+                            {renderMovement(entry.movement)}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </>
                 );
-              })}
+              })()}
             </tbody>
           </table>
         </div>
@@ -524,6 +659,13 @@ function FantasyLeaderboard({
   getMedalIcon: (rank: number) => JSX.Element;
   renderMovement: (movement: number | null) => JSX.Element;
 }) {
+  // Filter data: show top 5, then skip to user's position area
+  const top5 = data.filter(entry => entry.rank <= 5);
+  const showEllipsis = userRank > 6;
+  const userArea = showEllipsis 
+    ? data.filter(entry => entry.rank >= userRank - 2 && entry.rank <= userRank + 2)
+    : [];
+
   return (
     <>
       <PrizeBanner 
@@ -563,7 +705,8 @@ function FantasyLeaderboard({
               </tr>
             </thead>
             <tbody>
-              {data.map((entry) => {
+              {/* Top 5 */}
+              {top5.map((entry) => {
                 const isTop5 = entry.rank <= 5;
                 return (
                   <tr
@@ -582,6 +725,53 @@ function FantasyLeaderboard({
                     <td className="py-4 px-6 text-right font-semibold text-white">{entry.totalPts.toLocaleString()}</td>
                     <td className="py-4 px-6 text-right font-semibold text-white">{entry.weekPts}</td>
                     <td className="py-4 px-6 font-medium text-white">{entry.captain}</td>
+                    <td className="py-4 px-6 text-center">
+                      {renderMovement(entry.movement)}
+                    </td>
+                  </tr>
+                );
+              })}
+              
+              {/* Ellipsis row */}
+              {showEllipsis && (
+                <tr className="border-b border-white/5">
+                  <td colSpan={6} className="py-4 px-6 text-center">
+                    <span className="text-nrl-text-secondary text-lg">...</span>
+                  </td>
+                </tr>
+              )}
+              
+              {/* User area */}
+              {userArea.map((entry) => {
+                const isUser = entry.rank === userRank;
+                const isTop5 = entry.rank <= 5;
+                return (
+                  <tr
+                    key={entry.rank}
+                    className={`border-b border-white/5 hover:bg-white/5 transition-colors ${
+                      isUser ? "bg-nrl-green/10 border-l-2 border-l-nrl-green" : ""
+                    } ${isTop5 ? "bg-amber-500/5 border-l-2 border-l-amber-500" : ""}`}
+                  >
+                    <td className="py-4 px-6">
+                      <div className="flex items-center gap-2">
+                        {isTop5 && getMedalIcon(entry.rank)}
+                        <span className={`font-semibold ${isUser ? "text-nrl-green" : "text-white"}`}>
+                          #{entry.rank}
+                        </span>
+                      </div>
+                    </td>
+                    <td className={`py-4 px-6 font-medium ${isUser ? "text-nrl-green" : "text-white"}`}>
+                      {entry.player}
+                    </td>
+                    <td className={`py-4 px-6 text-right font-semibold ${isUser ? "text-nrl-green" : "text-white"}`}>
+                      {entry.totalPts.toLocaleString()}
+                    </td>
+                    <td className={`py-4 px-6 text-right font-semibold ${isUser ? "text-nrl-green" : "text-white"}`}>
+                      {entry.weekPts}
+                    </td>
+                    <td className={`py-4 px-6 font-medium ${isUser ? "text-nrl-green" : "text-white"}`}>
+                      {entry.captain}
+                    </td>
                     <td className="py-4 px-6 text-center">
                       {renderMovement(entry.movement)}
                     </td>

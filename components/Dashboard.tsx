@@ -280,7 +280,7 @@ export default function Dashboard({ user }: DashboardProps) {
       <RightSidebar user={
         activeSection === "home" ? homeUser : 
         activeSection === "dashboard" ? lockerRoomUser : 
-        activeSection === "leaderboards" ? user :
+        activeSection === "leaderboards" ? homeUser : // Use homeUser for leaderboards to match other pages
         user
       } />
 
