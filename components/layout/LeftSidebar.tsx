@@ -82,8 +82,33 @@ export default function LeftSidebar({ activeSection, onNavigate }: LeftSidebarPr
       <div className="pb-4 border-t border-white/20 pt-4 px-2">
         <button
           onClick={() => {
+            // Clear all onboarding and user data
             localStorage.removeItem("nrl_onboarded");
             localStorage.removeItem("nrl_user");
+            
+            // Clear all completed tasks and progress
+            localStorage.removeItem("completedMissionIds");
+            localStorage.removeItem("completedProfileItems");
+            localStorage.removeItem("selectedHomeGround");
+            
+            // Clear modal dismissal flags
+            localStorage.removeItem("tierProgressModalDismissedPermanently");
+            localStorage.removeItem("tierProgressModalShownAfterOnboarding");
+            
+            // Clear all tier progress modal dismissals (for all tiers)
+            Object.keys(localStorage).forEach(key => {
+              if (key.startsWith("tierProgressModalDismissed_")) {
+                localStorage.removeItem(key);
+              }
+            });
+            
+            // Clear sessionStorage items
+            sessionStorage.removeItem("userUpgradedPoints");
+            sessionStorage.removeItem("onboardingJustCompleted");
+            sessionStorage.removeItem("tierUpgradeJustCompleted");
+            sessionStorage.removeItem("highlightProfileCompletion");
+            
+            // Reload to restart the experience
             window.location.reload();
           }}
           className="flex w-full items-center gap-3 p-2 h-12 px-4 rounded-lg text-sm text-white/90 hover:text-white bg-transparent hover:bg-white/10 backdrop-blur-sm transition-all duration-300 ease-out hover:shadow-lg hover:shadow-white/20 group relative overflow-hidden"
