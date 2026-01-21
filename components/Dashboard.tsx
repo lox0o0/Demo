@@ -11,6 +11,7 @@ import RightSidebar from "./layout/RightSidebar";
 import StatusBar from "./layout/StatusBar";
 import SectionHeader from "./cards/SectionHeader";
 import ContentCard from "./cards/ContentCard";
+import SponsorActivityCard from "./cards/SponsorActivityCard";
 import BackgroundVideo from "./BackgroundVideo";
 import HeroCarousel from "./HeroCarousel";
 import TierProgressModal from "./TierProgressModal";
@@ -237,6 +238,49 @@ export default function Dashboard({ user }: DashboardProps) {
                     badge="+28 pts"
                     badgeColor="gold"
                     ctaStyle="subtitle"
+                  />
+                </div>
+              </section>
+
+              {/* SECTION 4: SPONSOR ACTIVITIES */}
+              <section>
+                <SectionHeader
+                  icon={
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                      <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+                    </svg>
+                  }
+                  title="SPONSOR ACTIVITIES"
+                  seeAllLink="#"
+                />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <SponsorActivityCard
+                    image="/images/cards/KFC.png"
+                    title="Game Day Meal Deal"
+                    description="Order any meal via KFC app using code NRLPLAYER at checkout"
+                    benefit="Free upgrade to Large + 50 pts"
+                    availability="Ends: Sunday 9pm"
+                    ctaText="Open KFC App"
+                    points="+50 pts"
+                  />
+                  <SponsorActivityCard
+                    image="/images/cards/Telstra.jpg"
+                    title="Stay Connected"
+                    description="Complete a 2-min plan comparison quiz and see exclusive NRL member offers"
+                    benefit="10GB Bonus Data + 30 pts"
+                    availability="Available: Ongoing"
+                    ctaText="Start Quiz"
+                    points="+30 pts"
+                  />
+                  <SponsorActivityCard
+                    image="/images/cards/Ampol.webp"
+                    title="Fuel Up Friday"
+                    description="Visit any Ampol station and scan the QR code at the pump using the Ampol app"
+                    benefit="10c/L off (max 60L) + 40 pts"
+                    availability="Available: Fridays only"
+                    ctaText="Get QR Code"
+                    points="+40 pts"
                   />
                 </div>
               </section>
