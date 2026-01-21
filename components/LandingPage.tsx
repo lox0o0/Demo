@@ -283,7 +283,10 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
             </span>
           </h1>
           <p className="text-sm sm:text-base text-white/80 max-w-2xl mx-auto">
-            A new way to play. Get closer to the game and the players like never before
+            A new way to play
+          </p>
+          <p className="text-sm sm:text-base text-white/80 max-w-2xl mx-auto mt-1">
+            Get closer to the game and the players like never before
           </p>
         </div>
       </section>
