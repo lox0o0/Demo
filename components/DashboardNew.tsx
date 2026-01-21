@@ -555,7 +555,7 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
             <h2 className="text-2xl font-bold text-white">Weekly Prize Wheel</h2>
           </div>
           <button
-            onClick={onClose}
+            onClick={() => onClose()}
             className="text-white/60 hover:text-white transition-colors"
           >
             <span className="text-2xl leading-none">×</span>
