@@ -2474,7 +2474,12 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
         return newPoints >= t.minPoints && (!nextTier || newPoints < nextTier.minPoints);
       }) || TIERS[0];
       
-      // Tier upgrade celebration removed - no popup
+      if (oldTier.name !== newTier.name) {
+        // Wait for fireworks animation (2 seconds) + 0.5 seconds before showing celebration
+        setTimeout(() => {
+          onTierUpgrade(oldTier, newTier, currentUserPoints);
+        }, 2500);
+      }
     }
     
     // Remove highlight after completion
