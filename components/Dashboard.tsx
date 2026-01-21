@@ -47,6 +47,14 @@ export default function Dashboard({ user }: DashboardProps) {
 
   // Show modal if user is close to next tier (within 100 points) and hasn't dismissed it
   useEffect(() => {
+    // Don't show modal if user just completed a tier upgrade
+    const tierUpgradeJustCompleted = sessionStorage.getItem('tierUpgradeJustCompleted');
+    if (tierUpgradeJustCompleted === 'true') {
+      sessionStorage.removeItem('tierUpgradeJustCompleted');
+      setShowProgressModal(false);
+      return;
+    }
+    
     if (activeSection === "home" && pointsToNext > 0 && pointsToNext <= 100 && nextTier) {
       // Check if modal was dismissed for this specific tier
       const dismissedKey = `tierProgressModalDismissed_${nextTier.name}`;

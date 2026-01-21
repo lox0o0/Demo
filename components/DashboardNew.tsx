@@ -67,6 +67,8 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
   const handleTierUpgrade = (oldTier: any, newTier: any, startPoints?: number) => {
     setCelebrationData({ oldTier, newTier, startPoints: startPoints ?? oldTier.minPoints });
     setShowTierCelebration(true);
+    // Set flag to prevent TierProgressModal from showing after tier upgrade
+    sessionStorage.setItem('tierUpgradeJustCompleted', 'true');
   };
   
   // Get user data
