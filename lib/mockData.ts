@@ -4,7 +4,7 @@
 export const TIERS = [
   { name: "Rookie", minPoints: 0, color: "gray", reward: "Welcome badge", access: "Welcome badge" },
   { name: "Bronze", minPoints: 250, color: "#CD7F32", reward: "Broncos Hat", access: "Broncos Hat" },
-  { name: "Silver", minPoints: 1000, color: "#C0C0C0", reward: "Meet the team - Broncos training access", access: "Meet the team - Broncos training access" },
+  { name: "Silver", minPoints: 1000, color: "#C0C0C0", reward: "Meet the team - Broncos training access with one mate", access: "Meet the team - Broncos training access with one mate" },
   { name: "Gold", minPoints: 2000, color: "#FFD700", reward: "Team Jersey", access: "Team Jersey" },
   { name: "Platinum", minPoints: 3500, color: "#E5E4E2", reward: "Game ticket", access: "Game ticket" },
   { name: "Diehard", minPoints: 5000, color: "#8B0000", reward: "Signed team jersey", access: "Signed team jersey" },
