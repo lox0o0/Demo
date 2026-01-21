@@ -42,25 +42,14 @@ interface Reward {
 export default function Rewards({ user, onNavigate }: RewardsProps) {
   const [claimableRewards, setClaimableRewards] = useState<Reward[]>([
     {
-      id: "1",
-      title: "$10 Sportsbet Credit",
-      description: "Use on any sports betting market",
-      icon: DollarSign,
-      source: "Prize Wheel",
-      wonDate: "19 Jan 2026",
-      expiresDate: "19 Feb 2026",
+      id: "4",
+      title: "Broncos Training Session Access",
+      description: "Access for you + 1 mate\nRed Hill Training Facility",
+      icon: Users,
+      source: "Weekly Draw",
+      wonDate: "12 Jan 2026",
       type: "claimable",
-      ageRestricted: true,
-    },
-    {
-      id: "2",
-      title: "KFC Family Box Deal",
-      description: "$29.95 Family Box for $19.95",
-      icon: Utensils,
-      source: "Prize Wheel",
-      wonDate: "18 Jan 2026",
-      expiresDate: "28 Feb 2026",
-      type: "claimable",
+      rewardType: "experience",
     },
     {
       id: "3",
@@ -74,14 +63,25 @@ export default function Rewards({ user, onNavigate }: RewardsProps) {
       rewardType: "tier",
     },
     {
-      id: "4",
-      title: "Broncos Training Session Access",
-      description: "Access for you + 1 mate\nRed Hill Training Facility",
-      icon: Users,
-      source: "Weekly Draw",
-      wonDate: "12 Jan 2026",
+      id: "2",
+      title: "$10 KFC Voucher",
+      description: "$10 off your next KFC order",
+      icon: Utensils,
+      source: "Prize Wheel",
+      wonDate: "18 Jan 2026",
+      expiresDate: "28 Feb 2026",
       type: "claimable",
-      rewardType: "experience",
+    },
+    {
+      id: "1",
+      title: "$10 Sportsbet Credit",
+      description: "Use on any sports betting market",
+      icon: DollarSign,
+      source: "Prize Wheel",
+      wonDate: "19 Jan 2026",
+      expiresDate: "19 Feb 2026",
+      type: "claimable",
+      ageRestricted: true,
     },
   ]);
 
@@ -167,7 +167,7 @@ export default function Rewards({ user, onNavigate }: RewardsProps) {
       {/* Background Image */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <Image
-          src="/locker-room/background.webp"
+          src="/rewards/background.webp"
           alt="Rewards Background"
           fill
           className="object-cover"
