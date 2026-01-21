@@ -2555,7 +2555,15 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       {/* Mission List */}
       <div className="overflow-y-auto">
         <ul className="w-full">
-          {missions.map((mission, index) => {
+          {[...missions].sort((a, b) => {
+            const aCompleted = completedMissionIds.includes(a.id);
+            const bCompleted = completedMissionIds.includes(b.id);
+            // Incomplete activities first
+            if (!aCompleted && bCompleted) return -1;
+            if (aCompleted && !bCompleted) return 1;
+            // If both same status, maintain original order
+            return 0;
+          }).map((mission, index) => {
             const Icon = mission.icon;
             const isExpanded = expandedMission === mission.id;
             const isCompleted = completedMissionIds.includes(mission.id);
@@ -2605,7 +2613,13 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                           : isHighlighted
                           ? "text-yellow-200 font-bold"
                           : "text-white"
-                      }`}>{mission.title}</p>
+                      }`}
+                      style={{
+                        ...(isHighlighted && {
+                          textShadow: '0 0 10px rgba(250, 204, 21, 0.8), 0 0 20px rgba(250, 204, 21, 0.6)',
+                        }),
+                      }}
+                      >{mission.title}</p>
                       <div className={`text-xs ${
                         isCompleted ? "text-white/70" : isHighlighted ? "text-yellow-300/80" : "text-white/60"
                       }`}>{getStatusText(mission)}</div>
@@ -2617,7 +2631,13 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                           : isHighlighted
                           ? "border-yellow-400/50 bg-yellow-400/20 text-yellow-300"
                           : "border-white/10 text-neutral-50 bg-neutral-950/40"
-                      }`}>
+                      }`}
+                      style={{
+                        ...(isHighlighted && {
+                          boxShadow: '0 0 15px rgba(250, 204, 21, 0.6), 0 0 30px rgba(250, 204, 21, 0.4)',
+                        }),
+                      }}
+                      >
                         {isCompleted && mission.pointsEarned
                           ? mission.pointsEarned
                           : mission.points}
