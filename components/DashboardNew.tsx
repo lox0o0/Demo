@@ -2855,7 +2855,24 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                           <div className="pt-3 border-t border-gray-700/50 space-y-3">
                             <div className="text-xs text-white/60 mb-2">+10 Fuel • {mission.points}</div>
                             
-                            {/* Voting Results - Show what other fans picked */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCompleteMission(mission.id, mission.pointsValue || 25);
+                              }}
+                              className="w-full mt-2 py-2 px-4 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold rounded-lg transition-colors"
+                            >
+                              Complete Vote
+                            </button>
+                            <div className="text-xs text-white/40 mt-2">Winner announced: Wednesday 12pm</div>
+                          </div>
+                        )}
+                        {isCompleted && mission.id === 3 && (
+                          <div className="pt-3 border-t border-gray-700/50 space-y-3">
+                            <div className="text-xs text-emerald-400 font-semibold mb-1">✓ Vote Complete</div>
+                            <div className="text-xs text-white/60 mb-3">{mission.pointsEarned || mission.points}</div>
+                            
+                            {/* Voting Results - Show what other fans picked (only after completion) */}
                             <div className="pt-3 border-t border-gray-700/50">
                               <div className="text-xs font-semibold text-white/80 mb-2">Fan Voting Results:</div>
                               <div className="space-y-2">
@@ -2890,23 +2907,6 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                                 ))}
                               </div>
                             </div>
-                            
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCompleteMission(mission.id, mission.pointsValue || 25);
-                              }}
-                              className="w-full mt-2 py-2 px-4 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold rounded-lg transition-colors"
-                            >
-                              Complete Vote
-                            </button>
-                            <div className="text-xs text-white/40 mt-2">Winner announced: Wednesday 12pm</div>
-                          </div>
-                        )}
-                        {isCompleted && mission.id === 3 && (
-                          <div className="pt-3 border-t border-gray-700/50">
-                            <div className="text-xs text-emerald-400 font-semibold mb-1">✓ Vote Complete</div>
-                            <div className="text-xs text-white/60">{mission.pointsEarned || mission.points}</div>
                           </div>
                         )}
                       </div>
@@ -2929,7 +2929,23 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                           <div className="pt-3 border-t border-gray-700/50 space-y-3">
                             <div className="text-xs text-white/60 mb-2">+10 Fuel • {mission.points}</div>
                             
-                            {/* Voting Results - Show after selection */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCompleteMission(mission.id, mission.pointsValue || 25);
+                              }}
+                              className="w-full mt-2 py-2 px-4 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold rounded-lg transition-colors"
+                            >
+                              Complete Prediction
+                            </button>
+                          </div>
+                        )}
+                        {isCompleted && mission.id === 4 && (
+                          <div className="pt-3 border-t border-gray-700/50 space-y-3">
+                            <div className="text-xs text-emerald-400 font-semibold mb-1">✓ Prediction Complete</div>
+                            <div className="text-xs text-white/60 mb-3">{mission.pointsEarned || mission.points}</div>
+                            
+                            {/* Voting Results - Show what other fans picked (only after completion) */}
                             <div className="pt-3 border-t border-gray-700/50">
                               <div className="text-xs font-semibold text-white/80 mb-2">Fan Voting Results:</div>
                               <div className="space-y-2">
@@ -2964,22 +2980,6 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                                 ))}
                               </div>
                             </div>
-                            
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCompleteMission(mission.id, mission.pointsValue || 25);
-                              }}
-                              className="w-full mt-2 py-2 px-4 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold rounded-lg transition-colors"
-                            >
-                              Complete Prediction
-                            </button>
-                          </div>
-                        )}
-                        {isCompleted && mission.id === 4 && (
-                          <div className="pt-3 border-t border-gray-700/50">
-                            <div className="text-xs text-emerald-400 font-semibold mb-1">✓ Prediction Complete</div>
-                            <div className="text-xs text-white/60">{mission.pointsEarned || mission.points}</div>
                           </div>
                         )}
                       </div>
