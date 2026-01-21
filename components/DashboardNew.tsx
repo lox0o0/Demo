@@ -2408,17 +2408,17 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       progress: null,
       pointsValue: 25,
     },
-    {
-      id: 4,
-      icon: Calendar,
-      title: "Most dominant team prediction",
-      points: "+25 pts",
-      status: "Not started",
-      statusType: "pending" as const,
-      progress: null,
-      hasDropdown: true,
-      pointsValue: 25,
-    },
+            {
+              id: 4,
+              icon: Calendar,
+              title: "Predict the most dominant team for the upcoming round",
+              points: "+25 pts",
+              status: "Not started",
+              statusType: "pending" as const,
+              progress: null,
+              hasDropdown: true,
+              pointsValue: 25,
+            },
     {
       id: 7,
       icon: Share2,
@@ -2926,8 +2926,45 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                           ))}
                         </select>
                         {selectedTeam && !isCompleted && (
-                          <div className="pt-3 border-t border-gray-700/50">
+                          <div className="pt-3 border-t border-gray-700/50 space-y-3">
                             <div className="text-xs text-white/60 mb-2">+10 Fuel • {mission.points}</div>
+                            
+                            {/* Voting Results - Show after selection */}
+                            <div className="pt-3 border-t border-gray-700/50">
+                              <div className="text-xs font-semibold text-white/80 mb-2">Fan Voting Results:</div>
+                              <div className="space-y-2">
+                                {[
+                                  { name: "Broncos", percentage: 44 },
+                                  { name: "Sharks", percentage: 20 },
+                                  { name: selectedTeam, percentage: 15 },
+                                  { name: "Panthers", percentage: 12 },
+                                  { name: "Storm", percentage: 9 },
+                                ]
+                                .filter((result, index, self) => {
+                                  // If this is the selected team, only keep the entry with 15% (the selected one)
+                                  if (selectedTeam && result.name === selectedTeam) {
+                                    return result.percentage === 15;
+                                  }
+                                  // Remove any other duplicates by name
+                                  return index === self.findIndex((r) => r.name === result.name);
+                                })
+                                .map((result) => (
+                                  <div key={result.name} className="flex items-center gap-2">
+                                    <div className="w-24 text-xs text-white/60 truncate">{result.name}</div>
+                                    <div className="flex-1 bg-gray-800/50 rounded-full h-2">
+                                      <div
+                                        className={`h-2 rounded-full ${
+                                          result.name === selectedTeam ? 'bg-emerald-500' : 'bg-gray-600'
+                                        }`}
+                                        style={{ width: `${result.percentage}%` }}
+                                      />
+                                    </div>
+                                    <div className="w-10 text-xs text-white/60 text-right">{result.percentage}%</div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                            
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -2945,23 +2982,6 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                             <div className="text-xs text-white/60">{mission.pointsEarned || mission.points}</div>
                           </div>
                         )}
-                        <div className="pt-3 border-t border-gray-700/50">
-                          <div className="text-xs font-semibold text-white/80 mb-2">Current Voting Results:</div>
-                          <div className="space-y-2">
-                            {teamVotes?.map((team) => (
-                              <div key={team.name} className="flex items-center gap-2">
-                                <div className="w-20 text-xs text-white/60">{team.name}</div>
-                                <div className="flex-1 bg-gray-800/50 rounded-full h-2">
-                                  <div
-                                    className="h-2 rounded-full bg-emerald-500"
-                                    style={{ width: `${team.percentage}%` }}
-                                  />
-                                </div>
-                                <div className="w-10 text-xs text-white/60 text-right">{team.percentage}%</div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
                       </div>
                     )}
                     {mission.id === 5 && (
