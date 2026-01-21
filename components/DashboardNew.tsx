@@ -2409,7 +2409,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
     setCompletedMissionIds(updatedCompleted);
     
     // Update weekly completion count
-    setWeeklyCompleted(prev => prev + 1);
+    setWeeklyCompleted((prev: number) => prev + 1);
     
     // Update user points
     const newPoints = currentUserPoints + points;
