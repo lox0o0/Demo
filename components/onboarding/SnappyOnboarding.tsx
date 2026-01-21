@@ -693,7 +693,7 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
           <div className="bg-nrl-dark-card/95 backdrop-blur-sm rounded-2xl p-8 border border-nrl-border-light">
             <ProgressStepper currentStep={2} />
             <p className="text-center text-sm text-nrl-text-primary mt-2 mb-4 font-medium">
-              Sign-in to get started
+              Start your fan journey now - a new way to Play
             </p>
             
             {/* Profile Completion Bar - Show after team selection */}
