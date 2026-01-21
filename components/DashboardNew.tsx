@@ -2459,7 +2459,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
             <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-50/20">
               <div 
                 className={`h-full transition-all duration-500 ease-out rounded-full ${
-                  currentUserPoints >= 1000 && currentUserPoints < 1001 ? 'animate-pulse' : ''
+                  currentUserPoints >= 1000 && nextTier?.name === 'Silver' ? 'animate-pulse' : ''
                 }`}
                 style={{ 
                   width: `${Math.min(progressToNext, 100)}%`,
@@ -2480,7 +2480,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                         return `linear-gradient(to right, ${currentColor}, ${nextColor})`;
                       })()
                     : currentTier.color,
-                  boxShadow: currentUserPoints >= 1000 && currentUserPoints < 1001
+                  boxShadow: currentUserPoints >= 1000 && nextTier?.name === 'Silver'
                     ? `0 0 20px ${nextTier?.color || '#C0C0C0'}80, 0 0 40px ${nextTier?.color || '#C0C0C0'}60, 0 0 60px ${nextTier?.color || '#C0C0C0'}40`
                     : nextTier 
                       ? `0 0 8px ${nextTier.color}60` 
@@ -2873,10 +2873,10 @@ function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightP
     
     // Trigger celebration if tier changed
     if (oldTier.name !== newTier.name) {
-      // Delay 0.75 seconds (750ms) so user can see they've hit 1000 points before popup appears
+      // Delay 1.5 seconds (1500ms) so user can see they've hit 1000 points and the glow effect before popup appears
       setTimeout(() => {
         onTierUpgrade(oldTier, newTier, oldPoints); // Pass oldPoints as startPoints
-      }, 750);
+      }, 1500);
     }
   };
 
