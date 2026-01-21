@@ -5,7 +5,8 @@ import { useState } from "react";
 export type NavSection = 
   | "home"
   | "dashboard"
-  | "rewards";
+  | "rewards"
+  | "leaderboards";
 
 // Legacy types kept for compatibility but not used in new navigation
 export type LatestSubSection = "news" | "watch" | "highlights";

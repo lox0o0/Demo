@@ -14,6 +14,7 @@ import ContentCard from "./cards/ContentCard";
 import BackgroundVideo from "./BackgroundVideo";
 import HeroCarousel from "./HeroCarousel";
 import TierProgressModal from "./TierProgressModal";
+import Leaderboards from "./Leaderboards";
 
 interface DashboardProps {
   user: any;
@@ -262,8 +263,12 @@ export default function Dashboard({ user }: DashboardProps) {
             />
           )}
 
+          {activeSection === "leaderboards" && (
+            <Leaderboards user={user} />
+          )}
+
           {/* Default fallback for any unrecognized sections */}
-          {!["home", "dashboard"].includes(activeSection) && (
+          {!["home", "dashboard", "leaderboards"].includes(activeSection) && (
             <div className="text-center py-20">
               <p className="text-nrl-text-secondary">Section not found: {activeSection}</p>
             </div>
