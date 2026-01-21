@@ -547,8 +547,7 @@ function PrizeWheel({ streakData, teamData, onClose, spinsTaken = 0 }: { streakD
       
       setIsSpinning(false);
       setPrizeWon(actualPrize);
-      // Don't close automatically - let user see the prize and close manually
-      // The prize will be passed when user closes the modal
+      // Prize is shown, but wheel stays open until user clicks "Close" or "Spin Again"
     }, spinDuration);
   };
 
