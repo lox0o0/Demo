@@ -45,6 +45,8 @@ export default function Home() {
     setUser(userData);
     localStorage.setItem("nrl_onboarded", "true");
     localStorage.setItem("nrl_user", JSON.stringify(userData));
+    // Set flag to show tier progress modal once after onboarding
+    sessionStorage.setItem("onboardingJustCompleted", "true");
   };
 
   if (!isOnboarded) {

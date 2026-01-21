@@ -53,7 +53,7 @@ export default function Dashboard({ user }: DashboardProps) {
   const nextTier = TIERS.find((t) => t.minPoints > userPoints);
   const pointsToNext = nextTier ? nextTier.minPoints - userPoints : 0;
 
-  // Show modal if user is close to next tier (within 100 points) and hasn't dismissed it
+  // Show modal once after onboarding is complete, then never again after CTA is clicked
   useEffect(() => {
     // Don't show modal if user just completed a tier upgrade
     const tierUpgradeJustCompleted = sessionStorage.getItem('tierUpgradeJustCompleted');
@@ -63,29 +63,37 @@ export default function Dashboard({ user }: DashboardProps) {
       return;
     }
     
-    if (activeSection === "home" && pointsToNext > 0 && pointsToNext <= 100 && nextTier) {
-      // Check if modal was dismissed for this specific tier
-      const dismissedKey = `tierProgressModalDismissed_${nextTier.name}`;
-      const dismissed = localStorage.getItem(dismissedKey);
-      if (!dismissed) {
-        setShowProgressModal(true);
-      }
+    // Check if modal was permanently dismissed (after clicking CTA)
+    const permanentlyDismissed = localStorage.getItem('tierProgressModalDismissedPermanently');
+    if (permanentlyDismissed === 'true') {
+      setShowProgressModal(false);
+      return;
+    }
+    
+    // Check if onboarding was just completed (set in app/page.tsx)
+    const onboardingJustCompleted = sessionStorage.getItem('onboardingJustCompleted');
+    const hasShownAfterOnboarding = localStorage.getItem('tierProgressModalShownAfterOnboarding');
+    
+    // Show modal once after onboarding completes
+    if (activeSection === "home" && onboardingJustCompleted === 'true' && !hasShownAfterOnboarding) {
+      setShowProgressModal(true);
+      localStorage.setItem('tierProgressModalShownAfterOnboarding', 'true');
+      sessionStorage.removeItem('onboardingJustCompleted');
     } else {
       setShowProgressModal(false);
     }
-  }, [activeSection, pointsToNext, nextTier]);
+  }, [activeSection]);
 
   const handleDismissModal = () => {
     setShowProgressModal(false);
-    // Store dismissal per tier so it can show again for next tier
-    if (nextTier) {
-      const dismissedKey = `tierProgressModalDismissed_${nextTier.name}`;
-      localStorage.setItem(dismissedKey, 'true');
-    }
+    // Permanently dismiss - never show again
+    localStorage.setItem('tierProgressModalDismissedPermanently', 'true');
   };
 
   const handleCompleteProfile = () => {
     setShowProgressModal(false);
+    // Permanently dismiss - never show again after CTA is clicked
+    localStorage.setItem('tierProgressModalDismissedPermanently', 'true');
     // Navigate to profile completion or locker room
     setActiveSection("dashboard");
     // Store flag to highlight profile completion section
