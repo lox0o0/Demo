@@ -2865,7 +2865,12 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                                   { name: selectedLastRoundPlayer, percentage: 15 },
                                   { name: "Jahrome Hughes", percentage: 10 },
                                   { name: "Kalyn Ponga", percentage: 5 },
-                                ].map((result) => (
+                                ]
+                                .filter((result) => !selectedLastRoundPlayer || result.name !== selectedLastRoundPlayer || result.percentage === 15)
+                                .filter((result, index, self) => 
+                                  index === self.findIndex((r) => r.name === result.name)
+                                )
+                                .map((result) => (
                                   <div key={result.name} className="flex items-center gap-2">
                                     <div className="w-24 text-xs text-white/60 truncate">{result.name}</div>
                                     <div className="flex-1 bg-gray-800/50 rounded-full h-2">
