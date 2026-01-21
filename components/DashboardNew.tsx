@@ -159,7 +159,7 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
                       points="+50 pts"
                     />
                     <SponsorActivityCard
-                      image="/images/cards/Telstra.jpg"
+                      image="/images/cards/telstra.png"
                       title="Stay Connected"
                       description="Complete a 2-min plan comparison quiz and see exclusive NRL member offers"
                       benefit="10GB Bonus Data + 30 pts"
