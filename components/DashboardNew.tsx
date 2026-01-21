@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { SocialIcon } from "@/lib/icons";
 import TierUpgradeCelebration from "./TierUpgradeCelebration";
-import SponsorActivityCard from "./cards/SponsorActivityCard";
 
 interface DashboardProps {
   user: any;
@@ -147,36 +146,110 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
                     <h1 className="font-semibold text-2xl leading-8 text-neutral-50 text-left">Sponsor Activities</h1>
                   </div>
                 </div>
-                <div className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <SponsorActivityCard
-                      image="/images/cards/KFC.png"
-                      title="Game Day Meal Deal"
-                      description="Order any meal via KFC app using code NRLPLAYER at checkout"
-                      benefit="Free upgrade to Large + 50 pts"
-                      availability="Ends: Sunday 9pm"
-                      ctaText="Open KFC App"
-                      points="+50 pts"
-                    />
-                    <SponsorActivityCard
-                      image="/images/cards/telstra.png"
-                      title="Stay Connected"
-                      description="Complete a 2-min plan comparison quiz and see exclusive NRL member offers"
-                      benefit="10GB Bonus Data + 30 pts"
-                      availability="Available: Ongoing"
-                      ctaText="Start Quiz"
-                      points="+30 pts"
-                    />
-                    <SponsorActivityCard
-                      image="/images/cards/Ampol.webp"
-                      title="Fuel Up Friday"
-                      description="Visit any Ampol station and scan the QR code at the pump using the Ampol app"
-                      benefit="10c/L off (max 60L) + 40 pts"
-                      availability="Available: Fridays only"
-                      ctaText="Get QR Code"
-                      points="+40 pts"
-                    />
-                  </div>
+                <div className="overflow-y-auto">
+                  <ul className="w-full">
+                    {/* KFC Sponsor Activity */}
+                    <li>
+                      <div className="flex items-center w-full px-3 py-2.5 transition-all duration-300 cursor-pointer relative border-l-2 border-yellow-500/30 hover:bg-white/5">
+                        <div className="flex items-center w-full gap-3">
+                          <div className="flex flex-col min-w-0 flex-1 gap-1">
+                            <p className="font-medium text-sm text-white uppercase">Game Day Meal Deal</p>
+                            <div className="text-xs text-white/60">Order any meal via KFC app using code NRLPLAYER at checkout</div>
+                            <div className="text-xs text-white/70 mt-1">
+                              <span className="font-semibold">You get:</span> Free upgrade to Large + 50 pts
+                            </div>
+                            <div className="text-xs text-white/60">
+                              <span className="font-semibold">Ends:</span> Sunday 9pm
+                            </div>
+                          </div>
+                          <div className="flex flex-col items-end gap-1">
+                            <div className="w-12 h-12 rounded border border-yellow-500/30 bg-white/5 backdrop-blur-md flex items-center justify-center overflow-hidden">
+                              <Image
+                                src="/images/cards/KFC.png"
+                                alt="KFC"
+                                width={48}
+                                height={48}
+                                className="object-cover w-full h-full"
+                                unoptimized
+                              />
+                            </div>
+                            <div className="inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-semibold border border-white/10 text-neutral-50 bg-neutral-950/40">
+                              +50 pts
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr className="h-px bg-foreground opacity-5" />
+                    </li>
+
+                    {/* Telstra Sponsor Activity */}
+                    <li>
+                      <div className="flex items-center w-full px-3 py-2.5 transition-all duration-300 cursor-pointer relative border-l-2 border-yellow-500/30 hover:bg-white/5">
+                        <div className="flex items-center w-full gap-3">
+                          <div className="flex flex-col min-w-0 flex-1 gap-1">
+                            <p className="font-medium text-sm text-white uppercase">Stay Connected</p>
+                            <div className="text-xs text-white/60">Complete a 2-min plan comparison quiz and see exclusive NRL member offers</div>
+                            <div className="text-xs text-white/70 mt-1">
+                              <span className="font-semibold">You get:</span> 10GB Bonus Data + 30 pts
+                            </div>
+                            <div className="text-xs text-white/60">
+                              <span className="font-semibold">Available:</span> Ongoing
+                            </div>
+                          </div>
+                          <div className="flex flex-col items-end gap-1">
+                            <div className="w-12 h-12 rounded border border-yellow-500/30 bg-white/5 backdrop-blur-md flex items-center justify-center overflow-hidden">
+                              <Image
+                                src="/images/cards/telstra.png"
+                                alt="Telstra"
+                                width={48}
+                                height={48}
+                                className="object-cover w-full h-full"
+                                unoptimized
+                              />
+                            </div>
+                            <div className="inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-semibold border border-white/10 text-neutral-50 bg-neutral-950/40">
+                              +30 pts
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr className="h-px bg-foreground opacity-5" />
+                    </li>
+
+                    {/* Ampol Sponsor Activity */}
+                    <li>
+                      <div className="flex items-center w-full px-3 py-2.5 transition-all duration-300 cursor-pointer relative border-l-2 border-yellow-500/30 hover:bg-white/5">
+                        <div className="flex items-center w-full gap-3">
+                          <div className="flex flex-col min-w-0 flex-1 gap-1">
+                            <p className="font-medium text-sm text-white uppercase">Fuel Up Friday</p>
+                            <div className="text-xs text-white/60">Visit any Ampol station and scan the QR code at the pump using the Ampol app</div>
+                            <div className="text-xs text-white/70 mt-1">
+                              <span className="font-semibold">You get:</span> 10c/L off (max 60L) + 40 pts
+                            </div>
+                            <div className="text-xs text-white/60">
+                              <span className="font-semibold">Available:</span> Fridays only
+                            </div>
+                          </div>
+                          <div className="flex flex-col items-end gap-1">
+                            <div className="w-12 h-12 rounded border border-yellow-500/30 bg-white/5 backdrop-blur-md flex items-center justify-center overflow-hidden">
+                              <Image
+                                src="/images/cards/Ampol.webp"
+                                alt="Ampol"
+                                width={48}
+                                height={48}
+                                className="object-cover w-full h-full"
+                                unoptimized
+                              />
+                            </div>
+                            <div className="inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-semibold border border-white/10 text-neutral-50 bg-neutral-950/40">
+                              +40 pts
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr className="h-px bg-foreground opacity-5" />
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
