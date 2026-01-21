@@ -374,6 +374,7 @@ function FanTierLeaderboard({
   getTierColor: (tier: string) => string;
   getMedalIcon: (rank: number) => JSX.Element;
   renderMovement: (movement: number | null) => JSX.Element;
+  user?: any;
 }) {
   // Filter data: show top 5, then skip to user's position area
   const top5 = data.filter(entry => entry.rank <= 5);
@@ -535,6 +536,7 @@ function TippingLeaderboard({
   userMovement: number;
   getMedalIcon: (rank: number) => JSX.Element;
   renderMovement: (movement: number | null) => JSX.Element;
+  user?: any;
 }) {
   return (
     <>
@@ -701,6 +703,7 @@ function FantasyLeaderboard({
   userMovement: number;
   getMedalIcon: (rank: number) => JSX.Element;
   renderMovement: (movement: number | null) => JSX.Element;
+  user?: any;
 }) {
   // Filter data: show top 5, then skip to user's position area
   const top5 = data.filter(entry => entry.rank <= 5);
