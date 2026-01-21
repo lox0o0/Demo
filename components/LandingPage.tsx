@@ -258,7 +258,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
   }
 
   return (
-    <div className="h-screen relative overflow-hidden flex flex-col">
+    <div className="min-h-screen relative overflow-y-auto flex flex-col">
       {/* Background */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <Image
@@ -424,7 +424,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
         </section>
 
         {/* Social Proof + CTA Section - Combined at bottom */}
-        <section className="px-4 sm:px-6 lg:px-8 py-6 pb-8 flex-shrink-0">
+        <section className="px-4 sm:px-6 lg:px-8 py-6 pb-12 flex-shrink-0">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-sm font-bold text-white mb-1">
               Join 50,000+ NRL fans already playing
@@ -446,7 +446,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
               Join Now
               <ArrowRight className="w-5 h-5" />
             </button>
-            <p className="text-white/75 mt-3 mb-2 text-sm">
+            <p className="text-white/75 mt-3 mb-4 text-sm">
               Free to play · Win real prizes
             </p>
           </div>
