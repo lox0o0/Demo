@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Team } from "@/lib/data/teams";
 import { EntryPoint } from "@/lib/onboardingTypes";
+import { AuthIcon } from "@/lib/icons";
 
 interface ProgressiveProfileProps {
   team: Team;
@@ -19,6 +20,7 @@ export default function ProgressiveProfile({
   onComplete,
 }: ProgressiveProfileProps) {
   const [step, setStep] = useState(1);
+  const [selectedAuthMethod, setSelectedAuthMethod] = useState<"google" | "apple" | "email" | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -27,19 +29,55 @@ export default function ProgressiveProfile({
     smsReminders: false,
   });
 
+  const handleGoogleSignIn = () => {
+    // In a real app, this would trigger Google OAuth
+    setSelectedAuthMethod("google");
+    setFormData({
+      ...formData,
+      name: "User", // Would come from Google OAuth
+      email: "user@gmail.com", // Would come from Google OAuth
+    });
+    // Auto-advance to next step after auth
+    setTimeout(() => setStep(2), 500);
+  };
+
+  const handleAppleSignIn = () => {
+    // In a real app, this would trigger Apple Sign In
+    setSelectedAuthMethod("apple");
+    setFormData({
+      ...formData,
+      name: "User", // Would come from Apple Sign In
+      email: "user@icloud.com", // Would come from Apple Sign In
+    });
+    // Auto-advance to next step after auth
+    setTimeout(() => setStep(2), 500);
+  };
+
+  const handleEmailAuth = () => {
+    setSelectedAuthMethod("email");
+  };
+
   const handleNext = () => {
-    if (step === 1 && formData.name && formData.email) {
-      setStep(2);
+    if (step === 1) {
+      // Step 1: Name/Email (either from auth or manual entry)
+      if (selectedAuthMethod === "email" && formData.email) {
+        setStep(2);
+      } else if (formData.name && formData.email) {
+        setStep(2);
+      } else if (selectedAuthMethod === "google" || selectedAuthMethod === "apple") {
+        // Already authenticated, move to next step
+        setStep(2);
+      }
     } else if (step === 2) {
-      // Phone verification step
+      // Phone verification step (optional)
       if (formData.phone) {
         setFormData({ ...formData, phoneVerified: true });
-        setStep(3);
       }
+      setStep(3);
     } else if (step === 3) {
       // Complete onboarding
       const userData = {
-        name: formData.name,
+        name: formData.name || "Fan",
         email: formData.email,
         phone: formData.phone,
         phoneVerified: formData.phoneVerified,
@@ -101,6 +139,47 @@ export default function ProgressiveProfile({
                 </p>
               </div>
 
+              {/* Auth Options */}
+              {!selectedAuthMethod && (
+                <div className="space-y-4">
+                  <p className="text-sm text-gray-400 text-center">Quick sign in:</p>
+                  <div className="grid grid-cols-3 gap-3">
+                    <button
+                      onClick={handleGoogleSignIn}
+                      className="w-full h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all border border-white/20"
+                      aria-label="Sign in with Google"
+                    >
+                      <AuthIcon provider="google" size={28} />
+                    </button>
+                    <button
+                      onClick={handleAppleSignIn}
+                      className="w-full h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all border border-white/20"
+                      aria-label="Sign in with Apple"
+                    >
+                      <AuthIcon provider="apple" size={28} />
+                    </button>
+                    <button
+                      onClick={handleEmailAuth}
+                      className="w-full h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all border border-white/20"
+                      aria-label="Sign in with Email"
+                    >
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-white/20"></div>
+                    </div>
+                    <div className="relative flex justify-center text-xs">
+                      <span className="px-2 bg-nrl-dark-card text-gray-400">or</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Name/Email Inputs */}
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium mb-2">Name</label>
@@ -109,7 +188,8 @@ export default function ProgressiveProfile({
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Your name"
-                    className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 focus:outline-none focus:border-nrl-green focus:ring-2 focus:ring-nrl-green/20"
+                    disabled={selectedAuthMethod === "google" || selectedAuthMethod === "apple"}
+                    className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 focus:outline-none focus:border-nrl-green focus:ring-2 focus:ring-nrl-green/20 disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
                 <div>
@@ -119,14 +199,18 @@ export default function ProgressiveProfile({
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="your@email.com"
-                    className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 focus:outline-none focus:border-nrl-green focus:ring-2 focus:ring-nrl-green/20"
+                    disabled={selectedAuthMethod === "google" || selectedAuthMethod === "apple"}
+                    className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 focus:outline-none focus:border-nrl-green focus:ring-2 focus:ring-nrl-green/20 disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
               </div>
 
               <button
                 onClick={handleNext}
-                disabled={!formData.name || !formData.email}
+                disabled={
+                  (selectedAuthMethod === "email" && !formData.email) ||
+                  (!selectedAuthMethod && (!formData.name || !formData.email))
+                }
                 className="w-full bg-nrl-green text-white font-bold py-4 rounded-xl hover:bg-nrl-green/90 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Continue
@@ -182,10 +266,9 @@ export default function ProgressiveProfile({
                 </button>
                 <button
                   onClick={handleNext}
-                  disabled={!formData.phone}
-                  className="flex-1 bg-nrl-green text-white font-bold py-3 rounded-xl hover:bg-nrl-green/90 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-nrl-green text-white font-bold py-3 rounded-xl hover:bg-nrl-green/90 transition-all transform hover:scale-[1.02]"
                 >
-                  Verify & Continue
+                  {formData.phone ? "Verify & Continue" : "Skip & Continue"}
                 </button>
               </div>
             </div>

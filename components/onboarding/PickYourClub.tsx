@@ -5,6 +5,7 @@ import Image from "next/image";
 import { NRL_TEAMS, Team } from "@/lib/data/teams";
 import { EntryPoint } from "@/lib/onboardingTypes";
 import SnappyOnboarding from "./SnappyOnboarding";
+import ProgressiveProfile from "./ProgressiveProfile";
 
 // Team logo component with error handling
 function TeamLogoWithFallback({ src, alt }: { src: string; alt: string }) {
@@ -59,31 +60,34 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   const [showProfile, setShowProfile] = useState(false);
   const [teamSearchQuery, setTeamSearchQuery] = useState("");
 
-  // For direct entry, use SnappyOnboarding which handles the full flow
-  // For other entry points that already collected data, we could show celebration first
-  if (entryPoint === "direct" || !entryData) {
-    return (
-      <SnappyOnboarding
-        entryPoint={entryPoint}
-        entryData={entryData}
-        onComplete={onComplete}
-      />
-    );
-  }
-
   const handleTeamSelect = (team: Team) => {
     setSelectedTeam(team);
-    // Quick celebration, then move to social step
-    setShowCelebration(true);
-    setTimeout(() => {
-      setShowCelebration(false);
+    // For direct entry (from landing page), skip celebration and go straight to profile
+    if (entryPoint === "direct") {
       setShowProfile(true);
-    }, 2000); // Reduced from 4000ms for snappier flow
+    } else {
+      // For other entry points, show celebration first
+      setShowCelebration(true);
+      setTimeout(() => {
+        setShowCelebration(false);
+        setShowProfile(true);
+      }, 2000);
+    }
   };
 
   if (showProfile && selectedTeam) {
-    // Use the new snappy onboarding for social connection
-    // Pass the selected team so user doesn't have to select again
+    // For direct entry, go to ProgressiveProfile (build profile with auth)
+    if (entryPoint === "direct") {
+      return (
+        <ProgressiveProfile
+          team={selectedTeam}
+          entryPoint={entryPoint}
+          entryData={entryData}
+          onComplete={onComplete}
+        />
+      );
+    }
+    // For other entry points, use SnappyOnboarding
     return (
       <SnappyOnboarding
         entryPoint={entryPoint}

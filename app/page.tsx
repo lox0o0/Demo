@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Dashboard from "@/components/Dashboard";
 import EntryPointRouter from "@/components/onboarding/EntryPointRouter";
 import LandingPage from "@/components/LandingPage";
+import PickYourClub from "@/components/onboarding/PickYourClub";
 
 export default function Home() {
   const [isOnboarded, setIsOnboarded] = useState(false);
@@ -61,9 +62,12 @@ export default function Home() {
     sessionStorage.setItem("onboardingJustCompleted", "true");
   };
 
+  const [showTeamSelection, setShowTeamSelection] = useState(false);
+
   const handleGetStarted = () => {
     localStorage.setItem("landing_page_seen", "true");
     setShowLandingPage(false);
+    setShowTeamSelection(true);
   };
 
   if (showLandingPage) {
@@ -71,6 +75,11 @@ export default function Home() {
   }
 
   if (!isOnboarded) {
+    // If coming from landing page, go directly to team selection
+    if (showTeamSelection) {
+      return <PickYourClub entryPoint="direct" onComplete={handleOnboardingComplete} />;
+    }
+    // Otherwise use the entry point router for other entry points
     return <EntryPointRouter onComplete={handleOnboardingComplete} />;
   }
 
