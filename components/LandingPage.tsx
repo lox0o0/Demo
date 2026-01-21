@@ -16,7 +16,8 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowRight,
-  Utensils
+  Utensils,
+  Sparkles
 } from "lucide-react";
 
 interface LandingPageProps {
@@ -233,16 +234,18 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
   };
 
 
-  // Show blank black screen with tiny button if demo hasn't started
+  // Show blank black screen with tiny star button if demo hasn't started
   if (!showLanding) {
     return (
-      <div className="h-screen w-screen bg-black flex items-end justify-start p-2">
+      <div className="h-screen w-screen bg-black flex items-end justify-start p-3">
         <button
           onClick={handleBeginDemo}
-          className="w-2 h-2 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 border border-white/5 hover:border-white/10"
+          className="text-white/20 hover:text-white/40 transition-all duration-300"
           title="Begin Demo"
           aria-label="Begin Demo"
-        />
+        >
+          <Star className="w-4 h-4" strokeWidth={1.5} fill="currentColor" />
+        </button>
       </div>
     );
   }
