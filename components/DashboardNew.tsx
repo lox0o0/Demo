@@ -471,27 +471,37 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
   // 20 prizes with alternating color scheme: purple, orange, green, blue, gray
   const colorScheme = ['#8B5CF6', '#F97316', '#10B981', '#3B82F6', '#6B7280']; // purple, orange, green, blue, gray
   
+  // Map prize types to Lucide icons
+  const getPrizeIcon = (name: string) => {
+    if (name.includes('Points')) return Coins;
+    if (name.includes('Ticket')) return Ticket;
+    if (name.includes('Voucher') || name.includes('Shop')) return Gift;
+    if (name.includes('Ball')) return Trophy;
+    if (name.includes('Shield')) return Award;
+    return Gift; // Default
+  };
+
   const prizes = [
-    { id: 1, name: '25 Points', tier: 'common', icon: '🪙', shortName: '25 PTS' },
-    { id: 2, name: '$10 Telstra', tier: 'uncommon', icon: '📱', shortName: '$10 TELSTRA', sponsor: 'Telstra' },
-    { id: 3, name: '50 Points', tier: 'common', icon: '🪙', shortName: '50 PTS' },
-    { id: 4, name: '100 Points', tier: 'uncommon', icon: '🪙', shortName: '100 PTS' },
-    { id: 5, name: '10 Points', tier: 'common', icon: '🪙', shortName: '10 PTS' },
-    { id: 6, name: '$10 KFC', tier: 'rare', icon: '🍗', shortName: '$10 KFC', sponsor: 'KFC' },
-    { id: 7, name: '25 Points', tier: 'common', icon: '🪙', shortName: '25 PTS' },
-    { id: 8, name: 'Free Shield', tier: 'uncommon', icon: '🛡️', shortName: 'SHIELD' },
-    { id: 9, name: '50 Points', tier: 'common', icon: '🪙', shortName: '50 PTS' },
-    { id: 10, name: '$25 NRL Shop', tier: 'epic', icon: '🛍️', shortName: '$25 NRL', sponsor: 'NRL' },
-    { id: 11, name: '250 Points', tier: 'rare', icon: '🪙', shortName: '250 PTS' },
-    { id: 12, name: 'Signed Ball', tier: 'epic', icon: '🏉', shortName: 'BALL' },
-    { id: 13, name: '25 Points', tier: 'common', icon: '🪙', shortName: '25 PTS' },
-    { id: 14, name: '500 Points', tier: 'rare', icon: '🪙', shortName: '500 PTS' },
-    { id: 15, name: '$20 Uber Eats', tier: 'uncommon', icon: '🍔', shortName: '$20 UBER', sponsor: 'Uber Eats' },
-    { id: 16, name: '100 Points', tier: 'uncommon', icon: '🪙', shortName: '100 PTS' },
-    { id: 17, name: 'Match Tickets', tier: 'legendary', icon: '🎟️', shortName: 'TICKETS' },
-    { id: 18, name: '25 Points', tier: 'common', icon: '🪙', shortName: '25 PTS' },
-    { id: 19, name: '50 Points', tier: 'common', icon: '🪙', shortName: '50 PTS' },
-    { id: 20, name: '$15 Voucher', tier: 'uncommon', icon: '🎁', shortName: '$15 VOUCHER' },
+    { id: 1, name: '25 Points', tier: 'common', iconComponent: Coins, shortName: '25 PTS' },
+    { id: 2, name: '$10 Telstra', tier: 'uncommon', iconComponent: Gift, shortName: '$10 TELSTRA', sponsor: 'Telstra' },
+    { id: 3, name: '50 Points', tier: 'common', iconComponent: Coins, shortName: '50 PTS' },
+    { id: 4, name: '100 Points', tier: 'uncommon', iconComponent: Coins, shortName: '100 PTS' },
+    { id: 5, name: '10 Points', tier: 'common', iconComponent: Coins, shortName: '10 PTS' },
+    { id: 6, name: '$10 KFC', tier: 'rare', iconComponent: Gift, shortName: '$10 KFC', sponsor: 'KFC' },
+    { id: 7, name: '25 Points', tier: 'common', iconComponent: Coins, shortName: '25 PTS' },
+    { id: 8, name: 'Free Shield', tier: 'uncommon', iconComponent: Award, shortName: 'SHIELD' },
+    { id: 9, name: '50 Points', tier: 'common', iconComponent: Coins, shortName: '50 PTS' },
+    { id: 10, name: '$25 NRL Shop', tier: 'epic', iconComponent: Gift, shortName: '$25 NRL', sponsor: 'NRL' },
+    { id: 11, name: '250 Points', tier: 'rare', iconComponent: Coins, shortName: '250 PTS' },
+    { id: 12, name: 'Signed Ball', tier: 'epic', iconComponent: Trophy, shortName: 'BALL' },
+    { id: 13, name: '25 Points', tier: 'common', iconComponent: Coins, shortName: '25 PTS' },
+    { id: 14, name: '500 Points', tier: 'rare', iconComponent: Coins, shortName: '500 PTS' },
+    { id: 15, name: '$20 Uber Eats', tier: 'uncommon', iconComponent: Gift, shortName: '$20 UBER', sponsor: 'Uber Eats' },
+    { id: 16, name: '100 Points', tier: 'uncommon', iconComponent: Coins, shortName: '100 PTS' },
+    { id: 17, name: 'Match Tickets', tier: 'legendary', iconComponent: Ticket, shortName: 'TICKETS' },
+    { id: 18, name: '25 Points', tier: 'common', iconComponent: Coins, shortName: '25 PTS' },
+    { id: 19, name: '50 Points', tier: 'common', iconComponent: Coins, shortName: '50 PTS' },
+    { id: 20, name: '$15 Voucher', tier: 'uncommon', iconComponent: Gift, shortName: '$15 VOUCHER' },
   ].map((prize, idx) => ({
     ...prize,
     color: colorScheme[idx % colorScheme.length],
@@ -610,18 +620,14 @@ function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData;
                           stroke="#000"
                           strokeWidth="2"
                         />
-                        {/* Icon */}
-                        <text
-                          x={iconX}
-                          y={iconY}
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                          fontSize="36"
+                        {/* Icon - Using simple circle as placeholder (monochromatic design) */}
+                        <circle
+                          cx={iconX}
+                          cy={iconY}
+                          r="12"
                           fill="white"
-                          fontWeight="bold"
-                        >
-                          {prize.icon}
-                        </text>
+                          opacity="0.3"
+                        />
                         {/* Text - rotated to follow segment direction */}
                         <text
                           x={textX}
