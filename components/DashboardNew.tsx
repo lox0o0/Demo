@@ -2195,7 +2195,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
   const [playerSearchNextWeek, setPlayerSearchNextWeek] = useState("");
   
   // Track current user points for tier progress bar
-  const [currentUserPoints, setCurrentUserPoints] = useState(user?.points || 1900);
+  const [currentUserPoints, setCurrentUserPoints] = useState(user?.points || 950);
   
   // Update parent component when points change
   useEffect(() => {
@@ -2204,7 +2204,8 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
     }
   }, [currentUserPoints, onUserPointsUpdate]);
   
-  const weeklyCompleted = 2;
+  // Track weekly completion count
+  const [weeklyCompleted, setWeeklyCompleted] = useState(2);
   const weeklyTotal = 7;
   const seasonCompleted = 34;
   const seasonTotal = 49;
@@ -2267,6 +2268,9 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
   // Get all teams for dropdown
   const allTeams = NRL_TEAMS.map(t => t.name);
 
+  // Track completed mission IDs
+  const [completedMissionIds, setCompletedMissionIds] = useState<number[]>([5, 6]); // Start with 2 completed
+  
   const missions = [
     {
       id: 5,
@@ -2277,6 +2281,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       statusType: "completed" as const,
       progress: null,
       pointsEarned: "+30 pts earned",
+      pointsValue: 30,
     },
     {
       id: 6,
@@ -2287,6 +2292,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       statusType: "completed" as const,
       progress: null,
       pointsEarned: "+15 pts earned",
+      pointsValue: 15,
     },
     {
       id: 1,
@@ -2296,6 +2302,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       status: "4h left",
       statusType: "urgent" as const,
       progress: null,
+      pointsValue: 25,
     },
     {
       id: 2,
@@ -2305,6 +2312,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       status: null,
       statusType: "progress" as const,
       progress: { current: 6, total: 8, percent: 75 },
+      pointsValue: 50,
     },
     {
       id: 3,
@@ -2314,6 +2322,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       status: "Not started",
       statusType: "pending" as const,
       progress: null,
+      pointsValue: 25,
     },
     {
       id: 4,
@@ -2324,6 +2333,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       statusType: "pending" as const,
       progress: null,
       hasDropdown: true,
+      pointsValue: 25,
     },
     {
       id: 7,
@@ -2333,8 +2343,13 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       status: "Not started",
       statusType: "pending" as const,
       progress: null,
+      pointsValue: 20,
     },
-  ];
+  ].map(mission => ({
+    ...mission,
+    statusType: completedMissionIds.includes(mission.id) ? ("completed" as const) : mission.statusType,
+    pointsEarned: completedMissionIds.includes(mission.id) ? `${mission.points} earned` : undefined,
+  }));
 
   const handleMissionClick = (missionId: number) => {
     if (expandedMission === missionId) {
@@ -2343,9 +2358,51 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       setExpandedMission(missionId);
     }
   };
+  
+  const handleCompleteMission = (missionId: number, points: number) => {
+    if (completedMissionIds.includes(missionId)) return;
+    
+    // Mark mission as completed
+    setCompletedMissionIds([...completedMissionIds, missionId]);
+    
+    // Update weekly completion count
+    setWeeklyCompleted(prev => prev + 1);
+    
+    // Update user points
+    const newPoints = currentUserPoints + points;
+    setCurrentUserPoints(newPoints);
+    if (onUserPointsUpdate) {
+      onUserPointsUpdate(newPoints);
+    }
+    
+    // Check for tier upgrade
+    if (onTierUpgrade) {
+      const oldTier = TIERS.find((t, i) => {
+        const nextTier = TIERS[i + 1];
+        return currentUserPoints >= t.minPoints && (!nextTier || currentUserPoints < nextTier.minPoints);
+      }) || TIERS[0];
+      
+      const newTier = TIERS.find((t, i) => {
+        const nextTier = TIERS[i + 1];
+        return newPoints >= t.minPoints && (!nextTier || newPoints < nextTier.minPoints);
+      }) || TIERS[0];
+      
+      if (oldTier.name !== newTier.name) {
+        setTimeout(() => {
+          onTierUpgrade(oldTier, newTier, currentUserPoints);
+        }, 750);
+      }
+    }
+    
+    // Remove highlight after completion
+    if (highlightMVP && missionId === 1) {
+      setHighlightMVP(false);
+    }
+  };
 
   const getStatusText = (mission: any) => {
-    if (mission.statusType === "completed") {
+    const isCompleted = completedMissionIds.includes(mission.id);
+    if (isCompleted) {
       return "Completed";
     }
     if (mission.statusType === "urgent") {
@@ -2387,7 +2444,21 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                 style={{ 
                   width: `${Math.min(progressToNext, 100)}%`,
                   background: nextTier 
-                    ? `linear-gradient(to right, ${currentTier.color}, ${nextTier.color})`
+                    ? (() => {
+                        // Define tier color transitions
+                        const tierColors: Record<string, string> = {
+                          Rookie: "#6b7280", // grey
+                          Bronze: "#CD7F32", // brown/bronze
+                          Silver: "#C0C0C0", // silver
+                          Gold: "#FFD700", // gold
+                          Platinum: "#E5E4E2", // platinum
+                          Diehard: "#8B0000", // maroon
+                          Legend: "#FFB800", // gold/yellow
+                        };
+                        const currentColor = tierColors[currentTier.name] || currentTier.color;
+                        const nextColor = tierColors[nextTier.name] || nextTier.color;
+                        return `linear-gradient(to right, ${currentColor}, ${nextColor})`;
+                      })()
                     : currentTier.color,
                   boxShadow: nextTier ? `0 0 8px ${nextTier.color}60` : `0 0 8px ${currentTier.color}60`,
                 }}
@@ -2435,13 +2506,17 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
           {missions.map((mission, index) => {
             const Icon = mission.icon;
             const isExpanded = expandedMission === mission.id;
+            const isCompleted = completedMissionIds.includes(mission.id);
+            const isHighlighted = highlightMVP && mission.id === 1;
             
             return (
-              <li key={mission.id}>
+              <li key={mission.id} id={`mission-${mission.id}`}>
                 <div 
                   className={`flex items-center w-full px-3 py-2.5 transition-all duration-300 cursor-pointer relative ${
-                    mission.statusType === "completed"
+                    isCompleted
                       ? "border-l-2 border-emerald-500/50 bg-emerald-500/5 hover:bg-emerald-500/10"
+                      : isHighlighted
+                      ? "border-l-4 border-yellow-400 bg-yellow-400/10 hover:bg-yellow-400/15 animate-pulse"
                       : mission.statusType === "urgent"
                       ? "border-l-2 border-yellow-500/30 hover:bg-white/5"
                       : "border-l-2 border-yellow-500/30 hover:bg-white/5"
@@ -2449,7 +2524,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                   onClick={() => handleMissionClick(mission.id)}
                 >
                   {/* Checkmark for completed missions */}
-                  {mission.statusType === "completed" && (
+                  {isCompleted && (
                     <div className="absolute top-2 right-2">
                       <Check className="w-4 h-4 text-emerald-400" strokeWidth={3} />
                     </div>
@@ -2457,29 +2532,41 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                   
                   <div className="flex items-center w-full gap-3">
                     <div className={`w-12 h-12 rounded border backdrop-blur-md flex items-center justify-center ${
-                      mission.statusType === "completed"
+                      isCompleted
                         ? "border-emerald-500/50 bg-emerald-500/10"
+                        : isHighlighted
+                        ? "border-yellow-400 bg-yellow-400/20"
                         : "border-yellow-500/30 bg-white/5"
                     }`}>
                       <Icon className={`w-5 h-5 ${
-                        mission.statusType === "completed" ? "text-emerald-400" : "text-white/70"
+                        isCompleted 
+                          ? "text-emerald-400" 
+                          : isHighlighted
+                          ? "text-yellow-300"
+                          : "text-white/70"
                       }`} />
                     </div>
                     <div className="flex flex-col min-w-0 flex-1 gap-1">
                       <p className={`font-medium text-sm ${
-                        mission.statusType === "completed" ? "text-white/90" : "text-white"
+                        isCompleted 
+                          ? "text-white/90" 
+                          : isHighlighted
+                          ? "text-yellow-200 font-bold"
+                          : "text-white"
                       }`}>{mission.title}</p>
                       <div className={`text-xs ${
-                        mission.statusType === "completed" ? "text-white/70" : "text-white/60"
+                        isCompleted ? "text-white/70" : isHighlighted ? "text-yellow-300/80" : "text-white/60"
                       }`}>{getStatusText(mission)}</div>
                     </div>
                     <div className="flex flex-col items-end gap-1">
                       <div className={`inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-semibold border ${
-                        mission.statusType === "completed"
+                        isCompleted
                           ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-400"
+                          : isHighlighted
+                          ? "border-yellow-400/50 bg-yellow-400/20 text-yellow-300"
                           : "border-white/10 text-neutral-50 bg-neutral-950/40"
                       }`}>
-                        {mission.statusType === "completed" && mission.pointsEarned
+                        {isCompleted && mission.pointsEarned
                           ? mission.pointsEarned
                           : mission.points}
                       </div>
@@ -2528,10 +2615,25 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                             </button>
                           ))}
                         </div>
-                        {selectedNextWeekPlayer && (
+                        {selectedNextWeekPlayer && !isCompleted && (
                           <div className="pt-3 border-t border-gray-700/50">
                             <div className="text-xs text-white/60 mb-2">+10 Fuel • {mission.points}</div>
-                            <div className="text-xs text-white/40">Prediction locked until next round</div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCompleteMission(mission.id, 25);
+                              }}
+                              className="w-full mt-2 py-2 px-4 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold rounded-lg transition-colors"
+                            >
+                              Complete Prediction
+                            </button>
+                            <div className="text-xs text-white/40 mt-2">Prediction locked until next round</div>
+                          </div>
+                        )}
+                        {isCompleted && (
+                          <div className="pt-3 border-t border-gray-700/50">
+                            <div className="text-xs text-emerald-400 font-semibold mb-1">✓ Prediction Complete</div>
+                            <div className="text-xs text-white/60">{mission.pointsEarned || mission.points}</div>
                           </div>
                         )}
                       </div>
@@ -2617,9 +2719,24 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                             <option key={teamName} value={teamName}>{teamName}</option>
                           ))}
                         </select>
-                        {selectedTeam && (
+                        {selectedTeam && !isCompleted && (
                           <div className="pt-3 border-t border-gray-700/50">
                             <div className="text-xs text-white/60 mb-2">+10 Fuel • {mission.points}</div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCompleteMission(mission.id, mission.pointsValue || 25);
+                              }}
+                              className="w-full mt-2 py-2 px-4 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold rounded-lg transition-colors"
+                            >
+                              Complete Prediction
+                            </button>
+                          </div>
+                        )}
+                        {isCompleted && mission.id === 4 && (
+                          <div className="pt-3 border-t border-gray-700/50">
+                            <div className="text-xs text-emerald-400 font-semibold mb-1">✓ Prediction Complete</div>
+                            <div className="text-xs text-white/60">{mission.pointsEarned || mission.points}</div>
                           </div>
                         )}
                         <div className="pt-3 border-t border-gray-700/50">
