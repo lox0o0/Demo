@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
-import { Trophy, Target, ChevronLeft, ChevronRight } from "lucide-react";
+import { Trophy, Target, ChevronLeft, ChevronRight, User } from "lucide-react";
 import { TIERS } from "@/lib/mockData";
 
 interface Slide {
@@ -174,6 +174,10 @@ export default function HeroCarousel({ onNavigate, user }: HeroCarouselProps = {
                           <div className="relative h-full w-full overflow-hidden p-6 flex items-center gap-4">
                             {/* Left side - Text content */}
                             <div className="flex flex-col items-start text-left text-white space-y-4 relative z-10 flex-1">
+                              {/* User icon above ONBOARDING */}
+                              <div className="mb-2">
+                                <User className="w-10 h-10 text-amber-400/90" strokeWidth={1.5} />
+                              </div>
                               <h3 className="text-base font-bold uppercase">{slide.headline}</h3>
                               <p className="text-lg text-white/80 max-w-xl leading-relaxed">{slide.subtext}</p>
                               <button
