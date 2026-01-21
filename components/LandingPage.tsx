@@ -28,6 +28,7 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
   const [videoEnded, setVideoEnded] = useState(true); // Start with video ended so landing page shows first
   const [showVideo, setShowVideo] = useState(false); // Control whether to show video
+  const [showLanding, setShowLanding] = useState(false); // Control whether to show landing page
   const [videoError, setVideoError] = useState(false);
   const [videoLoading, setVideoLoading] = useState(true);
   const [videoCanPlay, setVideoCanPlay] = useState(false);
@@ -46,7 +47,8 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
     }
   }, []);
 
-  const handlePlayVideo = () => {
+  const handleBeginDemo = () => {
+    setShowLanding(true);
     setShowVideo(true);
     setVideoEnded(false);
     setVideoError(false);
@@ -231,6 +233,20 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
   };
 
 
+  // Show blank black screen with tiny button if demo hasn't started
+  if (!showLanding) {
+    return (
+      <div className="h-screen w-screen bg-black flex items-end justify-start p-2">
+        <button
+          onClick={handleBeginDemo}
+          className="w-2 h-2 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 border border-white/5 hover:border-white/10"
+          title="Begin Demo"
+          aria-label="Begin Demo"
+        />
+      </div>
+    );
+  }
+
   // Show video when triggered (if available and not ended/errored)
   if (showVideo && !videoEnded && !videoError) {
     return (
@@ -276,18 +292,6 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
 
   return (
     <div className="min-h-screen relative overflow-y-auto flex flex-col">
-      {/* Begin Demo Button - Top right corner */}
-      <button
-        onClick={handlePlayVideo}
-        className="fixed top-4 right-4 z-50 px-4 py-2 bg-nrl-green/90 hover:bg-nrl-green text-white font-semibold text-sm rounded-lg transition-all duration-300 shadow-[0_0_20px_rgba(34,197,94,0.5)] hover:shadow-[0_0_30px_rgba(34,197,94,0.7)] hover:scale-105 flex items-center gap-2 border-2 border-nrl-green/50 hover:border-nrl-green/80"
-        title="Begin Demo"
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <polygon points="5 3 19 12 5 21 5 3" />
-        </svg>
-        Begin Demo
-      </button>
-
       {/* Background */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <Image
