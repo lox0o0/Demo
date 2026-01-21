@@ -3362,8 +3362,9 @@ function PrizesAndStreakSection({ user, streakData, currentTier }: { user: any; 
 
   const handleWheelClose = (prize?: string) => {
     setShowWheel(false);
-    if (prize && spinsTaken < 3) {
-      setSpinsTaken(prev => prev + 1);
+    if (prize) {
+      // Always increment if a prize was won (even if we somehow exceed 3, cap it)
+      setSpinsTaken(prev => Math.min(prev + 1, 3));
       setLastPrizeWon(prize);
       // Clear prize after showing it
       setTimeout(() => setLastPrizeWon(null), 3000);
@@ -3622,12 +3623,12 @@ function PrizeWheelCardPrizes({ streakData, onSpinClick, spinsTaken, lastPrizeWo
   ];
 
   return (
-    <div className={`bg-white/5 backdrop-blur-[32px] border rounded-xl p-6 transition-all relative overflow-hidden ${
+    <div className={`bg-white/5 backdrop-blur-[32px] border rounded-xl p-4 transition-all relative overflow-hidden ${
       isComplete ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-white/20 hover:border-white/30'
     }`}>
       {/* Animated Spinning Wheel Preview with smooth rotation */}
-      <div className="flex justify-center mb-4">
-        <div className="relative w-32 h-32">
+      <div className="flex justify-center mb-3">
+        <div className="relative w-24 h-24">
           {/* Outer glow effect */}
           <div 
             className="absolute inset-0 rounded-full"
@@ -3697,10 +3698,10 @@ function PrizeWheelCardPrizes({ streakData, onSpinClick, spinsTaken, lastPrizeWo
 
       {/* Prize Won Notification */}
       {lastPrizeWon && (
-        <div className="mb-4 p-3 bg-emerald-500/20 border border-emerald-500/50 rounded-lg animate-pulse">
+        <div className="mb-3 p-2 bg-emerald-500/20 border border-emerald-500/50 rounded-lg animate-pulse">
           <div className="flex items-center justify-center gap-2">
-            <Trophy className="w-4 h-4 text-emerald-400" strokeWidth={2} />
-            <span className="text-sm font-semibold text-emerald-400">You won: {lastPrizeWon}!</span>
+            <Trophy className="w-3.5 h-3.5 text-emerald-400" strokeWidth={2} />
+            <span className="text-xs font-semibold text-emerald-400">You won: {lastPrizeWon}!</span>
           </div>
         </div>
       )}
@@ -3723,29 +3724,29 @@ function PrizeWheelCardPrizes({ streakData, onSpinClick, spinsTaken, lastPrizeWo
         </button>
       )}
 
-      {/* Prize Categories - Reduced Size */}
-      <div className="mt-4 space-y-2">
-        <div className="text-xs font-bold text-white/90 uppercase tracking-wider text-center mb-2">Available Rewards</div>
-        <div className="grid grid-cols-2 gap-2">
-          <div className="flex flex-col items-center gap-1 p-2 bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/40 rounded-lg hover:border-blue-400/60 transition-all">
-            <Ticket size={14} className="text-blue-400" style={{ filter: 'drop-shadow(0 0 6px rgba(59, 130, 246, 0.8))' }} />
-            <span className="text-xs font-bold text-white">Tickets</span>
-            <span className="text-[10px] text-white/70">Game Access</span>
+      {/* Prize Categories - Smaller Size */}
+      <div className="mt-3 space-y-1.5">
+        <div className="text-[10px] font-bold text-white/90 uppercase tracking-wider text-center mb-1.5">Available Rewards</div>
+        <div className="grid grid-cols-2 gap-1.5">
+          <div className="flex flex-col items-center gap-0.5 p-1.5 bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/40 rounded-lg hover:border-blue-400/60 transition-all">
+            <Ticket size={10} className="text-blue-400" style={{ filter: 'drop-shadow(0 0 4px rgba(59, 130, 246, 0.8))' }} />
+            <span className="text-[10px] font-bold text-white">Tickets</span>
+            <span className="text-[9px] text-white/70">Game Access</span>
           </div>
-          <div className="flex flex-col items-center gap-1 p-2 bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/40 rounded-lg hover:border-purple-400/60 transition-all">
-            <Gift size={14} className="text-purple-400" style={{ filter: 'drop-shadow(0 0 6px rgba(168, 85, 247, 0.8))' }} />
-            <span className="text-xs font-bold text-white">Vouchers</span>
-            <span className="text-[10px] text-white/70">Shop Credits</span>
+          <div className="flex flex-col items-center gap-0.5 p-1.5 bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/40 rounded-lg hover:border-purple-400/60 transition-all">
+            <Gift size={10} className="text-purple-400" style={{ filter: 'drop-shadow(0 0 4px rgba(168, 85, 247, 0.8))' }} />
+            <span className="text-[10px] font-bold text-white">Vouchers</span>
+            <span className="text-[9px] text-white/70">Shop Credits</span>
           </div>
-          <div className="flex flex-col items-center gap-1 p-2 bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 border border-yellow-500/40 rounded-lg hover:border-yellow-400/60 transition-all">
-            <Coins size={14} className="text-yellow-400" style={{ filter: 'drop-shadow(0 0 6px rgba(234, 179, 8, 0.8))' }} />
-            <span className="text-xs font-bold text-white">Points</span>
-            <span className="text-[10px] text-white/70">Boost Progress</span>
+          <div className="flex flex-col items-center gap-0.5 p-1.5 bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 border border-yellow-500/40 rounded-lg hover:border-yellow-400/60 transition-all">
+            <Coins size={10} className="text-yellow-400" style={{ filter: 'drop-shadow(0 0 4px rgba(234, 179, 8, 0.8))' }} />
+            <span className="text-[10px] font-bold text-white">Points</span>
+            <span className="text-[9px] text-white/70">Boost Progress</span>
           </div>
-          <div className="flex flex-col items-center gap-1 p-2 bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/40 rounded-lg hover:border-green-400/60 transition-all">
-            <Shirt size={14} className="text-green-400" style={{ filter: 'drop-shadow(0 0 6px rgba(34, 197, 94, 0.8))' }} />
-            <span className="text-xs font-bold text-white">Merch</span>
-            <span className="text-[10px] text-white/70">Team Gear</span>
+          <div className="flex flex-col items-center gap-0.5 p-1.5 bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/40 rounded-lg hover:border-green-400/60 transition-all">
+            <Shirt size={10} className="text-green-400" style={{ filter: 'drop-shadow(0 0 4px rgba(34, 197, 94, 0.8))' }} />
+            <span className="text-[10px] font-bold text-white">Merch</span>
+            <span className="text-[9px] text-white/70">Team Gear</span>
           </div>
         </div>
       </div>
