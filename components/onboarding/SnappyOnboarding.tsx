@@ -692,6 +692,9 @@ export default function SnappyOnboarding({ entryPoint, entryData, onComplete, in
         <div className="w-full max-w-md relative z-10">
           <div className="bg-nrl-dark-card/95 backdrop-blur-sm rounded-2xl p-8 border border-nrl-border-light">
             <ProgressStepper currentStep={2} />
+            <p className="text-center text-sm text-nrl-text-primary mt-2 mb-4 font-medium">
+              Sign-in to get started
+            </p>
             
             {/* Profile Completion Bar - Show after team selection */}
             <div className="bg-nrl-dark-hover rounded-xl p-4 border border-nrl-border-light mb-4">
