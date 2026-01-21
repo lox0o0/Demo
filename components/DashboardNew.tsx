@@ -2576,11 +2576,17 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                     isCompleted
                       ? "border-l-2 border-emerald-500/50 bg-emerald-500/5 hover:bg-emerald-500/10"
                       : isHighlighted
-                      ? "border-l-4 border-yellow-400 bg-yellow-400/10 hover:bg-yellow-400/15 animate-pulse"
+                      ? "border-l-4 border-yellow-400 bg-yellow-400/10 hover:bg-yellow-400/15"
                       : mission.statusType === "urgent"
                       ? "border-l-2 border-yellow-500/30 hover:bg-white/5"
                       : "border-l-2 border-yellow-500/30 hover:bg-white/5"
                   }`}
+                  style={{
+                    ...(isHighlighted && {
+                      boxShadow: '0 0 20px rgba(250, 204, 21, 0.6), 0 0 40px rgba(250, 204, 21, 0.4), inset 0 0 20px rgba(250, 204, 21, 0.1)',
+                      animation: 'pulse 2s ease-in-out infinite',
+                    }),
+                  }}
                   onClick={() => handleMissionClick(mission.id)}
                 >
                   {/* Checkmark for completed missions */}
