@@ -2866,10 +2866,18 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                                   { name: "Jahrome Hughes", percentage: 10 },
                                   { name: "Kalyn Ponga", percentage: 5 },
                                 ]
-                                .filter((result) => !selectedLastRoundPlayer || result.name !== selectedLastRoundPlayer || result.percentage === 15)
-                                .filter((result, index, self) => 
-                                  index === self.findIndex((r) => r.name === result.name)
-                                )
+                                .filter((result, index, self) => {
+                                  // Remove duplicate: if selected player matches a hardcoded entry, keep only the selected one (15%)
+                                  if (selectedLastRoundPlayer && result.name === selectedLastRoundPlayer) {
+                                    return result.percentage === 15;
+                                  }
+                                  // Remove hardcoded entry if it matches selected player
+                                  if (selectedLastRoundPlayer && result.name === selectedLastRoundPlayer && result.percentage !== 15) {
+                                    return false;
+                                  }
+                                  // Remove any other duplicates by name
+                                  return index === self.findIndex((r) => r.name === result.name);
+                                })
                                 .map((result) => (
                                   <div key={result.name} className="flex items-center gap-2">
                                     <div className="w-24 text-xs text-white/60 truncate">{result.name}</div>
