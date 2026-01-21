@@ -12,6 +12,7 @@ import {
   TrendingUp, Calendar, Award, Crown, Target, Share2, Video, ChevronLeft, ChevronRight, Info
 } from "lucide-react";
 import { SocialIcon } from "@/lib/icons";
+import TierUpgradeCelebration from "./TierUpgradeCelebration";
 
 interface DashboardProps {
   user: any;
@@ -44,6 +45,9 @@ const calculateTier = (points: number, profileCompletion: number) => {
 export default function DashboardNew({ user, hideNavigation = false, onNavigate, onUserPointsUpdate }: DashboardProps) {
   const [activeSection, setActiveSection] = useState<NavSection>("dashboard");
   const [highlightProfileCompletion, setHighlightProfileCompletion] = useState(false);
+  const [showTierCelebration, setShowTierCelebration] = useState(false);
+  const [celebrationData, setCelebrationData] = useState<{ oldTier: any; newTier: any; startPoints: number } | null>(null);
+  
   // Check if we should highlight profile completion (from modal CTA)
   useEffect(() => {
     const shouldHighlight = sessionStorage.getItem('highlightProfileCompletion');
@@ -61,7 +65,8 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
   }, []);
   
   const handleTierUpgrade = (oldTier: any, newTier: any, startPoints?: number) => {
-    // Tier upgrade celebration removed - no popup
+    setCelebrationData({ oldTier, newTier, startPoints: startPoints ?? oldTier.minPoints });
+    setShowTierCelebration(true);
     // Set flag to prevent TierProgressModal from showing after tier upgrade
     sessionStorage.setItem('tierUpgradeJustCompleted', 'true');
   };
@@ -147,6 +152,27 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
       </main>
 
       {/* Tier Upgrade Celebration Modal */}
+      {showTierCelebration && celebrationData && (
+        <TierUpgradeCelebration
+          oldTier={celebrationData.oldTier}
+          newTier={celebrationData.newTier}
+          reward={celebrationData.newTier.reward}
+          startPoints={celebrationData.startPoints}
+          onDismiss={() => {
+            setShowTierCelebration(false);
+            setCelebrationData(null);
+          }}
+          onViewRewards={() => {
+            setShowTierCelebration(false);
+            setCelebrationData(null);
+          }}
+          onNavigateHome={() => {
+            if (onNavigate) {
+              onNavigate("home");
+            }
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -2188,7 +2214,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       setIsAnimating(true);
       const startPoints = displayPoints;
       const endPoints = currentUserPoints;
-      const duration = 1500; // 1.5 seconds
+      const duration = 800; // 0.8 seconds (faster animation)
       const steps = 50;
       const increment = (endPoints - startPoints) / steps;
       const stepDuration = duration / steps;
