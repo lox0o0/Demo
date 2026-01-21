@@ -63,10 +63,12 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
     setSelectedTeam(team);
     // Show celebration first (video + splashback picture for Broncos)
     setShowCelebration(true);
-    setTimeout(() => {
-      setShowCelebration(false);
-      setShowProfile(true);
-    }, 2000);
+  };
+
+  const handleCelebrationComplete = () => {
+    // Move to profile after celebration (video + splashback) is done
+    setShowCelebration(false);
+    setShowProfile(true);
   };
 
   if (showProfile && selectedTeam) {
@@ -82,7 +84,7 @@ export default function PickYourClub({ entryPoint, entryData, onComplete }: Pick
   }
 
   if (showCelebration && selectedTeam) {
-    return <TeamCelebration team={selectedTeam} />;
+    return <TeamCelebration team={selectedTeam} onComplete={handleCelebrationComplete} />;
   }
 
   // Progress stepper component
