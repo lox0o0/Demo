@@ -237,7 +237,8 @@ function FanJourneyProgression({ userPoints, currentTier }: { userPoints: number
   const pointsToNext = nextTier ? nextTier.minPoints - userPoints : 0;
   const tierRange = nextTier && currentTier ? nextTier.minPoints - currentTier.minPoints : 0;
   const progressToNext = tierRange > 0 ? ((userPoints - currentTier.minPoints) / tierRange) * 100 : 0;
-  const isCloseToNextTier = progressToNext >= 90 && progressToNext < 100;
+  // Show progress bar when progressing to next tier (not at max tier and has progress)
+  const showProgressBar = nextTier && progressToNext > 0 && progressToNext < 100;
 
   return (
     <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-lg p-4">
