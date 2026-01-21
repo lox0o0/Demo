@@ -2475,10 +2475,10 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       }) || TIERS[0];
       
       if (oldTier.name !== newTier.name) {
-        // Slow down transition - wait 1.5 seconds so user can see the glow effect
+        // Wait for fireworks animation (2 seconds) + 0.5 seconds before showing celebration
         setTimeout(() => {
           onTierUpgrade(oldTier, newTier, currentUserPoints);
-        }, 1500);
+        }, 2500);
       }
     }
     
@@ -2520,19 +2520,49 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
             </div>
             <div className="flex items-center justify-between text-xs mb-1.5">
               <span className="text-white/80 font-medium">
-                {nextTier ? `${pointsToNext} pts to ${nextTier.name}` : 'Max tier reached'}
+                {nextTier ? `${nextTier.minPoints - displayPoints} pts to ${nextTier.name}` : 'Max tier reached'}
               </span>
               <span className="text-white/60">
-                {currentUserPoints} / {nextTier ? nextTier.minPoints : currentTier.minPoints} pts
+                {displayPoints} / {nextTier ? nextTier.minPoints : currentTier.minPoints} pts
               </span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-50/20">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-50/20 relative" ref={progressBarRef}>
+              {/* Fireworks overlay */}
+              {showFireworks && (
+                <div className="absolute inset-0 pointer-events-none z-10" style={{ overflow: 'visible' }}>
+                  {[...Array(12)].map((_, i) => {
+                    const angle = (i * Math.PI * 2) / 12;
+                    const distance = 40;
+                    return (
+                      <div
+                        key={i}
+                        className="absolute w-2 h-2 rounded-full"
+                        style={{
+                          left: `${50 + Math.cos(angle) * distance}%`,
+                          top: `${50 + Math.sin(angle) * distance}%`,
+                          background: ['#FFD700', '#FFA500', '#FF6B6B', '#4ECDC4'][i % 4],
+                          boxShadow: `0 0 10px ${['#FFD700', '#FFA500', '#FF6B6B', '#4ECDC4'][i % 4]}`,
+                          animation: `fireworks 1s ease-out forwards`,
+                          animationDelay: `${i * 0.1}s`,
+                          '--tx': `${Math.cos(angle) * 30}px`,
+                          '--ty': `${Math.sin(angle) * 30}px`,
+                        } as React.CSSProperties}
+                      />
+                    );
+                  })}
+                </div>
+              )}
               <div 
-                className={`h-full transition-all duration-500 ease-out rounded-full ${
-                  currentUserPoints >= 1000 && nextTier?.name === 'Silver' ? 'animate-pulse' : ''
+                className={`h-full transition-all duration-300 ease-out rounded-full ${
+                  displayPoints >= 1000 && nextTier?.name === 'Silver' ? 'animate-pulse' : ''
                 }`}
                 style={{ 
-                  width: `${Math.min(progressToNext, 100)}%`,
+                  width: `${Math.min(
+                    nextTier && currentTier 
+                      ? ((displayPoints - currentTier.minPoints) / (nextTier.minPoints - currentTier.minPoints)) * 100
+                      : 0,
+                    100
+                  )}%`,
                   background: nextTier 
                     ? (() => {
                         // Define tier color transitions
@@ -2550,11 +2580,13 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
                         return `linear-gradient(to right, ${currentColor}, ${nextColor})`;
                       })()
                     : currentTier.color,
-                  boxShadow: currentUserPoints >= 1000 && nextTier?.name === 'Silver'
-                    ? `0 0 20px ${nextTier?.color || '#C0C0C0'}80, 0 0 40px ${nextTier?.color || '#C0C0C0'}60, 0 0 60px ${nextTier?.color || '#C0C0C0'}40`
-                    : nextTier 
-                      ? `0 0 8px ${nextTier.color}60` 
-                      : `0 0 8px ${currentTier.color}60`,
+                  boxShadow: isAnimating && displayPoints < 1000
+                    ? `0 0 15px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.4), 0 0 45px rgba(255, 215, 0, 0.2)`
+                    : displayPoints >= 1000 && nextTier?.name === 'Silver'
+                      ? `0 0 20px ${nextTier?.color || '#C0C0C0'}80, 0 0 40px ${nextTier?.color || '#C0C0C0'}60, 0 0 60px ${nextTier?.color || '#C0C0C0'}40`
+                      : nextTier 
+                        ? `0 0 8px ${nextTier.color}60` 
+                        : `0 0 8px ${currentTier.color}60`,
                 }}
               />
             </div>
