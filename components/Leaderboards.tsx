@@ -84,8 +84,8 @@ export default function Leaderboards({ user }: LeaderboardsProps) {
 
   // User's position (mock - in real app, this would come from API)
   const userFanTierRank = 847;
-  const userFanTierPoints = 5000;
-  const userFanTierTier = "DIEHARD";
+  const userFanTierPoints = 1900;
+  const userFanTierTier = "SILVER";
   const userFanTierMovement = 23;
   const userFanTierPointsBehind = 275;
   const userFanTierPlayerAhead = "QLD4Life";
@@ -407,12 +407,12 @@ function FanTierLeaderboard({
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-white/10">
-                <th className="text-left py-4 px-6 text-nrl-text-secondary font-semibold">Rank</th>
-                <th className="text-left py-4 px-6 text-nrl-text-secondary font-semibold">Player</th>
-                <th className="text-left py-4 px-6 text-nrl-text-secondary font-semibold">Tier</th>
-                <th className="text-right py-4 px-6 text-nrl-text-secondary font-semibold">Points</th>
-                <th className="text-center py-4 px-6 text-nrl-text-secondary font-semibold">Movement</th>
+              <tr className="border-b border-white/10 bg-white/5">
+                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Rank</th>
+                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Player</th>
+                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Tier</th>
+                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Points</th>
+                <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Movement</th>
               </tr>
             </thead>
             <tbody>
@@ -426,14 +426,14 @@ function FanTierLeaderboard({
                       isTop5 ? "bg-amber-500/5 border-l-2 border-l-amber-500" : ""
                     }`}
                   >
-                    <td className="py-2 px-4">
-                      <div className="flex items-center gap-1.5">
+                    <td className="py-2 px-4 text-center">
+                      <div className="flex items-center justify-center gap-1.5">
                         {isTop5 && getMedalIcon(entry.rank)}
                         <span className="font-semibold text-sm text-white">#{entry.rank}</span>
                       </div>
                     </td>
-                    <td className="py-2 px-4 font-medium text-sm text-white">{entry.player}</td>
-                    <td className="py-2 px-4">
+                    <td className="py-2 px-4 text-center font-medium text-sm text-white">{entry.player}</td>
+                    <td className="py-2 px-4 text-center">
                       <span 
                         className="font-semibold text-xs"
                         style={{ color: getTierColor(entry.tier) }}
@@ -441,7 +441,7 @@ function FanTierLeaderboard({
                         {entry.tier}
                       </span>
                     </td>
-                    <td className="py-2 px-4 text-right font-semibold text-sm text-white">
+                    <td className="py-2 px-4 text-center font-semibold text-sm text-white">
                       {entry.points.toLocaleString()} pts
                     </td>
                     <td className="py-2 px-4 text-center">
@@ -471,18 +471,18 @@ function FanTierLeaderboard({
                       isUser ? "bg-nrl-green/10 border-l-2 border-l-nrl-green" : ""
                     } ${isTop5 ? "bg-amber-500/5 border-l-2 border-l-amber-500" : ""}`}
                   >
-                    <td className="py-2 px-4">
-                      <div className="flex items-center gap-1.5">
+                    <td className="py-2 px-4 text-center">
+                      <div className="flex items-center justify-center gap-1.5">
                         {isTop5 && getMedalIcon(entry.rank)}
                         <span className={`font-semibold text-sm ${isUser ? "text-nrl-green" : "text-white"}`}>
                           #{entry.rank}
                         </span>
                       </div>
                     </td>
-                    <td className={`py-2 px-4 font-medium text-sm ${isUser ? "text-nrl-green" : "text-white"}`}>
+                    <td className={`py-2 px-4 text-center font-medium text-sm ${isUser ? "text-nrl-green" : "text-white"}`}>
                       {entry.player}
                     </td>
-                    <td className="py-2 px-4">
+                    <td className="py-2 px-4 text-center">
                       <span 
                         className="font-semibold text-xs"
                         style={{ color: getTierColor(entry.tier) }}
@@ -490,7 +490,7 @@ function FanTierLeaderboard({
                         {entry.tier}
                       </span>
                     </td>
-                    <td className={`py-2 px-4 text-right font-semibold text-sm ${isUser ? "text-nrl-green" : "text-white"}`}>
+                    <td className={`py-2 px-4 text-center font-semibold text-sm ${isUser ? "text-nrl-green" : "text-white"}`}>
                       {entry.points.toLocaleString()} pts
                     </td>
                     <td className="py-2 px-4 text-center">
@@ -504,47 +504,6 @@ function FanTierLeaderboard({
           </table>
         </div>
       </div>
-      
-      {/* User's position row - formatted same as top 5 */}
-      {showEllipsis && user && (
-        <div className="mt-4 rounded-xl backdrop-blur-md bg-background/45 border border-white/10 overflow-hidden shadow-xl">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-white/10 bg-white/5">
-                  <th className="text-left py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Rank</th>
-                  <th className="text-left py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Player</th>
-                  <th className="text-left py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Tier</th>
-                  <th className="text-right py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Points</th>
-                  <th className="text-center py-2.5 px-4 text-nrl-text-secondary font-bold text-xs uppercase tracking-wider">Movement</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="bg-nrl-green/10 border-l-2 border-l-nrl-green">
-                  <td className="py-2 px-4">
-                    <span className="font-semibold text-sm text-nrl-green">#{userRank}</span>
-                  </td>
-                  <td className="py-2 px-4 font-medium text-sm text-nrl-green">{user.name || "You"}</td>
-                  <td className="py-2 px-4">
-                    <span 
-                      className="font-semibold text-xs"
-                      style={{ color: getTierColor(userTier) }}
-                    >
-                      {userTier}
-                    </span>
-                  </td>
-                  <td className="py-2 px-4 text-right font-semibold text-sm text-nrl-green">
-                    {userPoints.toLocaleString()} pts
-                  </td>
-                  <td className="py-2 px-4 text-center">
-                    {renderMovement(userMovement)}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
     </>
   );
 }
