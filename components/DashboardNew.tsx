@@ -2184,10 +2184,23 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
   const [playerSearchLastRound, setPlayerSearchLastRound] = useState("");
   const [playerSearchNextWeek, setPlayerSearchNextWeek] = useState("");
   
+  // Track current user points for tier progress bar
+  const [currentUserPoints, setCurrentUserPoints] = useState(user?.points || 950);
+  
   const weeklyCompleted = 5;
   const weeklyTotal = 7;
   const seasonCompleted = 34;
   const seasonTotal = 49;
+  
+  // Calculate tier progress for the progress bar
+  const currentTier = TIERS.find((t, i) => {
+    const nextTier = TIERS[i + 1];
+    return currentUserPoints >= t.minPoints && (!nextTier || currentUserPoints < nextTier.minPoints);
+  }) || TIERS[0];
+  const nextTier = TIERS.find(t => t.minPoints > currentTier.minPoints);
+  const pointsToNext = nextTier ? nextTier.minPoints - currentUserPoints : 0;
+  const tierRange = nextTier && currentTier ? nextTier.minPoints - currentTier.minPoints : 0;
+  const progressToNext = tierRange > 0 ? ((currentUserPoints - currentTier.minPoints) / tierRange) * 100 : 0;
 
   // Mock players for MVP search
   const players = [
@@ -2328,17 +2341,36 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
   return (
     <div className="w-full overflow-hidden rounded-xl border border-white/20 backdrop-blur-[32px] bg-white/5 flex flex-col">
       <div className="w-full z-10 px-2 py-6">
-        <h1 className="font-semibold text-2xl leading-8 text-neutral-50 text-left px-4">Weekly Activities</h1>
-        <p className="font-suisse text-sm text-white/60 px-4 mt-1">Complete missions to earn points and fuel your streak</p>
-        <div className="flex items-center gap-5 mt-4 px-4">
-          <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-50/20 flex-1">
-            <div 
-              className="h-full bg-emerald-500 transition-all duration-300 ease-in-out rounded-full" 
-              style={{ width: `${(weeklyCompleted / weeklyTotal) * 100}%` }}
-            />
+        <div className="flex items-center justify-between px-4 mb-1">
+          <h1 className="font-semibold text-2xl leading-8 text-neutral-50 text-left">Weekly Activities</h1>
+          <div className="text-sm font-semibold text-emerald-400">
+            Weekly Completion {weeklyCompleted}/{weeklyTotal}
           </div>
-          <div className="inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-semibold border border-white/10 text-neutral-50 bg-neutral-950/40">
-            {weeklyCompleted}/{weeklyTotal}
+        </div>
+        <p className="font-suisse text-sm text-white/60 px-4 mt-1">Complete missions to earn points and fuel your streak</p>
+        <div className="mt-4 px-4">
+          {/* Fan Tier Points Progress Bar */}
+          <div className="mb-2">
+            <div className="flex items-center justify-between text-xs mb-1.5">
+              <span className="text-white/80 font-medium">
+                {nextTier ? `${pointsToNext} pts to ${nextTier.name}` : 'Max tier reached'}
+              </span>
+              <span className="text-white/60">
+                {currentUserPoints} / {nextTier ? nextTier.minPoints : currentTier.minPoints} pts
+              </span>
+            </div>
+            <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-50/20">
+              <div 
+                className="h-full transition-all duration-500 ease-out rounded-full" 
+                style={{ 
+                  width: `${Math.min(progressToNext, 100)}%`,
+                  background: nextTier 
+                    ? `linear-gradient(to right, ${currentTier.color}, ${nextTier.color})`
+                    : currentTier.color,
+                  boxShadow: nextTier ? `0 0 8px ${nextTier.color}60` : `0 0 8px ${currentTier.color}60`,
+                }}
+              />
+            </div>
           </div>
         </div>
         <hr className="h-px bg-foreground opacity-5 mt-4" />
@@ -2371,6 +2403,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
           highlightProfileCompletion={highlightProfileCompletion}
           setHighlightProfileCompletion={setHighlightProfileCompletion}
           onTierUpgrade={onTierUpgrade}
+          onPointsUpdate={setCurrentUserPoints}
         />
       </div>
 
@@ -2604,7 +2637,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
 }
 
 // Profile Completion Flow Component with Animations
-function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightProfileCompletion, onTierUpgrade }: { user: any; highlightProfileCompletion: boolean; setHighlightProfileCompletion?: (value: boolean) => void; onTierUpgrade?: (oldTier: any, newTier: any, startPoints?: number) => void }) {
+function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightProfileCompletion, onTierUpgrade, onPointsUpdate }: { user: any; highlightProfileCompletion: boolean; setHighlightProfileCompletion?: (value: boolean) => void; onTierUpgrade?: (oldTier: any, newTier: any, startPoints?: number) => void; onPointsUpdate?: (points: number) => void }) {
   const [completedItems, setCompletedItems] = useState<string[]>(user?.completedProfileItems || []);
   const [totalPoints, setTotalPoints] = useState(0);
   const [pointsAnimation, setPointsAnimation] = useState<{ item: string; points: number } | null>(null);
@@ -2665,6 +2698,7 @@ function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightP
     setCompletedItems([...completedItems, platform]);
     setTotalPoints(prev => prev + points);
     setCurrentUserPoints(newPoints);
+    if (onPointsUpdate) onPointsUpdate(newPoints);
     setPointsAnimation({ item: platform, points });
     
     setTimeout(() => setPointsAnimation(null), 2000);
@@ -2686,6 +2720,7 @@ function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightP
     setCompletedItems([...completedItems, 'homeGround']);
     setTotalPoints(prev => prev + points);
     setCurrentUserPoints(newPoints);
+    if (onPointsUpdate) onPointsUpdate(newPoints);
     setPointsAnimation({ item: 'homeGround', points });
     setHomeGroundSearch(ground);
     setShowHomeGroundDropdown(false);
