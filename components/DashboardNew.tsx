@@ -130,6 +130,7 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
                 highlightProfileCompletion={highlightProfileCompletion}
                 setHighlightProfileCompletion={setHighlightProfileCompletion}
                 onTierUpgrade={handleTierUpgrade}
+                onUserPointsUpdate={onUserPointsUpdate}
               />
             </div>
             
