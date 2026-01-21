@@ -3458,6 +3458,7 @@ function PrizesAndStreakSection({ user, streakData, currentTier }: { user: any; 
           streakData={streakData}
           teamData={teamData}
           onClose={(prize?: string) => handleWheelClose(prize)}
+          spinsTaken={spinsTaken}
         />
       )}
     </div>
