@@ -26,7 +26,8 @@ interface LandingPageProps {
 export default function LandingPage({ onGetStarted }: LandingPageProps) {
   const [currentPrizeIndex, setCurrentPrizeIndex] = useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
-  const [videoEnded, setVideoEnded] = useState(false);
+  const [videoEnded, setVideoEnded] = useState(true); // Start with video ended so landing page shows first
+  const [showVideo, setShowVideo] = useState(false); // Control whether to show video
   const [videoError, setVideoError] = useState(false);
   const [videoLoading, setVideoLoading] = useState(true);
   const [videoCanPlay, setVideoCanPlay] = useState(false);
@@ -44,6 +45,22 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
       videoRef.current.load();
     }
   }, []);
+
+  const handlePlayVideo = () => {
+    setShowVideo(true);
+    setVideoEnded(false);
+    setVideoError(false);
+    setVideoLoading(true);
+    setVideoCanPlay(false);
+    // Play the video
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch((e) => {
+        console.error("Error playing video:", e);
+        setVideoError(true);
+      });
+    }
+  };
 
   const handleVideoEnd = () => {
     setVideoEnded(true);
@@ -214,8 +231,8 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
   };
 
 
-  // Show video first (if available and not ended/errored)
-  if (!videoEnded && !videoError) {
+  // Show video when triggered (if available and not ended/errored)
+  if (showVideo && !videoEnded && !videoError) {
     return (
       <div 
         className="h-screen flex items-center justify-center relative overflow-hidden bg-black cursor-pointer"
@@ -259,6 +276,18 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
 
   return (
     <div className="min-h-screen relative overflow-y-auto flex flex-col">
+      {/* Play Video Button - Top right corner */}
+      <button
+        onClick={handlePlayVideo}
+        className="fixed top-4 right-4 z-50 px-4 py-2 bg-nrl-green/90 hover:bg-nrl-green text-white font-semibold text-sm rounded-lg transition-all duration-300 shadow-[0_0_20px_rgba(34,197,94,0.5)] hover:shadow-[0_0_30px_rgba(34,197,94,0.7)] hover:scale-105 flex items-center gap-2 border-2 border-nrl-green/50 hover:border-nrl-green/80"
+        title="Play intro video"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <polygon points="5 3 19 12 5 21 5 3" />
+        </svg>
+        Play Video
+      </button>
+
       {/* Background */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <Image
