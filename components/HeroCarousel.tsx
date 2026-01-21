@@ -171,9 +171,9 @@ export default function HeroCarousel({ onNavigate, user }: HeroCarouselProps = {
                         
                         {/* Content Container */}
                         {slide.isOnboarding ? (
-                          <div className="relative h-full w-full overflow-hidden p-6 flex items-center justify-between">
+                          <div className="relative h-full w-full overflow-hidden p-6 flex items-center gap-4">
                             {/* Left side - Text content */}
-                            <div className="flex flex-col items-start text-left text-white space-y-4 relative z-10 flex-1 pr-4">
+                            <div className="flex flex-col items-start text-left text-white space-y-4 relative z-10 flex-1">
                               <h3 className="text-base font-bold uppercase">{slide.headline}</h3>
                               <p className="text-lg text-white/80 max-w-xl leading-relaxed">{slide.subtext}</p>
                               <button
@@ -183,28 +183,28 @@ export default function HeroCarousel({ onNavigate, user }: HeroCarouselProps = {
                                 {slide.ctaText}
                               </button>
                             </div>
-                            {/* Right side - Silver reward card */}
-                            <div className="relative z-10 flex-shrink-0 w-64">
+                            {/* Right side - Silver reward card with pulsing gold effect */}
+                            <div className="relative z-10 flex-shrink-0 w-56">
                               <div 
-                                className="rounded-lg p-4 border"
+                                className="rounded-lg p-4 border animate-pulse-gold"
                                 style={{
-                                  backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                                  borderColor: 'rgba(192, 192, 192, 0.3)',
-                                  boxShadow: '0 0 18px rgba(192, 192, 192, 0.25)',
+                                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                  borderColor: 'rgba(255, 215, 0, 0.5)',
+                                  animation: 'pulseGold 2s ease-in-out infinite',
                                 }}
                               >
                                 <div className="flex items-center gap-3 mb-3">
                                   <div 
                                     className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
                                     style={{
-                                      backgroundColor: 'rgba(192, 192, 192, 0.15)',
-                                      border: '1px solid rgba(192, 192, 192, 0.3)',
+                                      backgroundColor: 'rgba(255, 215, 0, 0.2)',
+                                      border: '1px solid rgba(255, 215, 0, 0.5)',
                                     }}
                                   >
-                                    <Trophy className="w-6 h-6" style={{ color: '#C0C0C0' }} />
+                                    <Trophy className="w-6 h-6" style={{ color: '#FFD700' }} />
                                   </div>
                                   <div>
-                                    <div className="text-xs font-semibold uppercase tracking-wider text-white/60 mb-1">
+                                    <div className="text-xs font-semibold uppercase tracking-wider text-yellow-400 mb-1">
                                       SILVER REWARD
                                     </div>
                                   </div>
@@ -213,6 +213,18 @@ export default function HeroCarousel({ onNavigate, user }: HeroCarouselProps = {
                                   Meet the team - Broncos training access with one mate
                                 </p>
                               </div>
+                              <style jsx>{`
+                                @keyframes pulseGold {
+                                  0%, 100% {
+                                    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), 0 0 40px rgba(255, 215, 0, 0.2);
+                                    border-color: rgba(255, 215, 0, 0.5);
+                                  }
+                                  50% {
+                                    box-shadow: 0 0 30px rgba(255, 215, 0, 0.7), 0 0 60px rgba(255, 215, 0, 0.4);
+                                    border-color: rgba(255, 215, 0, 0.8);
+                                  }
+                                }
+                              `}</style>
                             </div>
                           </div>
                         ) : (
