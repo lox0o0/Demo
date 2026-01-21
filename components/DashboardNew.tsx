@@ -12,7 +12,6 @@ import {
   TrendingUp, Calendar, Award, Crown, Target, Share2, Video, ChevronLeft, ChevronRight, Info
 } from "lucide-react";
 import { SocialIcon } from "@/lib/icons";
-import TierUpgradeCelebration from "./TierUpgradeCelebration";
 
 interface DashboardProps {
   user: any;
@@ -45,9 +44,6 @@ const calculateTier = (points: number, profileCompletion: number) => {
 export default function DashboardNew({ user, hideNavigation = false, onNavigate, onUserPointsUpdate }: DashboardProps) {
   const [activeSection, setActiveSection] = useState<NavSection>("dashboard");
   const [highlightProfileCompletion, setHighlightProfileCompletion] = useState(false);
-  const [showTierCelebration, setShowTierCelebration] = useState(false);
-  const [celebrationData, setCelebrationData] = useState<{ oldTier: any; newTier: any; startPoints: number } | null>(null);
-  
   // Check if we should highlight profile completion (from modal CTA)
   useEffect(() => {
     const shouldHighlight = sessionStorage.getItem('highlightProfileCompletion');
@@ -65,8 +61,7 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
   }, []);
   
   const handleTierUpgrade = (oldTier: any, newTier: any, startPoints?: number) => {
-    setCelebrationData({ oldTier, newTier, startPoints: startPoints ?? oldTier.minPoints });
-    setShowTierCelebration(true);
+    // Tier upgrade celebration removed - no popup
     // Set flag to prevent TierProgressModal from showing after tier upgrade
     sessionStorage.setItem('tierUpgradeJustCompleted', 'true');
   };
