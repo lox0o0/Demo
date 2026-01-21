@@ -279,12 +279,12 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
                   return (
                     <div
                       key={prize.id}
-                      className="flex-shrink-0 w-[200px] bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-3 hover:scale-105 hover:shadow-xl transition-all duration-300 snap-center"
+                      className="flex-shrink-0 w-[200px] bg-white/5 backdrop-blur-md border border-white/20 rounded-xl p-2 hover:scale-105 hover:shadow-xl transition-all duration-300 snap-center"
                     >
-                      <div className="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/50 flex items-center justify-center mb-2 mx-auto">
-                        <Icon className="w-5 h-5 text-amber-400" />
+                      <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/50 flex items-center justify-center mb-1.5 mx-auto">
+                        <Icon className="w-4 h-4 text-amber-400" />
                       </div>
-                      <h3 className="text-xs font-bold text-white mb-1 text-center leading-tight">{prize.title}</h3>
+                      <h3 className="text-xs font-bold text-white mb-0.5 text-center leading-tight">{prize.title}</h3>
                       <p className="text-xs text-white/70 text-center leading-tight">{prize.description}</p>
                     </div>
                   );
