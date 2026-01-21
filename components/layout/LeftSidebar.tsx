@@ -1,5 +1,7 @@
 "use client";
 
+import { Sparkles } from "lucide-react";
+
 interface LeftSidebarProps {
   activeSection: string;
   onNavigate: (section: string) => void;
@@ -60,6 +62,33 @@ export default function LeftSidebar({ activeSection, onNavigate }: LeftSidebarPr
 
   return (
     <aside className="fixed left-0 top-0 bottom-0 w-[70px] bg-transparent backdrop-blur-md border-r border-white/20 shadow-xl z-50 flex flex-col">
+      {/* Logo/Brand Icon */}
+      <div className="pt-4 px-2 pb-2 border-b border-white/20">
+        <button
+          onClick={() => {
+            // Clear landing page seen flag to show landing page again
+            localStorage.removeItem("landing_page_seen");
+            // Reload to show landing page
+            window.location.reload();
+          }}
+          className="flex w-full items-center justify-center p-2 h-12 rounded-lg text-sm text-white/90 hover:text-white bg-transparent hover:bg-white/10 backdrop-blur-sm transition-all duration-300 ease-out hover:shadow-lg hover:shadow-white/20 group relative overflow-hidden"
+          title="NRL Player +"
+        >
+          {/* Hover Gradient Overlay */}
+          <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent rounded-lg"></div>
+          </div>
+          <div 
+            className="flex items-center justify-center w-5 h-5 transition-transform duration-300 group-hover:scale-110"
+            style={{
+              filter: "drop-shadow(rgba(255, 255, 255, 0.6) 0px 0px 8px) drop-shadow(rgba(103, 126, 234, 0.8) 0px 0px 16px) drop-shadow(rgba(103, 126, 234, 0.4) 0px 0px 24px)"
+            }}
+          >
+            <Sparkles className="w-5 h-5" strokeWidth={2} />
+          </div>
+        </button>
+      </div>
+
       {/* Navigation Items */}
       <nav className="flex-1 pt-4 px-2">
         {navItems.map((item, index) => {
