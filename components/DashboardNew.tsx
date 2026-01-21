@@ -152,28 +152,6 @@ export default function DashboardNew({ user, hideNavigation = false, onNavigate,
       </main>
 
       {/* Tier Upgrade Celebration Modal */}
-      {showTierCelebration && celebrationData && (
-        <TierUpgradeCelebration
-          oldTier={celebrationData.oldTier}
-          newTier={celebrationData.newTier}
-          reward={celebrationData.newTier.reward}
-          startPoints={celebrationData.startPoints}
-          onDismiss={() => {
-            setShowTierCelebration(false);
-            setCelebrationData(null);
-          }}
-          onViewRewards={() => {
-            setShowTierCelebration(false);
-            setCelebrationData(null);
-          }}
-          onNavigateHome={() => {
-            setActiveSection("home");
-            if (onNavigate) {
-              onNavigate("home");
-            }
-          }}
-        />
-      )}
     </div>
   );
 }
@@ -2474,12 +2452,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
         return newPoints >= t.minPoints && (!nextTier || newPoints < nextTier.minPoints);
       }) || TIERS[0];
       
-      if (oldTier.name !== newTier.name) {
-        // Wait for fireworks animation (2 seconds) + 0.5 seconds before showing celebration
-        setTimeout(() => {
-          onTierUpgrade(oldTier, newTier, currentUserPoints);
-        }, 2500);
-      }
+      // Tier upgrade celebration removed - no popup
     }
     
     // Remove highlight after completion
