@@ -2193,6 +2193,7 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
   const [selectedNextWeekPlayer, setSelectedNextWeekPlayer] = useState("");
   const [playerSearchLastRound, setPlayerSearchLastRound] = useState("");
   const [playerSearchNextWeek, setPlayerSearchNextWeek] = useState("");
+  const [highlightMVP, setHighlightMVP] = useState(false);
   
   // Track current user points for tier progress bar
   const [currentUserPoints, setCurrentUserPoints] = useState(user?.points || 950);
@@ -2203,6 +2204,22 @@ function WeeklyActivitiesSection({ user, highlightProfileCompletion = false, set
       onUserPointsUpdate(currentUserPoints);
     }
   }, [currentUserPoints, onUserPointsUpdate]);
+  
+  // Check if we should highlight MVP Predict (from carousel navigation)
+  useEffect(() => {
+    const shouldHighlight = sessionStorage.getItem('highlightMVP');
+    if (shouldHighlight === 'true') {
+      setHighlightMVP(true);
+      sessionStorage.removeItem('highlightMVP');
+      // Scroll to MVP mission after a brief delay
+      setTimeout(() => {
+        const element = document.getElementById('mission-1');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 300);
+    }
+  }, []);
   
   // Track weekly completion count
   const [weeklyCompleted, setWeeklyCompleted] = useState(2);
