@@ -462,7 +462,7 @@ function StreakCard({ streakData, teamData }: { streakData: StreakData; teamData
 }
 
 // Prize Wheel Component
-function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData; teamData: any; onClose: () => void }) {
+function PrizeWheel({ streakData, teamData, onClose }: { streakData: StreakData; teamData: any; onClose: (prize?: string) => void }) {
   const [isSpinning, setIsSpinning] = useState(false);
   const [prizeWon, setPrizeWon] = useState<any>(null);
   const [spinsRemaining, setSpinsRemaining] = useState(streakData.spins.available);
@@ -3312,6 +3312,9 @@ function ProfileCompletionFlow({ user, highlightProfileCompletion, setHighlightP
 // Section B: Prizes & Streak
 function PrizesAndStreakSection({ user, streakData, currentTier }: { user: any; streakData: StreakData; currentTier: any }) {
   const [showWheel, setShowWheel] = useState(false);
+  const [spinsTaken, setSpinsTaken] = useState(0);
+  const [drawEntered, setDrawEntered] = useState(false);
+  const [lastPrizeWon, setLastPrizeWon] = useState<string | null>(null);
   const teamData = user?.teamData || NRL_TEAMS.find(t => t.name === user?.team) || NRL_TEAMS[0];
   
   // Mock recent winners data
@@ -3328,17 +3331,101 @@ function PrizesAndStreakSection({ user, streakData, currentTier }: { user: any; 
   const drawCountdown = { days: 3, hours: 14, minutes: 23 };
   const entryCount = 1247;
 
+  // Calculate progress: 3 spins + 1 draw = 4 total actions
+  const totalActions = 4;
+  const completedActions = spinsTaken + (drawEntered ? 1 : 0);
+  const progressPercent = (completedActions / totalActions) * 100;
+  const allComplete = completedActions === totalActions;
+
+  const handleSpin = () => {
+    if (spinsTaken < 3) {
+      setShowWheel(true);
+      // Prize will be set when wheel closes
+    }
+  };
+
+  const handleWheelClose = (prize?: string) => {
+    setShowWheel(false);
+    if (prize && spinsTaken < 3) {
+      setSpinsTaken(prev => prev + 1);
+      setLastPrizeWon(prize);
+      // Clear prize after showing it
+      setTimeout(() => setLastPrizeWon(null), 3000);
+    }
+  };
+
+  const handleDrawEntry = () => {
+    if (!drawEntered) {
+      setDrawEntered(true);
+    }
+  };
+
   return (
-    <div className="w-full overflow-hidden rounded-xl border border-white/20 backdrop-blur-[32px] bg-white/5 min-h-[400px] flex flex-col flex-1 h-full">
+    <div className="w-full overflow-hidden rounded-xl border border-white/20 backdrop-blur-[32px] bg-white/5 flex flex-col flex-1 h-full">
+      {/* Header Section - Matching Weekly Activities */}
+      <div className="w-full z-10 px-2 py-6 border-b border-white/10">
+        <div className="flex items-center justify-between px-4 mb-1">
+          <div className="flex items-center gap-2">
+            <Gift className="w-5 h-5 text-white/80" strokeWidth={2} />
+            <h1 className="font-semibold text-2xl leading-8 text-neutral-50 text-left">Prizes</h1>
+          </div>
+          <div className={`text-sm font-semibold ${allComplete ? 'text-emerald-400' : 'text-white/60'}`}>
+            {spinsTaken}/3 spins {drawEntered ? '· 1/1 draw' : '· 0/1 draw'}
+          </div>
+        </div>
+        <p className="font-suisse text-sm text-white/60 px-4 mt-1">Complete actions to claim prizes</p>
+        
+        {/* Progress Bar */}
+        <div className="mt-4 px-4">
+          <div className="flex items-center justify-between text-xs mb-1.5">
+            <span className="text-white/60">Progress</span>
+            <span className="text-white/60">{completedActions}/{totalActions}</span>
+          </div>
+          <div className="w-full rounded-full overflow-hidden relative" style={{ height: '6px', backgroundColor: 'rgba(255, 255, 255, 0.1)' }}>
+            <div
+              className="h-full rounded-full transition-all duration-500"
+              style={{
+                width: `${progressPercent}%`,
+                background: allComplete 
+                  ? 'linear-gradient(to right, #22c55e, #10b981)'
+                  : 'linear-gradient(to right, #3b82f6, #8b5cf6)',
+                boxShadow: allComplete 
+                  ? '0 0 8px rgba(34, 197, 94, 0.6)'
+                  : '0 0 8px rgba(59, 130, 246, 0.4)',
+              }}
+            />
+          </div>
+        </div>
+
+        {/* All Complete Message */}
+        {allComplete && (
+          <div className="mt-3 px-4 flex items-center gap-2 text-emerald-400 text-sm font-semibold">
+            <Check className="w-4 h-4" strokeWidth={2} />
+            <span>All prizes claimed this week</span>
+          </div>
+        )}
+      </div>
+
       <div className="flex-1 overflow-y-auto space-y-4 p-4">
         {/* Card 1: Streak */}
         <StreakCardPrizes streakData={streakData} />
 
         {/* Card 2: Prize Wheel */}
-        <PrizeWheelCardPrizes streakData={streakData} onSpinClick={() => setShowWheel(true)} />
+        <PrizeWheelCardPrizes 
+          streakData={streakData} 
+          spinsTaken={spinsTaken}
+          lastPrizeWon={lastPrizeWon}
+          onSpinClick={handleSpin}
+        />
 
         {/* Card 3: Weekly Prize Draw */}
-        <WeeklyPrizeDrawCard currentTier={currentTier} drawCountdown={drawCountdown} entryCount={entryCount} />
+        <WeeklyPrizeDrawCard 
+          currentTier={currentTier} 
+          drawCountdown={drawCountdown} 
+          entryCount={entryCount}
+          isEntered={drawEntered}
+          onEnterDraw={handleDrawEntry}
+        />
 
         {/* Recent Winners Row */}
         <RecentWinnersRow winners={recentWinners} />
@@ -3349,7 +3436,7 @@ function PrizesAndStreakSection({ user, streakData, currentTier }: { user: any; 
         <PrizeWheel 
           streakData={streakData}
           teamData={teamData}
-          onClose={() => setShowWheel(false)}
+          onClose={(prize?: string) => handleWheelClose(prize)}
         />
       )}
     </div>
@@ -3505,13 +3592,23 @@ function StreakCardPrizes({ streakData }: { streakData: StreakData }) {
 }
 
 // Card 2: Prize Wheel Card
-function PrizeWheelCardPrizes({ streakData, onSpinClick }: { streakData: StreakData; onSpinClick: () => void }) {
-  const spinsAvailable = streakData.spins.available;
-  const baseSpins = streakData.spins.baseSpins;
-  const bonusSpins = streakData.spins.bonusSpins;
+function PrizeWheelCardPrizes({ streakData, onSpinClick, spinsTaken, lastPrizeWon }: { streakData: StreakData; onSpinClick: () => void; spinsTaken: number; lastPrizeWon: string | null }) {
+  const maxSpins = 3;
+  const spinsRemaining = maxSpins - spinsTaken;
+  const isComplete = spinsTaken >= maxSpins;
+
+  // Prize types for random selection
+  const prizeTypes = [
+    { name: "50 Points", icon: Coins, color: "text-yellow-400" },
+    { name: "Match Tickets", icon: Ticket, color: "text-blue-400" },
+    { name: "$10 Voucher", icon: Gift, color: "text-purple-400" },
+    { name: "Team Merch", icon: Shirt, color: "text-green-400" },
+  ];
 
   return (
-    <div className="bg-white/5 backdrop-blur-[32px] border border-white/20 rounded-xl p-6 hover:border-white/30 transition-all relative overflow-hidden">
+    <div className={`bg-white/5 backdrop-blur-[32px] border rounded-xl p-6 transition-all relative overflow-hidden ${
+      isComplete ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-white/20 hover:border-white/30'
+    }`}>
       {/* Animated Spinning Wheel Preview with smooth rotation */}
       <div className="flex justify-center mb-4">
         <div className="relative w-32 h-32">
@@ -3570,25 +3667,45 @@ function PrizeWheelCardPrizes({ streakData, onSpinClick }: { streakData: StreakD
         </div>
       </div>
 
-      {/* Spins Available */}
+      {/* Spins Counter */}
       <div className="text-center mb-4">
-        <div className="text-3xl font-bold text-white mb-1">{spinsAvailable}</div>
-        <div className="text-xs font-semibold text-white/80 uppercase tracking-wider">Spins Available</div>
-        {bonusSpins > 0 && (
-          <div className="text-xs text-emerald-400 mt-1">
-            {baseSpins} base + {bonusSpins} bonus
+        <div className={`text-2xl font-bold mb-1 ${isComplete ? 'text-emerald-400' : 'text-white'}`}>
+          {spinsTaken}/{maxSpins} spins taken
+        </div>
+        {!isComplete && (
+          <div className="text-xs text-white/60">
+            {spinsRemaining} spin{spinsRemaining !== 1 ? 's' : ''} remaining
           </div>
         )}
       </div>
 
-      {/* Spin Button with Pulse Animation */}
-      <button
-        onClick={onSpinClick}
-        disabled={spinsAvailable === 0}
-        className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 rounded-xl hover:from-orange-600 hover:to-red-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed animate-pulse"
-      >
-        SPIN THE WHEEL
-      </button>
+      {/* Prize Won Notification */}
+      {lastPrizeWon && (
+        <div className="mb-4 p-3 bg-emerald-500/20 border border-emerald-500/50 rounded-lg animate-pulse">
+          <div className="flex items-center justify-center gap-2">
+            <Trophy className="w-4 h-4 text-emerald-400" strokeWidth={2} />
+            <span className="text-sm font-semibold text-emerald-400">You won: {lastPrizeWon}!</span>
+          </div>
+        </div>
+      )}
+
+      {/* Spin Button */}
+      {isComplete ? (
+        <button
+          disabled
+          className="w-full bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 font-bold py-3 rounded-xl flex items-center justify-center gap-2 cursor-not-allowed"
+        >
+          <Check className="w-4 h-4" strokeWidth={2} />
+          All spins used
+        </button>
+      ) : (
+        <button
+          onClick={onSpinClick}
+          className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-3 rounded-xl hover:from-orange-600 hover:to-red-600 transition-all"
+        >
+          SPIN THE WHEEL
+        </button>
+      )}
 
       {/* Prize Categories - Reduced Size */}
       <div className="mt-4 space-y-2">
@@ -3621,7 +3738,7 @@ function PrizeWheelCardPrizes({ streakData, onSpinClick }: { streakData: StreakD
 }
 
 // Card 3: Weekly Prize Draw Card
-function WeeklyPrizeDrawCard({ currentTier, drawCountdown, entryCount }: { currentTier: any; drawCountdown: { days: number; hours: number; minutes: number }; entryCount: number }) {
+function WeeklyPrizeDrawCard({ currentTier, drawCountdown, entryCount, isEntered, onEnterDraw }: { currentTier: any; drawCountdown: { days: number; hours: number; minutes: number }; entryCount: number; isEntered: boolean; onEnterDraw: () => void }) {
   // Featured prize based on tier
   const getFeaturedPrize = () => {
     if (currentTier.name === "Legend") return { name: "SIGNED TEAM JERSEY", icon: Shirt, color: "text-yellow-400" };
@@ -3680,16 +3797,41 @@ function WeeklyPrizeDrawCard({ currentTier, drawCountdown, entryCount }: { curre
         <div className="text-xs text-white/60">This Week's Featured Prize</div>
       </div>
 
-      {/* Draw Now Button */}
-      <div className="mb-3">
-        <button className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold py-3 rounded-lg hover:from-emerald-600 hover:to-cyan-600 transition-all">
-          DRAW NOW
-        </button>
+      {/* Entry Status */}
+      <div className="text-center mb-3">
+        <div className={`text-sm font-semibold mb-2 ${isEntered ? 'text-emerald-400' : 'text-white/60'}`}>
+          {isEntered ? '1/1 draw entered' : '0/1 draw entered'}
+        </div>
       </div>
 
-      {/* Entry Count */}
-      <div className="text-center">
+      {/* Draw Now Button */}
+      <div className="mb-3">
+        {isEntered ? (
+          <button
+            disabled
+            className="w-full bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 font-bold py-3 rounded-lg flex items-center justify-center gap-2 cursor-not-allowed"
+          >
+            <Check className="w-4 h-4" strokeWidth={2} />
+            Entered
+          </button>
+        ) : (
+          <button 
+            onClick={onEnterDraw}
+            className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold py-3 rounded-lg hover:from-emerald-600 hover:to-cyan-600 transition-all"
+          >
+            DRAW NOW
+          </button>
+        )}
+      </div>
+
+      {/* Entry Count and Countdown */}
+      <div className="text-center space-y-1">
         <div className="text-xs text-white/60">{entryCount.toLocaleString()} entries</div>
+        {isEntered && (
+          <div className="text-xs text-emerald-400 font-semibold">
+            Draw in {drawCountdown.days}d {drawCountdown.hours}h
+          </div>
+        )}
       </div>
     </div>
   );
