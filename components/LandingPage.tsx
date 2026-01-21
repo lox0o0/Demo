@@ -276,16 +276,16 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
       {/* Hero Section */}
       <section className="relative z-10 flex-shrink-0 flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-8 pb-2">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
             Welcome to{" "}
             <span className="bg-gradient-to-r from-nrl-green via-emerald-400 to-nrl-green bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(34,197,94,0.5)]">
               NRL Player +
             </span>
           </h1>
-          <p className="text-sm sm:text-base text-white/80 max-w-2xl mx-auto">
+          <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-white max-w-3xl mx-auto mb-3 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
             A new way to play
           </p>
-          <p className="text-sm sm:text-base text-white/80 max-w-2xl mx-auto mt-1">
+          <p className="text-base sm:text-lg lg:text-xl font-semibold text-white/95 max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]">
             Get closer to the game and the players like never before
           </p>
         </div>
