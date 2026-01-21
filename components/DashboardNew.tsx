@@ -3592,24 +3592,12 @@ function StreakCardPrizes({ streakData }: { streakData: StreakData }) {
         </div>
       )}
 
-      {/* Progress to Next Streak Reward */}
-      {nextMilestone && (
-        <div className="mt-2 space-y-1.5">
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-white/60">Progress to {nextMilestone.name}</span>
-            <span className="text-white/80 font-semibold">{Math.round(progressToNext)}%</span>
-          </div>
-          <div className="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
-            <div
-              className="bg-gradient-to-r from-emerald-500 to-cyan-500 h-1.5 rounded-full transition-all duration-500"
-              style={{ width: `${progressToNext}%` }}
-            />
-          </div>
-          <div className="text-xs text-white/60 text-center">
-            {nextMilestone.weeksRemaining} weeks to {nextMilestone.reward}
-          </div>
-        </div>
-      )}
+      {/* Streak Benefits Text */}
+      <div className="mt-3">
+        <p className="text-xs text-white/70 text-center leading-relaxed">
+          Keep your engagement streak running to increase weekly Fan Tier points scored and get more free spins!
+        </p>
+      </div>
     </div>
   );
 }
