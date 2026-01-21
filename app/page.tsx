@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import Dashboard from "@/components/Dashboard";
 import EntryPointRouter from "@/components/onboarding/EntryPointRouter";
+import LandingPage from "@/components/LandingPage";
 
 export default function Home() {
   const [isOnboarded, setIsOnboarded] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [showLandingPage, setShowLandingPage] = useState(true);
 
   useEffect(() => {
     // Check if user is onboarded (in real app, this would be from localStorage/auth)
@@ -15,9 +17,17 @@ export default function Home() {
     if (params.get("reset") === "1") {
       localStorage.removeItem("nrl_onboarded");
       localStorage.removeItem("nrl_user");
+      localStorage.removeItem("landing_page_seen");
       setIsOnboarded(false);
       setUser(null);
+      setShowLandingPage(true);
       return;
+    }
+    
+    // Check if user has seen landing page
+    const landingPageSeen = localStorage.getItem("landing_page_seen");
+    if (landingPageSeen === "true") {
+      setShowLandingPage(false);
     }
     
     const onboarded = localStorage.getItem("nrl_onboarded");
@@ -31,6 +41,7 @@ export default function Home() {
         if (parsed && (parsed.name || parsed.email)) {
           setIsOnboarded(true);
           setUser(parsed);
+          setShowLandingPage(false);
         }
       } catch (e) {
         // Invalid data, clear it
@@ -45,9 +56,19 @@ export default function Home() {
     setUser(userData);
     localStorage.setItem("nrl_onboarded", "true");
     localStorage.setItem("nrl_user", JSON.stringify(userData));
+    localStorage.setItem("landing_page_seen", "true");
     // Set flag to show tier progress modal once after onboarding
     sessionStorage.setItem("onboardingJustCompleted", "true");
   };
+
+  const handleGetStarted = () => {
+    localStorage.setItem("landing_page_seen", "true");
+    setShowLandingPage(false);
+  };
+
+  if (showLandingPage) {
+    return <LandingPage onGetStarted={handleGetStarted} />;
+  }
 
   if (!isOnboarded) {
     return <EntryPointRouter onComplete={handleOnboardingComplete} />;
